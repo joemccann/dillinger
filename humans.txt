@@ -1,0 +1,9 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+  Lt. Gnarkill: Joe McCann
+  Site: subprint.com
+  Twitter: joemccann
+  Location: Austin, TX, USA

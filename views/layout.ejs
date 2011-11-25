@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title><%= title %></title>
+  <meta name="description" content="">
+  <meta name="author" content="Joe McCann">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <% if(debugging) {%>
+  <!-- Follow the order of imports in style.styl file -->
+  <link rel='stylesheet' href='/css/style.css' />
+  <% } %>
+  <% if(!debugging) {%>
+  <link rel="stylesheet" href="css/style-<%- version %>.min.css">
+  <% } %>
+  <!-- Powered by:
+  
+  '||''''|                                          
+   ||  .   ... ...... ...... ..   ....  ....  ....  
+   ||''|    '|..'  ||'  ||||' ''.|...||||. ' ||. '  
+   ||        .|.   ||    |||    ||     . '|... '|.. 
+  .||.....|.|  ||. ||...'.||.    '|...'|'..|'|'..|'  
+                   ||
+                   ||  
+  -->
+</head>
+<body>
+<%- body %>
+  <% if(debugging) { %>
+  <script type="text/javascript" src="js/reqwest.min.js"></script>
+  <script type="text/javascript" src="js/code.js"></script>
+  <%} else {%>
+  <script src="js/code-<%- version %>.min.js"></script>
+  <%}%>
+  <script type="text/javascript">
+    var _gaq=[['_setAccount','UA-XXXXXXX-X'],['_trackPageview']];
+    !function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;  
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';  
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    }();
+  </script>
+  <% if(debugging) { %>
+  <script src="http://localhost:8080/target/target-script-min.js#anonymous"></script>
+  <% } %>
+</body>
+</html>

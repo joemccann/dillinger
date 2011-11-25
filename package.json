@@ -1,0 +1,29 @@
+{
+    "name": "Dillinger"
+  , "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann."
+  , "version": "0.0.3"
+  , "keywords": "express, stylus, redis, ejs, markdown, editor"
+  , "private": true
+  , "dependencies": {
+      "express": ">=2.5.0"
+    , "assert": "0.4.9"
+    , "request": "2.2.0"
+    , "cluster": "0.6.4"
+    , "colors": "0.5.0"
+    , "connect-redis": "1.0.7"
+    , "connect-form": "0.2.1"
+    , "ejs": "0.4.3"
+    , "hiredis": "0.1.12"
+    , "nodemailer": "0.2.2"
+    , "password-hash": "1.1.2"
+    , "redis": "0.6.7"
+    , "smoosh": "0.3.0"
+    , "stylus": "0.15.1"
+    , "node-markdown": "0.1.0"
+    , "uglify-js" : "1.1.1"
+    , "jshint": "0.5.2"
+    , "asciimo": "0.3.1"
+    , "gzip": "0.1.0"
+    , "jsdom": "0.2.9"
+  }
+}

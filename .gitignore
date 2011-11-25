@@ -1,0 +1,7 @@
+.DS_Store
+node.pid
+node_modules/*
+logs/*
+dump.rdb
+public/files/*
+config/github.json

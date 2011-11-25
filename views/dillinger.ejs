@@ -1,0 +1,147 @@
+<div id="loading"><p>Dillinger</p><p>Preparing for greatness...</p></div>
+<div id="main" class="bye">
+  <div class="topbar">
+    <div id="notify_container">
+      <div id="notify"> </div>
+    </div>
+    <div class="topbar-inner">
+        <nav class="slide_in">
+          <a href="#" class="btn primary" id="clear">Clear</a> |
+          <a href="#" id="save" class="btn primary">Save</a> |
+          <a href="#" class="btn success" id="export_md">Export Markdown</a> |
+          <a href="#" class="btn success" id="export_html">Export HTML</a> |
+          <span class="relative">
+            <img src="/img/icon_octocat_20x20.png" class="icon_octocat" alt="Octocat Icon"><% if(!loggedIn){ %>
+            <a href="https://github.com/login/oauth/authorize?client_id=<%- github.client_id %>&scope=repo&redirect_uri=<%- github.callback_url %>" id="oauth_github" class="btn github">Sign in With Github</a><% }%><% if(loggedIn){ %>
+            <a href="#" id="github_profile" class="btn github" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true" data-github-user="<%= github.username %>">Import from Repo</a><% }%>
+          </span>
+          <select id="theme">
+            <option value="ace/theme/clouds">Clouds</option>
+            <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+            <option value="ace/theme/cobalt">Cobalt</option>
+            <option value="ace/theme/crimson_editor">Crimson Editor</option>
+            <option value="ace/theme/dawn">Dawn</option>
+            <option value="ace/theme/eclipse">Eclipse</option>
+            <option value="ace/theme/idle_fingers">idleFingers</option>
+            <option value="ace/theme/kr_theme">krTheme</option>
+            <option value="ace/theme/merbivore">Merbivore</option>
+            <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+            <option value="ace/theme/mono_industrial">Mono Industrial</option>
+            <option value="ace/theme/monokai">Monokai</option>
+            <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+            <option value="ace/theme/solarized_dark">Solarized Dark</option>
+            <option value="ace/theme/solarized_light">Solarized Light</option>
+            <option value="ace/theme/textmate">TextMate</option>
+            <option value="ace/theme/twilight">Twilight</option>
+            <option value="ace/theme/tomorrow">Tomorrow</option>
+            <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
+            <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
+            <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
+            <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
+            <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+          </select>
+        </nav>
+        <div class="cont">
+          <div class="core_inner" role="button">
+              <div class="inner_one"></div>
+              <div class="inner_two">&nbsp;</div>
+          </div>
+          <div class="core_menu">
+            <ul>
+              <li><a href="#" id="toggleNav">Hide Navigation</a></li>
+              <li><a href="#" id="paper">Toggle Paper</a></li>
+              <li><a href="#" id="reset">Reset Profile</a></li>
+              <li><a href="#" id="autosave">Enable Autosave</a></li>
+              <li><a href="#" id="about" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true">About Dillinger</a></li>
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="app_wrap" class="jumbotron">
+    <div id="editor">Dillinger
+=========
+
+Dillinger is a cloud-enabled HTML5 Markdown editor.
+
+  - Type some Markdown text in the left window
+  - See the HTML in the right
+  - Magic
+
+Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site] [1]:
+
+> The overriding design goal for Markdown's
+> formatting syntax is to make it as readable 
+> as possible. The idea is that a
+> Markdown-formatted document should be
+> publishable as-is, as plain text, without
+> looking like it's been marked up with tags
+> or formatting instructions.
+
+This text your see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  
+
+**Get started by clearing the text with the button 'Clear' in the top navigation.**
+
+Tech
+-----------
+
+Dillinger uses a number of open source projects to work properly:
+
+* [Ace Editor] - awesome web-based text editor
+* [Showdown] - a port of Markdown to JavaScript
+* [Twitter Bootstrap] - great UI boilerplate for modern web apps
+* [node.js] - evented I/O for the backend
+* [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
+* [jQuery] - duh 
+
+
+Coming Soon
+--------------
+
+Dillinger has a number of features in the works.  Just trust me.
+
+
+Installation
+--------------
+
+NOTE: currently the `app.js` file expects a Redis instance to be up and running and available.  It is used for session storage and will be used in the future.
+
+1. Clone the repo
+2. `cd dillinger`
+3. `npm install -d` (also, if you don't have `smoosh` installed globally execute: `npm install smoosh -g`)
+4. `mkdir -p public/files`
+5. `mkdir -p public/files/md && mkdir -p public/files/html`
+6. Read the Readme file located at `config/README.md` and do what it says.
+7. `sudo node app.js`
+8. `open http://127.0.0.1`
+
+NOTE: Have a look at the `app.json` file as it has some configuration variables in there as well. You will definitely need to update the `IMAGE_PREFIX_PRODUCTION: "http://cdn.dillinger.io/"` to your own CDN. If you're not using a CDN, set it's path to `/img/` for that is where the images reside locally in the dillinger repo.
+
+
+*Free Software, Fuck Yeah!*
+
+  [john gruber]: http://daringfireball.net/
+  [@thomasfuchs]: http://twitter.com/thomasfuchs
+  [1]: http://daringfireball.net/projects/markdown/
+  [showdown]: http://www.attacklab.net/
+  [ace editor]: http://ace.ajax.org
+  [node.js]: http://nodejs.org
+  [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
+  [keymaster.js]: https://github.com/madrobby/keymaster
+  [jQuery]: http://jquery.com  
+    
+    </div>
+    <div id="preview" class="shadowbox"></div>
+  </div> <!-- end #app_wrap -->
+</div> <!-- end #main -->
+<iframe id="downloader" class="hide"></iframe>
+<div id="modal-generic" class="modal hide fade in">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3></h3>
+  </div>
+  <div class="modal-body">
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
