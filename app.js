@@ -24,6 +24,9 @@ var appConfig = JSON.parse(fs.readFileSync(__dirname + '/app.json', 'UTF-8'))
 
 var githubConfig = JSON.parse(fs.readFileSync(__dirname + '/config/github.json', 'UTF-8'))
 
+var dillingerReadme = fs.readFileSync(__dirname + '/README.md', 'UTF-8')
+
+
 var app = module.exports = express.createServer()
 
 
@@ -62,6 +65,13 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
+
+app.dynamicHelpers({
+  readme: function(req,res){
+    return dillingerReadme.toString() 
+  }
+})
+
 
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
@@ -127,7 +137,7 @@ app.get('/', function(req, res, next){
 
     res.render('dillinger', 
     {
-      title: 'Dillinger, the last Markdown editor, ever. '
+      title: 'Dillinger, the last Markdown editor, ever.'
     , version: appConfig.VERSION
     , debugging: debug
     , layout: 'dillinger-layout'
@@ -137,6 +147,7 @@ app.get('/', function(req, res, next){
         client_id: githubConfig.client_id
       , callback_url: githubConfig.callback_url
       }
+    , readme: req.readme
     })
   } // end else
   
