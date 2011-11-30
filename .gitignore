@@ -5,3 +5,4 @@ logs/*
 dump.rdb
 public/files/*
 config/github.json
+config/server.json
