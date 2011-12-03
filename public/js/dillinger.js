@@ -512,6 +512,31 @@ $(function(){
     alert('Sad Panda - No localStorage for you!')
   }
 
+  /**
+   * Show the modal for the "About Dillinger" information.
+   *
+   * @return {Void}
+   */  
+  function showAboutInfo(){
+
+    $('.modal-header h3').text("What's the deal with Dillinger?")
+
+    // TODO: PULL THIS OUT AND RENDER VIA TEMPLATE FROM XHR OR STASH IN PAGE FOR SEO AND CLONE
+    var aboutContent =  "<p>Dillinger is an online cloud-enabled, HTML5, buzzword-filled Markdown editor.</p>"
+                      + "<p>Dillinger was designed and developed by <a href='http://twitter.com/joemccann'>@joemccann</a> because he needed a decent Markdown editor.</p>"
+                      + "<p>Dillinger is a 100% open source project so <a href='https://github.com/joemccann/dillinger'>fork the code</a> and contribute!</p>"
+                      + "<p>Follow Dillinger on Twitter at <a href='http://twitter.com/dillingerapp'>@dillingerapp</a></p>"
+  
+    $('.modal-body').html(aboutContent)
+
+    $('#modal-generic').modal({
+      keyboard: true,
+      backdrop: true,
+      show: true
+    })
+    
+  }
+  
   
   /// UI RELATED =================
 
@@ -701,21 +726,7 @@ $(function(){
 
     $('#about').
       on('click', function(){
-
-        $('.modal-header h3').text("What's the deal with Dillinger?")
-        
-        var aboutContent =  "<p>Dillinger is an online cloud-enabled, HTML5, buzzword-filled Markdown editor.</p>"
-                          + "<p>Dillinger was designed and developed by <a href='http://twitter.com/joemccann'>@joemccann</a> because he needed a decent Markdown editor.</p>"
-                          + "<p>Follow Dillinger on Twitter at <a href='http://twitter.com/dillingerapp'>@dillingerapp</a></p>"
-      
-        $('.modal-body').html(aboutContent)
-  
-        $('#modal-generic').modal({
-          keyboard: true,
-          backdrop: true,
-          show: true
-        })
-          
+        showAboutInfo()
         return false
       })
 
@@ -852,7 +863,7 @@ $(function(){
       
       var sorted = []
         , raw = 'https://raw.github.com'
-        , slash = '/'
+        , slash = '/'  
 
       treefiles.forEach(function(el){
         
