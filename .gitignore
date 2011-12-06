@@ -6,3 +6,4 @@ dump.rdb
 public/files/*
 config/github.json
 config/server.json
+config/redis.conf
