@@ -1,6 +1,13 @@
 HISTORY
 =
 
+0.0.8
+-
+- Programmatically reading in the `README.md` to populate the `dillinger.ejs` view (DRY).
+- Removed google site verification value.
+- Added handler for showing the about dillinger info (updated about copy as well)
+
+
 0.0.7
 -
 - Added noscript verbiage.
