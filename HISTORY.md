@@ -6,6 +6,7 @@ HISTORY
 - Programmatically reading in the `README.md` to populate the `dillinger.ejs` view (DRY).
 - Removed google site verification value.
 - Added handler for showing the about dillinger info (updated about copy as well)
+- Added boxflex per @rem's suggestion.
 
 
 0.0.7
