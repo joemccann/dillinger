@@ -30,6 +30,7 @@ Dillinger uses a number of open source projects to work properly:
 * [Showdown] - a port of Markdown to JavaScript
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [node.js] - evented I/O for the backend
+* [Redis] - wickedly fast key-value data store
 * [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh 
 
@@ -37,7 +38,7 @@ Dillinger uses a number of open source projects to work properly:
 Coming Soon
 --------------
 
-Dillinger has a number of features in the works.  Just trust me.
+**NOTE**: currently the `app.js` file expects a Redis instance to be up and running and available. Dillinger currently uses Redis version **2.4.4**.  You will need to modify the `redis.conf` file if you are going to use an older version of Redis.
 
 
 Installation
@@ -69,4 +70,5 @@ NOTE: Have a look at the `app.json` file as it has some configuration variables 
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
   [keymaster.js]: https://github.com/madrobby/keymaster
   [jQuery]: http://jquery.com  
+  [Redis]: http://redis.io
   
