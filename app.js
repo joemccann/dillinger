@@ -532,16 +532,16 @@ function setStylusImagePrefix(productionFile){
 
 // Snatch the pw from the redis config file.
 function findRedisPassword(){
-	
-	var pw = ''
-	
-	// bet you didn't know you could do that with String#replace(), eh?
-	redisConfig.replace(/(masterauth+\s)+(.*)+\s/, function( line, masterauthString, password){
-		pw = password
-	})
-	
-	return pw
-	
+
+  var pw = ''
+
+  // bet you didn't know you could do that with String#replace(), eh?
+  redisConfig.replace(/(masterauth+\s)+(.*)+\s/, function( line, masterauthString, password){
+    pw = password
+  })
+
+  return pw
+
 }
 
 
