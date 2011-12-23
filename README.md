@@ -53,8 +53,9 @@ NOTE: currently the `app.js` file expects a Redis instance to be up and running 
 5. `mkdir -p public/files/md && mkdir -p public/files/html`
 6. Read the Readme file located at `config/README.md` and do what it says.
 7. `redis-server config/redis.conf`
-8. `sudo node app.js`
-9. `open http://127.0.0.1`
+8. `node build.js` as this will concat/compress the css and js files.
+9. `sudo node app.js`
+10. `open http://127.0.0.1`
 
 NOTE: Have a look at the `app.json` file as it has some configuration variables in there as well. You will definitely need to update the `IMAGE_PREFIX_PRODUCTION: "http://cdn.dillinger.io/"` to your own CDN. If you're not using a CDN, set it's path to `/img/` for that is where the images reside locally in the dillinger repo.
 
