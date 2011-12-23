@@ -1993,7 +1993,7 @@ footer {
   color: #eee;
   background-position: 0 -15px;
 }
-.btn.github {
+.btn.vendor {
   color: #fff;
   background-color: #b85c00;
   background-repeat: no-repeat;
@@ -2007,7 +2007,7 @@ footer {
   border-color: #c60 #c60 #ad5700;
   border-color: rgba(0,0,0,0.10) rgba(0,0,0,0.10) rgba(0,0,0,0.00);
 }
-.btn.github:hover {
+.btn.vendor:hover {
   color: #eee;
   background-position: 0 -15px;
 }
@@ -2601,12 +2601,17 @@ nav {
 .relative {
   position: relative;
 }
-.github {
+.vendor {
   padding-left: 30px;
 }
-.icon_octocat {
+.icon_vendor {
   position: absolute;
+}
+.icon_vendor.github {
   margin: 3px 0 0 6px;
+}
+.icon_vendor.dropbox {
+  margin: 6px 0 0 9px;
 }
 #theme {
   float: right;

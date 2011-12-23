@@ -14,6 +14,24 @@ It should look like the following:
 
 To obtain the `client_id` and the `client_secret` you'll need to register your application with Github.  Do that here:  [Github App]
 
+
+Dropbox Config
+=========
+
+In order to use the dropbox features associated with Dilinger you need to create a file in this directory called `dropbox.json`.
+
+It should look like the following:
+
+    {
+      "consumer_key": "someRandomString"
+    , "consumer_secret": "someRandomString"
+    , "email": "yourEmailAddressForDropbox"
+    , "password": "yourPasswordForDropbox"
+    }
+
+To obtain the `consumer_key` and the `consumer_secret` you'll need to register your application with Dropbox.  Do that here:  [Dropbox App]
+
+
 Redis Config
 =========
 
@@ -26,3 +44,4 @@ In order to shut down the admin party (meaning everyone has access) with Redis, 
 Done!
 
   [Github App]: https://github.com/account/applications/new
+  [Dropbox App]: https://www.dropbox.com/developers/apps

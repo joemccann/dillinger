@@ -9,9 +9,11 @@ var express = require('express')
   , cluster = require('cluster')
   , path = require('path')
   , redis = require('redis')
+  , async = require('async')
   , passwordHash = require('password-hash')
   , md = require(__dirname + '/utils/md').md
   , github = require(__dirname + '/utils/github').github
+  , dbox = require(__dirname + '/utils/dropbox').dropbox
   , debug
   , redisStore
   , redisClient
@@ -68,10 +70,25 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
-app.dynamicHelpers({
-  readme: function(req,res){
-    return dillingerReadme.toString() 
-  }
+app.dynamicHelpers(
+  {
+    readme: function(req,res){
+      return dillingerReadme.toString() 
+    }
+  , dropbox: function(req,res){
+    
+      if(typeof req.session.dropbox !== 'undefined' && req.session.dropbox.sync){
+        return req.session.dropbox
+      }
+      else{
+        var drop = {
+          sync : null
+        , oauth_token: dbox.getAccessToken()
+        , oauth_callback: dbox.getOauthCallback()  
+        }
+        return drop
+      }
+    }
 })
 
 
@@ -155,6 +172,7 @@ app.get('/', function(req, res, next){
   
 })
 
+/* Github OAuth */
 app.get('/oauth/github', function(req, res, next){
 
   if(!req.query.code) next()
@@ -203,6 +221,57 @@ app.get('/oauth/test/github', function(req, res){
   })
 
 })
+
+
+function requestDropboxToken(){
+  
+  var url = dropbox_api + "oauth/request_token"
+  
+  function _tokenHandler(err,resp,data){  }
+
+  // Make a request to dropbox api to get token
+  var iterator = async.iterator([
+    function(){
+      request.post(url, function(err, resp, data){
+        // sample response: oauth_token_secret=b9q1n5il4lcc&oauth_token=mh7an9dkrg59
+        
+        var token = data.split('=').pop();
+        console.log(token)
+
+        return data.split('=').pop()
+
+      })    
+    }
+    ])
+    
+    return iterator()
+
+} // end requestDropboxToken()
+
+
+// requestDropboxToken()
+
+
+app.get('/oauth/dropbox', function(req, res, next){
+
+  // id=409429&oauth_token=15usk7o67ckg644
+
+  if(!req.query.oauth_token) next()
+  else{
+    req.session.dropbox = {}
+    
+    req.session.dropbox.sync = true
+    req.session.dropbox.oauth_token = true
+
+    res.redirect('/')
+    
+    } // end else
+    
+})
+
+
+
+/* Github Actions */
 
 app.post('/github/repo/fetch_all', function(req,res){
   
@@ -350,6 +419,8 @@ app.post('/github/repo/fetch_markdown_file', function(req,res){
 })
 
 
+/* Dillinger Actions */
+
 // save a markdown file and send header to download it directly as response 
 app.post('/factory/fetch_markdown', function(req,res){
   
@@ -413,7 +484,6 @@ app.post('/factory/fetch_html', function(req,res){
   
 }) // end post
 
-
 // route to handle download of md file
 app.get('/files/md/:mdid', function(req, res){
   
@@ -454,6 +524,8 @@ app.get('/files/html/:html', function(req, res){
   })
 
 })
+
+
 
 
 // TODO: ADD THESE LATER? Nah, fuck it, Github is good enough.
@@ -506,7 +578,7 @@ function init(){
   if (cluster.isMaster){
 
     // Fork workers.
-    for (var i = 0; i < numCPUs; i++) {
+    for (var i = 0; i < (debug ? 1 : numCPUs); i++) {
       cluster.fork()
     }
 

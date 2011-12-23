@@ -5,5 +5,6 @@ logs/*
 dump.rdb
 public/files/*
 config/github.json
+config/dropbox.json
 config/server.json
 config/redis.conf
