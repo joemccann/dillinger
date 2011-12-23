@@ -26,7 +26,7 @@ function setStylusImagePrefix(productionFile){
     if(err) throw err
     else{
       // must be: imagePrefix="../img" or imagePrefix="http://cdn.foo.com/" in the stylus file.
-      var d = data.replace(/imagePrefix=[A-Za-z0-9-:"'\.\/\\]+/i + 'imagePrefix="' + appConfig.IMAGE_PREFIX_PRODUCTION + '"')
+      var d = data.replace(/imagePrefix=[A-Za-z0-9-:"'\.\/\\]+/i, 'imagePrefix="' + appConfig.IMAGE_PREFIX_PRODUCTION + '"')
 
        // write the file with the proper prefix.
        fs.writeFile(__dirname + appConfig.STYLUS_FILE, d, function(err,data){
