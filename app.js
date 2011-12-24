@@ -10,6 +10,7 @@ var express = require('express')
   , path = require('path')
   , redis = require('redis')
   , async = require('async')
+  , colors = require('colors')
   , passwordHash = require('password-hash')
   , md = require(__dirname + '/utils/md').md
   , github = require(__dirname + '/utils/github').github
@@ -17,6 +18,7 @@ var express = require('express')
   , debug
   , redisStore
   , redisClient
+  , _dropbox
   , github_api = 'https://api.github.com/'
 
 
@@ -45,16 +47,17 @@ if(appConfig.DEBUG){
 // If hacking on localhost/local machine
 if(appConfig.LOCALHOST){
 
-   appConfig.PORT = debug ? 5050 : appConfig.PORT
+  appConfig.PORT = debug ? 5050 : appConfig.PORT
  
 }
-
-// Initialize Redis connection
-initRedis()
 
 // Configuration
 
 app.configure(function(){
+
+  // Initialize Redis connection
+  initRedis()
+  
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.set('env', debug ? 'development' : 'production');
@@ -67,8 +70,9 @@ app.configure(function(){
     , compile: !debug
   }));
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-});
+  app.use(express.static(__dirname + '/public'))
+  
+})
 
 app.dynamicHelpers(
   {
@@ -76,14 +80,22 @@ app.dynamicHelpers(
       return dillingerReadme.toString() 
     }
   , dropbox: function(req,res){
-    
-      if(typeof req.session.dropbox !== 'undefined' && req.session.dropbox.sync){
+
+      if(typeof req.session.dropbox !== 'undefined' && typeof req.session.dropbox.access_token !== 'undefined'){
+        console.log('Dropbox session available\n'.blue)
+        // now set the values for later use:
+        
+        dbox.setAccessToken( req.session.dropbox.access_token )
+        dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
+        
+        console.dir(req.session.dropbox)
         return req.session.dropbox
       }
       else{
+        console.log('Dropbox session unavailable\n'.red)
         var drop = {
           sync : null
-        , oauth_token: dbox.getAccessToken()
+        , request_token: dbox.getRequestToken()
         , oauth_callback: dbox.getOauthCallback()  
         }
         return drop
@@ -222,50 +234,51 @@ app.get('/oauth/test/github', function(req, res){
 
 })
 
-
-function requestDropboxToken(){
-  
-  var url = dropbox_api + "oauth/request_token"
-  
-  function _tokenHandler(err,resp,data){  }
-
-  // Make a request to dropbox api to get token
-  var iterator = async.iterator([
-    function(){
-      request.post(url, function(err, resp, data){
-        // sample response: oauth_token_secret=b9q1n5il4lcc&oauth_token=mh7an9dkrg59
-        
-        var token = data.split('=').pop();
-        console.log(token)
-
-        return data.split('=').pop()
-
-      })    
-    }
-    ])
-    
-    return iterator()
-
-} // end requestDropboxToken()
-
-
-// requestDropboxToken()
-
-
+/* Dropbox OAuth */
 app.get('/oauth/dropbox', function(req, res, next){
 
   // id=409429&oauth_token=15usk7o67ckg644
 
   if(!req.query.oauth_token) next()
   else{
+    // Create dropbox session object and stash for later.
     req.session.dropbox = {}
-    
     req.session.dropbox.sync = true
-    req.session.dropbox.oauth_token = true
-
-    res.redirect('/')
+    req.session.dropbox.request_token = req.query.oauth_token
     
-    } // end else
+    // We are setting it here for future API calls
+    dbox.setAccessToken( req.session.dropbox.request_token )
+
+    // We are now fetching the actual access token and stash in
+    // session object in callback.
+    dbox.getRemoteAccessToken( function(err, data){
+      if(err){
+        console.err(err)
+        throw err
+      }
+      else{
+        
+        console.log('callback in getRemoteAccessToken else...\n'.yellow)
+        /*
+        
+        { 
+          oauth_token_secret: 't7enjtftcji6esn'
+        , oauth_token: 'kqjyvtk6oh5xrc1'
+        , uid: '409429' 
+        }
+        
+        */
+        req.session.dropbox.access_token_secret = data.oauth_token_secret
+        req.session.dropbox.access_token = data.oauth_token
+        
+        // Now go back to home page with session data in tact.
+        res.redirect('/')
+        
+      } // end else in callback
+      
+    })  // end dbox.getRemoteAccessToken()    
+  
+  } // end else
     
 })
 
@@ -526,6 +539,45 @@ app.get('/files/html/:html', function(req, res){
 })
 
 
+/* Dropbox Actions */
+
+app.get('/dropbox/account/info', function(req,res){
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( {data: 'Not authorized with Dropbox.'}, 403)
+
+  dbox.getAccountInfo( function(err,data){
+    
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.send(data)
+    }
+    
+  })
+  
+})
+
+
+app.get('/dropbox/metadata', function(req,res){
+  // TODO: CHECK FOR DB SESSION
+  if(typeof req.session.dropbox === 'undefined') return res.json( {data: 'Not authorized with Dropbox.'}, 403)
+
+  dbox.getMetadata( function(err,data){
+    
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json(JSON.parse(data))
+    }
+    
+  })
+  
+  
+})
 
 
 // TODO: ADD THESE LATER? Nah, fuck it, Github is good enough.
@@ -578,9 +630,11 @@ function init(){
   if (cluster.isMaster){
 
     // Fork workers.
-    for (var i = 0; i < (debug ? 1 : numCPUs); i++) {
+    for (var i = 0; i < (debug ? 0 : numCPUs); i++) {
       cluster.fork()
     }
+    
+    app.listen(appConfig.PORT)
 
     cluster.on('death', function(worker) {
       // We need to spin back up on death.
@@ -592,5 +646,13 @@ function init(){
   else{ app.listen(appConfig.PORT) }
   
 }
+
+setTimeout(function(){
+  // console.dir(_dropbox)
+  // dbox.setToken(_dropbox)
+  // dbox.setSecret()
+  // dbox.getAccountInfo()
+  
+}, 1000)
 
 init()
