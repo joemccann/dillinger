@@ -2839,6 +2839,7 @@ nav {
   height: auto;
   overflow: auto;
   text-align: center;
+  z-index: 10001;
 }
 #notify {
   -webkit-user-select: none;
