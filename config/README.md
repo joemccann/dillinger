@@ -23,10 +23,9 @@ In order to use the dropbox features associated with Dilinger you need to create
 It should look like the following:
 
     {
-      "consumer_key": "someRandomString"
-    , "consumer_secret": "someRandomString"
-    , "email": "yourEmailAddressForDropbox"
-    , "password": "yourPasswordForDropbox"
+      "consumer_key": "0k94h9kolnpwldr"
+    , "consumer_secret": "lbw3db73iyybs0h"
+    , "oauth_callback": "http://dillinger.io/oauth/dropbox"
     }
 
 To obtain the `consumer_key` and the `consumer_secret` you'll need to register your application with Dropbox.  Do that here:  [Dropbox App]
