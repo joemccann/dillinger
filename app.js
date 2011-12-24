@@ -543,7 +543,7 @@ app.get('/files/html/:html', function(req, res){
 
 app.get('/dropbox/account/info', function(req,res){
   
-  if(typeof req.session.dropbox === 'undefined') return res.json( {data: 'Not authorized with Dropbox.'}, 403)
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
 
   dbox.getAccountInfo( function(err,data){
     
@@ -555,17 +555,17 @@ app.get('/dropbox/account/info', function(req,res){
       res.send(data)
     }
     
-  })
+  })  // end getAccountInfo()
   
 })
 
-
+// Basically your directory listing with 'dropbox' as the root.
 app.get('/dropbox/metadata', function(req,res){
-  // TODO: CHECK FOR DB SESSION
-  if(typeof req.session.dropbox === 'undefined') return res.json( {data: 'Not authorized with Dropbox.'}, 403)
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
 
   dbox.getMetadata( function(err,data){
-    
+
     if(err){
       console.error(err)
       res.json(err)
@@ -574,10 +574,28 @@ app.get('/dropbox/metadata', function(req,res){
       res.json(JSON.parse(data))
     }
     
-  })
-  
+  })  // end getMetadata()
   
 })
+
+app.get('/dropbox/search', function(req,res){
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+
+  dbox.searchForMdFiles( function(err,data){
+
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json(JSON.parse(data))
+    }
+    
+  })  // end getMetadata()
+  
+})
+
 
 
 // TODO: ADD THESE LATER? Nah, fuck it, Github is good enough.

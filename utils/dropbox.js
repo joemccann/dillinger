@@ -18,6 +18,7 @@ function Dropbox(){
     , ACCESS_TOKEN_URI = 'https://api.dropbox.com/1/oauth/access_token'
     , METADATA_URI = 'https://api.dropbox.com/1/metadata'
     , ACCOUNT_INFO_URI = 'https://api.dropbox.com/1/account/info'
+    , SEARCH_URI = 'https://api.dropbox.com/1/search'
 
 
   // Fetch access token and secret from dropbox.
@@ -112,7 +113,20 @@ function Dropbox(){
                       cb(null, data)
                     }
                   })
-    } // end getAccountInfo()
+    }, // end getAccountInfo()
+    searchForMdFiles: function(cb){
+
+      _oauth.get( SEARCH_URI + "/dropbox/?query=.md&file_limit=500"
+                  , _access_token
+                  , _access_token_secret
+                  , function(err, data, res) {
+                      if(err) return cb(err)
+                      else{
+                        cb(null, data)
+                      }
+                  })
+      
+    } // searchForMdFiles
   } // end public API object
   
 } // end Dropbox()

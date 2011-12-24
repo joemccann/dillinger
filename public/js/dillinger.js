@@ -1167,7 +1167,40 @@ $(function(){
 
           $.ajax(config)  
 
-        } // end fetchAccuntInfo()
+        }, // end fetchAccuntInfo()
+        fetchFiles: function(){
+
+          function _beforeSendHandler(jqXHR, data){
+            Notifier.showMessage('Fetching User Info from Dropbox')
+          }
+
+          function _doneHandler(jqXHR, data, response){
+            var resp = JSON.parse(response.responseText)
+            console.log('\nFetch Metadata...')
+            console.dir(resp)
+            // Notifier
+            //   .showMessage('Sup '+ resp.display_name)
+          } // end done handler
+
+          function _failHandler(jqXHR, errorString, err){
+            alert("Roh-roh. Something went wrong. :(")
+          }
+
+          function _alwaysHandler(jqXHR, data){}
+
+          var config = {
+                          type: 'GET',
+                          dataType: 'json',
+                          url: '/dropbox/metadata',
+                          beforeSend: _beforeSendHandler,
+                          error: _failHandler,
+                          success: _doneHandler,
+                          complete: _alwaysHandler
+                        }
+
+          $.ajax(config)  
+
+        } // end fetchFiles()
       } // end return obj
   })() // end IIFE
 
