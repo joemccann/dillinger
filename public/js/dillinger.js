@@ -711,6 +711,12 @@ $(function(){
         Github.fetchRepos()
         return false
       })
+
+    $('#dropbox_profile')
+      .on('click', function(){
+        Dropbox.fetchAccountInfo()
+        return false
+      })
     
     $('#export_md')
       .on('click', function(){
@@ -730,16 +736,6 @@ $(function(){
         return false
       })
 
-    // $('#modal-from-dom').bind('shown', function () {
-    //   // do stuff
-    // })
-    //   
-    // $('#modal-from-dom').bind('hidden', function () {
-    //   // do stuff
-    // })
-
-      
-    
   } // end bindNav()
 
   /**
@@ -823,10 +819,14 @@ $(function(){
           // TODO: FIX ANIMATION QUEUE PROBLEM - .stop() doesn't work.
 
           _el
+            .text('')
+            .stop()
             .text(msg)
-            .slideDown(300)
-            .delay(delay || 800)
-            .slideUp(250)
+            .slideDown(250, function(){
+              _el
+                .delay(delay || 1000)
+                .slideUp(250)
+            })
 
           } // end showMesssage
       } // end return obj
@@ -1130,6 +1130,47 @@ $(function(){
     } // end return obj
   
   })() // end IIFE
+
+  // Dropbox Module
+  var Dropbox = (function(){
+    
+      return {
+        fetchAccountInfo: function(){
+
+          function _beforeSendHandler(jqXHR, data){
+            Notifier.showMessage('Fetching User Info from Dropbox')
+          }
+
+          function _doneHandler(jqXHR, data, response){
+            var resp = JSON.parse(response.responseText)
+            console.log('\nFetch User Info...')
+            // console.dir(resp)
+            Notifier
+              .showMessage('Sup '+ resp.display_name)
+          } // end done handler
+
+          function _failHandler(jqXHR, errorString, err){
+            alert("Roh-roh. Something went wrong. :(")
+          }
+
+          function _alwaysHandler(jqXHR, data){}
+
+          var config = {
+                          type: 'GET',
+                          dataType: 'json',
+                          url: '/dropbox/account/info',
+                          beforeSend: _beforeSendHandler,
+                          error: _failHandler,
+                          success: _doneHandler,
+                          complete: _alwaysHandler
+                        }
+
+          $.ajax(config)  
+
+        } // end fetchAccuntInfo()
+      } // end return obj
+  })() // end IIFE
+
 
   init()
   
