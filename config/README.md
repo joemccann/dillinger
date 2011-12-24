@@ -23,8 +23,8 @@ In order to use the dropbox features associated with Dilinger you need to create
 It should look like the following:
 
     {
-      "consumer_key": "0k94h9kolnpwldr"
-    , "consumer_secret": "lbw3db73iyybs0h"
+      "consumer_key": "YOUR-KEY"
+    , "consumer_secret": "YOUR-SECRET"
     , "oauth_callback": "http://dillinger.io/oauth/dropbox"
     }
 
