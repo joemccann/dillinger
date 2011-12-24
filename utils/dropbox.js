@@ -100,7 +100,7 @@ function Dropbox(){
                       }
                   })
       
-    }, // end getMetadata
+    }, // end getMetadata()
     getAccountInfo: function(cb){
       
       _oauth.get( ACCOUNT_INFO_URI
@@ -112,7 +112,7 @@ function Dropbox(){
                       cb(null, data)
                     }
                   })
-    }
+    } // end getAccountInfo()
   } // end public API object
   
 } // end Dropbox()
