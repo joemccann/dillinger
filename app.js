@@ -259,7 +259,6 @@ app.get('/oauth/dropbox', function(req, res, next){
       }
       else{
         
-        console.log('callback in getRemoteAccessToken else...\n'.yellow)
         /*
         
         { 
