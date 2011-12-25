@@ -2652,7 +2652,7 @@ nav {
   top: 0;
   height: 100%;
   overflow: auto;
-  background: rgba(255,255,255,0.90) url("/img/notebook_paper_200x200.gif") repeat scroll top left;
+  background: rgba(255,255,255,0.90) url("http://cdn.dillinger.io/notebook_paper_200x200.gif") repeat scroll top left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;

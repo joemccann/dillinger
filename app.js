@@ -82,17 +82,18 @@ app.dynamicHelpers(
   , dropbox: function(req,res){
 
       if(typeof req.session.dropbox !== 'undefined' && typeof req.session.dropbox.access_token !== 'undefined'){
-        console.log('Dropbox session available\n'.blue)
+        // console.log('Dropbox session available\n'.blue)
         // now set the values for later use:
         
         dbox.setAccessToken( req.session.dropbox.access_token )
         dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
         
-        console.dir(req.session.dropbox)
+        // console.dir(req.session.dropbox)
+        // Now we return it so our views have access to it as well.
         return req.session.dropbox
       }
       else{
-        console.log('Dropbox session unavailable\n'.red)
+        // console.log('Dropbox session unavailable\n'.red)
         var drop = {
           sync : null
         , request_token: dbox.getRequestToken()
@@ -283,9 +284,7 @@ app.get('/oauth/dropbox', function(req, res, next){
 })
 
 
-
 /* Github Actions */
-
 app.post('/github/repo/fetch_all', function(req,res){
   
   var github_url = github_api + 'user/repos?access_token=' + req.session.oauth.github
@@ -432,8 +431,88 @@ app.post('/github/repo/fetch_markdown_file', function(req,res){
 })
 
 
-/* Dillinger Actions */
+/* Dropbox Actions */
+app.get('/dropbox/account/info', function(req,res){
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
 
+  dbox.getAccountInfo( function(err,data){
+    
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.send(data)
+    }
+    
+  })  // end getAccountInfo()
+  
+})
+
+// Basically your directory listing with 'dropbox' as the root.
+app.get('/dropbox/metadata', function(req,res){
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+
+  dbox.getMetadata( function(err,data){
+
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json(JSON.parse(data))
+    }
+    
+  })  // end getMetadata()
+  
+})
+
+// Search for all .md files.
+app.get('/dropbox/search', function(req,res){
+  
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+
+  dbox.searchForMdFiles( function(err,data){
+
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json(JSON.parse(data))
+    }
+    
+  })  // end getMetadata()
+  
+})
+
+// Fetch a .md file's contents.
+app.post('/dropbox/files/get', function(req,res){
+
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+  
+  var pathToMdFile = req.body.mdFile
+  
+  dbox.getMdFile(pathToMdFile, function(err,filedata){
+
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json({data: filedata})
+    }
+    
+  })  // end getMetadata()
+  
+  
+})
+
+
+
+/* Dillinger Actions */
 // save a markdown file and send header to download it directly as response 
 app.post('/factory/fetch_markdown', function(req,res){
   
@@ -536,64 +615,6 @@ app.get('/files/html/:html', function(req, res){
     }
   })
 
-})
-
-
-/* Dropbox Actions */
-
-app.get('/dropbox/account/info', function(req,res){
-  
-  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
-
-  dbox.getAccountInfo( function(err,data){
-    
-    if(err){
-      console.error(err)
-      res.json(err)
-    }
-    else{
-      res.send(data)
-    }
-    
-  })  // end getAccountInfo()
-  
-})
-
-// Basically your directory listing with 'dropbox' as the root.
-app.get('/dropbox/metadata', function(req,res){
-  
-  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
-
-  dbox.getMetadata( function(err,data){
-
-    if(err){
-      console.error(err)
-      res.json(err)
-    }
-    else{
-      res.json(JSON.parse(data))
-    }
-    
-  })  // end getMetadata()
-  
-})
-
-app.get('/dropbox/search', function(req,res){
-  
-  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
-
-  dbox.searchForMdFiles( function(err,data){
-
-    if(err){
-      console.error(err)
-      res.json(err)
-    }
-    else{
-      res.json(JSON.parse(data))
-    }
-    
-  })  // end getMetadata()
-  
 })
 
 

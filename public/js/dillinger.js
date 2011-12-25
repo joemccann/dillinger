@@ -714,7 +714,7 @@ $(function(){
 
     $('#dropbox_profile')
       .on('click', function(){
-        Dropbox.fetchAccountInfo()
+        Dropbox.searchDropbox()
         return false
       })
     
@@ -795,6 +795,14 @@ $(function(){
         Github.fetchMarkdownFile(file)
           
         return false
+      })
+      .on('click', '.dropbox_file', function(){
+        var file = $(this).parent('li').attr('data-file-path')
+
+        Dropbox.fetchMarkdownFile(file)
+          
+        return false
+        
       })
   }
 
@@ -1134,74 +1142,192 @@ $(function(){
   // Dropbox Module
   var Dropbox = (function(){
     
-      return {
-        fetchAccountInfo: function(){
+    // Sorting regardless of upper/lowercase
+    // TODO: Let's be DRY and merge this with the
+    // sort method in Github module.
+    function _alphaNumSort(m,n) {
+      a = m.path.toLowerCase()
+      b = n.path.toLowerCase()
+      if (a === b) { return 0 }
+      if (isNaN(m) || isNaN(n)){ return ( a > b ? 1 : -1)} 
+      else {return m-n}
+    }
+    
+    function _listMdFiles(files){
 
-          function _beforeSendHandler(jqXHR, data){
-            Notifier.showMessage('Fetching User Info from Dropbox')
+      var list = '<ul>'
+      
+      // Sort alpha
+      files.sort(_alphaNumSort)
+
+      files.forEach(function(item){
+        // var name = item.path.split('/').pop()
+        list += '<li data-file-path="' 
+              + item.path + '"><a class="dropbox_file" href="#">' 
+              + item.path + '</a></li>'
+      })
+
+      list += '</ul>'
+  
+      $('.modal-header h3').text('Your Dropbox Files')
+      
+      $('.modal-body').html(list)
+  
+      $('#modal-generic').modal({
+        keyboard: true,
+        backdrop: true,
+        show: true
+      })
+        
+      return false
+  
+    }
+    
+    return {
+      fetchAccountInfo: function(){
+
+        function _beforeSendHandler(jqXHR, data){
+          Notifier.showMessage('Fetching User Info from Dropbox')
+        }
+
+        function _doneHandler(jqXHR, data, response){
+          var resp = JSON.parse(response.responseText)
+          console.log('\nFetch User Info...')
+          // console.dir(resp)
+          Notifier
+            .showMessage('Sup '+ resp.display_name)
+        } // end done handler
+
+        function _failHandler(jqXHR, errorString, err){
+          alert("Roh-roh. Something went wrong. :(")
+        }
+
+        function _alwaysHandler(jqXHR, data){}
+
+        var config = {
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '/dropbox/account/info',
+                        beforeSend: _beforeSendHandler,
+                        error: _failHandler,
+                        success: _doneHandler,
+                        complete: _alwaysHandler
+                      }
+
+        $.ajax(config)  
+
+      }, // end fetchAccuntInfo()
+      fetchMetadata: function(){
+
+        function _beforeSendHandler(jqXHR, data){
+          Notifier.showMessage('Fetching Metadata')
+        }
+
+        function _doneHandler(jqXHR, data, response){
+          var resp = JSON.parse(response.responseText)
+          console.dir(resp)
+        } // end done handler
+
+        function _failHandler(jqXHR, errorString, err){
+          alert("Roh-roh. Something went wrong. :(")
+        }
+
+        function _alwaysHandler(jqXHR, data){}
+
+        var config = {
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '/dropbox/metadata',
+                        beforeSend: _beforeSendHandler,
+                        error: _failHandler,
+                        success: _doneHandler,
+                        complete: _alwaysHandler
+                      }
+
+        $.ajax(config)  
+
+      }, // end fetchMetadata()
+      searchDropbox: function(){
+
+        function _beforeSendHandler(jqXHR, data){
+          Notifier.showMessage('Searching for .md Files')
+        }
+
+        function _doneHandler(jqXHR, data, response){
+          var resp = JSON.parse(response.responseText)
+          if(!resp.length){
+            Notifier.showMessage('No .md files found!')
           }
-
-          function _doneHandler(jqXHR, data, response){
-            var resp = JSON.parse(response.responseText)
-            console.log('\nFetch User Info...')
+          else{
             // console.dir(resp)
-            Notifier
-              .showMessage('Sup '+ resp.display_name)
-          } // end done handler
-
-          function _failHandler(jqXHR, errorString, err){
-            alert("Roh-roh. Something went wrong. :(")
+            _listMdFiles(resp)
           }
+        } // end done handler
 
-          function _alwaysHandler(jqXHR, data){}
+        function _failHandler(jqXHR, errorString, err){
+          alert("Roh-roh. Something went wrong. :(")
+        }
 
-          var config = {
-                          type: 'GET',
-                          dataType: 'json',
-                          url: '/dropbox/account/info',
-                          beforeSend: _beforeSendHandler,
-                          error: _failHandler,
-                          success: _doneHandler,
-                          complete: _alwaysHandler
-                        }
+        function _alwaysHandler(jqXHR, data){}
 
-          $.ajax(config)  
+        var config = {
+                        type: 'GET',
+                        dataType: 'json',
+                        url: '/dropbox/search',
+                        beforeSend: _beforeSendHandler,
+                        error: _failHandler,
+                        success: _doneHandler,
+                        complete: _alwaysHandler
+                      }
 
-        }, // end fetchAccuntInfo()
-        fetchFiles: function(){
+        $.ajax(config)  
 
-          function _beforeSendHandler(jqXHR, data){
-            Notifier.showMessage('Fetching User Info from Dropbox')
+      }, // end searchDropbox()
+      fetchMarkdownFile: function(filename){
+        
+        function _beforeSendHandler(jqXHR, data){}
+
+        function _doneHandler(jqXHR, data, response){
+          response = JSON.parse(response.responseText)
+          // console.dir(response)
+          if( response.statusCode === 404 ) {
+
+            var msg = JSON.parse( response.data )
+
+            Notifier.showMessage(msg.error)
+
           }
+          else{
+            
+            $('#modal-generic').modal('hide')
 
-          function _doneHandler(jqXHR, data, response){
-            var resp = JSON.parse(response.responseText)
-            console.log('\nFetch Metadata...')
-            console.dir(resp)
-            // Notifier
-            //   .showMessage('Sup '+ resp.display_name)
-          } // end done handler
+            editor.getSession().setValue( response.data )
+            previewMd()
+            
+          } // end else
+        } // end done handler
 
-          function _failHandler(jqXHR, errorString, err){
-            alert("Roh-roh. Something went wrong. :(")
-          }
+        function _failHandler(jqXHR, errorString, err){
+          alert("Roh-roh. Something went wrong. :(")
+        }
 
-          function _alwaysHandler(jqXHR, data){}
+        function _alwaysHandler(jqXHR, data){}
+        
+        var config = {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: 'mdFile=' + filename,
+                        url: '/dropbox/files/get',
+                        beforeSend: _beforeSendHandler,
+                        error: _failHandler,
+                        success: _doneHandler,
+                        complete: _alwaysHandler
+                      }
 
-          var config = {
-                          type: 'GET',
-                          dataType: 'json',
-                          url: '/dropbox/metadata',
-                          beforeSend: _beforeSendHandler,
-                          error: _failHandler,
-                          success: _doneHandler,
-                          complete: _alwaysHandler
-                        }
+        $.ajax(config)  
 
-          $.ajax(config)  
-
-        } // end fetchFiles()
-      } // end return obj
+      } // end fetchMarkdownFile()
+    } // end return obj
   })() // end IIFE
 
 

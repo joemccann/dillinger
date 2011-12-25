@@ -19,7 +19,6 @@ STRETCH GOALS/FEATURES
 ==
 
 - Integrate with Dropbox 
-    - oAuth
     - Save files to Dropbox directory
 - iPad/Tablet version
     - No export capabilities :/

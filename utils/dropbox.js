@@ -19,9 +19,10 @@ function Dropbox(){
     , METADATA_URI = 'https://api.dropbox.com/1/metadata'
     , ACCOUNT_INFO_URI = 'https://api.dropbox.com/1/account/info'
     , SEARCH_URI = 'https://api.dropbox.com/1/search'
+    , FILES_GET_URI = 'https://api-content.dropbox.com/1/files'
 
 
-  // Fetch access token and secret from dropbox.
+  // Fetch request token and request secret from dropbox.
   function _getRequestToken(){
 
     _oauth.get( REQUEST_TOKEN_URI, null, null, function(err, data, res){
@@ -64,11 +65,11 @@ function Dropbox(){
       return _request_token_secret
     },
     setAccessToken: function(token){
-      console.log('Setting access token: ' + token.green + '\n')
+      // console.log('Setting access token: ' + token.green + '\n')
       _access_token = token
     },
     setAccessTokenSecret: function( access_token_secret ){
-      console.log('Setting access token secret: ' + access_token_secret.green + '\n')
+      // console.log('Setting access token secret: ' + access_token_secret.green + '\n')
       _access_token_secret = access_token_secret
     },
     getRemoteAccessToken: function(cb){
@@ -116,6 +117,7 @@ function Dropbox(){
     }, // end getAccountInfo()
     searchForMdFiles: function(cb){
 
+      // *sigh* http://forums.dropbox.com/topic.php?id=50266&replies=1
       _oauth.get( SEARCH_URI + "/dropbox/?query=.md&file_limit=500"
                   , _access_token
                   , _access_token_secret
@@ -126,7 +128,21 @@ function Dropbox(){
                       }
                   })
       
-    } // searchForMdFiles
+    }, // searchForMdFiles
+    getMdFile: function(pathToFile, cb){
+
+      _oauth.get( FILES_GET_URI + "/dropbox" + pathToFile
+                  , _access_token
+                  , _access_token_secret
+                  , function(err, data, res) {
+                      if(err) return cb(err)
+                      else{
+                        cb(null, data)
+                      }
+                  })
+      
+    } // getMdFile()
+    
   } // end public API object
   
 } // end Dropbox()

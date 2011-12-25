@@ -1,6 +1,11 @@
 HISTORY
 =
 
+0.1.0
+-
+- Added initial Dropbox support
+- Updated notification position (needs to be completely refactored).
+
 0.0.8
 -
 - Programmatically reading in the `README.md` to populate the `dillinger.ejs` view (DRY).

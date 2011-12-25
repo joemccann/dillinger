@@ -1,5 +1,5 @@
 {
-  "VERSION": "0.0.8",
+  "VERSION": "0.1.0",
   "JSHINT_OPTS": { "laxbreak": true, "asi": true },
   "JAVASCRIPT": {
     "DIST_DIR": "./public/js",
@@ -10,7 +10,7 @@
     "DIST_DIR": "./public/css",
     "dillinger": ["./public/css/dillinger.css"]
   },
-  "DEBUG": true,
+  "DEBUG": false,
   "PORT": 80,
   "LOCALHOST": false,
   "IMAGE_PREFIX_DEBUG": "/img/",
