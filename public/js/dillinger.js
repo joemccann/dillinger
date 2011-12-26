@@ -8,16 +8,20 @@ $(function(){
     , navShow = true
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = 
-    {
-      theme: 'ace/theme/clouds_midnight'
-    , showPaper: true
-    , currentMd: ''
-    , autosave: 
       {
-        enabled: true
-      , interval: 3000 // might be too agressive; don't want to block UI for large saves.
+        theme: 'ace/theme/clouds_midnight'
+      , showPaper: true
+      , currentMd: ''
+      , autosave: 
+        {
+          enabled: true
+        , interval: 3000 // might be too agressive; don't want to block UI for large saves.
+        }
+      , dropbox:
+        {
+          current_filename: null
+        }
       }
-    }
 
   // Feature detect ish
   var dillinger = 'dillinger'
@@ -208,6 +212,18 @@ $(function(){
      return transEndEventNames[ prefixed('transition') ]
   }
 
+
+  /**
+   * Generate a random filename.
+   *
+   * @param  {String}  The file type's extension
+   * @return {String} 
+   */
+  function generateRandomFilename(ext){
+    return 'dillinger_' +(new Date()).toISOString().replace(/[\.:-]/g, "_")+ '.' + ext
+  }
+
+
   /**
    * Initialize application.
    *
@@ -353,7 +369,8 @@ $(function(){
    */
   function resetProfile(){
     localStorage.clear()
-    Notifier.showMessage(Notifier.messages.profileCleared)
+    // delete localStorage.profile
+    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
   }
 
   /**
@@ -672,7 +689,13 @@ $(function(){
     
     $('#save')
       .on('click', function(){
-        saveFile(true)
+        
+        profile.dropbox.current_filename = profile.dropbox.current_filename || '/Dillinger/' + generateRandomFilename('md')
+
+        Dropbox.putMarkdownFile()
+
+        saveFile()
+        
         return false
       })
 
@@ -797,9 +820,11 @@ $(function(){
         return false
       })
       .on('click', '.dropbox_file', function(){
-        var file = $(this).parent('li').attr('data-file-path')
-
-        Dropbox.fetchMarkdownFile(file)
+        
+        // We stash the current filename in the local profile only; not in localStorage.
+        profile.dropbox.current_filename = $(this).parent('li').attr('data-file-path')
+        
+        Dropbox.fetchMarkdownFile(profile.dropbox.current_filename)
           
         return false
         
@@ -821,6 +846,8 @@ $(function(){
           , profileCleared: "Profile cleared"
           , docSavedLocal: "Document saved locally"
           , docSavedServer: "Document saved on our server"
+          , docSavedDropbox: "Document saved on dropbox"
+          , dropboxImportNeeded: "Please import a file from dropbox first."
         },
         showMessage: function(msg,delay){
           
@@ -1318,6 +1345,55 @@ $(function(){
                         dataType: 'json',
                         data: 'mdFile=' + filename,
                         url: '/dropbox/files/get',
+                        beforeSend: _beforeSendHandler,
+                        error: _failHandler,
+                        success: _doneHandler,
+                        complete: _alwaysHandler
+                      }
+
+        $.ajax(config)  
+
+      }, // end fetchMarkdownFile()
+      putMarkdownFile: function(){
+        
+        function _beforeSendHandler(jqXHR, data){}
+
+        function _doneHandler(jqXHR, data, response){
+          response = JSON.parse(response.responseText)
+          // console.dir(response)
+          if( response.statusCode >= 204 ) {
+
+            var msg = JSON.parse( response.data )
+
+            Notifier.showMessage(msg.error, 5000)
+
+          }
+          else{
+            
+            $('#modal-generic').modal('hide')
+            
+            // console.dir(JSON.parse(response.data))
+
+            Notifier.showMessage( Notifier.messages.docSavedDropbox )
+            
+          } // end else
+        } // end done handler
+
+        function _failHandler(jqXHR, errorString, err){
+          alert("Roh-roh. Something went wrong. :(")
+        }
+
+        function _alwaysHandler(jqXHR, data){}
+        
+        var md = encodeURIComponent( editor.getSession().getValue() )
+                
+        var postData = 'pathToMdFile=' + profile.dropbox.current_filename + '&fileContents=' + md
+        
+        var config = {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: postData,
+                        url: '/dropbox/files/put',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,

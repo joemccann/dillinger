@@ -1,5 +1,5 @@
 {
-  "VERSION": "0.1.0",
+  "VERSION": "0.1.1",
   "JSHINT_OPTS": { "laxbreak": true, "asi": true },
   "JAVASCRIPT": {
     "DIST_DIR": "./public/js",

@@ -6,8 +6,8 @@
   <div class="topbar">
     <div class="topbar-inner">
         <nav class="slide_in">
-          <a href="#" class="btn primary" id="clear">Clear</a> |
-          <a href="#" id="save" class="btn primary">Save</a> |
+          <% if(dropbox.sync){ %><span class="relative">
+            <img src="/img/icon_dropbox_16x16.png" class="icon_vendor dropbox" alt="Dropbox Icon"><a href="#" id="save" class="btn primary save">Save to Dropbox</a> |</span><% }%>
           <a href="#" class="btn success" id="export_md">Export Markdown</a> |
           <a href="#" class="btn success" id="export_html">Export HTML</a> |
           <span class="relative">

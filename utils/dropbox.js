@@ -20,6 +20,7 @@ function Dropbox(){
     , ACCOUNT_INFO_URI = 'https://api.dropbox.com/1/account/info'
     , SEARCH_URI = 'https://api.dropbox.com/1/search'
     , FILES_GET_URI = 'https://api-content.dropbox.com/1/files'
+    , FILES_PUT_URI = 'https://api-content.dropbox.com/1/files_put'
 
 
   // Fetch request token and request secret from dropbox.
@@ -141,7 +142,29 @@ function Dropbox(){
                       }
                   })
       
-    } // getMdFile()
+    }, // getMdFile()
+    putMdFile: function(pathToFile, fileContents, cb){
+
+      // https://github.com/ciaranj/node-oauth/blob/master/lib/oauth.js#L472-474
+      // exports.OAuth.prototype.post= function(url, oauth_token, oauth_token_secret, post_body, post_content_type, callback)
+      
+      // https://www.dropbox.com/developers/reference/api#files_put
+      
+      var params = querystring.stringify({overwrite: 'true'})
+             
+      _oauth.put( FILES_PUT_URI + "/dropbox" + pathToFile + "?" + params
+                  , _access_token
+                  , _access_token_secret
+                  , fileContents
+                  , 'text/plain'
+                  , function(err, data, res) {
+                      if(err) return cb(err)
+                      else{
+                        cb(null, data)
+                      }
+                  })
+      
+    } // putMdFile()
     
   } // end public API object
   

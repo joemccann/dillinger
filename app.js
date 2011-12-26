@@ -504,11 +504,30 @@ app.post('/dropbox/files/get', function(req,res){
       res.json({data: filedata})
     }
     
-  })  // end getMetadata()
-  
+  })  // end getMdFile()
   
 })
 
+app.post('/dropbox/files/put', function(req,res){
+
+  if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+  
+  var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
+  var contents = req.body.fileContents || 'Test Data from Dillinger.'
+
+  dbox.putMdFile(pathToMdFile, contents, function(err,filedata){
+
+    if(err){
+      console.error(err)
+      res.json(err)
+    }
+    else{
+      res.json({data: filedata})
+    }
+    
+  })  // end getMdFile()
+  
+})
 
 
 /* Dillinger Actions */
