@@ -685,12 +685,5 @@ function init(){
   
 }
 
-setTimeout(function(){
-  // console.dir(_dropbox)
-  // dbox.setToken(_dropbox)
-  // dbox.setSecret()
-  // dbox.getAccountInfo()
-  
-}, 1000)
 
 init()
