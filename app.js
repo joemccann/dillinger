@@ -225,7 +225,7 @@ app.get('/oauth/dropbox', function(req, res, next){
     dbox.getRemoteAccessToken( function(err, data){
       if(err){
         console.error(err)
-        res.json(err)
+        res.redirect('/')
       }
       else{
         
