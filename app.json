@@ -10,7 +10,7 @@
     "DIST_DIR": "./public/css",
     "dillinger": ["./public/css/dillinger.css"]
   },
-  "DEBUG": true,
+  "DEBUG": false,
   "PORT": 80,
   "LOCALHOST": false,
   "IMAGE_PREFIX_DEBUG": "/img/",
