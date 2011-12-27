@@ -77,8 +77,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
- 
-/*
-  for app.json
- "dependencies": [ "./public/js/jquery.hoverIntent.min.js", "./public/js/ace.js", "./public/js/mode-markdown.js", "./public/js/showdown.js", "./public/js/keymaster.js", "./public/js/bootstrap-modal.js"],
-*/
