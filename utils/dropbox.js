@@ -61,7 +61,6 @@ function Dropbox(){
       return _request_token
     },
     forceNewRequestToken: function(cb){
-      console.log('forcing new request token')
       _request_token = null
       _getRequestToken(cb)
     },
@@ -168,6 +167,7 @@ function Dropbox(){
                   })
       
     } // putMdFile()
+  
   } // end public API object
   
 } // end Dropbox()
