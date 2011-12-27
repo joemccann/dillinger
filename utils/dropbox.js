@@ -24,19 +24,19 @@ function Dropbox(){
 
 
   // Fetch request token and request secret from dropbox.
-  function _getRequestToken(){
+  function _getRequestToken(cb){
 
     _oauth.get( REQUEST_TOKEN_URI, null, null, function(err, data, res){
       if (err) {
         console.error(err)
-        throw err
+        cb(err)
       }
       else {
         var d = querystring.parse(data)
         // console.dir(d)
         _request_token = d.oauth_token
         _request_token_secret = d.oauth_token_secret
-
+        cb(null, data)
       }
 
     })  // end _oauth.get()
@@ -51,9 +51,7 @@ function Dropbox(){
                               , API_URI + '/oauth/access_token'
                               , config.consumer_key, config.consumer_secret
                               , '1.0', null, 'HMAC-SHA1')
-
-    _getRequestToken()
-
+                              
   }()
   
   // Public API Object
@@ -61,6 +59,11 @@ function Dropbox(){
     
     getRequestToken: function(){
       return _request_token
+    },
+    forceNewRequestToken: function(cb){
+      console.log('forcing new request token')
+      _request_token = null
+      _getRequestToken(cb)
     },
     getRequestSecret: function(){
       return _request_token_secret
@@ -165,7 +168,6 @@ function Dropbox(){
                   })
       
     } // putMdFile()
-    
   } // end public API object
   
 } // end Dropbox()

@@ -74,34 +74,11 @@ app.configure(function(){
   
 })
 
-app.dynamicHelpers(
-  {
-    readme: function(req,res){
+app.dynamicHelpers({
+    readme: function(req,res)
+    {
       return dillingerReadme.toString() 
-    }
-  , dropbox: function(req,res){
-
-      if(typeof req.session.dropbox !== 'undefined' && typeof req.session.dropbox.access_token !== 'undefined'){
-        // console.log('Dropbox session available\n'.blue)
-        // now set the values for later use:
-        
-        dbox.setAccessToken( req.session.dropbox.access_token )
-        dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
-        
-        // console.dir(req.session.dropbox)
-        // Now we return it so our views have access to it as well.
-        return req.session.dropbox
-      }
-      else{
-        // console.log('Dropbox session unavailable\n'.red)
-        var drop = {
-          sync : null
-        , request_token: dbox.getRequestToken()
-        , oauth_callback: dbox.getOauthCallback()  
-        }
-        return drop
-      }
-    }
+    }// end readme
 })
 
 
@@ -117,73 +94,66 @@ app.configure('production', function(){
 
 app.get('/', function(req, res, next){
   
-  if(typeof req.session.oauth !== 'undefined' && typeof req.session.oauth.github !== 'undefined'){
+  
+  if(typeof req.session.dropbox !== 'undefined' && typeof req.session.dropbox.access_token !== 'undefined'){
     
-    // VALIDATE THE TOKEN BY FETCHING USERNAME
-    var github_url = github_api + 'user?access_token=' + req.session.oauth.github
-
-    request.get(github_url, function(err, resp, data){
-      if(err) {
-        res.redirect(resp.statusCode)
-      }
-      else if(!err && resp.statusCode == 200) 
-      {
-        var d = JSON.parse(data)
-        var username = req.session.oauth.username = d.login 
-        
-        res.render('dillinger', 
-        {
-          title: 'Dillinger, the last Markdown editor, ever.'
-        , version: appConfig.VERSION
-        , debugging: debug
-        , layout: 'dillinger-layout'
-        , loggedIn: true
-        , github: 
-          {
-            username: username
-          }
-        })
-        
-      } // end else if
+    // Create a new request token on every request
+    dbox.forceNewRequestToken(function(err, data){
+      if(err) next(err)
       else{
         
-        res.render('dillinger', 
-        {
-          title: 'Dillinger, the last Markdown editor, ever.'
-        , version: appConfig.VERSION
-        , debugging: debug
-        , layout: 'dillinger-layout'
-        , loggedIn: false
-        , github: 
-          {
-            client_id: githubConfig.client_id
-          , callback_url: githubConfig.callback_url
-          }
+        res.local('dropbox',{
+          sync : true
+        , request_token: dbox.getRequestToken()
+        , oauth_callback: dbox.getOauthCallback()  
         })
         
-      }
-    }) // end request callback
-    
-  } // end if github oauth undefined
-  else{
+        dbox.setAccessToken( req.session.dropbox.access_token )
+        dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
 
-    res.render('dillinger', 
-    {
-      title: 'Dillinger, the last Markdown editor, ever.'
-    , version: appConfig.VERSION
-    , debugging: debug
-    , layout: 'dillinger-layout'
-    , loggedIn: false
-    , github: 
-      {
-        client_id: githubConfig.client_id
-      , callback_url: githubConfig.callback_url
-      }
-    , readme: req.readme
+        dbox.getAccountInfo(function(err, data){
+          if(err){
+            // If this fails, the token is old or something else is 
+            // wrong so let's delete it and redirect, thus trying agin.
+            delete req.session['dropbox']
+            return res.redirect('/')
+          }
+          else{
+            // If there's no error, let's now check Github's oauth setting.
+            
+            res.local('dropbox',{
+              sync : true
+            , request_token: dbox.getRequestToken()
+            , oauth_callback: dbox.getOauthCallback()  
+            })
+            
+            return checkGithubOauth(req, res, next)
+          }
+        })  // end getAccountInf()
+        
+      } // end else
     })
+  }
+  else{
+    // Create a new request token on every request
+    dbox.forceNewRequestToken(function(err, data){
+      if(err) next(err)
+      else{
+        
+        res.local('dropbox',{
+          sync : null
+        , request_token: dbox.getRequestToken()
+        , oauth_callback: dbox.getOauthCallback()  
+        })
+
+        checkGithubOauth(req, res, next)        
+      } // end else
+      
+    })  // end forceNewRequestToken()
+    
   } // end else
   
-})
+}) // end route
 
 /* Github OAuth */
 app.get('/oauth/github', function(req, res, next){
@@ -255,7 +225,7 @@ app.get('/oauth/dropbox', function(req, res, next){
     dbox.getRemoteAccessToken( function(err, data){
       if(err){
         console.err(err)
-        throw err
+        res.json(err)
       }
       else{
         
@@ -647,6 +617,77 @@ app.get('/oauth/twitter', function(req,res){
 })
 
 
+// Router helper to determine if oauth'd with Github
+function checkGithubOauth(req, res, next){
+  
+  if(typeof req.session.oauth !== 'undefined' && typeof req.session.oauth.github !== 'undefined'){
+    
+    // VALIDATE THE TOKEN BY FETCHING USERNAME
+    var github_url = github_api + 'user?access_token=' + req.session.oauth.github
+
+    request.get(github_url, function(err, resp, data){
+      if(err) {
+        res.redirect(resp.statusCode)
+      }
+      else if(!err && resp.statusCode == 200) 
+      {
+        var d = JSON.parse(data)
+        var username = req.session.oauth.username = d.login 
+        
+        res.render('dillinger', 
+        {
+          title: 'Dillinger, the last Markdown editor, ever.'
+        , version: appConfig.VERSION
+        , debugging: debug
+        , layout: 'dillinger-layout'
+        , loggedIn: true
+        , github: 
+          {
+            username: username
+          }
+        })
+        
+      } // end else if
+      else{
+        
+        res.render('dillinger', 
+        {
+          title: 'Dillinger, the last Markdown editor, ever.'
+        , version: appConfig.VERSION
+        , debugging: debug
+        , layout: 'dillinger-layout'
+        , loggedIn: false
+        , github: 
+          {
+            client_id: githubConfig.client_id
+          , callback_url: githubConfig.callback_url
+          }
+        })
+        
+      }
+    }) // end request callback
+    
+  } // end if github oauth undefined
+  else{
+
+    res.render('dillinger', 
+    {
+      title: 'Dillinger, the last Markdown editor, ever.'
+    , version: appConfig.VERSION
+    , debugging: debug
+    , layout: 'dillinger-layout'
+    , loggedIn: false
+    , github: 
+      {
+        client_id: githubConfig.client_id
+      , callback_url: githubConfig.callback_url
+      }
+    , readme: req.readme
+    })
+  } // end else
+  
+} // end checkGithubOauth()
+
 // Snatch the pw from the redis config file.
 function findRedisPassword(){
 
@@ -692,7 +733,7 @@ function init(){
     }
     
     app.listen(appConfig.PORT)
-
+    
     cluster.on('death', function(worker) {
       // We need to spin back up on death.
       cluster.fork()
