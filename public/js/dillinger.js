@@ -1281,7 +1281,25 @@ $(function(){
         }
 
         function _doneHandler(jqXHR, data, response){
+
           var resp = JSON.parse(response.responseText)
+                    
+          if(resp.hasOwnProperty('statusCode') && resp.statusCode === 401){
+            // {"statusCode":401,"data":"{\"error\": \"Access token is disabled.\"}"}
+            
+            var data = JSON.parse(resp.data)
+            
+            Notifier.showMessage('Error! ' + data.error, 1000)
+            
+            setTimeout(function(){
+              Notifier.showMessage('Reloading!')
+              window.location.reload()
+            }, 1250)
+
+            return
+
+          }
+
           if(!resp.length){
             Notifier.showMessage('No .md files found!')
           }
