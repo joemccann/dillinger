@@ -224,7 +224,7 @@ app.get('/oauth/dropbox', function(req, res, next){
     // session object in callback.
     dbox.getRemoteAccessToken( function(err, data){
       if(err){
-        console.err(err)
+        console.error(err)
         res.json(err)
       }
       else{
