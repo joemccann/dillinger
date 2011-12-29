@@ -574,11 +574,11 @@ app.get('/files/md/:mdid', function(req, res){
   res.attachment(filename)
   
   res.download(filename, function(err){
-    if(err) throw err
+    if(err) console.error(err) 
     else{
       // Delete the file after download
       fs.unlink(filename, function(err, data){
-        if(err) throw err
+        if(err) console.error(err)
       })
     }
   })
@@ -594,11 +594,11 @@ app.get('/files/html/:html', function(req, res){
   
   res.attachment(filename)
   res.download(filename, function(err){
-    if(err) throw err
+    if(err) console.error(err)
     else{
       // Delete the file after download
       fs.unlink(filename, function(err, data){
-        if(err) throw err
+        if(err) console.error(err)
       })
     }
   })
@@ -711,7 +711,7 @@ function initRedis(){
   });
 
   redisClient.on("connect", function (err){
-    if(err) throw err
+    if(err) console.error(err)
     else{
       redisClient.auth(findRedisPassword(), function(){
         debug && console.log('Authenticated to redis.')
