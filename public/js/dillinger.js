@@ -368,9 +368,15 @@ $(function(){
    * @return {Void}
    */
   function resetProfile(){
+    // For some reason, clear() is not working in Chrome.
     localStorage.clear()
-    // delete localStorage.profile
-    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
+    // Let's turn off autosave
+    profile.autosave.enabled = false
+    // Delete the property altogether
+    delete localStorage['profile']
+    // Now reload the page to start fresh
+    window.location.reload()
+//    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
   }
 
   /**
