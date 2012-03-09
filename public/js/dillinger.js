@@ -471,10 +471,11 @@ $(function(){
   /**
    * Stash current file name in the user's profile.
    *
+   * @param {String}  Optional string to force the value
    * @return {Void}
    */  
-  function updateFilename(){
-    updateUserProfile( {current_filename: getCurrentFilenameFromField()} )
+  function updateFilename(str){
+    updateUserProfile( {current_filename: str || getCurrentFilenameFromField()} )
   }
   
   /**
@@ -869,9 +870,10 @@ $(function(){
       .on('click', '.dropbox_file', function(){
         
         // We stash the current filename in the local profile only; not in localStorage.
-        profile.current_filename = $(this).parent('li').attr('data-file-path')
-        
-        Dropbox.fetchMarkdownFile(profile.current_filename)
+        // Upon success of fetching, we add it to localStorage.
+        profile.current_filename = $(this).parent('li').attr('data-file-path').split('/').pop().replace('.md', '')
+
+        Dropbox.fetchMarkdownFile( $(this).parent('li').attr('data-file-path') )
           
         return false
         
@@ -1266,7 +1268,7 @@ $(function(){
 
         function _doneHandler(jqXHR, data, response){
           var resp = JSON.parse(response.responseText)
-          console.log('\nFetch User Info...')
+          // console.log('\nFetch User Info...')
           // console.dir(resp)
           Notifier
             .showMessage('Sup '+ resp.display_name)
@@ -1299,7 +1301,7 @@ $(function(){
 
         function _doneHandler(jqXHR, data, response){
           var resp = JSON.parse(response.responseText)
-          console.dir(resp)
+          // console.dir(resp)
         } // end done handler
 
         function _failHandler(jqXHR, errorString, err){
@@ -1392,7 +1394,12 @@ $(function(){
           else{
             
             $('#modal-generic').modal('hide')
-
+            
+            // Update it in localStorage
+            updateFilename(profile.current_filename)
+            // Show it in the field
+            setCurrentFilenameField()
+            
             editor.getSession().setValue( response.data )
             previewMd()
             
