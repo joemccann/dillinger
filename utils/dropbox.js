@@ -153,7 +153,6 @@ function Dropbox(){
       // https://www.dropbox.com/developers/reference/api#files_put
       
       var params = querystring.stringify({overwrite: 'true'})
-             
       _oauth.put( FILES_PUT_URI + "/dropbox" + pathToFile + "?" + params
                   , _access_token
                   , _access_token_secret

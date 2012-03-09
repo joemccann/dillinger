@@ -15,9 +15,13 @@ $(function(){
       , autosave: 
         {
           enabled: true
-        , interval: 3000 // might be too agressive; don't want to block UI for large saves.
+        , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
         }
       , current_filename : 'Untitled Document'
+      , dropbox:
+        {
+          filepath: '/Dillinger/'
+        }
       }
 
   // Feature detect ish
@@ -475,7 +479,14 @@ $(function(){
    * @return {Void}
    */  
   function updateFilename(str){
-    updateUserProfile( {current_filename: str || getCurrentFilenameFromField()} )
+    // Check for string because it may be keyup event object
+    if(typeof str === 'string'){
+      f = str
+    }else
+    {
+      f = getCurrentFilenameFromField()
+    }
+    updateUserProfile( {current_filename: f })
   }
   
   /**
@@ -871,9 +882,14 @@ $(function(){
         
         // We stash the current filename in the local profile only; not in localStorage.
         // Upon success of fetching, we add it to localStorage.
-        profile.current_filename = $(this).parent('li').attr('data-file-path').split('/').pop().replace('.md', '')
+        
+        var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        Dropbox.fetchMarkdownFile( $(this).parent('li').attr('data-file-path') )
+        profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
+
+        Dropbox.setFilePath( dboxFilePath )
+
+        Dropbox.fetchMarkdownFile( dboxFilePath )
           
         return false
         
@@ -1259,6 +1275,17 @@ $(function(){
   
     }
     
+    function _encodeFilename(path){
+      return encodeURIComponent( path.split('/').pop() )
+    }
+    
+    function _removeFilenameFromPath(path){
+      // capture the name
+      var name = path.split('/').pop()
+      // then just replace with nothing on the path. boom.
+      return path.replace(name, '')
+    }
+    
     return {
       fetchAccountInfo: function(){
 
@@ -1412,6 +1439,12 @@ $(function(){
 
         function _alwaysHandler(jqXHR, data){}
         
+        // Weird encoding mumbo jumbo columbo
+        var enc = _encodeFilename(filename)
+        var path = _removeFilenameFromPath(filename)
+        
+        filename = path + enc
+        
         var config = {
                         type: 'POST',
                         dataType: 'json',
@@ -1426,6 +1459,10 @@ $(function(){
         $.ajax(config)  
 
       }, // end fetchMarkdownFile()
+      setFilePath: function(path){
+        path = _removeFilenameFromPath(path)
+        updateUserProfile({dropbox: {filepath: path }})
+      },
       putMarkdownFile: function(){
         
         function _beforeSendHandler(jqXHR, data){}
@@ -1458,8 +1495,8 @@ $(function(){
         function _alwaysHandler(jqXHR, data){}
         
         var md = encodeURIComponent( editor.getSession().getValue() )
-                
-        var postData = 'pathToMdFile=' + profile.current_filename + '&fileContents=' + md
+        
+        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
         
         var config = {
                         type: 'POST',

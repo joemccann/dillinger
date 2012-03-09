@@ -464,6 +464,13 @@ app.post('/dropbox/files/get', function(req,res){
   
   var pathToMdFile = req.body.mdFile
   
+  // For some reason dropbox needs me to do this...
+  // Otherwise, spaces and shit get fuct up
+  // TODO: DRY THIS UP
+  var name = pathToMdFile.split('/').pop()
+  var encodedName = encodeURIComponent(name)
+  pathToMdFile = pathToMdFile.replace(name, encodedName)
+  
   dbox.getMdFile(pathToMdFile, function(err,filedata){
 
     if(err){
@@ -484,6 +491,14 @@ app.post('/dropbox/files/put', function(req,res){
   
   var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
   var contents = req.body.fileContents || 'Test Data from Dillinger.'
+
+  console.log(pathToMdFile)
+  
+  // For some reason dropbox needs me to do this...
+  // Otherwise, spaces and shit get fuct up
+  var name = pathToMdFile.split('/').pop()
+  var encodedName = encodeURIComponent(name)
+  pathToMdFile = pathToMdFile.replace(name, encodedName)
 
   dbox.putMdFile(pathToMdFile, contents, function(err,filedata){
 
