@@ -497,6 +497,8 @@ $(function(){
    */  
   function fetchMarkdownFile(){
     
+    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
+    
     var unmd = editor.getSession().getValue()
     
     function _beforeSendHandler(jqXHR, data){}
@@ -535,6 +537,8 @@ $(function(){
    * @return {Void}
    */  
   function fetchHtmlFile(){
+    
+    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     
     var unmd = editor.getSession().getValue()
     
