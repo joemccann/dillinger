@@ -17,10 +17,7 @@ $(function(){
           enabled: true
         , interval: 3000 // might be too agressive; don't want to block UI for large saves.
         }
-      , dropbox:
-        {
-          current_filename: null
-        }
+      , current_filename : 'Untitled Document'
       }
 
   // Feature detect ish
@@ -79,8 +76,7 @@ $(function(){
    * @param {Function} Optional callback to be executed after the script loads.
    * @return {void}
    */
-  function asyncLoad(filename,cb)
-  {
+  function asyncLoad(filename,cb){
     (function(d,t){
 
       var leScript = d.createElement(t)
@@ -225,6 +221,27 @@ $(function(){
 
 
   /**
+   * Get current filename from contenteditable field.
+   *
+   * @return {String} 
+   */
+  function getCurrentFilenameFromField(){
+    return $('#filename > p[contenteditable="true"]').text()
+  }
+
+
+  /**
+   * Set current filename from profile.
+   *
+   * @param {String}  Optional string to force set the value. 
+   * @return {String} 
+   */
+  function setCurrentFilenameField(str){
+    $('#filename > p[contenteditable="true"]').text( str || profile.current_filename || "Untitled Document")
+  }
+
+
+  /**
    * Initialize application.
    *
    * @return {Void}
@@ -254,6 +271,8 @@ $(function(){
       bindKeyboard()
       
       bindDelegation()
+      
+      bindFilenameField()
               
       autoSave()
       
@@ -310,6 +329,8 @@ $(function(){
     githubUser && Notifier.showMessage("What's Up " + githubUser, 1000)
     
     originalContPosition = $cont.css('right')
+    
+    setCurrentFilenameField()
     
   }
 
@@ -445,6 +466,15 @@ $(function(){
       .html('') // unnecessary?
       .html(md)
       
+  }
+
+  /**
+   * Stash current file name in the user's profile.
+   *
+   * @return {Void}
+   */  
+  function updateFilename(){
+    updateUserProfile( {current_filename: getCurrentFilenameFromField()} )
   }
   
   /**
@@ -642,6 +672,17 @@ $(function(){
     autoSave()
   
   }
+
+
+  /**
+   * Bind keyup handler to the editor.
+   *
+   * @return {Void}
+   */  
+  function bindFilenameField(){
+    $('#filename > p[contenteditable="true"]').bind('keyup', updateFilename)
+  }
+  
   
   /**
    * Bind keyup handler to the editor.
@@ -696,7 +737,7 @@ $(function(){
     $('#save')
       .on('click', function(){
         
-        profile.dropbox.current_filename = profile.dropbox.current_filename || '/Dillinger/' + generateRandomFilename('md')
+        profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
 
         Dropbox.putMarkdownFile()
 
@@ -828,9 +869,9 @@ $(function(){
       .on('click', '.dropbox_file', function(){
         
         // We stash the current filename in the local profile only; not in localStorage.
-        profile.dropbox.current_filename = $(this).parent('li').attr('data-file-path')
+        profile.current_filename = $(this).parent('li').attr('data-file-path')
         
-        Dropbox.fetchMarkdownFile(profile.dropbox.current_filename)
+        Dropbox.fetchMarkdownFile(profile.current_filename)
           
         return false
         
@@ -1411,7 +1452,7 @@ $(function(){
         
         var md = encodeURIComponent( editor.getSession().getValue() )
                 
-        var postData = 'pathToMdFile=' + profile.dropbox.current_filename + '&fileContents=' + md
+        var postData = 'pathToMdFile=' + profile.current_filename + '&fileContents=' + md
         
         var config = {
                         type: 'POST',
