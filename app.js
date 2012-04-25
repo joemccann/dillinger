@@ -205,6 +205,7 @@ app.get('/oauth/test/github', function(req, res){
 
 })
 
+
 /* Dropbox OAuth */
 app.get('/oauth/dropbox', function(req, res, next){
 
@@ -405,6 +406,10 @@ app.get('/dropbox/account/info', function(req,res){
   
   if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
 
+  // Set the access token and access token secret for the request
+  dbox.setAccessToken( req.session.dropbox.access_token )
+  dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
+
   dbox.getAccountInfo( function(err,data){
     
     if(err){
@@ -424,6 +429,10 @@ app.get('/dropbox/metadata', function(req,res){
   
   if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
 
+  // Set the access token and access token secret for the request
+  dbox.setAccessToken( req.session.dropbox.access_token )
+  dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
+
   dbox.getMetadata( function(err,data){
 
     if(err){
@@ -442,7 +451,12 @@ app.get('/dropbox/metadata', function(req,res){
 app.get('/dropbox/search', function(req,res){
   
   if(typeof req.session.dropbox === 'undefined') return res.json( { "data": "Not authorized with Dropbox."} )
+  
+  // Set the access token and access token secret for the request
+  dbox.setAccessToken( req.session.dropbox.access_token )
+  dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
 
+  // Now search...
   dbox.searchForMdFiles( function(err,data){
 
     if(err){
@@ -470,6 +484,10 @@ app.post('/dropbox/files/get', function(req,res){
   var name = pathToMdFile.split('/').pop()
   var encodedName = encodeURIComponent(name)
   pathToMdFile = pathToMdFile.replace(name, encodedName)
+
+  // Set the access token and access token secret for the request
+  dbox.setAccessToken( req.session.dropbox.access_token )
+  dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
   
   dbox.getMdFile(pathToMdFile, function(err,filedata){
 
@@ -492,13 +510,17 @@ app.post('/dropbox/files/put', function(req,res){
   var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
   var contents = req.body.fileContents || 'Test Data from Dillinger.'
 
-  console.log(pathToMdFile)
+  // console.log(pathToMdFile)
   
   // For some reason dropbox needs me to do this...
   // Otherwise, spaces and shit get fuct up
   var name = pathToMdFile.split('/').pop()
   var encodedName = encodeURIComponent(name)
   pathToMdFile = pathToMdFile.replace(name, encodedName)
+
+  // Set the access token and access token secret for the request
+  dbox.setAccessToken( req.session.dropbox.access_token )
+  dbox.setAccessTokenSecret( req.session.dropbox.access_token_secret )
 
   dbox.putMdFile(pathToMdFile, contents, function(err,filedata){
 
