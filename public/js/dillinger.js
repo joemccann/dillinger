@@ -230,7 +230,7 @@ $(function(){
    * @return {String} 
    */
   function getCurrentFilenameFromField(){
-    return $('#filename > p[contenteditable="true"]').text()
+    return $('#filename > span[contenteditable="true"]').text()
   }
 
 
@@ -241,7 +241,7 @@ $(function(){
    * @return {String} 
    */
   function setCurrentFilenameField(str){
-    $('#filename > p[contenteditable="true"]').text( str || profile.current_filename || "Untitled Document")
+    $('#filename > span[contenteditable="true"]').text( str || profile.current_filename || "Untitled Document")
   }
 
 
@@ -696,7 +696,7 @@ $(function(){
    * @return {Void}
    */  
   function bindFilenameField(){
-    $('#filename > p[contenteditable="true"]').bind('keyup', updateFilename)
+    $('#filename > span[contenteditable="true"]').bind('keyup', updateFilename)
   }
   
   
