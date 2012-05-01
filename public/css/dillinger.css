@@ -2695,7 +2695,7 @@ nav {
   top: -28px;
   z-index: 0;
 }
-#filename > p {
+#filename > span {
   font-size: 16px;
   font-style: normal;
   background: #f1eeee;
