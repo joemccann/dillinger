@@ -1,6 +1,12 @@
 HISTORY
 =
 
+0.1.4
+-
+- Added filename label via modified [pull request][1]
+
+  [1]: https://github.com/joemccann/dillinger/pull/14
+
 0.1.0
 -
 - Added initial Dropbox support

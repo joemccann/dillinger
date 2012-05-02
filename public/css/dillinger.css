@@ -2664,7 +2664,7 @@ nav {
 }
 .jumbotron {
   width: 940px;
-  margin-top: 88px;
+  margin-top: 128px;
 }
 .shadowbox {
   -webkit-border-radius: 4px;
@@ -2691,14 +2691,17 @@ nav {
 }
 #filename {
   position: absolute;
-  right: 42px;
-  top: -28px;
+  left: 28px;
+  width: 655px;
+  top: -51px;
   z-index: 0;
 }
-#filename > p {
+#filename > span {
   font-size: 16px;
   font-style: normal;
   background: #f1eeee;
+  width: 100%;
+  display: inline-block;
   padding: 6px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
