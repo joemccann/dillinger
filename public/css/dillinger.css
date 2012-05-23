@@ -1372,13 +1372,12 @@ table .headerSortDown.purple {
   background-color: #af8dd5;
 }
 .topbar {
-  height: 40px;
+  height: 60px;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 10000;
-  overflow: visible;
 }
 .topbar a {
   color: #808080;
@@ -2594,6 +2593,9 @@ input[type=submit].btn -moz-focus-inner {
     width: 48%;
   }
 }
+html {
+  overflow-y: hidden;
+}
 nav {
   text-align: left;
   padding: 12px 20px 12px 25px;
@@ -2619,17 +2621,19 @@ nav {
   margin-right: 235px;
 }
 #app_wrap {
-  position: relative;
-  width: 100%;
-  height: 768px;
-}
-#editor {
-  top: 0;
-  left: 25px;
+  top: 60px;
+  left: 0;
   bottom: 0;
   right: 0;
-  width: 47%;
-  border: 2px solid #999;
+  position: fixed;
+}
+#editor {
+  position: absolute;
+  margin-right: 5px;
+  top: 45px;
+  left: 10px;
+  bottom: 10px;
+  right: 50%;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -2646,12 +2650,12 @@ nav {
 }
 #preview {
   position: absolute;
-  margin: 0;
-  width: 47%;
+  margin-left: 5px;
   padding: 20px;
-  right: 25px;
-  top: 0;
-  height: 100%;
+  left: 50%;
+  bottom: 10px;
+  right: 10px;
+  top: 45px;
   overflow: auto;
   background: rgba(255,255,255,0.90) url("http://cdn.dillinger.io/notebook_paper_200x200.gif") repeat scroll top left;
   -webkit-box-sizing: border-box;
@@ -2661,10 +2665,6 @@ nav {
   -moz-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
-}
-.jumbotron {
-  width: 940px;
-  margin-top: 128px;
 }
 .shadowbox {
   -webkit-border-radius: 4px;
@@ -2691,18 +2691,24 @@ nav {
 }
 #filename {
   position: absolute;
-  left: 28px;
-  width: 655px;
-  top: -51px;
+  left: 10px;
+  top: 5px;
+  padding-right: 15px;
+  width: 50%;
   z-index: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 #filename > span {
   font-size: 16px;
   font-style: normal;
   background: #f1eeee;
   width: 100%;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 6px;
   display: inline-block;
-  padding: 6px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -2710,6 +2716,9 @@ nav {
   -webkit-box-shadow: 1px 1px 20px;
   -moz-box-shadow: 1px 1px 20px;
   box-shadow: 1px 1px 20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 #settings {
   background: url("http://cdn.dillinger.io/h_bedf916a.png");
