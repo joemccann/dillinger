@@ -13,7 +13,6 @@ var express = require('express')
   , colors = require('colors')
   , passwordHash = require('password-hash')
   , md = require(__dirname + '/utils/md').md
-  , github = require(__dirname + '/utils/github').github
   , dbox = require(__dirname + '/utils/dropbox').dropbox
   , debug
   , redisStore
