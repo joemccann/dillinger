@@ -1,0 +1,18 @@
+<!-- 
+  <nav class="slide_in">
+    <% if(dropbox.sync){ %><span class="relative">
+      <img src="/img/icon_dropbox_16x16.png" class="icon_vendor dropbox" alt="Dropbox Icon"><a href="#" id="save" class="btn primary save">Save to Dropbox</a> |</span><% }%>
+    <a href="#" class="btn success" id="export_md">Export Markdown</a> |
+    <a href="#" class="btn success" id="export_html">Export HTML</a> |
+    <span class="relative">
+      <img src="/img/icon_octocat_20x20.png" class="icon_vendor github" alt="Octocat Icon"><% if(!loggedIn){ %>
+      <a href="https://github.com/login/oauth/authorize?client_id=<%- github.client_id %>&scope=repo&redirect_uri=<%- github.callback_url %>" id="oauth_github" class="btn vendor">Sign in With Github</a> |<% }%><% if(loggedIn){ %>
+      <a href="#" id="github_profile" class="btn vendor" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true" data-github-user="<%= github.username %>">Import from Repo</a> |<% }%>
+    </span>
+    <span class="relative">
+      <img src="/img/icon_dropbox_16x16.png" class="icon_vendor dropbox" alt="Dropbox Icon"><% if(!dropbox.sync){ %>
+      <a href="https://www.dropbox.com/1/oauth/authorize?oauth_token=<%= dropbox.request_token %>&oauth_callback=<%= dropbox.oauth_callback %>" id="oauth_github" class="btn vendor">Link With Dropbox</a><% }%><% if(dropbox.sync){ %>
+      <a href="#" id="dropbox_profile" class="btn vendor" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true" data-dropbox-user="<%= dropbox.username %>">Import from Dropbox</a><% }%>
+    </span>
+            </nav>
+            -->

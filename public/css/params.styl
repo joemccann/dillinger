@@ -1,0 +1,88 @@
+spin(color, amount)
+  h = hue(color)
+  s = saturation(color)
+  l = lightness(color)
+  a = alpha(color)
+  hue = (h + amount) % 360
+  h = hue < 0 ? 360 + hue : hue
+  return hsla(h,s,l,a)
+
+fade-in(color, amount)
+  h = hue(color)
+  s = saturation(color)
+  l = lightness(color)
+  a = alpha(color)
+  a += (amount/100)
+  a = round(a)
+  return hsla(h,s,l,a)
+
+fade-out(color, amount)
+  h = hue(color)
+  s = saturation(color)
+  l = lightness(color)
+  a = alpha(color)
+  a -= (amount/100)
+  a = round(a)
+  return hsla(h,s,l,a)
+
+// Links
+linkColor =       #0069d6
+linkColorHover =  darken(linkColor, 15)
+
+// Grays
+black =           #000
+grayDark =        lighten(black, 25%)
+gray =            lighten(black, 50%)
+grayLight =       lighten(black, 75%)
+grayLighter =     lighten(black, 90%)
+white =           #fff
+
+// Accent Colors
+blue =            #049CDB
+blueDark =        #0064CD
+green =           #46a546
+greenDark =       #2b832b
+red =             #9d261d
+yellow =          #ffc40d
+yellowDark =      #edb404
+orange =          #f89406
+pink =            #c3325f
+purple =          #7a43b6
+github =          #ff9933
+githubDark =      #cc6600
+
+// Baseline grid
+basefont =        13px
+basefontSmall =   11px
+baseline =        18px
+
+// Griditude
+// Modify the grid styles in mixins.less
+gridColumns =     16px // px needed because of stylus bug
+gridColumnWidth = 40px
+gridGutterWidth = 20px
+extraSpace =      (gridGutterWidth * 2) // For our grid calculations
+siteWidth =    (gridColumns * gridColumnWidth) + (gridGutterWidth*(gridColumns - 1))
+
+// Color Scheme
+// Use this to roll your own color schemes if you like (unused by Bootstrap by default)
+baseColor =       blue                  // Set a base color
+complement =      spin(baseColor, 180)  // Determine a complementary color
+split1 =          spin(baseColor, 158)  // Split complements
+split2 =          spin(baseColor, -158)
+triad1 =          spin(baseColor, 135)  // Triads colors
+triad2 =          spin(baseColor, -135)
+tetra1 =          spin(baseColor, 90)   // Tetra colors
+tetra2 =          spin(baseColor, -90)
+analog1 =         spin(baseColor, 22)   // Analogs colors
+analog2 =         spin(baseColor, -22)
+
+/* For debugging */
+/* You should change this to your CDN...you are using a CDN, right? */
+imagePrefix="/img/"
+
+/* Images */
+innerOneImg = imagePrefix + 'sprite_black2.png'
+innerTwoImg = imagePrefix + 'arrow_down.png'
+settingsImg = imagePrefix + 'h_bedf916a.png'
+notebookImg = imagePrefix + 'notebook_paper_200x200.gif'

@@ -1,0 +1,48 @@
+/*
+ * These functions are necessary to maintain compatibility with the Less equivalents
+ * as the Stylus versions of *lighten* and *darken* do not follow the same algorithms
+ * and *mix* and *fadein* were missing from Stylus.
+ *
+ * Only those functions that were used in Twitter Bootstrap were ported here.
+ *
+ * These have not been tested extensively and will probably break if used with the
+ * wrong combination of unit types (e.g. percent or decimal).  They work for Twitter Bootstrap and that is all
+ * they have been tested with.
+ *
+ */
+
+mix($color1, $color2, $weight)
+
+  w = $weight * 2 - 100
+  a = alpha($color1) - alpha($color2)
+  w1 = ((w + a) / (1 + w * a) + 100) / 2
+  w2 = 100 - w1
+
+  red1 = red($color1) / 255 * w1
+  red2 = red($color2) / 255 * w2
+  green1 = green($color1) / 255 * w1
+  green2 = green($color2) / 255 * w2
+  blue1 = blue($color1) / 255 * w1
+  blue2 = blue($color2) / 255 * w2
+
+  $colorCombined = rgb(red1 + red2, green1 + green2, blue1 + blue2)
+
+  alphaFinal = alpha($color1) * $weight + alpha($color2) * (100% - $weight)
+  result = rgba($colorCombined, alphaFinal)
+
+
+fadein($color, $amount)
+  a1 = alpha($color)
+  a1 += $amount / 100
+  $color = hsla(hue($color), saturation($color), lightness($color), a1)
+  $color
+
+lighten($color, $amount)
+  l = lightness($color)
+  l += $amount
+  $color = hsla(hue($color), saturation($color), l, alpha($color))
+
+darken($color, $amount)
+  l = lightness($color)
+  l -= $amount
+  $color = hsla(hue($color), saturation($color), l, alpha($color))

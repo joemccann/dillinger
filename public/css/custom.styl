@@ -1,0 +1,383 @@
+@import params
+
+html
+  overflow-y: hidden
+
+nav
+  text-align left
+  padding 12px 20px 12px 9px
+
+.relative
+  position relative
+
+.vendor, .save
+  padding-left 30px
+
+.icon_vendor
+  position absolute
+
+.icon_vendor.github
+  margin 3px 0 0 6px
+
+.icon_vendor.dropbox
+  margin 6px 0 0 9px
+
+#theme
+  float right
+  margin-right 235px
+
+#app_wrap
+  top 60px
+  left 0
+  bottom 0
+  right 0
+  position fixed
+
+#editor
+  position absolute
+  margin-right: 5px;
+  top 45px
+  left 10px
+  bottom 10px
+  right 50%
+  borderRadius(4px)
+  boxShadow(0px 0px 80px rgba(0,0,0,0.30), inset 0 0 5px rgba(0,0,0,0.6))
+  boxSizing()
+  boxFlex()
+
+#preview
+  position absolute
+  margin-left: 5px;
+  padding 20px
+  left 50%
+  bottom 10px
+  right 10px
+  top 45px
+  overflow auto
+  background rgba(255, 255, 255, 0.9) url(notebookImg) repeat scroll top left
+  boxSizing()
+  boxFlex()
+
+.shadowbox
+  borderRadius(4px)
+  -webkit-box-shadow 0px 0px 80px rgba(0,0,0,0.30), inset 0 0 5px rgba(0,0,0,0.6)
+  margin 0 auto
+  
+.opacity_ten
+  normOpacity(10)
+  
+.opacity_thirty
+  normOpacity(30)
+
+.set_wrap
+  color #CCC
+  display block
+  line-height 27px
+  font-size 0
+
+#filename
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  padding-right: 15px;
+  width: 50%;
+  z-index: 0;
+  boxSizing();
+  
+#filename > span
+  font-size: 16px
+  font-style: normal
+  background: #F1EEEE
+  width 100%
+  height: 30px;
+  line-height: 30px;
+  padding: 0 6px;
+  display inline-block
+  borderRadius(4px)
+  box-shadow: 1px 1px 20px #999
+  boxShadow(1px 1px 20px)
+  boxSizing()
+
+#settings
+  background url(settingsImg)
+  background-position 0 0
+  display block
+  font-size 0
+  height 17px
+  width 16px
+  position absolute
+  right 35px
+  top 15px
+  
+.cont
+  position absolute
+  right 25px
+  top 12px
+  display inline-block
+  font-family arial, sans-serif
+  height 29px
+  padding 0
+  margin 0
+  text-align right
+  white-space nowrap
+  width 88px
+  z-index auto
+
+        
+.core_inner
+  userSelect()
+  gradient-vertical(rgb(245,245,245), rgb(241,241,241))
+  border-color rgba(0, 0, 0, 0.097)
+  border-style solid
+  borderRadius(4px)
+  border-top-width 1px
+  color #444
+  cursor default
+  display inline-block
+  font-family arial, sans-serif
+  font-size 11px
+  font-weight bold
+  height 27px
+  line-height 27px
+  margin-left 16px
+  outline-color #444
+  outline-style none
+  outline-width 0px
+  padding-left 8px
+  padding-right 8px
+  position relative
+  text-align center
+  white-space nowrap
+  width 54px
+  z-index 2
+
+.core_menu
+  userSelect()
+  gradient-vertical(rgb(245,245,245), rgb(241,241,241))
+  border-color rgba(0, 0, 0, 0.0976562)
+  border-style solid
+  border-width 1px
+  borderRadius(4px)
+  color #444
+  cursor default
+  display inline-block
+  font-family arial, sans-serif
+  font-size 11px
+  font-weight bold
+  height auto
+  line-height 27px
+  margin-left 0
+  padding-bottom 0px
+  padding-left 8px
+  padding-right 22px
+  position relative
+  text-align center
+  white-space nowrap
+  width 100%
+  z-index 2
+  display none
+  right 28px
+
+.topbar div ul
+  float none
+  margin 2px auto
+
+.topbar div .core_menu ul li
+  display block
+  float none
+  
+        
+.inner_one
+  background url(innerOneImg) no-repeat 0 -21px
+  height 21px
+  width 21px
+  margin-top -3px
+  vertical-align middle
+  opacity .55
+  cursor default
+  font-size 11px
+  font-weight bold
+  text-align center
+  line-height 27px
+  color #444
+  position relative
+  display inline-block
+  
+
+.inner_two
+  opacity .55
+  margin-top -3px
+  vertical-align middle
+  background url(innerTwoImg) no-repeat 0 1px
+  position relative
+  display inline-block
+  height 6px
+  width 7px
+  font-size 0
+  margin-left 3px
+  color #444
+  cursor default
+  font-weight bold
+  text-align center
+  line-height 27px
+
+#notify_container
+  userSelect(none)
+  position fixed
+  top -2px
+  width 100%
+  height auto
+  overflow auto
+  text-align center
+  z-index 10001
+  
+#notify
+  userSelect(none)
+  width 160px
+  margin 0 auto
+  gradient-vertical(#CCFFCC, #66cc66)
+  borderRadius(4px)
+  boxCenter()
+  border 1px solid rgba(0, 0, 0, 0.0976562)
+  color #444
+  font-weight bold
+  height auto
+  line-height 1.5em
+  padding 6px 8px
+  text-align center
+  overflow auto
+  display none
+
+.modal-body ul
+  margin 0
+  padding 0 0 18px 25px
+  max-height 240px
+  overflow auto
+
+.private_repo
+  background transparent url(/img/icon_lock_16x16.png) no-repeat scroll top left
+
+.private_repo .tree_file
+  padding-left 20px
+
+bodyTransitionTime = .4s
+mainTransitionTime = .15s
+
+#main
+  opacity 1
+  transition opacity mainTransitionTime linear  
+  -webkit-transition opacity mainTransitionTime linear
+  -moz-transition opacity mainTransitionTime linear  
+  -o-transition opacity mainTransitionTime linear  
+  -ms-transition opacity mainTransitionTime linear  
+  
+.bye
+  opacity 0
+
+#main.bye
+  opacity 0
+
+.slick
+  opacity 1
+  transition opacity bodyTransitiontime linear  
+  -webkit-transition opacity bodyTransitionTime linear
+  -moz-transition opacity bodyTransitionTime linear  
+  -o-transition opacity bodyTransitionTime linear  
+  -ms-transition opacity bodyTransitionTime linear  
+
+#loading
+  position absolute
+  top 0 
+  left 0
+  width 100%
+  height 120%
+  background #fff
+  text-align center
+  z-index 99998
+
+#loading p:first-child
+  color #000
+  margin 300px auto 0
+  text-align center
+  monospace(normal, 72px, 72px)
+
+#loading p:last-child
+  color #111
+  margin 30px auto
+  text-align center
+  monospace(normal, 18px, 18px)
+
+noscript
+  z-index 99999
+  position absolute
+  top 30px
+  width 100%
+
+noscript p
+  color #000
+  font-size 24px
+  text-align center
+  padding 10px 0
+
+tr = top .25s ease-out
+
+#loading.swift_top
+  top -100%
+  transition tr  
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+
+#loading.fade_slow, .fade_slow
+  normOpacity(0)
+  tr = opacity .8s ease-in
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+  transition tr  
+
+.slide_out
+  margin-top -60px
+  tr = margin-top .2s ease-out
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+  transition tr  
+  
+.slide_in
+  margin-top 0px
+  tr = margin-top .2s ease-in
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+  transition tr  
+
+.slide_left
+  margin-top 0px
+  tr = margin-top .2s ease-in
+  transition tr  
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+  
+.slide_left
+  right 25px
+  tr = right .2s ease-out
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  
+  transition tr  
+
+.slide_right
+  right -40px
+  tr = right .2s ease-out
+  -webkit-transition tr
+  -moz-transition tr  
+  -o-transition tr  
+  -ms-transition tr  transition tr  
