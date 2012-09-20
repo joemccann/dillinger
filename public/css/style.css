@@ -4550,12 +4550,8 @@ nav {
 .icon_vendor.dropbox {
   margin: 6px 0 0 9px;
 }
-#theme {
-  float: right;
-  margin-right: 235px;
-}
 #app_wrap {
-  top: 60px;
+  top: 45px;
   left: 0;
   bottom: 0;
   right: 0;

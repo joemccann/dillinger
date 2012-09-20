@@ -1,11 +1,65 @@
 <%- include notify %>
 <%- include loading %>
 <div id="main" class="bye">
+  
+  
   <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="nav-inner">
-      <div class="container">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="#">Dillinger</a>
+        <ul class="nav" role="navigation">
+          
+          <li class="dropdown">
+            <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropbox <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+              <li><a tabindex="-1" href="#">Link or Unlink with Dropbox</a></li>
+              <li><a tabindex="-1" href="#">Import from Dropbox</a></li>
+              <li><a tabindex="-1" href="#">Save to Dropbox</a></li>
+            </ul>
+          </li>
+          
+          <li class="dropdown">
+            <a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
+              <li><a tabindex="-1" href="#">Link or Unlink with Github</a></li>
+              <li><a tabindex="-1" href="#">Import from Dropbox</a></li>
+              <li><a tabindex="-1" href="#">Save to Github</a></li>
+            </ul>
+          </li>
+          
+          <li class="dropdown">
+            <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Evernote <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+              <li><a tabindex="-1" href="#">Link or Unlink with Evernote</a></li>
+              <li><a tabindex="-1" href="#">Import from Evernote</a></li>
+              <li><a tabindex="-1" href="#">Save to Evernote</a></li>
+            </ul>
+          </li>
 
-          <select id="theme">
+          <li class="dropdown">
+            <a href="#" id="drop4" role="button" class="dropdown-toggle" data-toggle="dropdown">Google Drive <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop4">
+              <li><a tabindex="-1" href="#">Link or Unlink with Google Drive</a></li>
+              <li><a tabindex="-1" href="#">Import from Google Drive</a></li>
+              <li><a tabindex="-1" href="#">Save to Google Drive</a></li>
+            </ul>
+          </li>
+        
+        </ul>
+
+        <ul class="nav pull-right">
+          <li class="dropdown">
+            <a href="#" id="drop5" role="button" class="dropdown-toggle" data-toggle="dropdown">Utilities <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop5">
+              <li><a tabindex="-1" href="#">Export as Markdown File</a></li>
+              <li><a tabindex="-1" href="#">Export as HTML File</a></li>
+              <li><a tabindex="-1" href="#">Preferences</a></li>
+            </ul>
+          </li>
+        </ul>
+        
+        <form class="navbar-form pull-right">
+          <select id="theme" name="theme">
             <option value="ace/theme/clouds">Clouds</option>
             <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
             <option value="ace/theme/cobalt">Cobalt</option>
@@ -30,27 +84,36 @@
             <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
             <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
           </select>
-
-        <div class="cont">
-          <div class="core_inner" role="button">
-              <div class="inner_one"></div>
-              <div class="inner_two">&nbsp;</div>
-          </div>
-          <div class="core_menu">
-            <ul>
-              <li><a href="#" id="toggleNav">Hide Navigation</a></li>
-              <li><a href="#" id="paper">Toggle Paper</a></li>
-              <li><a href="#" id="reset">Reset Profile</a></li>
-              <li><a href="#" id="autosave">Enable Autosave</a></li>
-              <li><a href="#" id="about" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true">About Dillinger</a></li>
-            </ul>
-          </div>
-        </div>
-      </div> <!-- end .container -->
-    </div> <!-- end .nav-inner -->
-  </div> <!-- end .navbar -->
+        </form>
+        
+        <!-- 
+         
+         use this in prefs modal
+         
+           <div class="cont">
+           <div class="core_inner" role="button">
+               <div class="inner_one"></div>
+               <div class="inner_two">&nbsp;</div>
+           </div>
+           <div class="core_menu">
+             <ul>
+               <li><a href="#" id="toggleNav">Hide Navigation</a></li>
+               <li><a href="#" id="paper">Toggle Paper</a></li>
+               <li><a href="#" id="reset">Reset Profile</a></li>
+               <li><a href="#" id="autosave">Enable Autosave</a></li>
+               <li><a href="#" id="about" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true">About Dillinger</a></li>
+             </ul>
+           </div>
+         </div>
+         
+        
+        -->
+        
+      </div>
+    </div>
+  </div>
   
-  <div id="app_wrap" class="jumbotron">
+  <div id="app_wrap" class="container-fluid">
     <div id="editor"><%- readme %>
     </div>
     <div id="filename">

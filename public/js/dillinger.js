@@ -336,6 +336,14 @@ $(function(){
     
     setCurrentFilenameField()
     
+    /* BEGIN RE-ARCH STUFF */
+
+    $('.dropdown-toggle').dropdown()
+    
+
+    /* END RE-ARCH STUFF */
+    
+    
   }
 
 
