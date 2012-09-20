@@ -33,7 +33,7 @@ $(function(){
   // Cache some shit
   var $cont = $('.cont') // TODO: horrible var name - change this (update HTML as well)
     , $core_menu = $('.core_menu')
-    , $theme = $('#theme')
+    , $theme = $('#theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $toggleNav = $('#toggleNav')
@@ -317,8 +317,11 @@ $(function(){
    */
   function initUi(){
     
-    // Set proper theme value in <select>
-    $theme.find('option[value="'+ profile.theme +'"]').attr('selected', true)
+    // Set proper theme value in theme dropdown
+    fetchTheme(profile.theme, function(){
+      $theme.find('li > a[data-value="'+profile.theme+'"]').addClass('selected')
+    })
+    
 
     // Set/unset paper background image on preview
     // TODO: FIX THIS BUG
@@ -413,17 +416,22 @@ $(function(){
   }
 
   /**
-   * Combobox change event handler to update the current theme.
+   * Dropbown nav handler to update the current theme.
    *
    * @return {Void}
    */  
-   function changeTheme(){
-     // get selected val
-     var t = $theme.find('option:selected').val()
+   function changeTheme(e){
      // check for same theme
-     if(t === profile.theme) return
+     var $target = $(e.target)
+     if( $target.attr('data-value') === profile.theme) return
      else{
-       fetchTheme(t, function(){
+       // add/remove class
+       $theme.find('li > a.selected').removeClass('selected')
+       $target.addClass('selected')
+       // grabnew theme
+       var newTheme = $target.attr('data-value')
+       $(e.target).blur()
+       fetchTheme(newTheme, function(){
          Notifier.showMessage(Notifier.messages.profileUpdated)
        })
       }
@@ -777,8 +785,9 @@ $(function(){
       })
     
     $theme
-      .on('change', function(){
-        changeTheme()
+      .find('li > a')
+      .bind('click', function(e){
+        changeTheme(e)
         return false
       })
 
