@@ -36,7 +36,6 @@ $(function(){
     , $theme = $('#theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
-    , $toggleNav = $('#toggleNav')
     , $github_profile = $('#github_profile')
     , $nav = $('nav')
 
@@ -265,8 +264,6 @@ $(function(){
       initUi()
       
       converter = new Showdown.converter()
-      
-      transitionEndNav()
       
       bindPreview()
 
@@ -625,56 +622,6 @@ $(function(){
   
   /// UI RELATED =================
 
-
-  /**
-   * Transition End Event handler for the nav when it is hidden/shown.
-   *
-   * @return {Void}
-   */  
-  function transitionEndNav(){
-    
-    $nav.bind( $.support.transitionEnd, function(e){
-      
-      // Required because of weird bubbling from hovering on nav anchors that have transitions
-      if( $('nav').hasClass('slide_in') ) return 
-      
-      $toggleNav
-        .text(navShow ? 'Show Navigation' : 'Hide Navigation')
-
-      $core_menu.slideToggle(50, function(){
-
-        $cont[navShow ? 'addClass' : 'removeClass']('opacity_thirty')
-          .animate({right: navShow ? '-40px' : originalContPosition}, 200)
-          navShow = !navShow
-      })
-      
-    })
-    
-  }
-
-  /**
-   * Hide show the navigation and the toggle navigation button. 
-   *
-   * @return {Void}
-   */  
-  function toggleNav(){
-
-    if( $nav.hasClass('slide_in') ){
-
-      $nav
-        .removeClass('slide_in')
-        .addClass('slide_out')
-      
-    }
-    else{
-
-      $nav
-        .removeClass('slide_out')
-        .addClass('slide_in')
-      
-    }
-  }
-  
   /**
    * Toggles the paper background image. 
    *
@@ -731,34 +678,6 @@ $(function(){
    * @return {Void}
    */  
   function bindNav(){
-    
-    var hoverConfig = {    
-      over: function(){
-        if( $('nav').hasClass('slide_in') ) return
-        else{
-          $cont
-            .removeClass('opacity_thirty')
-            .animate({right: originalContPosition}, 200)
-          }
-      }, 
-      timeout: 300,     
-      out: function(){
-        if( $('nav').hasClass('slide_in') ) return
-        else{
-          if( $core_menu.is(':visible') ) $core_menu.slideToggle(50)
-          $cont
-            .animate({right: '-40px'}, 200)
-            .addClass('opacity_thirty')
-        }
-      }
-    }
-    
-    $('.core_inner')
-      .on('click', function(){
-        $core_menu.slideToggle(50)
-      })
-      
-    $cont.hoverIntent( hoverConfig )
 
     $('#clear')
       .on('click', function(){
@@ -791,12 +710,6 @@ $(function(){
         return false
       })
 
-    $toggleNav
-      .on('click', function(){
-        toggleNav()
-        return false
-      })
-    
     $('#reset')
       .on('click', function(){
         resetProfile()
@@ -824,12 +737,14 @@ $(function(){
     $('#export_md')
       .on('click', function(){
         fetchMarkdownFile()
+        $('.dropdown').removeClass('open')
         return false
       })
 
     $('#export_html')
       .on('click', function(){
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
         return false
       })
 
