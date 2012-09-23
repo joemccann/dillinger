@@ -12,7 +12,7 @@ var express = require('express')
 var app = express()
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000)
+  app.set('port', process.env.PORT || 80)
   app.set('views', __dirname + '/views')
   app.set('view engine', 'ejs')
   app.use(express.favicon())
@@ -37,6 +37,23 @@ app.configure('development', function(){
 })
 
 app.get('/', routes.index)
+
+/* Begin Dropbox */
+
+app.get('/oauth/dropbox', routes.oauth_dropbox)
+
+app.get('/unlink/dropbox', routes.unlink_dropbox)
+
+app.get('/import/dropbox', routes.import_dropbox)
+
+app.get('/save/dropbox', routes.save_dropbox)
+
+app.get('/account/dropbox', routes.account_info_dropbox)
+
+app.post('/fetch/dropbox', routes.fetch_dropbox_file)
+
+/* End Dropbox */
+
 
 /* Dillinger Actions */
 // save a markdown file and send header to download it directly as response 

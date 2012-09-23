@@ -10,12 +10,7 @@
         <ul class="nav" role="navigation">
           
           <li class="dropdown">
-            <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropbox <b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-              <li><a tabindex="-1" href="#">Link or Unlink with Dropbox</a></li>
-              <li><a tabindex="-1" href="#">Import from Dropbox</a></li>
-              <li><a tabindex="-1" href="#">Save to Dropbox</a></li>
-            </ul>
+            <%- include dropbox %>
           </li>
           
           <li class="dropdown">
@@ -54,7 +49,7 @@
               <li><a tabindex="-1" href="#" id="export_md"><i class="icon-download"></i>&nbsp;Export as Markdown File</a></li>
               <li><a tabindex="-1" href="#" id="export_html"><i class="icon-download"></i>&nbsp;Export as HTML File</a></li>
               <li><a tabindex="-1" href="#" id="reset"><i class="icon-refresh"></i>&nbsp;Reset Current Profile</a></li>
-              <li><a tabindex="-1" href="#" id="autosave"><i class="icon-repeat"></i>&nbsp;Disable Autosave</a></li>
+              <li><a tabindex="-1" href="#" id="autosave"><i class="icon-remove"></i>&nbsp;Disable Autosave</a></li>
               <li><a tabindex="-1" href="#" id="preferences"><i class="icon-cog"></i>&nbsp;Preferences</a></li>
               <li><a tabindex="-1" href="#" id="about"><i class="icon-question-sign"></i>&nbsp;WTF is Dillinger?</a></li>
             </ul>
@@ -91,29 +86,6 @@
             </ul>
           </li>
         </ul>
-        
-        <!-- 
-         
-         use this in prefs modal
-         
-           <div class="cont">
-           <div class="core_inner" role="button">
-               <div class="inner_one"></div>
-               <div class="inner_two">&nbsp;</div>
-           </div>
-           <div class="core_menu">
-             <ul>
-               <li><a href="#" id="toggleNav">Hide Navigation</a></li>
-               <li><a href="#" id="paper">Toggle Paper</a></li>
-               <li><a href="#" id="reset">Reset Profile</a></li>
-               <li><a href="#" id="autosave">Enable Autosave</a></li>
-               <li><a href="#" id="about" data-controls-modal="modal-generic" data-backdrop="static" data-keyboard="true">About Dillinger</a></li>
-             </ul>
-           </div>
-         </div>
-         
-        
-        -->
         
       </div>
     </div>

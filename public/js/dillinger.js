@@ -324,7 +324,7 @@ $(function(){
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
     
     // Set text for dis/enable autosave
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-repeat"></i>&nbsp;Disable Autosave' : '<i class="icon-repeat"></i>&nbsp;Enable Autosave' )
+    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
     
     // Check for logged in Github user and notifiy
     githubUser = $github_profile.attr('data-github-user')
@@ -339,9 +339,7 @@ $(function(){
 
     $('.dropdown-toggle').dropdown()
     
-
     /* END RE-ARCH STUFF */
-    
     
   }
 
@@ -670,7 +668,7 @@ $(function(){
    */  
   function toggleAutoSave(){
 
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-repeat"></i>&nbsp;Disable Autosave' : '<i class="icon-repeat"></i>&nbsp;Enable Autosave' )
+    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
 
     updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
 
@@ -718,7 +716,8 @@ $(function(){
         return false
       })
 
-    $(".modal-body").delegate("#save", "click", function(){
+    $("#save_dropbox")
+      .on('click', function(){
       profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
 
       Dropbox.putMarkdownFile()
@@ -751,7 +750,7 @@ $(function(){
         return false
       })
 
-    $('#dropbox_profile')
+    $('#import_dropbox')
       .on('click', function(){
         Dropbox.searchDropbox()
         return false
@@ -1275,7 +1274,7 @@ $(function(){
         var config = {
                         type: 'GET',
                         dataType: 'json',
-                        url: '/dropbox/account/info',
+                        url: '/account/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1359,7 +1358,7 @@ $(function(){
         var config = {
                         type: 'GET',
                         dataType: 'json',
-                        url: '/dropbox/search',
+                        url: '/import/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1414,7 +1413,7 @@ $(function(){
                         type: 'POST',
                         dataType: 'json',
                         data: 'mdFile=' + filename,
-                        url: '/dropbox/files/get',
+                        url: '/fetch/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1467,7 +1466,7 @@ $(function(){
                         type: 'POST',
                         dataType: 'json',
                         data: postData,
-                        url: '/dropbox/files/put',
+                        url: '/save/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
