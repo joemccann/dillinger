@@ -287,18 +287,18 @@ textarea {
 }
 body {
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Arvo", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 18px;
   color: #333;
   background-color: #fff;
 }
 a {
-  color: #08c;
+  color: #525252;
   text-decoration: none;
 }
 a:hover {
-  color: #005580;
+  color: #2c2c2c;
   text-decoration: underline;
 }
 .row {
@@ -471,7 +471,7 @@ a:hover {
 }
 p {
   margin: 0 0 9px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Arvo", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 18px;
 }
@@ -1907,7 +1907,7 @@ table .span12 {
 .dropdown-menu .active > a:hover {
   color: #fff;
   text-decoration: none;
-  background-color: #08c;
+  background-color: #525252;
 }
 .dropdown.open {
   *z-index: 1000;
@@ -2118,7 +2118,7 @@ table .span12 {
 }
 .btn-primary {
   text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
-  border-color: #04c #04c #002a80;
+  border-color: #525252 #525252 #2c2c2c;
   border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
@@ -2127,11 +2127,11 @@ table .span12 {
 .btn-primary.active,
 .btn-primary.disabled,
 .btn-primary[disabled] {
-  background-color: #04c;
+  background-color: #525252;
 }
 .btn-primary:active,
 .btn-primary.active {
-  background-color: #039 \9;
+  background-color: #393939 \9;
 }
 .btn-warning {
   text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
@@ -2470,7 +2470,7 @@ input[type="submit"].btn.small {
 .nav-list .active > a:hover {
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-  background-color: #08c;
+  background-color: #525252;
 }
 .nav-list [class^="icon-"] {
   margin-right: 2px;
@@ -2538,7 +2538,7 @@ input[type="submit"].btn.small {
 .nav-pills .active > a,
 .nav-pills .active > a:hover {
   color: #fff;
-  background-color: #08c;
+  background-color: #525252;
 }
 .nav-stacked > li {
   float: none;
@@ -2587,12 +2587,12 @@ input[type="submit"].btn.small {
 }
 .nav-tabs .dropdown-toggle .caret,
 .nav-pills .dropdown-toggle .caret {
-  border-top-color: #08c;
+  border-top-color: #525252;
   margin-top: 6px;
 }
 .nav-tabs .dropdown-toggle:hover .caret,
 .nav-pills .dropdown-toggle:hover .caret {
-  border-top-color: #005580;
+  border-top-color: #2c2c2c;
 }
 .nav-tabs .active .dropdown-toggle .caret,
 .nav-pills .active .dropdown-toggle .caret {
@@ -3454,7 +3454,7 @@ input[type="submit"].btn.small {
   box-shadow: 0 1px 1px rgba(0,0,0,0.075);
 }
 a.thumbnail:hover {
-  border-color: #08c;
+  border-color: #525252;
   -webkit-box-shadow: 0 1px 4px rgba(0,105,214,0.25);
   -moz-box-shadow: 0 1px 4px rgba(0,105,214,0.25);
   box-shadow: 0 1px 4px rgba(0,105,214,0.25);

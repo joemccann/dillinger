@@ -319,13 +319,12 @@ $(function(){
       $theme.find('li > a[data-value="'+profile.theme+'"]').addClass('selected')
     })
     
-
     // Set/unset paper background image on preview
     // TODO: FIX THIS BUG
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
     
     // Set text for dis/enable autosave
-    $autosave.text( profile.autosave.enabled ? 'Disable Autosave' : 'Enable Autosave' )
+    $autosave.html( profile.autosave.enabled ? '<i class="icon-repeat"></i>&nbsp;Disable Autosave' : '<i class="icon-repeat"></i>&nbsp;Enable Autosave' )
     
     // Check for logged in Github user and notifiy
     githubUser = $github_profile.attr('data-github-user')
@@ -619,6 +618,33 @@ $(function(){
     
   }
   
+  /**
+   * Show the modal for the "Preferences".
+   *
+   * @return {Void}
+   */
+  function showPreferences(){
+
+    $('.modal-header h3').text("Preferences")
+    
+    // TODO: PULL THIS OUT AND RENDER VIA TEMPLATE FROM XHR OR STASH IN PAGE FOR SEO AND CLONE
+    var prefContent =  '<div>'
+                          +'<ul>'
+                            +'<li><a href="#" id="paper">Toggle Paper</a></li>'
+                            +'<li><a href="#" id="reset">Reset Profile</a></li>'
+                          +'</ul>'
+                        +'</div>'
+  
+    $('.modal-body').html(prefContent)
+
+    $('#modal-generic').modal({
+      keyboard: true,
+      backdrop: true,
+      show: true
+    })
+    
+  }
+  
   
   /// UI RELATED =================
 
@@ -644,7 +670,7 @@ $(function(){
    */  
   function toggleAutoSave(){
 
-    $autosave.text( profile.autosave.enabled ? 'Enable Autosave' : 'Disable Autosave' )
+    $autosave.html( profile.autosave.enabled ? '<i class="icon-repeat"></i>&nbsp;Disable Autosave' : '<i class="icon-repeat"></i>&nbsp;Enable Autosave' )
 
     updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
 
@@ -678,30 +704,6 @@ $(function(){
    * @return {Void}
    */  
   function bindNav(){
-
-    $('#clear')
-      .on('click', function(){
-        clearSelection()
-        return false
-      })
-    
-    $('#save')
-      .on('click', function(){
-        
-        profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
-
-        Dropbox.putMarkdownFile()
-
-        saveFile()
-        
-        return false
-      })
-
-    $('#paper')
-      .on('click', function(){
-        togglePaper()
-        return false
-      })
     
     $theme
       .find('li > a')
@@ -710,18 +712,39 @@ $(function(){
         return false
       })
 
+    $('#clear')
+      .on('click', function(){
+        clearSelection()
+        return false
+      })
+
+    $(".modal-body").delegate("#save", "click", function(){
+      profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
+
+      Dropbox.putMarkdownFile()
+
+      saveFile()
+      
+      return false
+    })
+
+    $(".modal-body").delegate("#paper", "click", function(){
+      togglePaper()
+      return false
+    })
+
+    $("#autosave")
+      .on('click', function(){
+        toggleAutoSave()
+        return false
+    })
+
     $('#reset')
       .on('click', function(){
         resetProfile()
         return false
       })
-      
-    $autosave
-      .on('click', function(){
-        toggleAutoSave()
-        return false
-      })
-  
+
     $github_profile
       .on('click', function(){
         Github.fetchRepos()
@@ -745,6 +768,12 @@ $(function(){
       .on('click', function(){
         fetchHtmlFile()
         $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#preferences').
+      on('click', function(){
+        showPreferences()
         return false
       })
 
