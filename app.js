@@ -54,6 +54,23 @@ app.post('/save/dropbox', routes.save_dropbox)
 
 /* End Dropbox */
 
+/* Begin Github */
+
+app.get('/oauth/github', routes.oauth_dropbox)
+
+app.get('/unlink/github', routes.unlink_dropbox)
+
+app.get('/import/github', routes.import_dropbox)
+
+app.get('/account/github', routes.account_info_dropbox)
+
+app.post('/fetch/github', routes.fetch_dropbox_file)
+
+app.post('/save/github', routes.save_dropbox)
+
+/* End Github */
+
+
 
 /* Dillinger Actions */
 // save a markdown file and send header to download it directly as response 
