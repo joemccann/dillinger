@@ -46,11 +46,11 @@ app.get('/unlink/dropbox', routes.unlink_dropbox)
 
 app.get('/import/dropbox', routes.import_dropbox)
 
-app.get('/save/dropbox', routes.save_dropbox)
-
 app.get('/account/dropbox', routes.account_info_dropbox)
 
 app.post('/fetch/dropbox', routes.fetch_dropbox_file)
+
+app.post('/save/dropbox', routes.save_dropbox)
 
 /* End Dropbox */
 

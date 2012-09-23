@@ -14,7 +14,7 @@ exports.Dropbox = (function(){
     , METADATA_URI = 'https://api.dropbox.com/1/metadata/dropbox/'
     , SEARCH_URI = 'https://api.dropbox.com/1/search/dropbox'
     , FILES_GET_URI = 'https://api-content.dropbox.com/1/files/dropbox'
-    , FILES_PUT_URI = 'https://api-content.dropbox.com/1/files_put/dropbox/Dillinger/'
+    , FILES_PUT_URI = 'https://api-content.dropbox.com/1/files_put/dropbox'
     , THUMBNAILS_URI = 'https://api-content.dropbox.com/1/thumbnails/dropbox'
     , DELTA_URI = 'https://api.dropbox.com/1/delta'
   
@@ -152,6 +152,8 @@ exports.Dropbox = (function(){
                   , token_secret: req.session.dropbox.oauth.access_token_secret
                   }
 
+      // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
+
       var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
       var contents = req.body.fileContents || 'Test Data from Dillinger.'
       // For some reason dropbox needs me to do this...
@@ -161,8 +163,8 @@ exports.Dropbox = (function(){
       
       pathToMdFile = pathToMdFile.replace(name, encodedName)
       
-      var uri = FILES_PUT_URI + "/dropbox" + pathToFile + "?" + params
-
+      var uri = FILES_PUT_URI + pathToMdFile 
+      
       request.put({
         oauth: oauth,
         uri: uri,
@@ -173,6 +175,7 @@ exports.Dropbox = (function(){
             return res.json(e)
           }
           if(data) {
+            // console.dir(data)
             return res.json({data: data})
           }        
         }

@@ -191,9 +191,6 @@ exports.save_dropbox = function(req,res){
   
 }
 
-exports.account_info_dropbox = function(req,res){
-  
-}
 
 exports.fetch_md = Core.fetchMd
 exports.download_md = Core.downloadMd
