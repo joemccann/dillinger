@@ -18,12 +18,12 @@
   display: none;
 }
 ::-moz-selection {
-  background: #fe57a1;
+  background: #087185;
   color: #fff;
   text-shadow: none;
 }
 ::selection {
-  background: #fe57a1;
+  background: #087185;
   color: #fff;
   text-shadow: none;
 }
@@ -1814,6 +1814,9 @@ table .span12 {
 }
 .icon-resize-horizontal {
   background-position: -456px -118px;
+}
+.icon-hdd {
+  background-position: 0 -144px;
 }
 .dropdown {
   position: relative;
