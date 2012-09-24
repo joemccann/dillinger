@@ -22,7 +22,6 @@
     "ide",
     "text",
     "html",
-    "redis",
     "express",
     "api"
   ],
@@ -40,7 +39,8 @@
     "request": ">=2.9.203",
     "colors": ">=0.6.0-1",
     "node-markdown": ">=0.1.0",
-    "lodash": ">=0.6.1"
+    "lodash": ">=0.6.1",
+    "smoosh": ">=0.3.2"
   },
   "subdomain": "dill"
 }

@@ -24,12 +24,38 @@ app.configure(function(){
   app.use(app.router)
   app.use(require('stylus').middleware(__dirname + '/public'))
   app.use(express.static(path.join(__dirname, 'public')))
+
+  var package = require(path.resolve(__dirname, './package.json'))
   
   // Setup local variables to be available in the views.
   app.locals.title = "Online Markdown Editor - Dillinger, the Last Markdown Editor ever."
   app.locals.description = "Online cloud based HTML5 filled Markdown Editor"
   app.locals.node_version = process.version.replace('v', '')
+  app.locals.app_version = package.version
+  app.locals.env = process.env.NODE_ENV
   app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
+  
+  // Compress/concat files for production env...
+  if(app.locals.env === 'production'){
+    // Smoosh the things
+    var smoosh = require('smoosh')
+    
+    smoosh.make({
+      "VERSION": app.locals.app_version,
+      "JAVASCRIPT": {
+        "DIST_DIR": "./public/js",
+        "dependencies": [ "./public/js/bootstrap.js", "./public/js/ace.js", "./public/js/mode-markdown.js", 
+                          "./public/js/showdown.js", "./public/js/keymaster.js"],
+        "dillinger": [ "./public/js/dillinger.js" ]
+      },
+      "CSS": {
+        "DIST_DIR": "./public/css",
+        "style": [ "./public/css/style.css" ]
+      }
+    })
+    
+  } // end if production env
+  
 })
 
 app.configure('development', function(){
