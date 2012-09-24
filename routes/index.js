@@ -291,7 +291,11 @@ exports.save_github = function(req,res){
 /* End Github stuff */
 
 
+/* Core stuff */
+
 exports.fetch_md = Core.fetchMd
 exports.download_md = Core.downloadMd
 exports.fetch_html = Core.fetchHtml
 exports.download_html = Core.downloadHtml
+
+/* End Core stuff */
