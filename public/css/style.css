@@ -5086,6 +5086,10 @@ noscript p {
   -o-transition: right 0.2s ease-out;
   -ms-transition: right 0.2s ease-out transition right 0.2s ease-out;
 }
+.main-error {
+  margin: 2% auto;
+  max-width: 660px;
+}
 .ir {
   display: block;
   border: 0;

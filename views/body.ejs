@@ -14,32 +14,17 @@
           </li>
           
           <li class="dropdown">
-            <a href="#" id="drop2" role="button" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
-              <li><a tabindex="-1" href="#">Link or Unlink with Github</a></li>
-              <li><a tabindex="-1" href="#">Import from Dropbox</a></li>
-              <li><a tabindex="-1" href="#">Save to Github</a></li>
-            </ul>
+            <%- include github %>
           </li>
-          
+          <!--
           <li class="dropdown">
-            <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Evernote <b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-              <li><a tabindex="-1" href="#">Link or Unlink with Evernote</a></li>
-              <li><a tabindex="-1" href="#">Import from Evernote</a></li>
-              <li><a tabindex="-1" href="#">Save to Evernote</a></li>
-            </ul>
+            <%- include evernote %>
           </li>
 
           <li class="dropdown">
-            <a href="#" id="drop4" role="button" class="dropdown-toggle" data-toggle="dropdown">Google Drive <b class="caret"></b></a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="drop4">
-              <li><a tabindex="-1" href="#">Link or Unlink with Google Drive</a></li>
-              <li><a tabindex="-1" href="#">Import from Google Drive</a></li>
-              <li><a tabindex="-1" href="#">Save to Google Drive</a></li>
-            </ul>
+            <%- include google_drive %>
           </li>
-        
+          -->
         </ul>
 
         <ul class="nav pull-right">
@@ -60,11 +45,13 @@
           <li class="dropdown">
             <a href="#" id="drop6" role="button" class="dropdown-toggle" data-toggle="dropdown">Select Your Theme <b class="caret"></b></a>
             <ul id="theme-list" class="dropdown-menu" role="menu" aria-labelledby="drop6">
+              <li><a tabindex='-1' href="#" data-value="ace/theme/chrome">Chrome</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/clouds">Clouds</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/clouds_midnight">Clouds Midnight</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/cobalt">Cobalt</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/crimson_editor">Crimson Editor</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/dawn">Dawn</a></li>
+              <li><a tabindex='-1' href="#" data-value="ace/theme/dawn">Dreamweaver</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/eclipse">Eclipse</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/idle_fingers">idleFingers</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/kr_theme">krTheme</a></li>
@@ -72,16 +59,16 @@
               <li><a tabindex='-1' href="#" data-value="ace/theme/merbivore_soft">Merbivore Soft</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/mono_industrial">Mono Industrial</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/monokai">Monokai</a></li>
-              <li><a tabindex='-1' href="#" data-value="ace/theme/pastel_on_dark">Pastel on dark</a></li>
+              <li><a tabindex='-1' href="#" data-value="ace/theme/pastel_on_dark">Pastel on Dark</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/solarized_dark">Solarized Dark</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/solarized_light">Solarized Light</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/textmate">TextMate</a></li>
-              <li><a tabindex='-1' href="#" data-value="ace/theme/twilight">Twilight</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/tomorrow">Tomorrow</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/tomorrow_night">Tomorrow Night</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</a></li>
+              <li><a tabindex='-1' href="#" data-value="ace/theme/twilight">Twilight</a></li>
               <li><a tabindex='-1' href="#" data-value="ace/theme/vibrant_ink">Vibrant Ink</a></li>
             </ul>
           </li>

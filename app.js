@@ -38,6 +38,8 @@ app.configure('development', function(){
 
 app.get('/', routes.index)
 
+app.get('/not-implemented', routes.not_implemented)
+
 /* Begin Dropbox */
 
 app.get('/oauth/dropbox', routes.oauth_dropbox)
@@ -56,17 +58,21 @@ app.post('/save/dropbox', routes.save_dropbox)
 
 /* Begin Github */
 
-app.get('/oauth/github', routes.oauth_dropbox)
+app.get('/oauth/github', routes.oauth_github)
 
-app.get('/unlink/github', routes.unlink_dropbox)
+app.get('/unlink/github', routes.unlink_github)
 
-app.get('/import/github', routes.import_dropbox)
+app.get('/account/github', routes.account_info_github)
 
-app.get('/account/github', routes.account_info_dropbox)
+app.post('/import/github/repos', routes.import_github_repos)
 
-app.post('/fetch/github', routes.fetch_dropbox_file)
+app.post('/import/github/branches', routes.import_github_branches)
 
-app.post('/save/github', routes.save_dropbox)
+app.post('/import/github/tree_files', routes.import_tree_files)
+
+app.post('/import/github/file', routes.import_github_file)
+
+app.post('/save/github', routes.save_github)
 
 /* End Github */
 

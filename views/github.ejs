@@ -1,0 +1,18 @@
+<% if(isGithubAuth) {
+ var icon = 'icon-minus'
+ var copy = 'Unlink'
+ var href = '/unlink/github'
+ var username = github_username
+}else{
+  var icon = 'icon-plus'
+  var copy = 'Link'
+  var href = github_auth_url
+  var username = 'bob-saget-is-amazing-yet-not-a-github-user'
+}
+%>
+<a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Github <b class="caret"></b></a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+  <li><a tabindex="-1" href="<%- href %>"><i class="<%- icon %>"></i>&nbsp;<%- copy %> with Github</a></li>
+  <li><a tabindex="-1" href="#" id="import_github" data-github-username="<%- username %>"><i class="icon-download-alt"></i>&nbsp;Import from Github</a></li>
+  <!--<li><a tabindex="-1" href="#" id="save_github"><i class="icon-hdd"></i>&nbsp;Save to Github</a></li>-->
+</ul>

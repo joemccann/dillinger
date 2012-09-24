@@ -36,14 +36,15 @@ $(function(){
     , $theme = $('#theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
-    , $github_profile = $('#github_profile')
+    , $import_github = $('#import_github')
     , $nav = $('nav')
 
     
   // Hash of themes and their respective background colors
   var bgColors = 
     {
-      'clouds': '#7AC9E3'
+      'chrome': '#333333'
+    , 'clouds': '#7AC9E3'
     , 'clouds_midnight': '#5F9EA0'
     , 'cobalt': '#4d586b'
     , 'crimson_editor': '#ffffff'
@@ -295,8 +296,7 @@ $(function(){
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
 
-      var MarkdownMode = require("ace/mode/markdown").Mode
-      editor.getSession().setMode(new MarkdownMode())
+      editor.getSession().setMode('ace/mode/markdown')
       
       editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
       
@@ -327,7 +327,7 @@ $(function(){
     $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
     
     // Check for logged in Github user and notifiy
-    githubUser = $github_profile.attr('data-github-user')
+    githubUser = $import_github.attr('data-github-username')
     
     githubUser && Notifier.showMessage("What's Up " + githubUser, 1000)
     
@@ -744,7 +744,7 @@ $(function(){
         return false
       })
 
-    $github_profile
+    $import_github
       .on('click', function(){
         Github.fetchRepos()
         return false
@@ -1060,7 +1060,7 @@ $(function(){
         var config = {
                         type: 'POST',
                         dataType: 'text',
-                        url: '/github/repo/fetch_all',
+                        url: '/import/github/repos',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1098,7 +1098,7 @@ $(function(){
                         type: 'POST',
                         dataType: 'json',
                         data: 'repo=' + repoName,
-                        url: '/github/repo/fetch_branches',
+                        url: '/import/github/branches',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1137,7 +1137,7 @@ $(function(){
                         type: 'POST',
                         dataType: 'json',
                         data: 'repo=' + repoName + '&sha=' + sha,
-                        url: '/github/repo/fetch_tree_files',
+                        url: '/import/github/tree_files',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
@@ -1174,13 +1174,15 @@ $(function(){
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        function _alwaysHandler(jqXHR, data){}
+        function _alwaysHandler(jqXHR, data){
+          $('.dropdown').removeClass('open')
+        }
         
         var config = {
                         type: 'POST',
                         dataType: 'json',
                         data: 'mdFile=' + filename,
-                        url: '/github/repo/fetch_markdown_file',
+                        url: '/import/github/file',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
