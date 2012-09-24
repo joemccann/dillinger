@@ -43,7 +43,7 @@ $(function(){
   // Hash of themes and their respective background colors
   var bgColors = 
     {
-      'chrome': '#333333'
+      'chrome': '#bbbbbb'
     , 'clouds': '#7AC9E3'
     , 'clouds_midnight': '#5F9EA0'
     , 'cobalt': '#4d586b'
@@ -291,20 +291,6 @@ $(function(){
     
     editor = ace.edit("editor")
     
-    fetchTheme(profile.theme, function(){
-
-      editor.getSession().setUseWrapMode(true)
-      editor.setShowPrintMargin(false)
-
-      editor.getSession().setMode('ace/mode/markdown')
-      
-      editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
-      
-      // Immediately populate the preview <div>
-      previewMd()
-    
-    }) // end fetchTheme
-
   } // end initAce
 
   /**
@@ -317,6 +303,17 @@ $(function(){
     // Set proper theme value in theme dropdown
     fetchTheme(profile.theme, function(){
       $theme.find('li > a[data-value="'+profile.theme+'"]').addClass('selected')
+      
+      editor.getSession().setUseWrapMode(true)
+      editor.setShowPrintMargin(false)
+
+      editor.getSession().setMode('ace/mode/markdown')
+      
+      editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
+      
+      // Immediately populate the preview <div>
+      previewMd()
+      
     })
     
     // Set/unset paper background image on preview
@@ -1165,6 +1162,13 @@ $(function(){
             $('#modal-generic').modal('hide')
 
             editor.getSession().setValue( response.data )
+
+            // Update it in localStorage
+            var name = filename.split('/').pop()
+            updateFilename(name)
+            // Show it in the field
+            setCurrentFilenameField(name)
+
             previewMd()
             
           } // end else
