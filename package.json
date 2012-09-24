@@ -1,7 +1,7 @@
 {
-  "name": "Dillinger"
-  , "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann."
-  , "version": "0.2.0",
+  "name": "Dillinger",
+  "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
+  "version": "0.2.0-2",
   "author": {
     "name": "Joe McCann",
     "email": "joe@subprint.com"
@@ -34,13 +34,13 @@
     "node": "0.8.x"
   },
   "dependencies": {
-      "express": ">=3.0.0rc3"
-    , "stylus": ">=0.28.2"
-    , "ejs": ">=0.8.1"
-    , "request": ">=2.9.203"
-    , "colors": ">=0.6.0-1"
-    , "node-markdown": ">=0.1.0"
-    , "lodash": ">=0.6.1"
+    "express": ">=3.0.0rc3",
+    "stylus": ">=0.28.2",
+    "ejs": ">=0.8.1",
+    "request": ">=2.9.203",
+    "colors": ">=0.6.0-1",
+    "node-markdown": ">=0.1.0",
+    "lodash": ">=0.6.1"
   },
-  "subdomain": "dillinger"
+  "subdomain": "dill"
 }
