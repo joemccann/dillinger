@@ -118,7 +118,7 @@ exports.not_implemented = function(req,res){
 exports.oauth_dropbox = function(req,res){
 
   // id=409429&oauth_token=15usk7o67ckg644
-  if(req.query && req.query.oauth_token){
+  if(req.query){
     
     // Create dropbox session object and stash for later.
     req.session.dropbox.oauth.request_token = req.query.oauth_token
