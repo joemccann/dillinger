@@ -1,10 +1,6 @@
 .DS_Store
-node.pid
 node_modules/*
 logs/*
-dump.rdb
 public/files/*
-config/github.json
-config/dropbox.json
-config/server.json
-config/redis.conf
+*-config.json
+backup/*

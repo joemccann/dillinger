@@ -1,93 +1,105 @@
-// ============== NOTE: MOST OF THIS SHIT FROM TWITTER'S BOOTSTRAP ISN'T USED, 
-// ============== BUT I'M LEAVING IT HERE IN CASE YOU WANT TO USE IT LATER
+// Variables.styl
+// Variables to customize the look and feel of Bootstrap
+// -----------------------------------------------------
 
-// sent pull request to be added to core, but in the meantime it is here
-// these methods aren't in stylus yet so I wrote them here:
-spin(color, amount)
-  h = hue(color)
-  s = saturation(color)
-  l = lightness(color)
-  a = alpha(color)
-  hue = (h + amount) % 360
-  h = hue < 0 ? 360 + hue : hue
-  return hsla(h,s,l,a)
 
-fade-in(color, amount)
-  h = hue(color)
-  s = saturation(color)
-  l = lightness(color)
-  a = alpha(color)
-  a += (amount/100)
-  a = round(a)
-  return hsla(h,s,l,a)
 
-fade-out(color, amount)
-  h = hue(color)
-  s = saturation(color)
-  l = lightness(color)
-  a = alpha(color)
-  a -= (amount/100)
-  a = round(a)
-  return hsla(h,s,l,a)
+// GLOBAL VALUES
+// --------------------------------------------------
 
 // Links
-linkColor =       #0069d6
-linkColorHover =  darken(linkColor, 15)
+$linkColor                        = #525252
+$linkColorHover                   = darken($linkColor, 15%)
 
 // Grays
-black =           #000
-grayDark =        lighten(black, 25%)
-gray =            lighten(black, 50%)
-grayLight =       lighten(black, 75%)
-grayLighter =     lighten(black, 90%)
-white =           #fff
+$black                            = #000
+$grayDarker                       = #333
+$grayDark                         = #444
+$gray                             = #555
+$grayLight                        = #999
+$grayLighter                      = #eee
+$white                            = #fff
 
-// Accent Colors
-blue =            #049CDB
-blueDark =        #0064CD
-green =           #46a546
-greenDark =       #2b832b
-red =             #9d261d
-yellow =          #ffc40d
-yellowDark =      #edb404
-orange =          #f89406
-pink =            #c3325f
-purple =          #7a43b6
-github =          #ff9933
-githubDark =      #cc6600
+// Accent colors
+$blue                             = #049cdb
+$blueDark                         = #0064cd
+$green                            = #46a546
+$red                              = #9d261d
+$yellow                           = #ffc40d
+$orange                           = #f89406
+$pink                             = #c3325f
+$purple                           = #7a43b6
 
-// Baseline grid
-basefont =        13px
-basefontSmall =   11px
-baseline =        18px
+// Typography
+$baseFontSize                     = 13px
+$baseFontFamily                   = "Arvo", "Helvetica Neue", Helvetica, Arial, sans-serif
 
-// Griditude
-// Modify the grid styles in mixins.less
-gridColumns =     16px // px needed because of stylus bug
-gridColumnWidth = 40px
-gridGutterWidth = 20px
-extraSpace =      (gridGutterWidth * 2) // For our grid calculations
-siteWidth =    (gridColumns * gridColumnWidth) + (gridGutterWidth*(gridColumns - 1))
+$baseLineHeight                   = 18px
+$textColor                        = $grayDark
 
-// Color Scheme
-// Use this to roll your own color schemes if you like (unused by Bootstrap by default)
-baseColor =       blue                  // Set a base color
-complement =      spin(baseColor, 180)  // Determine a complementary color
-split1 =          spin(baseColor, 158)  // Split complements
-split2 =          spin(baseColor, -158)
-triad1 =          spin(baseColor, 135)  // Triads colors
-triad2 =          spin(baseColor, -135)
-tetra1 =          spin(baseColor, 90)   // Tetra colors
-tetra2 =          spin(baseColor, -90)
-analog1 =         spin(baseColor, 22)   // Analogs colors
-analog2 =         spin(baseColor, -22)
+// Buttons
+$primaryButtonBackground          = $linkColor
 
-/* For debugging */
-/* You should change this to your CDN...you are using a CDN, right? */
-imagePrefix="http://cdn.dillinger.io/"
 
-/* Images */
-innerOneImg = imagePrefix + 'sprite_black2.png'
-innerTwoImg = imagePrefix + 'arrow_down.png'
-settingsImg = imagePrefix + 'h_bedf916a.png'
-notebookImg = imagePrefix + 'notebook_paper_200x200.gif'
+
+// COMPONENT VARIABLES
+// --------------------------------------------------
+
+// Z-index master list
+// Used for a bird's eye view of components dependent on the z-axis
+// Try to avoid customizing these =)
+$zindexDropdown                   = 1000
+$zindexPopover                    = 1010
+$zindexTooltip                    = 1020
+$zindexFixedNavbar                = 1030
+$zindexModalBackdrop              = 1040
+$zindexModal                      = 1050
+
+$iconSpritePath                   = "../img/glyphicons-halflings.png"
+$iconWhiteSpritePath              = "../img/glyphicons-halflings-white.png"
+
+// Input placeholder text color
+$placeholderText                  = $grayLight
+
+// Hr border color
+$hrBorder                         = $grayLighter
+
+// Navbar
+$navbarHeight                     = 40px
+$navbarBackground                 = $grayDarker
+$navbarBackgroundHighlight        = $grayDark
+$navbarLinkBackgroundHover        = transparent
+
+$navbarText                       = $grayLight
+$navbarLinkColor                  = $grayLight
+$navbarLinkColorHover             = $white
+
+// Form states and alerts
+$warningText                      = #c09853
+$warningBackground                = #fcf8e3
+$warningBorder                    = darken(spin($warningBackground, -10), 3%)
+
+$errorText                        = #b94a48
+$errorBackground                  = #f2dede
+$errorBorder                      = darken(spin($errorBackground, -10), 3%)
+
+$successText                      = #468847
+$successBackground                = #dff0d8
+$successBorder                    = darken(spin($successBackground, -10), 5%)
+
+$infoText                         = #3a87ad
+$infoBackground                   = #d9edf7
+$infoBorder                       = darken(spin($infoBackground, -10), 7%)
+
+// GRID
+// --------------------------------------------------
+
+// Default 940px grid
+$gridColumns                      = 12
+$gridColumnWidth                  = 60px
+$gridGutterWidth                  = 20px
+$gridRowWidth                     = ($gridColumns * $gridColumnWidth) + ($gridGutterWidth * ($gridColumns - 1))
+
+// Fluid grid
+$fluidGridColumnWidth             = 6.382978723%
+$fluidGridGutterWidth             = 2.127659574%
