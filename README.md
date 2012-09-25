@@ -49,7 +49,6 @@ NOTE: currently the `app.js` file expects a Redis instance to be up and running 
 5. `mkdir -p public/files/md && mkdir -p public/files/html`
 6. `sudo node app`
 
-NOTE: Have a look at the `app.json` file as it has some configuration variables in there as well. You will definitely need to update the `IMAGE_PREFIX_PRODUCTION: "http://cdn.dillinger.io/"` to your own CDN. If you're not using a CDN, set it's path to `/img/` for that is where the images reside locally in the dillinger repo.
 
 License
 -
