@@ -1,8 +1,0 @@
-{
-  "app_key": "0k94h9kolnpwldr",
-  "app_secret": "lbw3db73iyybs0h",
-  "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
-  "auth_url": "https://www.dropbox.com/1/oauth/authorize",
-  "callback_url": "http://dillinger.io/oauth/dropbox",
-  "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
-}
