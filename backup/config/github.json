@@ -1,6 +1,0 @@
-{
-  "client_id": "f2cc30d68101033eaafc"
-, "redirect_uri": "http://dillinger.io/"
-, "client_secret": "dbe70d03176be7217e398e80325035274ca238e4"
-, "callback_url": "http://dillinger.io/oauth/github"
-}
