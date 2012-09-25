@@ -19,6 +19,10 @@ Markdown is a lightweight markup language based on the formatting conventions th
 
 This text your see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  
 
+Version
+-
+
+2.0
 
 Tech
 -----------
@@ -29,16 +33,9 @@ Dillinger uses a number of open source projects to work properly:
 * [Showdown] - a port of Markdown to JavaScript
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [node.js] - evented I/O for the backend
-* [Redis] - wickedly fast key-value data store
+* [Express] - fast node.js network app framework [@tjholowaychuk]
 * [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh 
-
-
-Coming Soon
---------------
-
-**NOTE**: currently the `app.js` file expects a Redis instance to be up and running and available. Dillinger currently uses Redis version **2.4.4**.  You will need to modify the `redis.conf` file if you are going to use an older version of Redis.
-
 
 Installation
 --------------
@@ -47,17 +44,17 @@ NOTE: currently the `app.js` file expects a Redis instance to be up and running 
 
 1. Clone the repo
 2. `cd dillinger`
-3. `npm install -d` (also, if you don't have `smoosh` installed globally execute: `npm install smoosh -g`)
+3. `npm i`
 4. `mkdir -p public/files`
 5. `mkdir -p public/files/md && mkdir -p public/files/html`
-6. Read the Readme file located at `config/README.md` and do what it says.
-7. `redis-server config/redis.conf`
-8. `node build.js` as this will concat/compress the css and js files.
-9. `sudo node app.js`
-10. `open http://127.0.0.1`
+6. `sudo node app`
 
 NOTE: Have a look at the `app.json` file as it has some configuration variables in there as well. You will definitely need to update the `IMAGE_PREFIX_PRODUCTION: "http://cdn.dillinger.io/"` to your own CDN. If you're not using a CDN, set it's path to `/img/` for that is where the images reside locally in the dillinger repo.
 
+License
+-
+
+MIT
 
 *Free Software, Fuck Yeah!*
 
@@ -70,5 +67,5 @@ NOTE: Have a look at the `app.json` file as it has some configuration variables 
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
   [keymaster.js]: https://github.com/madrobby/keymaster
   [jQuery]: http://jquery.com  
-  [Redis]: http://redis.io
+  [@tjholowaychuk]: http://twitter.com/tjholowaychuk
   
