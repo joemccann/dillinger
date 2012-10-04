@@ -42,5 +42,9 @@
     "lodash": ">=0.6.1",
     "smoosh": ">=0.3.2"
   },
-  "subdomain": "dill"
+  "subdomain": "dill",
+  "domains": [
+    "dillinger.io",
+    "www.dillinger.io"
+  ]
 }
