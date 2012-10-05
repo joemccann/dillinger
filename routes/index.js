@@ -215,7 +215,7 @@ exports.save_dropbox = function(req,res){
 
 /* Github stuff */
 
-exports.oauth_github = function(req,res){
+exports.oauth_github = function(req,res, next){
 
   if(!req.query.code) next()
   else{
