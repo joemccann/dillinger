@@ -40,8 +40,6 @@ Dillinger uses a number of open source projects to work properly:
 Installation
 --------------
 
-NOTE: currently the `app.js` file expects a Redis instance to be up and running and available.  It is used for session storage and will be used in the future.
-
 1. Clone the repo
 2. `cd dillinger`
 3. `npm i`
