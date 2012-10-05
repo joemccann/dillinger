@@ -51,7 +51,7 @@ app.configure(function(){
         "lastsemic": true, 
         "laxbreak":true,
         "regexdash": true,
-      }
+      },
       "JAVASCRIPT": {
         "DIST_DIR": "./public/js",
         "dependencies": [ "./public/js/bootstrap.js", "./public/js/ace.js", "./public/js/mode-markdown.js", 
