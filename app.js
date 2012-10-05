@@ -43,6 +43,7 @@ app.configure(function(){
     smoosh.make({
       "VERSION": app.locals.app_version,
       "JSHINT_OPTS": {
+        "browser": true,
         "evil":true, 
         "boss":true, 
         "asi": true, 
@@ -54,8 +55,11 @@ app.configure(function(){
       },
       "JAVASCRIPT": {
         "DIST_DIR": "./public/js",
-        "dependencies": [ "./public/js/bootstrap.js", "./public/js/ace.js", "./public/js/mode-markdown.js", 
-                          "./public/js/showdown.js", "./public/js/keymaster.js"],
+        "dependencies": [ { "src": "./public/js/bootstrap.js", "jshint": false}, 
+                          { "src": "./public/js/ace.js", "jshint": false}, 
+                          { "src": "./public/js/mode-markdown.js", "jshint": false}, 
+                          { "src": "./public/js/showdown.js", "jshint": false},
+                          { "src": "./public/js/keymaster.js", "jshint": false}],
         "dillinger": [ "./public/js/dillinger.js" ]
       },
       "CSS": {
