@@ -35,8 +35,8 @@ app.configure(function(){
   app.locals.env = process.env.NODE_ENV
   app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
   
-  // Compress/concat files for production env...
-  if(app.locals.env === 'production'){
+  // Compress/concat files for deploy env...
+  if(app.locals.env === 'predeploy'){
     // Smoosh the things
     var smoosh = require('smoosh')
     
