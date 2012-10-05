@@ -42,6 +42,16 @@ app.configure(function(){
     
     smoosh.make({
       "VERSION": app.locals.app_version,
+      "JSHINT_OPTS": {
+        "evil":true, 
+        "boss":true, 
+        "asi": true, 
+        "laxcomma": true, 
+        "expr": true, 
+        "lastsemic": true, 
+        "laxbreak":true,
+        "regexdash": true,
+      }
       "JAVASCRIPT": {
         "DIST_DIR": "./public/js",
         "dependencies": [ "./public/js/bootstrap.js", "./public/js/ace.js", "./public/js/mode-markdown.js", 
