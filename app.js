@@ -36,6 +36,8 @@ app.configure(function(){
   app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
   
   // Compress/concat files for deploy env...
+  // Need to run this locally BEFORE deploying
+  // to nodejitsu
   if(app.locals.env === 'predeploy'){
     // Smoosh the things
     var smoosh = require('smoosh')
