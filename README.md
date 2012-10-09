@@ -58,7 +58,7 @@ MIT
   [john gruber]: http://daringfireball.net/
   [@thomasfuchs]: http://twitter.com/thomasfuchs
   [1]: http://daringfireball.net/projects/markdown/
-  [showdown]: http://www.attacklab.net/
+  [showdown]: https://github.com/coreyti/showdown
   [ace editor]: http://ace.ajax.org
   [node.js]: http://nodejs.org
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
