@@ -40,8 +40,6 @@ Dillinger uses a number of open source projects to work properly:
 Installation
 --------------
 
-NOTE: currently the `app.js` file expects a Redis instance to be up and running and available.  It is used for session storage and will be used in the future.
-
 1. Clone the repo
 2. `cd dillinger`
 3. `npm i`
@@ -60,11 +58,12 @@ MIT
   [john gruber]: http://daringfireball.net/
   [@thomasfuchs]: http://twitter.com/thomasfuchs
   [1]: http://daringfireball.net/projects/markdown/
-  [showdown]: http://www.attacklab.net/
+  [showdown]: https://github.com/coreyti/showdown
   [ace editor]: http://ace.ajax.org
   [node.js]: http://nodejs.org
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
   [keymaster.js]: https://github.com/madrobby/keymaster
   [jQuery]: http://jquery.com  
   [@tjholowaychuk]: http://twitter.com/tjholowaychuk
+  [express]: http://expressjs.com
   

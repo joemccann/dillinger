@@ -35,17 +35,33 @@ app.configure(function(){
   app.locals.env = process.env.NODE_ENV
   app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
   
-  // Compress/concat files for production env...
-  if(app.locals.env === 'production'){
+  // Compress/concat files for deploy env...
+  // Need to run this locally BEFORE deploying
+  // to nodejitsu
+  if(app.locals.env === 'predeploy'){
     // Smoosh the things
     var smoosh = require('smoosh')
     
     smoosh.make({
       "VERSION": app.locals.app_version,
+      "JSHINT_OPTS": {
+        "browser": true,
+        "evil":true, 
+        "boss":true, 
+        "asi": true, 
+        "laxcomma": true, 
+        "expr": true, 
+        "lastsemic": true, 
+        "laxbreak":true,
+        "regexdash": true,
+      },
       "JAVASCRIPT": {
         "DIST_DIR": "./public/js",
-        "dependencies": [ "./public/js/bootstrap.js", "./public/js/ace.js", "./public/js/mode-markdown.js", 
-                          "./public/js/showdown.js", "./public/js/keymaster.js"],
+        "dependencies": [ { "src": "./public/js/bootstrap.js", "jshint": false}, 
+                          { "src": "./public/js/ace.js", "jshint": false}, 
+                          { "src": "./public/js/mode-markdown.js", "jshint": false}, 
+                          { "src": "./public/js/showdown.js", "jshint": false},
+                          { "src": "./public/js/keymaster.js", "jshint": false}],
         "dillinger": [ "./public/js/dillinger.js" ]
       },
       "CSS": {

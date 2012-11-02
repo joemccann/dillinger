@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
-  "version": "0.2.0-3",
+  "version": "0.3.0",
   "author": {
     "name": "Joe McCann",
     "email": "joe@subprint.com"
@@ -42,5 +42,9 @@
     "lodash": ">=0.6.1",
     "smoosh": ">=0.3.2"
   },
-  "subdomain": "dill"
+  "subdomain": "dill",
+  "domains": [
+    "dillinger.io",
+    "www.dillinger.io"
+  ]
 }

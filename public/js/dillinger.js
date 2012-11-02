@@ -3,9 +3,7 @@ $(function(){
   var editor
     , converter
     , autoInterval
-    , originalContPosition
     , githubUser
-    , navShow = true
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = 
       {
@@ -31,13 +29,10 @@ $(function(){
     , domPrefixes = 'Webkit Moz O ms Khtml'.split(' ')
     
   // Cache some shit
-  var $cont = $('.cont') // TODO: horrible var name - change this (update HTML as well)
-    , $core_menu = $('.core_menu')
-    , $theme = $('#theme-list')
+  var $theme = $('#theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $import_github = $('#import_github')
-    , $nav = $('nav')
 
     
   // Hash of themes and their respective background colors
@@ -105,7 +100,7 @@ $(function(){
   function hasLocalStorage(){
    // http://mathiasbynens.be/notes/localstorage-pattern  
    var storage
-   try{ if(localStorage.getItem) storage = localStorage }catch(e){}
+   try{ if(localStorage.getItem) {storage = localStorage} }catch(e){}
    return storage
   }
 
@@ -119,7 +114,7 @@ $(function(){
     var p
     
     try{
-      p = JSON.parse( localStorage['profile'] )
+      p = JSON.parse( localStorage.profile )
       // Need to merge in any undefined/new properties from last release 
       // Meaning, if we add new features they may not have them in profile
       p = $.extend(true, profile, p)
@@ -140,7 +135,7 @@ $(function(){
    */
   function updateUserProfile(obj){
     localStorage.clear()
-    localStorage['profile'] = JSON.stringify( $.extend(true, profile, obj) )
+    localStorage.profile = JSON.stringify( $.extend(true, profile, obj) )
   }
 
   /**
@@ -252,7 +247,7 @@ $(function(){
    */
   function init(){
 
-    if( !hasLocalStorage() ) sadPanda()
+    if( !hasLocalStorage() ) { sadPanda() }
     else{
       
       // Attach to jQuery support object for later use.
@@ -327,9 +322,7 @@ $(function(){
     githubUser = $import_github.attr('data-github-username')
     
     githubUser && Notifier.showMessage("What's Up " + githubUser, 1000)
-    
-    originalContPosition = $cont.css('right')
-    
+        
     setCurrentFilenameField()
     
     /* BEGIN RE-ARCH STUFF */
@@ -399,8 +392,8 @@ $(function(){
     localStorage.clear()
     // Let's turn off autosave
     profile.autosave.enabled = false
-    // Delete the property altogether
-    delete localStorage['profile']
+    // Delete the property altogether --> need ; for JSHint bug.
+    ; delete localStorage.profile
     // Now reload the page to start fresh
     window.location.reload()
 //    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
@@ -414,7 +407,7 @@ $(function(){
    function changeTheme(e){
      // check for same theme
      var $target = $(e.target)
-     if( $target.attr('data-value') === profile.theme) return
+     if( $target.attr('data-value') === profile.theme) { return }
      else{
        // add/remove class
        $theme.find('li > a.selected').removeClass('selected')
@@ -487,6 +480,7 @@ $(function(){
    */  
   function updateFilename(str){
     // Check for string because it may be keyup event object
+    var f
     if(typeof str === 'string'){
       f = str
     }else
@@ -505,32 +499,26 @@ $(function(){
   function fetchMarkdownFile(){
     
     // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
-    
     var unmd = editor.getSession().getValue()
     
-    function _beforeSendHandler(jqXHR, data){}
-
-    function _doneHandler(jqXHR, data, response){
-      // console.dir(resp)
+    function _doneHandler(a, b, response){
+      a = b = null // JSHint complains if a, b are null in method
       var resp = JSON.parse(response.responseText)
+      // console.dir(resp)
       document.getElementById('downloader').src = '/files/md/' + resp.data
     }
 
-    function _failHandler(jqXHR, errorString, err){
+    function _failHandler(){
         alert("Roh-roh. Something went wrong. :(")
     }
-
-    function _alwaysHandler(jqXHR, data){}
     
     var mdConfig = {
                       type: 'POST',
                       data: "unmd=" + encodeURIComponent(unmd),
                       dataType: 'json',
                       url: '/factory/fetch_markdown',
-                      beforeSend: _beforeSendHandler,
                       error: _failHandler,
-                      success: _doneHandler,
-                      complete: _alwaysHandler
+                      success: _doneHandler
                     }
 
     $.ajax(mdConfig)  
@@ -548,8 +536,6 @@ $(function(){
     // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     
     var unmd = editor.getSession().getValue()
-    
-    function _beforeSendHandler(jqXHR, data){}
 
     function _doneHandler(jqXHR, data, response){
       // console.dir(resp)
@@ -557,21 +543,17 @@ $(function(){
       document.getElementById('downloader').src = '/files/html/' + resp.data
     }
 
-    function _failHandler(jqXHR, errorString, err){
+    function _failHandler(){
       alert("Roh-roh. Something went wrong. :(")
     }
 
-    function _alwaysHandler(jqXHR, data){}
-    
     var config = {
                       type: 'POST',
                       data: "unmd=" + encodeURIComponent(unmd),
                       dataType: 'json',
                       url: '/factory/fetch_html',
-                      beforeSend: _beforeSendHandler,
                       error: _failHandler,
-                      success: _doneHandler,
-                      complete: _alwaysHandler
+                      success: _doneHandler
                     }
 
     $.ajax(config)  
@@ -898,8 +880,8 @@ $(function(){
     
     // Sorting regardless of upper/lowercase
     function _alphaNumSort(m,n) {
-      a = m.url.toLowerCase()
-      b = n.url.toLowerCase()
+      var a = m.url.toLowerCase()
+      var b = n.url.toLowerCase()
       if (a === b) { return 0 }
       if (isNaN(m) || isNaN(n)){ return ( a > b ? 1 : -1)} 
       else {return m-n}
@@ -907,7 +889,7 @@ $(function(){
     
     // Test for md file extension
     function _isMdFile(file){
-      return /(\.md)|(\.markdown)/i.test(file)
+      return (/(\.md)|(\.markdown)/i).test(file)
     }
     
     // Returns an array of only md files from a tree
@@ -966,7 +948,7 @@ $(function(){
 
       repos.forEach(function(item){
         var name = item.url.split('/').pop()
-        list += '<li data-repo-name="' + name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + name + '</a></li>'
+        list += '<li data-repo-name="' + name + '" data-repo-private="' + item['private'] + '"><a class="repo" href="#">' + name + '</a></li>'
       })
 
       list += '</ul>'
@@ -1035,24 +1017,23 @@ $(function(){
       isRepoPrivate: false,
       fetchRepos: function(){
 
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Fetching Repos...')
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          a = b = null
           response = JSON.parse(response.responseText)
           // console.dir(response)
-          if( !response.length ) Notifier.showMessage('No repos available!')
+          if( !response.length ) { Notifier.showMessage('No repos available!') }
           else {
             _listRepos(response)
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'POST',
@@ -1060,8 +1041,7 @@ $(function(){
                         url: '/import/github/repos',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1069,11 +1049,12 @@ $(function(){
       }, // end fetchRepos
       fetchBranches: function(repoName){
   
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Fetching Branches for Repo '+repoName)
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          a = b = null
           response = JSON.parse(response.responseText)
           //console.dir(response)
           if( !response.length ) {
@@ -1085,11 +1066,9 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'POST',
@@ -1098,8 +1077,7 @@ $(function(){
                         url: '/import/github/branches',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1107,11 +1085,12 @@ $(function(){
       }, // end fetchBranches()
       fetchTreeFiles: function(repoName, sha){
   
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Fetching Tree for Repo '+repoName)
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          a = b = null
           response = JSON.parse(response.responseText)
           // console.log('\nFetch Tree Files...')
           // console.dir(response)
@@ -1124,11 +1103,9 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'POST',
@@ -1137,8 +1114,7 @@ $(function(){
                         url: '/import/github/tree_files',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1146,9 +1122,8 @@ $(function(){
       }, // end fetchTreeFiles()
       fetchMarkdownFile: function(filename){
         
-        function _beforeSendHandler(jqXHR, data){}
-
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          a = b = null
           response = JSON.parse(response.responseText)
           // console.dir(response)
           if( response.error ) {
@@ -1174,11 +1149,11 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        function _alwaysHandler(jqXHR, data){
+        function _alwaysHandler(){
           $('.dropdown').removeClass('open')
         }
         
@@ -1187,7 +1162,6 @@ $(function(){
                         dataType: 'json',
                         data: 'mdFile=' + filename,
                         url: '/import/github/file',
-                        beforeSend: _beforeSendHandler,
                         error: _failHandler,
                         success: _doneHandler,
                         complete: _alwaysHandler
@@ -1208,8 +1182,8 @@ $(function(){
     // TODO: Let's be DRY and merge this with the
     // sort method in Github module.
     function _alphaNumSort(m,n) {
-      a = m.path.toLowerCase()
-      b = n.path.toLowerCase()
+      var a = m.path.toLowerCase()
+      var b = n.path.toLowerCase()
       if (a === b) { return 0 }
       if (isNaN(m) || isNaN(n)){ return ( a > b ? 1 : -1)} 
       else {return m-n}
@@ -1259,11 +1233,11 @@ $(function(){
     return {
       fetchAccountInfo: function(){
 
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Fetching User Info from Dropbox')
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
           var resp = JSON.parse(response.responseText)
           // console.log('\nFetch User Info...')
           // console.dir(resp)
@@ -1271,11 +1245,9 @@ $(function(){
             .showMessage('Sup '+ resp.display_name)
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'GET',
@@ -1283,8 +1255,7 @@ $(function(){
                         url: '/account/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1292,20 +1263,18 @@ $(function(){
       }, // end fetchAccuntInfo()
       fetchMetadata: function(){
 
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Fetching Metadata')
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
           var resp = JSON.parse(response.responseText)
-          // console.dir(resp)
+          window.console && window.console.log && console.dir(resp)
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'GET',
@@ -1313,8 +1282,7 @@ $(function(){
                         url: '/dropbox/metadata',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1322,20 +1290,22 @@ $(function(){
       }, // end fetchMetadata()
       searchDropbox: function(){
 
-        function _beforeSendHandler(jqXHR, data){
+        function _beforeSendHandler(){
           Notifier.showMessage('Searching for .md Files')
         }
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          
+          a = b = null
 
           var resp = JSON.parse(response.responseText)
                     
           if(resp.hasOwnProperty('statusCode') && resp.statusCode === 401){
             // {"statusCode":401,"data":"{\"error\": \"Access token is disabled.\"}"}
             
-            var data = JSON.parse(resp.data)
+            var respData = JSON.parse(resp.data)
             
-            Notifier.showMessage('Error! ' + data.error, 1000)
+            Notifier.showMessage('Error! ' + respData.error, 1000)
             
             setTimeout(function(){
               Notifier.showMessage('Reloading!')
@@ -1355,11 +1325,9 @@ $(function(){
           }
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
-
-        function _alwaysHandler(jqXHR, data){}
 
         var config = {
                         type: 'GET',
@@ -1367,18 +1335,15 @@ $(function(){
                         url: '/import/dropbox',
                         beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
 
       }, // end searchDropbox()
       fetchMarkdownFile: function(filename){
-        
-        function _beforeSendHandler(jqXHR, data){}
 
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
           response = JSON.parse(response.responseText)
           // console.dir(response)
           if( response.statusCode === 404 ) {
@@ -1403,12 +1368,10 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        function _alwaysHandler(jqXHR, data){}
-        
         // Weird encoding mumbo jumbo columbo
         var enc = _encodeFilename(filename)
         var path = _removeFilenameFromPath(filename)
@@ -1420,10 +1383,8 @@ $(function(){
                         dataType: 'json',
                         data: 'mdFile=' + filename,
                         url: '/fetch/dropbox',
-                        beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1435,9 +1396,8 @@ $(function(){
       },
       putMarkdownFile: function(){
         
-        function _beforeSendHandler(jqXHR, data){}
-
-        function _doneHandler(jqXHR, data, response){
+        function _doneHandler(a, b, response){
+          a = b = null
           response = JSON.parse(response.responseText)
           // console.dir(response)
           if( response.statusCode >= 204 ) {
@@ -1458,12 +1418,10 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(jqXHR, errorString, err){
+        function _failHandler(){
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        function _alwaysHandler(jqXHR, data){}
-        
         var md = encodeURIComponent( editor.getSession().getValue() )
         
         var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
@@ -1473,10 +1431,8 @@ $(function(){
                         dataType: 'json',
                         data: postData,
                         url: '/save/dropbox',
-                        beforeSend: _beforeSendHandler,
                         error: _failHandler,
-                        success: _doneHandler,
-                        complete: _alwaysHandler
+                        success: _doneHandler
                       }
 
         $.ajax(config)  
@@ -1496,7 +1452,7 @@ window.onload = function(){
   var $loading = $('#loading')
   
   $loading
-    .bind( $.support.transitionEnd, function(e){
+    .bind( $.support.transitionEnd, function(){
       $('#main').removeClass('bye')
       $loading.remove()
     })
