@@ -109,9 +109,20 @@ exports.index = function(req, res){
   
 }
 
+// Show the not implemented yet page
 exports.not_implemented = function(req,res){
   res.render('not-implemented')
 }
+
+/* Core stuff */
+
+exports.fetch_md = Core.fetchMd
+exports.download_md = Core.downloadMd
+exports.fetch_html = Core.fetchHtml
+exports.download_html = Core.downloadHtml
+
+/* End Core stuff */
+
 
 /* Dropbox Stuff */
 
@@ -294,13 +305,3 @@ exports.save_github = function(req,res){
 }
 
 /* End Github stuff */
-
-
-/* Core stuff */
-
-exports.fetch_md = Core.fetchMd
-exports.download_md = Core.downloadMd
-exports.fetch_html = Core.fetchHtml
-exports.download_html = Core.downloadHtml
-
-/* End Core stuff */

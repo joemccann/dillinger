@@ -2,7 +2,8 @@ var fs = require('fs')
   , path = require('path')
   , request = require('request')
 
-var github_config = JSON.parse( fs.readFileSync( path.resolve(__dirname, 'github-config.json'), 'utf-8' ) )
+var github_config = JSON.parse( fs.readFileSync( 
+  path.resolve(__dirname, 'github-config.json'), 'utf-8' ) )
 
 exports.Github = (function(){
   

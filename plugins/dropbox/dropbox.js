@@ -4,7 +4,8 @@ var fs = require('fs')
   , qs = require('querystring')
   , _ = require('lodash')
 
-var dropbox_config = JSON.parse( fs.readFileSync( path.resolve(__dirname, 'dropbox-config.json'), 'utf-8' ) )
+var dropbox_config = JSON.parse( fs.readFileSync( 
+  path.resolve(__dirname, 'dropbox-config.json'), 'utf-8' ) )
 
 exports.Dropbox = (function(){
   
