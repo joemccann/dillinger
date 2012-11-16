@@ -127,10 +127,18 @@ exports.download_html = Core.downloadHtml
 /* Dropbox Stuff */
 
 exports.oauth_dropbox = function(req,res){
+  
+  console.dir(req.query)
 
   // id=409429&oauth_token=15usk7o67ckg644
-  if(req.query){
+  if(req.query && req.query.oauth_token){
     
+    if(!req.session.dropbox){
+      console.log('No dropbox session - browser bug')
+      req.session.dropbox = {}
+      req.session.dropbox.oauth = {}
+    }
+
     // Create dropbox session object and stash for later.
     req.session.dropbox.oauth.request_token = req.query.oauth_token
     req.session.dropbox.oauth.access_token_secret = null

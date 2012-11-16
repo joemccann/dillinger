@@ -201,7 +201,7 @@ $(function(){
       , 'MozTransition'    : 'transitionend'
       , 'OTransition'      : 'oTransitionEnd'
       , 'msTransition'     : 'msTransitionEnd' // maybe?
-      , 'transition'       : 'transitionEnd'
+      , 'transition'       : 'transitionend'
       }
 
      return transEndEventNames[ prefixed('transition') ]

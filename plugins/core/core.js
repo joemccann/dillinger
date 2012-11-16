@@ -34,7 +34,7 @@ exports.Core = (function(){
           json_response.error = true
           json_response.data = "Something wrong with the markdown conversion."
           res.send( JSON.stringify( json_response) )
-          if(debug) throw err     
+          console.error(err)     
         }
         else{
           json_response.data = name
@@ -90,6 +90,7 @@ exports.Core = (function(){
         if(err){
           json_response.error = true
           json_response.data = "Something wrong with the markdown conversion."
+          console.error(err)
           res.json( json_response )
         }
         else{
