@@ -258,7 +258,7 @@ exports.oauth_github = function(req,res, next){
         else {
           // access_token=519e3f859210aa34265a52acb6b88290087f8996&token_type=bearer
           if(!req.session.github){
-            reg.session.github = {
+            req.session.github = {
               oauth: null
             }
           }
