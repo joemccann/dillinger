@@ -90,7 +90,7 @@ app.get('/unlink/dropbox', routes.unlink_dropbox)
 
 app.get('/import/dropbox', routes.import_dropbox)
 
-app.get('/account/dropbox', routes.account_info_dropbox)
+// app.get('/account/dropbox', routes.account_info_dropbox)
 
 app.post('/fetch/dropbox', routes.fetch_dropbox_file)
 
@@ -104,7 +104,7 @@ app.get('/oauth/github', routes.oauth_github)
 
 app.get('/unlink/github', routes.unlink_github)
 
-app.get('/account/github', routes.account_info_github)
+// app.get('/account/github', routes.account_info_github)
 
 app.post('/import/github/repos', routes.import_github_repos)
 
