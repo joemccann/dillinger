@@ -2,8 +2,20 @@ var fs = require('fs')
   , path = require('path')
   , request = require('request')
 
-var github_config = JSON.parse( fs.readFileSync( 
-  path.resolve(__dirname, 'github-config.json'), 'utf-8' ) )
+var github_config_file = path.resolve(__dirname, 'github-config.json')
+var github_config = {}
+
+if(fs.existsSync(github_config_file)) {
+  github_config = JSON.parse( fs.readFileSync( github_config_file, 'utf-8' ) )
+} else {
+  github_config = {
+    "client_id": "YOUR_ID"
+  , "redirect_uri": "http://dillinger.io/"
+  , "client_secret": "YOUR_SECRET"
+  , "callback_url": "http://dillinger.io/oauth/github"
+  }
+  console.warn('Github config not found at ' + github_config_file + '. Using defaults instead.')
+}
 
 exports.Github = (function(){
   
