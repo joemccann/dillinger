@@ -4,7 +4,6 @@ var fs = require('fs')
   , qs = require('querystring')
   , _ = require('lodash')
 
-
 var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
 var dropbox_config = {}
 
