@@ -4,8 +4,22 @@ var fs = require('fs')
   , qs = require('querystring')
   , _ = require('lodash')
 
-var dropbox_config = JSON.parse( fs.readFileSync( 
-  path.resolve(__dirname, 'dropbox-config.json'), 'utf-8' ) )
+var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
+var dropbox_config = {}
+
+if(fs.existsSync(dropbox_config_file)) {
+  dropbox_config = JSON.parse( fs.readFileSync( dropbox_config_file, 'utf-8' ) )
+} else {
+  dropbox_config = {
+    "app_key": "YOUR_KEY"
+  , "app_secret": "YOUR_SECRET"
+  , "callback_url": "YOUR_CALLBACK_URL"
+  , "auth_url": "https://www.dropbox.com/1/oauth/authorize"
+  , "request_token_url": "https://api.dropbox.com/1/oauth/request_token"
+  , "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
+  }
+  console.warn('Dropbox config not found at ' + dropbox_config_file + '. Using defaults instead.')
+}
 
 exports.Dropbox = (function(){
   
