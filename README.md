@@ -45,7 +45,7 @@ Installation
 3. `npm i`
 4. `mkdir -p public/files`
 5. `mkdir -p public/files/md && mkdir -p public/files/html`
-6. `sudo node app`
+6. `node app`
 
 
 License
