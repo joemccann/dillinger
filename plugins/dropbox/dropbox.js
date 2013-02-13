@@ -5,10 +5,13 @@ var fs = require('fs')
   , _ = require('lodash')
 
 var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
-var dropbox_config = {}
+  , dropbox_config = {}
+  , isUsingDefaultConfig = true
+// ^^^helps with the home page view; should we show the dropbox dropdown?
 
 if(fs.existsSync(dropbox_config_file)) {
   dropbox_config = JSON.parse( fs.readFileSync( dropbox_config_file, 'utf-8' ) )
+  isUsingDefaultConfig = false
 } else {
   dropbox_config = {
     "app_key": "YOUR_KEY"
@@ -34,6 +37,7 @@ exports.Dropbox = (function(){
     , DELTA_URI = 'https://api.dropbox.com/1/delta'
   
   return {
+    isUsingDefault: isUsingDefaultConfig,
     config: dropbox_config,
     getNewRequestToken: function(req,res,cb){
 

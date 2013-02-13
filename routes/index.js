@@ -13,16 +13,18 @@ exports.index = function(req, res){
     isDropboxAuth: !!req.session.isDropboxSynced,
     isGithubAuth: !!req.session.isGithubSynced,
     isEvernoteAuth: !!req.session.isEvernoteSynced,
-    isGoogleDriveAuth: !!req.session.isGoogleDriveSynced
+    isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
+    isUsingDroboxDefaultConfig: Dropbox.isUsingDefault,
+    isUsingGithubDefaultConfig: Github.isUsingDefault    
   }
   
   // We set this because generating the oauth stuff is async for 
   // all 3rd party oauth providers
   var isReadyAsync = true
     , isAsyncCounter = 0
-  
+    
   // Check for dropbox sync
-  if(!req.session.isDropboxSynced){
+  if(!indexConfig.isUsingDroboxDefaultConfig && !req.session.isDropboxSynced){
     
     isReadyAsync = false
     ++isAsyncCounter
@@ -62,7 +64,7 @@ exports.index = function(req, res){
     
   }
   
-  if(!req.session.isGithubSynced){
+  if(!indexConfig.isUsingGithubDefaultConfig && !req.session.isGithubSynced){
     
     isReadyAsync = false
     ++isAsyncCounter

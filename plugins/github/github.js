@@ -3,10 +3,14 @@ var fs = require('fs')
   , request = require('request')
 
 var github_config_file = path.resolve(__dirname, 'github-config.json')
-var github_config = {}
+  , github_config = {}
+  , isUsingDefaultConfig = true 
+
+// ^^^helps with the home page view; should we show the github dropdown?
 
 if(fs.existsSync(github_config_file)) {
   github_config = JSON.parse( fs.readFileSync( github_config_file, 'utf-8' ) )
+  isUsingDefaultConfig = false
 } else {
   github_config = {
     "client_id": "YOUR_ID"
@@ -30,6 +34,7 @@ exports.Github = (function(){
   }
   
   return {
+    isUsingDefault: isUsingDefaultConfig,
     github_config: github_config,
     generateAuthUrl: function(req,res){
       return _buildAuthUrl()

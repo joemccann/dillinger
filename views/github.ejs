@@ -1,3 +1,5 @@
+<% if(!isUsingGithubDefaultConfig){ %>
+
 <% if(isGithubAuth) {
  var icon = 'icon-minus'
  var copy = 'Unlink'
@@ -16,3 +18,4 @@
   <li><a tabindex="-1" href="#" id="import_github" data-github-username="<%- username %>"><i class="icon-download-alt"></i>&nbsp;Import from Github</a></li>
   <!--<li><a tabindex="-1" href="#" id="save_github"><i class="icon-hdd"></i>&nbsp;Save to Github</a></li>-->
 </ul>
+<% } %>

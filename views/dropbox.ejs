@@ -1,3 +1,5 @@
+<% if(!isUsingDroboxDefaultConfig){ %>
+
 <% if(isDropboxAuth) {
  var icon = 'icon-minus'
  var copy = 'Unlink'
@@ -14,3 +16,4 @@
   <li><a tabindex="-1" href="#" id="import_dropbox"><i class="icon-download-alt"></i>&nbsp;Import from Dropbox</a></li>
   <li><a tabindex="-1" href="#" id="save_dropbox"><i class="icon-hdd"></i>&nbsp;Save to Dropbox</a></li>
 </ul>
+<% } %>
