@@ -29,7 +29,7 @@ app.configure(function(){
   var package = require(path.resolve(__dirname, './package.json'))
   
   // Setup local variables to be available in the views.
-  app.locals.title = "Online Markdown Editor - Dillinger, the Last Markdown Editor ever."
+  app.locals.title = "Online Markdown Editor"
   app.locals.description = "Online cloud based HTML5 filled Markdown Editor"
   app.locals.node_version = process.version.replace('v', '')
   app.locals.app_version = package.version

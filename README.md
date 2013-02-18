@@ -1,7 +1,7 @@
-Dillinger
+Edit
 =========
 
-Dillinger is a cloud-enabled HTML5 Markdown editor.
+Edit is a cloud-enabled HTML5 Markdown editor.
 
   - Type some Markdown text in the left window
   - See the HTML in the right
@@ -19,41 +19,6 @@ Markdown is a lightweight markup language based on the formatting conventions th
 
 This text your see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  
 
-Version
--
-
-2.0
-
-Tech
------------
-
-Dillinger uses a number of open source projects to work properly:
-
-* [Ace Editor] - awesome web-based text editor
-* [Showdown] - a port of Markdown to JavaScript
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
-* [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
-* [jQuery] - duh 
-
-Installation
---------------
-
-1. Clone the repo
-2. `cd dillinger`
-3. `npm i`
-4. `mkdir -p public/files`
-5. `mkdir -p public/files/md && mkdir -p public/files/html`
-6. `node app`
-
-
-License
--
-
-MIT
-
-*Free Software, Fuck Yeah!*
 
   [john gruber]: http://daringfireball.net/
   [@thomasfuchs]: http://twitter.com/thomasfuchs
