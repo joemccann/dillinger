@@ -18,17 +18,3 @@ Markdown is a lightweight markup language based on the formatting conventions th
 > or formatting instructions.
 
 This text your see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  
-
-
-  [john gruber]: http://daringfireball.net/
-  [@thomasfuchs]: http://twitter.com/thomasfuchs
-  [1]: http://daringfireball.net/projects/markdown/
-  [showdown]: https://github.com/coreyti/showdown
-  [ace editor]: http://ace.ajax.org
-  [node.js]: http://nodejs.org
-  [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
-  [keymaster.js]: https://github.com/madrobby/keymaster
-  [jQuery]: http://jquery.com  
-  [@tjholowaychuk]: http://twitter.com/tjholowaychuk
-  [express]: http://expressjs.com
-  
