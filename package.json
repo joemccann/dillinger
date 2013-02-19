@@ -1,6 +1,6 @@
 {
-  "name": "Dillinger",
-  "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
+  "name": "Leaf",
+  "description": "Leaf Markdown Editor",
   "version": "0.3.5",
   "author": {
     "name": "Joe McCann",
@@ -16,7 +16,7 @@
     "start": "node app.js"
   },
   "keywords": [
-    "dillinger",
+    "leaf",
     "markdown",
     "editor",
     "ide",
@@ -27,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/joemccann/dillinger"
+    "url": "git://github.com/bahai/leaf"
   },
   "engines": {
     "node": "0.8.x",
@@ -43,9 +43,7 @@
     "lodash": ">=0.6.1",
     "smoosh": ">=0.3.2"
   },
-  "subdomain": "dill",
   "domains": [
-    "dillinger.io",
-    "www.dillinger.io"
+    "leaf.bahai.net"
   ]
 }

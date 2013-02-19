@@ -1,7 +1,7 @@
-Edit
+Leaf
 =========
 
-Edit is a cloud-enabled HTML5 Markdown editor.
+Leaf is a cloud-enabled HTML5 Markdown editor.
 
   - Type some Markdown text in the left window
   - See the HTML in the right
