@@ -1,6 +1,6 @@
 {
     "client_id": "e1e884f306575cd17c5a"
-  , "redirect_uri": "http://mdedit.herokuapp.com/"
+  , "redirect_uri": "http://leaf.bahai.net/"
   , "client_secret": "5f46ca7ba37cb61505586bb5b35813cb951332f8"
-  , "callback_url": "http://mdedit.herokuapp.com/oauth/github"
+  , "callback_url": "http://leaf.bahai.net/oauth/github"
 }
