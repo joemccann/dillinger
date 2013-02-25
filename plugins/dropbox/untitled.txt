@@ -1,0 +1,8 @@
+{
+  "app_key": "4vfykxd3jar98uo",
+  "app_secret": "YOUR_SECRET",
+  "callback_url": "YOUR_CALLBACK_URL",
+  "auth_url": "https://www.dropbox.com/1/oauth/authorize",
+  "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
+  "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
+}
