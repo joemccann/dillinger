@@ -40,12 +40,13 @@ Dillinger uses a number of open source projects to work properly:
 Installation
 --------------
 
-1. Clone the repo
-2. `cd dillinger`
-3. `npm i`
-4. `mkdir -p public/files`
-5. `mkdir -p public/files/md && mkdir -p public/files/html`
-6. `node app`
+```sh
+git clone [git-repo-url] dillinger
+cd dillinger
+npm i
+mkdir -p public/files/{md,html}
+node app
+```
 
 
 License
