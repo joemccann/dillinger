@@ -137,4 +137,5 @@ app.get('/files/html/:html', routes.download_html)
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'))
+  console.log("\nhttp://localhost:" + app.get('port') + "\n")
 })
