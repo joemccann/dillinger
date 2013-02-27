@@ -7,7 +7,7 @@ $(function(){
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = 
       {
-        theme: 'ace/theme/clouds_midnight'
+        theme: 'ace/theme/idle_fingers'
       , showPaper: true
       , currentMd: ''
       , autosave: 
