@@ -8,7 +8,7 @@ $(function(){
     , profile = 
       {
         theme: 'ace/theme/idle_fingers'
-      , showPaper: true
+      , showPaper: false
       , currentMd: ''
       , autosave: 
         {
