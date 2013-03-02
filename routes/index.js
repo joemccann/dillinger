@@ -236,9 +236,9 @@ exports.save_dropbox = function(req,res){
 
 /* Github stuff */
 
-exports.oauth_github = function(req,res, next){
+exports.oauth_github = function(req,res, cb){
 
-  if(!req.query.code) next()
+  if(!req.query.code) cb()
   else{
     req.session.oauth = {}
     
