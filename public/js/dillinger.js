@@ -947,7 +947,6 @@ $(function(){
       repos.sort(_alphaNumSort)
 
       repos.forEach(function(item){
-        console.log(item['private'] );
         list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item['private'] + '"><a class="repo" href="#">' + item.name + '</a></li>'
       })
 
