@@ -947,8 +947,7 @@ $(function(){
       repos.sort(_alphaNumSort)
 
       repos.forEach(function(item){
-        var name = item.url.split('/').pop()
-        list += '<li data-repo-name="' + name + '" data-repo-private="' + item['private'] + '"><a class="repo" href="#">' + name + '</a></li>'
+        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item['private'] + '"><a class="repo" href="#">' + item.name + '</a></li>'
       })
 
       list += '</ul>'

@@ -80,6 +80,7 @@ exports.Github = (function(){
             var item = 
             {
               url: el.url
+            , name: el.name
             , private: el.private
             }
 
