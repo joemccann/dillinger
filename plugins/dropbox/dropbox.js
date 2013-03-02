@@ -68,11 +68,11 @@ exports.Dropbox = (function(){
                   }
 
       // Create your auth_url for the view   
-      request.get({url:url, oauth:oauth}, function (e, r, body) {
+      request.get({url:url, oauth:oauth}, function (e, r, d) {
 
         if(e) return cb(e,null)
         
-        return cb(null,qs.parse(body))
+        return cb(null,qs.parse(d))
 
       }) // end request.get()
       
@@ -86,11 +86,11 @@ exports.Dropbox = (function(){
                   , token_secret: dropbox_obj.oauth.access_token_secret
                   }
 
-      request.get({url: ACCOUNT_INFO_URI, oauth:oauth}, function (e, r, b) {
+      request.get({url: ACCOUNT_INFO_URI, oauth:oauth}, function (e, r, d) {
 
         if(e) return cb(e,null)
 
-        return cb(null,b)
+        return cb(null,d)
 
       }) // end request.post()
 
@@ -147,12 +147,12 @@ exports.Dropbox = (function(){
                   , token_secret: dropbox_obj.oauth.access_token_secret
                   }
       
-      request.get({url: uri, oauth:oauth}, function (e, r, b) {
+      request.get({url: uri, oauth:oauth}, function (e, r, d) {
 
         if(e) return cb(e,null)
 
-        b = JSON.parse(b)
-        return cb(null,b)
+        d = JSON.parse(d)
+        return cb(null,d)
 
       }) // end request.get()
         

@@ -43,14 +43,14 @@ exports.Github = (function(){
       
       var uri = github_api + 'user?access_token=' + req.session.github.oauth
 
-      request.get(uri, function(err, resp, data){
-        if(err) {
-          console.error(err)
-          return res.redirect(resp.statusCode)
+      request.get(uri, function(e, r, d){
+        if(e) {
+          console.error(e)
+          return res.redirect(r.statusCode)
         }
-        else if(!err && resp.statusCode === 200) 
+        else if(!e && r.statusCode === 200) 
         {
-          var d = JSON.parse(data)
+          d = JSON.parse(d)
           req.session.github.username = d.login 
           cb && cb()
         }
@@ -104,17 +104,17 @@ exports.Github = (function(){
                         + req.body.repo
                         +'/branches?access_token=' + req.session.github.oauth
 
-      request.get(uri, function(err, resp, data){
-        if(err) {
+      request.get(uri, function(e, r, d){
+        if(e) {
           res.send(
             {
               error: 'Request error.' 
-            , data: resp.statusCode
+            , d: r.statusCode
             })
         }
-        else if(!err && resp.statusCode === 200) 
+        else if(!e && r.statusCode === 200) 
         {
-          res.send(data)
+          res.send(d)
         } // end else if
         else{
           res.json({error: 'Unable to fetch repos from Github.'})
@@ -134,18 +134,18 @@ exports.Github = (function(){
                         + '/git/trees/'
                         + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
 
-      request.get(uri, function(err, resp, data){
-        if(err) {
+      request.get(uri, function(e, r, d){
+        if(e) {
           res.send(
             {
               error: 'Request error.' 
-            , data: resp.statusCode
+            , data: r.statusCode
             })
         }
-        else if(!err && resp.statusCode === 200) 
+        else if(!e && r.statusCode === 200) 
         {
-          data = JSON.parse(data)
-          res.json(data)
+          d = JSON.parse(d)
+          res.json(d)
         } // end else if
         else{
           res.json({error: 'Unable to fetch repos from Github.'})
@@ -164,25 +164,25 @@ exports.Github = (function(){
         url += '?access_token=' + req.session.github.oauth
       }
 
-      request.get(url, function(err, resp, data){
-        if(err){
+      request.get(url, function(e, r, d){
+        if(e){
           res.send(
             {
               error: 'Request error.' 
-            , data: resp.statusCode
+            , data: r.statusCode
             })
         }
-        else if(!err && resp.statusCode === 200) 
+        else if(!e && r.statusCode === 200) 
         {
 
           var json_resp = 
           {
-            data: data
+            data: d
           , error: false
           }
 
           if(isPrivateRepo){
-            var d = JSON.parse(data)
+            d = JSON.parse(d)
             json_resp.data = (new Buffer(d.content, 'base64').toString('ascii'))
           }
 
