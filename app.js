@@ -26,13 +26,11 @@ app.configure(function(){
   app.use(require('stylus').middleware(__dirname + '/public'))
   app.use(express.static(path.join(__dirname, 'public')))
 
-  var package = require(path.resolve(__dirname, './package.json'))
-  
   // Setup local variables to be available in the views.
   app.locals.title = "Online Markdown Editor - Dillinger, the Last Markdown Editor ever."
   app.locals.description = "Dillinger is an Online cloud based HTML5 filled Markdown Editor. Sync with Dropbox and Github. 100% Open Source!"
   app.locals.node_version = process.version.replace('v', '')
-  app.locals.app_version = package.version
+  app.locals.app_version = require('./package.json').version
   app.locals.env = process.env.NODE_ENV
   app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
 })
