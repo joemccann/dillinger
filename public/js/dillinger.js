@@ -761,6 +761,12 @@ $(function(){
         return false
       })
 
+    $('#cheat').
+      on('click', function(){
+        window.open("https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet", "_blank")
+        return false
+      })
+
   } // end bindNav()
 
   /**
