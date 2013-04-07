@@ -785,7 +785,7 @@ $(function(){
          saveFile() 
        }
     }
-    
+    editor.commands.addCommand(command);
   }
 
   /**
