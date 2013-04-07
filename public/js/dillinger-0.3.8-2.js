@@ -782,10 +782,10 @@ $(function(){
                 win: "Ctrl-S"
               },
        exec: function(){ 
-         saveFile() 
+         saveFile(true) 
        }
     }
-    
+    editor.commands.addCommand(command);
   }
 
   /**
