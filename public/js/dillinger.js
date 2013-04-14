@@ -775,7 +775,7 @@ $(function(){
      e.preventDefault() // so we don't save the webpage - native browser functionality
     })
     
-    var command = {
+    var saveCommand = {
        name: "save",
        bindKey: {
                 mac: "Command-S",
@@ -785,7 +785,20 @@ $(function(){
          saveFile(true) 
        }
     }
-    editor.commands.addCommand(command);
+    var fileForUrlNamer = {
+       name: "filenamer",
+       bindKey: {
+                mac: "Command-Shift-M",
+                win: "Ctrl-Shift-M"
+              },
+       exec: function(){ 
+        var profile = JSON.parse(localStorage.profile);
+        alert( profile.current_filename.replace(/\s/g, '-').toLowerCase())
+      }
+    }
+
+    editor.commands.addCommand(saveCommand)
+    editor.commands.addCommand(fileForUrlNamer)
   }
 
   /**
