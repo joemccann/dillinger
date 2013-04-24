@@ -560,6 +560,36 @@ $(function(){
     
   }
 
+  function showHtml(){
+    
+    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
+    
+    var unmd = editor.getSession().getValue()
+
+    function _doneHandler(jqXHR, data, response){
+      // console.dir(resp)
+      var resp = JSON.parse(response.responseText)
+      $('#myModalBody').text(resp.data)
+      $('#myModal').modal()
+    }
+
+    function _failHandler(){
+      alert("Roh-roh. Something went wrong. :(")
+    }
+
+    var config = {
+                      type: 'POST',
+                      data: "unmd=" + encodeURIComponent(unmd),
+                      dataType: 'json',
+                      url: '/factory/fetch_html_direct',
+                      error: _failHandler,
+                      success: _doneHandler
+                    }
+
+    $.ajax(config)  
+    
+  }
+
   /**
    * Show a sad panda because they are using a shitty browser. 
    *
@@ -745,6 +775,13 @@ $(function(){
     $('#export_html')
       .on('click', function(){
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#show_html')
+      .on('click', function(){
+        showHtml()
         $('.dropdown').removeClass('open')
         return false
       })
