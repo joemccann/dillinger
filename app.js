@@ -90,6 +90,7 @@ app.get('/files/md/:mdid', routes.download_md)
 
 // Save an html file and send header to download it directly as response 
 app.post('/factory/fetch_html', routes.fetch_html)
+app.post('/factory/fetch_html_direct', routes.fetch_html_direct)
 
 // Route to handle download of html file
 app.get('/files/html/:html', routes.download_html)
