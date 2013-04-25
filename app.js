@@ -45,6 +45,8 @@ app.get('/not-implemented', routes.not_implemented)
 
 /* Begin Dropbox */
 
+app.get('/redirect/dropbox', routes.oauth_dropbox_redirect)
+
 app.get('/oauth/dropbox', routes.oauth_dropbox)
 
 app.get('/unlink/dropbox', routes.unlink_dropbox)
@@ -60,6 +62,8 @@ app.post('/save/dropbox', routes.save_dropbox)
 /* End Dropbox */
 
 /* Begin Github */
+
+app.get('/redirect/github', routes.oauth_github_redirect)
 
 app.get('/oauth/github', routes.oauth_github)
 
