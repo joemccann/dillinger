@@ -121,6 +121,7 @@ exports.not_implemented = function(req,res){
 exports.fetch_md = Core.fetchMd
 exports.download_md = Core.downloadMd
 exports.fetch_html = Core.fetchHtml
+exports.fetch_html_direct = Core.fetchHtmlDirect
 exports.download_html = Core.downloadHtml
 
 /* End Core stuff */

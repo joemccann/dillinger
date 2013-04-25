@@ -99,6 +99,19 @@ exports.Core = (function(){
          }
       }) // end writeFile
     },
+    fetchHtmlDirect: function(req,res){
+      var unmd = req.body.unmd
+        , json_response = 
+        {
+          data: ''
+        , error: false
+        }
+
+      var html = _getHtml(req.body.unmd)  
+
+      json_response.data = html
+      res.json( json_response )
+    },
     downloadHtml: function(req,res){
       
       var fileId = req.params.html
