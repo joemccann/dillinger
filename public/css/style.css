@@ -4841,7 +4841,6 @@ nav {
 .modal-body ul {
   margin: 0;
   padding: 0 0 18px 25px;
-  max-height: 240px;
   overflow: auto;
 }
 .private_repo {
