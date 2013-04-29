@@ -42,7 +42,7 @@ exports.Github = (function(){
     getUsername: function(req,res,cb){
       
       var uri = github_api + 'user?access_token=' + req.session.github.oauth
-
+      console.log('getting username from github: ' + uri)
       request.get(uri, function(e, r, d){
         if(e) {
           console.error(e)
