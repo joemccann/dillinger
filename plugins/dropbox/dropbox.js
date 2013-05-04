@@ -3,6 +3,7 @@ var fs = require('fs')
   , request = require('request')
   , dbox = require('dbox')
   , qs = require('querystring')
+  , url = require('url')
   , _ = require('lodash')
 
 var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
@@ -21,13 +22,54 @@ if(fs.existsSync(dropbox_config_file)) {
   , "auth_url": "https://www.dropbox.com/1/oauth/authorize"
   , "request_token_url": "https://api.dropbox.com/1/oauth/request_token"
   , "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
+  , "collections_url": "https://api-content.dropbox.com/1"
   }
   console.warn('Dropbox config not found at ' + dropbox_config_file + '. Using defaults instead.')
 }
 
 exports.Dropbox = (function() {
 
-  var dboxapp = dbox.app({ "app_key": dropbox_config.app_key, "app_secret": dropbox_config.app_secret, "root": "dropbox" })
+  var dboxapp = dbox.app({ 
+  	"app_key": dropbox_config.app_key, 
+  	"app_secret": dropbox_config.app_secret, 
+  	"root": "dropbox" })
+
+  function _getCollection(collectionId, cb){
+
+	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection?')
+
+	  var params = {'id': collectionId}
+
+	  dbUrl += qs.stringify(params)
+
+	  console.log(dbUrl + " is the dbUrl")
+
+	  request.get(dbUrl, function requestCb(err,resp,body){
+	  	if(err) return cb(err)
+	  	cb && cb(null,body)
+	  })
+
+
+  } // end getCollectionItemContents
+
+
+  function _getCollectionItemContents(collectionId, item_id, cb){
+
+	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection_item_contents?')
+
+	  var params = {'id': collectionId, 'item_id': item_id}
+
+	  dbUrl += qs.stringify(params)
+
+	  console.log(dbUrl + " is the dbUrl")
+
+	  request.get(dbUrl, function requestCb(err,resp,body){
+	  	if(err) return cb(err)
+	  	if(!resp.headers['X-Dropbox-Item-Metadata']) return cb(new Error('No X-Dropbox-Item-Metadata header found.'))
+	  	cb && cb(null,body)
+	  })
+
+  } // end getCollectionItemContents
   
   return {
     isUsingDefault: isUsingDefaultConfig,
@@ -72,7 +114,10 @@ exports.Dropbox = (function() {
         return res.status(403).send("You are not authenticated with Dropbox.")
       } 
 
-      var access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret};
+      var access_token = {
+      	oauth_token : req.session.dropbox.oauth.access_token, 
+      	oauth_token_secret : req.session.dropbox.oauth.access_token_secret
+     	}
 
       var dboxclient = dboxapp.client(access_token)
                   
@@ -136,7 +181,43 @@ exports.Dropbox = (function() {
         return res.json({data: reply})
       })
 
-    } // end saveToDropbox
+    }, // end saveToDropbox
+    handleIncomingFlowRequest: function(req, res, cb){
+
+    	// TODO: Are they auth'd?
+
+    	var editFlowJson = JSON.parse( req.params['edit_flow_blob'] )
+    		,	item_id = editFlowJson['items_ids'][0] // the actual item_id of the md file
+
+    	// first, we have to get the collection
+			// "edit_flow" is hardcoded for Flow prototyping
+    	_getCollection('edit_flow', function getCollectionCb(err,data){
+
+    		if(err){
+    			console.error(err)
+    			return res.send(500)
+    		}
+    		// Now get the contents...
+    		_getCollectionItemContents('edit_flow', item_id, function _getCollectionItemContentsCb(err,data){
+
+	    		if(err){
+	    			console.error(err)
+	    			return res.send(500)
+	    		}
+
+	    		// if no errors, we should have the actual raw data...
+
+	    		console.log(data)
+
+
+    		}) // end _getCollectionItemContents
+
+    	}) // end _getCollection
+
+			
+
+    } // end handleIncomingFlowRequest
+
   }
   
 })()
