@@ -34,6 +34,7 @@ exports.Dropbox = (function() {
   	"app_secret": dropbox_config.app_secret, 
   	"root": "dropbox" })
 
+  // Grab collection from db
   function _getCollection(collectionId, cb){
 
 	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection?')
@@ -44,15 +45,17 @@ exports.Dropbox = (function() {
 
 	  console.log(dbUrl + " is the dbUrl")
 
+	  // Umm auth'd with dropbox? Need to add this...
 	  request.get(dbUrl, function requestCb(err,resp,body){
 	  	if(err) return cb(err)
 	  	cb && cb(null,body)
 	  })
 
 
-  } // end getCollectionItemContents
+  } // end _getCollection
 
 
+  // Grab collection's actual content from db
   function _getCollectionItemContents(collectionId, item_id, cb){
 
 	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection_item_contents?')
@@ -63,6 +66,7 @@ exports.Dropbox = (function() {
 
 	  console.log(dbUrl + " is the dbUrl")
 
+	  // Umm auth'd with dropbox? Need to add this...
 	  request.get(dbUrl, function requestCb(err,resp,body){
 	  	if(err) return cb(err)
 	  	if(!resp.headers['X-Dropbox-Item-Metadata']) return cb(new Error('No X-Dropbox-Item-Metadata header found.'))
@@ -184,7 +188,7 @@ exports.Dropbox = (function() {
     }, // end saveToDropbox
     handleIncomingFlowRequest: function(req, res, cb){
 
-    	// TODO: Are they auth'd?
+    	// TODO: Are they auth'd?  How do handle this?
 
     	var editFlowJson = JSON.parse( req.params['edit_flow_blob'] )
     		,	item_id = editFlowJson['items_ids'][0] // the actual item_id of the md file
@@ -213,8 +217,6 @@ exports.Dropbox = (function() {
     		}) // end _getCollectionItemContents
 
     	}) // end _getCollection
-
-			
 
     } // end handleIncomingFlowRequest
 
