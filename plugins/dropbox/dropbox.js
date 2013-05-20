@@ -34,71 +34,27 @@ exports.Dropbox = (function() {
   	"app_secret": dropbox_config.app_secret, 
   	"root": "dropbox" })
 
-  // Grab collection from db
-  function _getCollection(collectionId, cb){
-
-	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection?')
-
-	  var params = {'id': collectionId}
-
-	  dbUrl += qs.stringify(params)
-
-	  console.log(dbUrl + " is the dbUrl")
-
-	  // Umm auth'd with dropbox? Need to add this...
-	  request.get(dbUrl, function requestCb(err,resp,body){
-	  	if(err) return cb(err)
-	  	cb && cb(null,body)
-	  })
-
-
-  } // end _getCollection
-
-
-  // Grab collection's actual content from db
-  function _getCollectionItemContents(collectionId, item_id, cb){
-
-	  var dbUrl = url.resolve(dropbox_config.collections_url, '/collection_item_contents?')
-
-	  var params = {'id': collectionId, 'item_id': item_id}
-
-	  dbUrl += qs.stringify(params)
-
-	  console.log(dbUrl + " is the dbUrl")
-
-	  // Umm auth'd with dropbox? Need to add this...
-	  request.get(dbUrl, function requestCb(err,resp,body){
-	  	if(err) return cb(err)
-	  	if(!resp.headers['X-Dropbox-Item-Metadata']) return cb(new Error('No X-Dropbox-Item-Metadata header found.'))
-	  	cb && cb(null,body)
-	  })
-
-  } // end getCollectionItemContents
   
   return {
     isUsingDefault: isUsingDefaultConfig,
     config: dropbox_config,
     getNewRequestToken: function(req, res, cb) {
 
+      // Create your auth_url for the view   
       dboxapp.requesttoken(function(status, request_token){
 
-        console.log(request_token)
         return cb(status, request_token)
 
       })
-      // Create your auth_url for the view   
-
 
     },
     getRemoteAccessToken: function(request_token, request_token_secret, cb) {
 
-      var req_token = {oauth_token : request_token, oauth_token_secret : request_token_secret};
-      dboxapp.accesstoken(req_token, function(status, access_token) {
+      var req_token = {oauth_token : request_token, oauth_token_secret : request_token_secret}
 
-          console.log(access_token)
-          return cb(status, access_token)
-      
-      });
+      dboxapp.accesstoken(req_token, function(status, access_token){
+	      return cb(status, access_token)
+      })
       
     }, // end getRemoteAccessToken()
     getAccountInfo: function(dropbox_obj, cb) {
@@ -148,20 +104,30 @@ exports.Dropbox = (function() {
       }
 
       dboxclient.search("/", ".md", options, function(status, reply) {
-        var regex = /.*\.md$/i;
-        var files = []
+        var regex = /.*\.md$/i
+        	,	files = []
+        	;
+
+        if(status > 399 || !reply){
+        	return cb(new Error('Bad response.'))
+        }
+
         reply.forEach(function(item){
           if(regex.test(item.path)) {
             files.push(item)
           }
         })
+
         dboxclient.search("/", ".mdown", options, function(status, reply) {
           files = files.concat(reply)
+
           dboxclient.search("/", ".markdown", options, function(status, reply) {
             files = files.concat(reply)
             return cb(status, files)
           })
+
         })
+
       })
         
     },
@@ -188,35 +154,17 @@ exports.Dropbox = (function() {
     }, // end saveToDropbox
     handleIncomingFlowRequest: function(req, res, cb){
 
-    	// TODO: Are they auth'd?  How do handle this?
+    	var	filePath = req.query['path']
+    		,	access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
+    		,	dboxclient = dboxapp.client(access_token)
 
-    	var editFlowJson = JSON.parse( req.params['edit_flow_blob'] )
-    		,	item_id = editFlowJson['items_ids'][0] // the actual item_id of the md file
+    	if(!access_token){
+	    	return res.redirect('/redirect/dropbox')
+    	}
 
-    	// first, we have to get the collection
-			// "edit_flow" is hardcoded for Flow prototyping
-    	_getCollection('edit_flow', function getCollectionCb(err,data){
-
-    		if(err){
-    			console.error(err)
-    			return res.send(500)
-    		}
-    		// Now get the contents...
-    		_getCollectionItemContents('edit_flow', item_id, function _getCollectionItemContentsCb(err,data){
-
-	    		if(err){
-	    			console.error(err)
-	    			return res.send(500)
-	    		}
-
-	    		// if no errors, we should have the actual raw data...
-
-	    		console.log(data)
-
-
-    		}) // end _getCollectionItemContents
-
-    	}) // end _getCollection
+      dboxclient.get(filePath, function(status, reply, metadata){
+	      return res.json({data: reply.toString(), filename: path.basename(filePath)})
+      })
 
     } // end handleIncomingFlowRequest
 
