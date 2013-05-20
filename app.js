@@ -59,7 +59,7 @@ app.post('/fetch/dropbox', routes.fetch_dropbox_file)
 
 app.post('/save/dropbox', routes.save_dropbox)
 
-app.post('/dropbox/flow', routes.incoming_flow)
+app.get('/dropbox/flow', routes.incoming_flow)
 
 
 /* End Dropbox */
