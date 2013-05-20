@@ -75,7 +75,7 @@ exports.oauth_dropbox_redirect = function(req, res) {
 
 exports.oauth_dropbox = function(req, res) {
   
-  console.dir(req.query)
+  // console.dir(req.query)
     
     if(!req.session.dropbox){
       console.log('No dropbox session - browser bug')
