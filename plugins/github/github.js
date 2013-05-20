@@ -42,8 +42,17 @@ exports.Github = (function(){
     getUsername: function(req,res,cb){
       
       var uri = github_api + 'user?access_token=' + req.session.github.oauth
+
+      var options = {
+        headers: {
+          "User-Agent": "X-Dillinger-App"
+        },
+        uri: uri
+      }
+
       console.log('getting username from github: ' + uri)
-      request.get(uri, function(e, r, d){
+
+      request(options, function(e, r, d){
         if(e) {
           console.error(e)
           return res.redirect(r.statusCode)
@@ -61,16 +70,21 @@ exports.Github = (function(){
       
       var uri = github_api + 'user/repos?access_token=' + req.session.github.oauth
 
-      request.get(uri, function(e, r, d){
+      var options = {
+        headers: {
+          "User-Agent": "X-Dillinger-App"
+        },
+        uri: uri
+      }
+
+      request(options, function(e, r, d){
         if(e) {
-          res.send(
-            {
-              error: 'Request error.' 
-            , data: r.statusCode
-            })
+          res.send({
+            error: 'Request error.',
+            data: r.statusCode
+          })
         }
-        else if(!e && r.statusCode == 200) 
-        {
+        else if(!e && r.statusCode == 200){
           var set = []
 
           d = JSON.parse(d)
@@ -103,8 +117,14 @@ exports.Github = (function(){
                         + '/'
                         + req.body.repo
                         +'/branches?access_token=' + req.session.github.oauth
+      var options = {
+        headers: {
+          "User-Agent": "X-Dillinger-App"
+        },
+        uri: uri
+      }
 
-      request.get(uri, function(e, r, d){
+      request(options, function(e, r, d){
         if(e) {
           res.send(
             {
@@ -134,7 +154,14 @@ exports.Github = (function(){
                         + '/git/trees/'
                         + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
 
-      request.get(uri, function(e, r, d){
+      var options = {
+        headers: {
+          "User-Agent": "X-Dillinger-App"
+        },
+        uri: uri
+      }
+
+      request(options, function(e, r, d){
         if(e) {
           res.send(
             {
@@ -155,16 +182,23 @@ exports.Github = (function(){
     }, // end fetchTreeFiles
     fetchFile: function(req,res){
 
-      var url = req.body.mdFile
+      var uri = req.body.mdFile
         , isPrivateRepo = /blob/.test(url)
         
       // https://api.github.com/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132
       // If it is a private repo, we need to make an API call, because otherwise it is the raw file.
       if(isPrivateRepo){
-        url += '?access_token=' + req.session.github.oauth
+        uri += '?access_token=' + req.session.github.oauth
       }
 
-      request.get(url, function(e, r, d){
+      var options = {
+        headers: {
+          "User-Agent": "X-Dillinger-App"
+        },
+        uri: uri
+      }
+
+      request(options, function(e, r, d){
         if(e){
           res.send(
             {
