@@ -98,7 +98,10 @@ exports.Dropbox = (function() {
         include_deleted    : false
       }
 
-      dboxclient.search("/", ".md", options, function(status, reply) {
+      dboxclient.search("/", ".md", options, function(status, reply){
+        if(status > 399){
+          return cb(status)
+        }
         var regex = /.*\.md$/i;
         var files = []
         reply.forEach(function(item){
