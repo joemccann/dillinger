@@ -1086,8 +1086,8 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(){
-          alert("Roh-roh. Something went wrong. :(")
+        function _failHandler(resp,err){
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
         var config = {

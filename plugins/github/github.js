@@ -183,7 +183,7 @@ exports.Github = (function(){
     fetchFile: function(req,res){
 
       var uri = req.body.mdFile
-        , isPrivateRepo = /blob/.test(url)
+        , isPrivateRepo = /blob/.test(uri)
         
       // https://api.github.com/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132
       // If it is a private repo, we need to make an API call, because otherwise it is the raw file.
@@ -198,16 +198,17 @@ exports.Github = (function(){
         uri: uri
       }
 
+      console.dir(options)
+
       request(options, function(e, r, d){
         if(e){
-          res.send(
-            {
-              error: 'Request error.' 
-            , data: r.statusCode
-            })
+          console.error(e)
+          res.send({
+            error: 'Request error.' 
+          , data: r.statusCode
+          })
         }
-        else if(!e && r.statusCode === 200) 
-        {
+        else if(!e && r.statusCode === 200){
 
           var json_resp = 
           {
