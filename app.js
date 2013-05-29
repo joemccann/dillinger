@@ -99,6 +99,12 @@ app.post('/factory/fetch_html_direct', routes.fetch_html_direct)
 // Route to handle download of html file
 app.get('/files/html/:html', routes.download_html)
 
+// Save a pdf file and send header to download it directly as response
+app.post('/factory/fetch_pdf', routes.fetch_pdf)
+
+// Route to handle download of pdf file
+app.get('/files/pdf/:pdf', routes.download_pdf)
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'))
