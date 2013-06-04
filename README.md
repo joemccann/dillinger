@@ -44,7 +44,7 @@ Installation
 git clone [git-repo-url] dillinger
 cd dillinger
 npm i -d
-mkdir -p public/files/{md,html}
+mkdir -p public/files/{md,html,pdf}
 node app
 ```
 
