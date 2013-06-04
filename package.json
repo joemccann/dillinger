@@ -41,7 +41,8 @@
     "colors": ">=0.6.0-1",
     "node-markdown": ">=0.1.0",
     "lodash": ">=0.6.1",
-    "dbox": "0.6.3"
+    "dbox": "0.6.3",
+    "node-phantom": "~0.2.3"
   },
   "devDependencies": {
     "smoosh": ">=0.3.2",
