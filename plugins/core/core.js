@@ -3,7 +3,8 @@ var fs = require('fs')
   , request = require('request')
   , qs = require('querystring')
   , markdown = require('node-markdown').Markdown
-  , phantom = require('node-phantom')
+  , phantomjs = require('phantomjs')
+  , child = require('child_process')
 
 exports.Core = (function(){
   
@@ -164,40 +165,23 @@ exports.Core = (function(){
         else{
           var name = _generateRandomMdFilename('pdf')
           var filename = path.resolve(__dirname, '../../public/files/pdf/' + name)
-          var returnError = function(json,error){
-            console.error(error)
-            json.error = true
-            json.data = "Something wrong with the pdf conversion."
-            return json
-          }
 
-          phantom.create(function(err,ph){
-            if(!err){
-              ph.createPage(function(err,page){
-                if(!err){
-                  page.open(temp, function(err,status){
-                    if(!err){
-                      page.set('viewportSize', {width:1024, height:768})
-                      page.set('paperSize', {format:'A4',orientation:'portrait',margin: '1cm'})
-                      page.render(filename,function(err){
-                        if(!err){
-                          json_response.data = name
-                          res.json( json_response )
-                        }else{
-                          res.json(500, returnError(json_response,err) )
-                        }
-                        ph.exit()
-                      })
-                    }else{
-                      res.json(500, returnError(json_response,err) )
-                    }
-                  })
-                }else{
-                  res.json(500, returnError(json_response,err) )
-                }
-              })
-            }else{
-              res.json(500, returnError(json_response,err) )
+          var childArgs = [
+            path.join(__dirname, 'render.js'),
+            temp,
+            filename
+          ]
+
+          child.execFile(phantomjs.path, childArgs, function(err, stdout, stderr) {
+            if(err){
+              json_response.error = true
+              json_response.data = "Something wrong with the pdf conversion."
+              console.error(err)
+              res.json( json_response )
+            }
+            else{
+              json_response.data = name
+              res.json( json_response )
             }
           })
         }
