@@ -560,6 +560,32 @@ $(function(){
     
   }
 
+  function fetchPdfFile(){
+
+    var unmd = editor.getSession().getValue()
+    
+    function _doneHandler(jqXHR, data, response){
+      var resp = JSON.parse(response.responseText)
+      document.getElementById('downloader').src = '/files/pdf/' + resp.data
+    }
+
+    function _failHandler(){
+      alert("Roh-roh. Something went wrong. :(")
+    }
+
+    var config = {
+                      type: 'POST',
+                      data: "unmd=" + encodeURIComponent(unmd),
+                      dataType: 'json',
+                      url: '/factory/fetch_pdf',
+                      error: _failHandler,
+                      success: _doneHandler
+                    }
+
+    $.ajax(config)  
+
+  }
+
   function showHtml(){
     
     // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
@@ -775,6 +801,13 @@ $(function(){
     $('#export_html')
       .on('click', function(){
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#export_pdf')
+      .on('click', function(){
+        fetchPdfFile()
         $('.dropdown').removeClass('open')
         return false
       })
@@ -1086,8 +1119,8 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(){
-          alert("Roh-roh. Something went wrong. :(")
+        function _failHandler(resp,err){
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
         var config = {
@@ -1362,12 +1395,10 @@ $(function(){
             
             Notifier.showMessage('Error! ' + respData.error, 1000)
             
-            setTimeout(function(){
+            return setTimeout(function(){
               Notifier.showMessage('Reloading!')
               window.location.reload()
             }, 1250)
-
-            return
 
           }
 
@@ -1380,8 +1411,8 @@ $(function(){
           }
         } // end done handler
 
-        function _failHandler(){
-          alert("Roh-roh. Something went wrong. :(")
+        function _failHandler(resp,err){
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
         var config = {

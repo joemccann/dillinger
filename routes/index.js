@@ -43,6 +43,8 @@ exports.download_md = Core.downloadMd
 exports.fetch_html = Core.fetchHtml
 exports.fetch_html_direct = Core.fetchHtmlDirect
 exports.download_html = Core.downloadHtml
+exports.fetch_pdf = Core.fetchPdf
+exports.download_pdf = Core.downloadPdf
 
 /* End Core stuff */
 
@@ -126,7 +128,10 @@ exports.unlink_dropbox = function(req, res) {
 exports.import_dropbox = function(req, res) {
 
   Dropbox.searchForMdFiles(req.session.dropbox, function(status, data) {
-    res.json(data)
+    console.log(status)
+    if(status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
+    if(status > 399) return res.status(status).send("Something went wrong. Please refresh.")
+    return res.json(data)
   })
 
 }

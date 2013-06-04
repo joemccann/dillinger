@@ -1086,8 +1086,8 @@ $(function(){
           } // end else
         } // end done handler
 
-        function _failHandler(){
-          alert("Roh-roh. Something went wrong. :(")
+        function _failHandler(resp,err){
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
         var config = {
@@ -1362,12 +1362,10 @@ $(function(){
             
             Notifier.showMessage('Error! ' + respData.error, 1000)
             
-            setTimeout(function(){
+            return setTimeout(function(){
               Notifier.showMessage('Reloading!')
               window.location.reload()
             }, 1250)
-
-            return
 
           }
 
@@ -1380,8 +1378,8 @@ $(function(){
           }
         } // end done handler
 
-        function _failHandler(){
-          alert("Roh-roh. Something went wrong. :(")
+        function _failHandler(resp,err){
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
         var config = {
