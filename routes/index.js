@@ -148,13 +148,6 @@ exports.save_dropbox = function(req, res) {
   
 }
 
-exports.incoming_flow = function(req, res, cb){
-
-  Dropbox.handleIncomingFlowRequest(req, res, cb)
-  
-}
-
-
 /* End Dropbox stuff */
 
 

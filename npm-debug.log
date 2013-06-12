@@ -1,0 +1,30 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'version',
+1 verbose cli   'build' ]
+2 info using npm@1.2.15
+3 info using node@v0.10.2
+4 silly exec git "status" "--porcelain"
+5 silly git,status,--porcelain, spawning
+6 error Error: Git working directory not clean.
+6 error M app.js
+6 error M routes/index.js
+6 error     at /usr/local/lib/node_modules/npm/lib/version.js:82:33
+6 error     at /usr/local/lib/node_modules/npm/node_modules/once/once.js:17:15
+6 error     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/exec.js:64:5)
+6 error     at ChildProcess.EventEmitter.emit (events.js:98:17)
+6 error     at maybeClose (child_process.js:703:16)
+6 error     at Socket.<anonymous> (child_process.js:916:11)
+6 error     at Socket.EventEmitter.emit (events.js:95:17)
+6 error     at Pipe.close (net.js:451:12)
+7 error If you need help, you may report this log at:
+7 error     <http://github.com/isaacs/npm/issues>
+7 error or email it to:
+7 error     <npm-@googlegroups.com>
+8 error System Darwin 12.4.0
+9 error command "/usr/local/bin/node" "/usr/local/bin/npm" "version" "build"
+10 error cwd /Users/joe/Documents/workspace/dillinger
+11 error node -v v0.10.2
+12 error npm -v 1.2.15
+13 verbose exit [ 1, true ]
