@@ -1534,6 +1534,50 @@ $(function(){
 
 })
 
+/**
+ * Get scrollHeight of preview div
+ * (code adapted from https://github.com/anru/rsted/blob/master/static/scripts/editor.js)
+ * 
+ * @param {Object} The jQuery object for the preview div
+ * @return {Int} The scrollHeight of the preview area (in pixels)
+ */
+function getScrollHeight($prevFrame) {
+    // Different browsers attach the scrollHeight of a document to different
+    // elements, so handle that here.
+    if ($prevFrame[0].scrollHeight !== undefined) {
+        return $prevFrame[0].scrollHeight;
+    } else if ($prevFrame.find('html')[0].scrollHeight !== undefined &&
+               $prevFrame.find('html')[0].scrollHeight !== 0) {
+        return $prevFrame.find('html')[0].scrollHeight;
+    } else {
+        return $prevFrame.find('body')[0].scrollHeight;
+    }
+}
+
+/**
+ * Scroll preview to match cursor position in editor session
+ * (code adapted from https://github.com/anru/rsted/blob/master/static/scripts/editor.js)
+ * 
+ * @return {Void}
+ */
+
+function syncPreview() {
+  var $ed = window.ace.edit('editor');
+  var $prev = $('#preview');
+
+  var editorScrollRange = ($ed.getSession().getLength());
+  
+  var previewScrollRange = (getScrollHeight($prev));
+  
+  // Find how far along the editor is (0 means it is scrolled to the top, 1
+  // means it is at the bottom).
+  var scrollFactor = $ed.getFirstVisibleRow() / editorScrollRange;
+
+  // Set the scroll position of the preview pane to match.  jQuery will
+  // gracefully handle out-of-bounds values.
+  $prev.scrollTop(scrollFactor * previewScrollRange);
+}
+
 window.onload = function(){
   var $loading = $('#loading')
   
@@ -1542,6 +1586,12 @@ window.onload = function(){
       $('#main').removeClass('bye')
       $loading.remove()
     })
-    .addClass('fade_slow')
-    
+    .addClass('fade_slow');
+  
+  /**
+   * Bind synchronization of preview div to editor scroll and change
+   * of editor cursor position.
+   */
+  window.ace.edit('editor').session.on('changeScrollTop', syncPreview);
+  window.ace.edit('editor').session.selection.on('changeCursor', syncPreview);
 }
