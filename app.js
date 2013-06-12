@@ -86,7 +86,6 @@ app.post('/save/github', routes.save_github)
 /* End Github */
 
 
-
 /* Dillinger Actions */
 // save a markdown file and send header to download it directly as response 
 app.post('/factory/fetch_markdown', routes.fetch_md)
