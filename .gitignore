@@ -1,6 +1,7 @@
 .DS_Store
 node_modules/*
 logs/*
-public/files/*
+public/files/md/*.md
+public/files/html/*.html
 *-config.json
 backup/*
