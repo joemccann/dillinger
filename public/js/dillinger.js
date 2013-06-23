@@ -926,6 +926,37 @@ $(function(){
         return false
         
       })
+
+      $('#editor')
+        .on('dragover', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+        })
+        .on('drop', function(e) {
+          e.preventDefault()
+          e.stopPropagation()
+
+          // fetch FileList object
+          var originalEvent = e.originalEvent
+              , files = originalEvent.target.files || originalEvent.dataTransfer.files
+              , reader = new FileReader()
+              , i = 0
+              , file
+              , name
+
+          // find the first text file
+          do {
+            file = files[i++]
+          } while (file && file.type.substr(0, 4) !== 'text' && file.name.substr(file.name.length - 3) !== '.md')
+
+          if (!file) return
+
+          reader.onload = function (lE) {
+            editor.getSession().setValue(lE.target.result)
+            previewMd()
+          }
+          reader.readAsText(file)
+        })
   }
 
 
