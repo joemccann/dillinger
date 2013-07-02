@@ -45,6 +45,7 @@ git clone [git-repo-url] dillinger
 cd dillinger
 npm i -d
 mkdir -p public/files/{md,html,pdf}
+npm install express request node-markdown dbox lodash stylus ejs
 node app
 ```
 
