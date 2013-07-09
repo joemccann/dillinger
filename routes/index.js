@@ -4,6 +4,7 @@ var path = require('path')
   , Core = require( path.resolve(__dirname, '../plugins/core/core.js') ).Core
   , Dropbox = require( path.resolve(__dirname, '../plugins/dropbox/dropbox.js') ).Dropbox
   , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
+  , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
 
 // Show the home page
 exports.index = function(req, res) {
@@ -20,10 +21,6 @@ exports.index = function(req, res) {
 
   if(!req.session.isEvernoteSynced){
     console.warn('Evernote not implemented yet.')
-  }
-
-  if(!req.session.isGoogleDriveSynced){
-    console.warn('Google Drive not implemented yet.')    
   }
   
   if(req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
@@ -248,3 +245,84 @@ exports.save_github = function(req,res){
 }
 
 /* End Github stuff */
+
+
+/* Google Drive stuff */
+
+function handle_googledrive_response(req, res, err, fn) {
+  if (err) {
+    if (err.code == 401 || err.code == 403) {
+      req.session.googledrive = null;
+      req.session.isGoogleDriveSynced = false;
+    }
+    res.status(err.code || 400).send('Error: ' + err.message);
+  } else {
+    fn(req, res);
+  }
+}
+
+exports.oauth_googledrive_redirect = function(req, res) {
+  res.redirect(GoogleDrive.generateAuthUrl());
+}
+
+exports.oauth_googledrive = function(req, res, next) {
+  var code = req.query.code;
+  GoogleDrive.getToken(code, function(err, tokens) {
+    if (!err) {
+      req.session.isGoogleDriveSynced = true;
+      req.session.googledrive = tokens;
+    }
+    res.redirect('/');
+  });
+}
+
+exports.unlink_googledrive = function(req, res) {
+  req.session.googledrive = null;
+  req.session.isGoogleDriveSynced = false;
+  res.redirect('/');
+}
+
+exports.import_googledrive = function(req, res) {
+  if (!req.session.googledrive) {
+    res.status(401).send('Google Drive is not linked.');
+    return;
+  }
+  var tokens = req.session.googledrive;
+  GoogleDrive.search(tokens, function(err, data) {
+    handle_googledrive_response(req, res, err, function() {
+      res.json(data);
+    });
+  });
+}
+
+exports.fetch_googledrive_file = function(req, res) {
+  if (!req.session.googledrive) {
+    res.status(401).send('Google Drive is not linked.');
+    return;
+  }
+  var fileId = req.query.fileId
+    , tokens = req.session.googledrive;
+  GoogleDrive.get(tokens, fileId, function(err, response) {
+    handle_googledrive_response(req, res, err, function() {
+      res.json(response);
+    });
+  });
+}
+
+exports.save_googledrive = function(req, res) {
+  if (!req.session.googledrive) {
+    res.status(401).send('Google Drive is not linked.');
+    return;
+  }
+  var fileId = req.query.fileId
+    , content = req.body.content
+    , title = req.body.title
+    , tokens = req.session.googledrive;
+  GoogleDrive.save(tokens, fileId, title, content, function(err, data) {
+    handle_googledrive_response(req, res, err, function() {
+      res.send(data);
+    });
+  });
+}
+
+/* End of Google Drive stuff */

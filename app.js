@@ -85,6 +85,22 @@ app.post('/save/github', routes.save_github)
 
 /* End Github */
 
+/* Begin Google Drive */
+
+app.get('/redirect/googledrive', routes.oauth_googledrive_redirect);
+
+app.get('/oauth/googledrive', routes.oauth_googledrive);
+
+app.get('/unlink/googledrive', routes.unlink_googledrive);
+
+app.get('/import/googledrive', routes.import_googledrive);
+
+app.get('/fetch/googledrive', routes.fetch_googledrive_file);
+
+app.post('/save/googledrive', routes.save_googledrive);
+
+/* End Google Drive */
+
 
 /* Dillinger Actions */
 // save a markdown file and send header to download it directly as response 
