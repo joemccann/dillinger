@@ -1377,7 +1377,7 @@ $(function(){
       },
       save: function() {
         var content = encodeURIComponent(editor.getSession().getValue());
-        var postData = 'title=' + encodeURIComponent(profile.current_filename) +
+        var postData = 'title=' + encodeURIComponent(profile.current_filename)+ '.md' +
             '&content=' + content
         
          $.ajax({
