@@ -500,7 +500,7 @@ $(function(){
     
     // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     var unmd = editor.getSession().getValue()
-    
+
     function _doneHandler(a, b, response){
       a = b = null // JSHint complains if a, b are null in method
       var resp = JSON.parse(response.responseText)
@@ -762,6 +762,13 @@ $(function(){
       return false
     })
 
+    $("#save_googledrive")
+      .on('click', function() {
+        //profile.current_filename = profile.current_filename || generateRandomFilename('md')
+        GoogleDrive.save()
+        saveFile()
+      })
+
     $(".modal-body").delegate("#paper", "click", function(){
       togglePaper()
       return false
@@ -788,6 +795,12 @@ $(function(){
     $('#import_dropbox')
       .on('click', function(){
         Dropbox.searchDropbox()
+        return false
+      })
+
+    $('#import_googledrive')
+      .on('click', function(){
+        GoogleDrive.search()
         return false
       })
     
@@ -925,6 +938,13 @@ $(function(){
           
         return false
         
+      })
+      .on('click', '.googledrive_file', function(){
+        var fileId = $(this).parent('li').attr('data-file-id')
+        profile.current_filename = $(this).html()
+        GoogleDrive.fileId = fileId
+        GoogleDrive.get()
+        return false
       })
 
       // Check for support of drag/drop
@@ -1297,6 +1317,88 @@ $(function(){
     } // end return obj
   
   })() // end IIFE
+
+  var GoogleDrive = (function() {
+    function _errorHandler(a, b, res) {
+      Notifier.showMessage(res.responseText );
+    }
+
+    function renderSearchResults(a, b, res) {
+      var result = JSON.parse(res.responseText)
+        , list = '<ul>'
+      
+      // Handle empty array case.
+      if(!Array.isArray(result)) return _errorHandler(null, null, {responseText: "No Markdown files found!"} )
+
+      result.items.forEach(function(item){
+        list += '<li data-file-id="' 
+              + item.id + '"><a class="googledrive_file" href="#">' 
+              + item.title + '</a></li>'
+      })
+
+      list += '</ul>'
+      $('.modal-header h3').text('Your Google Drive Files')
+      $('.modal-body').html(list)
+      $('#modal-generic').modal({
+        keyboard: true,
+        backdrop: true,
+        show: true
+      })
+    }
+
+    function renderFile(a, b, res) {
+      var result = JSON.parse(res.responseText);
+      $('#modal-generic').modal('hide')
+      editor.getSession().setValue(result.content)
+      previewMd()
+    }
+
+    // TODO: what to do if access token expires?
+    return {
+      fileId: null,
+      search: function() {
+        $.ajax({
+          dataType: 'json',
+          url: '/import/googledrive',
+          beforeSend: function() {
+            Notifier.showMessage('Searching for .md files')
+          },
+          error: _errorHandler,
+          success: renderSearchResults
+        });
+      },
+      get: function() {
+        $.ajax({
+          dataType: 'json',
+          url: '/fetch/googledrive?fileId=' + this.fileId,
+          error: _errorHandler,
+          success: renderFile
+        });
+      },
+      save: function() {
+        var content = encodeURIComponent(editor.getSession().getValue());
+        var postData = 'title=' + encodeURIComponent(profile.current_filename)+ '.md' +
+            '&content=' + content
+        
+         $.ajax({
+          dataType: 'json',
+          type: 'post',
+          data: postData,
+          url: '/save/googledrive?fileId=' + (GoogleDrive.fileId || ''),
+          error: _errorHandler,
+          success: function(a, b, res) {
+            var response = JSON.parse(res.responseText);
+            if (response.id) {
+              GoogleDrive.fileId = response.id
+              Notifier.showMessage('Document saved on Google Drive')
+            } else {
+              Notifier.showMessage('An error occurred!')
+            }
+          }
+        });
+      }
+    }
+  })();
 
   // Dropbox Module
   var Dropbox = (function(){
