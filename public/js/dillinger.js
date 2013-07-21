@@ -1320,12 +1320,16 @@ $(function(){
 
   var GoogleDrive = (function() {
     function _errorHandler(a, b, res) {
-      Notifier.showMessage(res.responseText);
+      Notifier.showMessage(res.responseText );
     }
 
     function renderSearchResults(a, b, res) {
       var result = JSON.parse(res.responseText)
-      var list = '<ul>'
+        , list = '<ul>'
+      
+      // Handle empty array case.
+      if(!Array.isArray(result)) return _errorHandler(null, null, {responseText: "No Markdown files found!"} )
+
       result.items.forEach(function(item){
         list += '<li data-file-id="' 
               + item.id + '"><a class="googledrive_file" href="#">' 
