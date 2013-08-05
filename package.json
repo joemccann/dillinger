@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
-  "version": "0.5.1-3",
+  "version": "0.5.1-6",
   "author": {
     "name": "Joe McCann",
     "email": "joe@subprint.com"
@@ -31,7 +31,7 @@
     "url": "git://github.com/joemccann/dillinger"
   },
   "engines": {
-    "node": "0.8.x"
+    "node": "0.10.x"
   },
   "dependencies": {
     "express": ">=3.0.0rc3",
