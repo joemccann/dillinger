@@ -15,8 +15,9 @@ exports.index = function(req, res) {
     isGithubAuth: !!req.session.isGithubSynced,
     isEvernoteAuth: !!req.session.isEvernoteSynced,
     isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
-    isUsingDroboxDefaultConfig: Dropbox.isUsingDefault,
-    isUsingGithubDefaultConfig: Github.isUsingDefault    
+    isDropboxConfigured: Dropbox.isConfigured,
+    isGithubConfigured: Github.isConfigured,
+    isGoogleDriveConfigured: GoogleDrive.isConfigured   
   }
 
   if(!req.session.isEvernoteSynced){

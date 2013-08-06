@@ -1,3 +1,5 @@
+<% if(isGoogleDriveConfigured){ %>
+
 <% if(isGoogleDriveAuth) {
  var icon = 'icon-minus'
  var copy = 'Unlink'
@@ -14,3 +16,4 @@
   <li><a tabindex="-1" href="#" id="import_googledrive"><i class="icon-download-alt"></i>&nbsp;Import from Google Drive</a></li>
   <li><a tabindex="-1" href="#" id="save_googledrive"><i class="icon-hdd"></i>&nbsp;Save to Google Drive</a></li>
 </ul>
+<% } %>

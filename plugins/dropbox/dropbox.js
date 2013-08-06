@@ -8,12 +8,12 @@ var fs = require('fs')
 
 var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
   , dropbox_config = {}
-  , isUsingDefaultConfig = true
+  , isConfigEnabled = false
 // ^^^helps with the home page view; should we show the dropbox dropdown?
 
 if(fs.existsSync(dropbox_config_file)) {
   dropbox_config = JSON.parse( fs.readFileSync( dropbox_config_file, 'utf-8' ) )
-  isUsingDefaultConfig = false
+  isConfigEnabled = true
 } else {
   dropbox_config = {
     "app_key": "YOUR_KEY"
@@ -24,7 +24,7 @@ if(fs.existsSync(dropbox_config_file)) {
   , "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
   , "collections_url": "https://api-content.dropbox.com/1"
   }
-  console.warn('Dropbox config not found at ' + dropbox_config_file + '. Using defaults instead.')
+  console.warn('Dropbox config not found at ' + dropbox_config_file + '. Plugin disabled.')
 }
 
 exports.Dropbox = (function() {
@@ -36,7 +36,7 @@ exports.Dropbox = (function() {
 
   
   return {
-    isUsingDefault: isUsingDefaultConfig,
+    isConfigured: isConfigEnabled, 
     config: dropbox_config,
     getNewRequestToken: function(req, res, cb) {
 
