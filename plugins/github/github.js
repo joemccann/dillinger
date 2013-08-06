@@ -4,13 +4,13 @@ var fs = require('fs')
 
 var github_config_file = path.resolve(__dirname, 'github-config.json')
   , github_config = {}
-  , isUsingDefaultConfig = true 
+  , isConfigEnabled = false 
 
 // ^^^helps with the home page view; should we show the github dropdown?
 
 if(fs.existsSync(github_config_file)) {
   github_config = JSON.parse( fs.readFileSync( github_config_file, 'utf-8' ) )
-  isUsingDefaultConfig = false
+  isConfigEnabled = true
 } else {
   github_config = {
     "client_id": "YOUR_ID"
@@ -18,7 +18,7 @@ if(fs.existsSync(github_config_file)) {
   , "client_secret": "YOUR_SECRET"
   , "callback_url": "http://dillinger.io/oauth/github"
   }
-  console.warn('Github config not found at ' + github_config_file + '. Using defaults instead.')
+  console.warn('Github config not found at ' + github_config_file + '. Plugin disabled.')
 }
 
 exports.Github = (function(){
@@ -34,7 +34,7 @@ exports.Github = (function(){
   }
   
   return {
-    isUsingDefault: isUsingDefaultConfig,
+    isConfigured: isConfigEnabled,
     github_config: github_config,
     generateAuthUrl: function(req,res){
       return _buildAuthUrl()
