@@ -6,20 +6,23 @@ var fs = require('fs')
 var configFile = path.resolve(__dirname, 'googledrive-config.json')
   , config = {}
   , scopes = ['https://www.googleapis.com/auth/drive']
+  , isConfigEnabled = false
   , client = null;
 
 if (fs.existsSync(configFile)) {
   config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+  isConfigEnabled = true;
 } else {
   config = {
     "client_id": "CLIENT_ID"
   , "client_secret": "CLIENT_SECRET"
   , "redirect_uri": "http://dillinger.io/"};
   console.warn('Google Drive config not found at ' + configFile +
-      '. Using defaults instead.')
+      '. Plugin disabled.')
 }
 
 var GoogleDrive = {
+  isConfigured: isConfigEnabled,
   _loadDriveIfRequired: function(callback) {
     if (!client) {
       googleapis.discover('drive', 'v2').execute(function(err, c) {
