@@ -57,6 +57,14 @@ mkdir -p public/files/{md,html,pdf}
 node app
 ```
 
+For Nodejitsu Deployment
+----------
+
+```sh
+npm version [<newversion> | major | minor | patch | build]
+jitsu deploy
+```
+
 
 License
 -
