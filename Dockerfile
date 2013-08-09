@@ -17,7 +17,7 @@ run apt-get update
 #
 # base dependencies
 #
-run apt-get install -y build-essential chrpath git-core libssl-dev libfontconfig1-dev
+run apt-get install -y build-essential chrpath git-core libssl-dev libfontconfig1-dev curl
 
 #
 # install node
