@@ -31,7 +31,7 @@ run npm install -g forever
 #
 run mkdir -p /opt/install/phantomjs
 run cd /opt/install && git clone git://github.com/ariya/phantomjs.git
-run cd phantomjs && git checkout 1.9 && ./build.sh
+run cd /opt/install/phantomjs && git checkout 1.9 && yes | ./build.sh
 
 #
 # install the app
