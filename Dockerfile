@@ -17,7 +17,7 @@ run apt-get update
 #
 # base dependencies
 #
-run apt-get install -y build-essential chrpath git-core libssl-dev libfontconfig1-dev curl
+run apt-get install -y build-essential chrpath git-core libssl-dev libfontconfig1-dev curl xvfb gtk2-engines-pixbuf xfonts-100dpi x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libqt4-dev libqtwebkit-dev qt4-qmake python-qt4
 
 #
 # install node
@@ -29,9 +29,7 @@ run npm install -g forever
 #
 # install phantomjs
 #
-run mkdir -p /opt/install/phantomjs
-run cd /opt/install && git clone git://github.com/ariya/phantomjs.git
-run cd /opt/install/phantomjs && git checkout 1.9 && yes | ./build.sh
+run mkdir -p /opt/install && cd /opt/install && wget https://phantomjs.googlecode.com/files/phantomjs-1.9.1-linux-x86_64.tar.bz2 && tar xvf phantomjs-1.9.1-linux-x86_64.tar.bz2 && cd phantomjs-*-linux-x86_64 && echo 'export PATH='$(pwd)'/bin:'$PATH >> ~/.profile && source ~/.profile
 
 #
 # install the app
