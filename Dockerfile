@@ -30,7 +30,8 @@ run npm install -g forever
 # install phantomjs
 #
 run apt-get install -y wget
-run mkdir -p /opt/install && cd /opt/install && wget https://phantomjs.googlecode.com/files/phantomjs-1.9.1-linux-x86_64.tar.bz2 && tar xvf phantomjs-1.9.1-linux-x86_64.tar.bz2 && cd phantomjs-*-linux-x86_64 && echo 'export PATH='$(pwd)'/bin:'$PATH >> ~/.profile && source ~/.profile
+run mkdir -p /opt/install && cd /opt/install && wget https://phantomjs.googlecode.com/files/phantomjs-1.9.1-linux-x86_64.tar.bz2 && tar xvf phantomjs-1.9.1-linux-x86_64.tar.bz2 && cd phantomjs-*-linux-x86_64 && echo 'export PATH='$(pwd)'/bin:'$PATH >> ~/.profile
+run /bin/bash -c "source ~/.profile"
 
 #
 # install the app
