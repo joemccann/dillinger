@@ -1721,16 +1721,16 @@ function syncPreview() {
 window.onload = function(){
   var $loading = $('#loading')
   
-  if ($.support.transition!=false){
-  $loading
-    .bind( $.support.transitionEnd, function(){
-      $('#main').removeClass('bye')
-      $loading.remove()
-    })
-    .addClass('fade_slow');
-  } else  {
-      $('#main').removeClass('bye')
-      $loading.remove()   
+  if ($.support.transition){
+    $loading
+      .bind( $.support.transitionEnd, function(){
+        $('#main').removeClass('bye')
+        $loading.remove()
+      })
+      .addClass('fade_slow');
+  } else {
+    $('#main').removeClass('bye')
+    $loading.remove()   
   }
   
   /**
@@ -1740,4 +1740,3 @@ window.onload = function(){
   window.ace.edit('editor').session.on('changeScrollTop', syncPreview);
   window.ace.edit('editor').session.selection.on('changeCursor', syncPreview);
 }
-
