@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "express": ">=3.0.0rc3",
+    "rc": "0.3.0",
     "stylus": ">=0.28.2",
     "ejs": ">=0.8.1",
     "request": ">=2.9.203",
