@@ -2,9 +2,21 @@ var fs = require('fs')
   , path = require('path')
   , request = require('request')
   , qs = require('querystring')
-  , markdown = require('node-markdown').Markdown
+  // , markdown = require('node-markdown').Markdown
+  , markdown = require('marked')
   // , phantomjs = require('phantomjs')
   // , child = require('child_process')
+
+markdown.setOptions({
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false
+})
+
 
 exports.Core = (function(){
   

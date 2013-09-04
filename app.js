@@ -29,7 +29,8 @@ app.configure(function(){
 
   // Setup local variables to be available in the views.
   app.locals.title = "Online Markdown Editor - Dillinger, the Last Markdown Editor ever."
-  app.locals.description = "Dillinger is an Online cloud based HTML5 filled Markdown Editor. Sync with Dropbox and Github. 100% Open Source!"
+  app.locals.description = "Dillinger is an online cloud based HTML5 filled Markdown Editor."+
+    "Sync with Dropbox, Github and Google Drive. 100% Open Source!"
   if (config.googleWebmasterMeta)
     app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
   app.locals.node_version = process.version.replace('v', '')
