@@ -57,7 +57,7 @@ function smoosher(){
       "dependencies": [ { "src": "./public/js/bootstrap.js", "jshint": false}, 
                         { "src": "./public/js/ace.js", "jshint": false}, 
                         { "src": "./public/js/mode-markdown.js", "jshint": false}, 
-                        { "src": "./public/js/showdown.js", "jshint": false},
+                        { "src": "./public/js/marked.js", "jshint": false},
                         { "src": "./public/js/keymaster.js", "jshint": false}],
       "dillinger": [ "./public/js/dillinger.js" ]
     },

@@ -4882,10 +4882,10 @@ nav {
   -ms-transition: opacity bodyTransitiontime linear;
   -o-transition: opacity bodyTransitiontime linear;
   transition: opacity bodyTransitiontime linear;
-  -webkit-transition: opacity 0.4s linear;
-  -moz-transition: opacity 0.4s linear;
-  -o-transition: opacity 0.4s linear;
-  -ms-transition: opacity 0.4s linear;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  -ms-transition: opacity 0.2s linear;
 }
 #loading {
   position: absolute;
@@ -4938,15 +4938,15 @@ noscript p {
   -khtml-opacity: 0;
   -moz-opacity: 0;
   opacity: 0;
-  -webkit-transition: opacity 0.8s ease-in;
-  -moz-transition: opacity 0.8s ease-in;
-  -o-transition: opacity 0.8s ease-in;
-  -ms-transition: opacity 0.8s ease-in;
-  -webkit-transition: opacity 0.8s ease-in;
-  -moz-transition: opacity 0.8s ease-in;
-  -ms-transition: opacity 0.8s ease-in;
-  -o-transition: opacity 0.8s ease-in;
-  transition: opacity 0.8s ease-in;
+  -webkit-transition: opacity 0.15s ease-in;
+  -moz-transition: opacity 0.15s ease-in;
+  -o-transition: opacity 0.15s ease-in;
+  -ms-transition: opacity 0.15s ease-in;
+  -webkit-transition: opacity 0.15s ease-in;
+  -moz-transition: opacity 0.15s ease-in;
+  -ms-transition: opacity 0.15s ease-in;
+  -o-transition: opacity 0.15s ease-in;
+  transition: opacity 0.15s ease-in;
 }
 .slide_out {
   margin-top: -60px;
