@@ -1728,1368 +1728,1171 @@
             })();
         
 ace.define("ace/mode/markdown",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/xml","ace/mode/html","ace/tokenizer","ace/mode/markdown_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("./javascript").Mode,g=a("./xml").Mode,h=a("./html").Mode,i=a("../tokenizer").Tokenizer,j=a("./markdown_highlight_rules").MarkdownHighlightRules,k=function(){var a=new j;this.$tokenizer=new i(a.getRules()),this.$embeds=a.getEmbeds(),this.createModeDelegates({"js-":f,"xml-":g,"html-":h})};d.inherits(k,e),function(){this.getNextLineIndent=function(a,b,c){if(a=="listblock"){var d=/^((?:.+)?)([-+*][ ]+)/.exec(b);return d?(new Array(d[1].length+1)).join(" ")+d[2]:""}return this.$getIndent(b)}}.call(k.prototype),b.Mode=k}),ace.define("ace/mode/javascript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/javascript_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/worker/worker_client","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./javascript_highlight_rules").JavaScriptHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("../range").Range,j=a("../worker/worker_client").WorkerClient,k=a("./behaviour/cstyle").CstyleBehaviour,l=a("./folding/cstyle").FoldMode,m=function(){this.$tokenizer=new f((new g).getRules()),this.$outdent=new h,this.$behaviour=new k,this.foldingRules=new l};d.inherits(m,e),function(){this.toggleCommentLines=function(a,b,c,d){var e=!0,f=/^(\s*)\/\//;for(var g=c;g<=d;g++)if(!f.test(b.getLine(g))){e=!1;break}if(e){var h=new i(0,0,0,0);for(var g=c;g<=d;g++){var j=b.getLine(g),k=j.match(f);h.start.row=g,h.end.row=g,h.end.column=k[0].length,b.replace(h,k[1])}}else b.indentRows(c,d,"//")},this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a),f=e.tokens,g=e.state;if(f.length&&f[f.length-1].type=="comment")return d;if(a=="start"||a=="regex_allowed"){var h=b.match(/^.*(?:\bcase\b.*\:|[\{\(\[])\s*$/);h&&(d+=c)}else if(a=="doc-start"){if(g=="start"||a=="regex_allowed")return"";var h=b.match(/^\s*(\/?)\*/);h&&(h[1]&&(d+=" "),d+="* ")}return d},this.checkOutdent=function(a,b,c){return this.$outdent.checkOutdent(b,c)},this.autoOutdent=function(a,b,c){this.$outdent.autoOutdent(b,c)},this.createWorker=function(a){var b=new j(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");return b.attachToDocument(a.getDocument()),b.on("jslint",function(b){var c=[];for(var d=0;d<b.data.length;d++){var e=b.data[d];e&&c.push({row:e.line-1,column:e.character-1,text:e.reason,type:"warning",lint:e})}a.setAnnotations(c)}),b.on("narcissus",function(b){a.setAnnotations([b.data])}),b.on("terminate",function(){a.clearAnnotations()}),b}}.call(m.prototype),b.Mode=m}),ace.define("ace/mode/javascript_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/unicode","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("../unicode"),g=a("./doc_comment_highlight_rules").DocCommentHighlightRules,h=a("./text_highlight_rules").TextHighlightRules,i=function(){var a=e.arrayToMap("Array|Boolean|Date|Function|Iterator|Number|Object|RegExp|String|Proxy|Namespace|QName|XML|XMLList|ArrayBuffer|Float32Array|Float64Array|Int16Array|Int32Array|Int8Array|Uint16Array|Uint32Array|Uint8Array|Uint8ClampedArray|Error|EvalError|InternalError|RangeError|ReferenceError|StopIteration|SyntaxError|TypeError|URIError|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|isNaN|parseFloat|parseInt|JSON|Math|this|arguments|prototype|window|document".split("|")),b=e.arrayToMap("break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|throw|try|typeof|let|var|while|with|const|yield|import|get|set".split("|")),c="case|do|else|finally|in|instanceof|return|throw|try|typeof|yield",d=e.arrayToMap("__parent__|__count__|escape|unescape|with|__proto__".split("|")),h=e.arrayToMap("const|let|var|function".split("|")),i=e.arrayToMap("null|Infinity|NaN|undefined".split("|")),j=e.arrayToMap("class|enum|extends|super|export|implements|private|public|interface|package|protected|static".split("|")),k="["+f.packages.L+"\\$_]["+f.packages.L+f.packages.Mn+f.packages.Mc+f.packages.Nd+f.packages.Pc+"\\$_]*\\b",l="\\\\(?:x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)";this.$rules={start:[{token:"comment",regex:/\/\/.*$/},g.getStartRule("doc-start"),{token:"comment",merge:!0,regex:/\/\*/,next:"comment"},{token:"string",regex:"'(?=.)",next:"qstring"},{token:"string",regex:'"(?=.)',next:"qqstring"},{token:"constant.numeric",regex:/0[xX][0-9a-fA-F]+\b/},{token:"constant.numeric",regex:/[+-]?\d+(?:(?:\.\d*)?(?:[eE][+-]?\d+)?)?\b/},{token:["storage.type","punctuation.operator","support.function","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+k+")(\\.)(prototype)(\\.)("+k+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","punctuation.operator","support.function","punctuation.operator","entity.name.function","text","keyword.operator","text"],regex:"("+k+")(\\.)(prototype)(\\.)("+k+")(\\s*)(=)(\\s*)",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+k+")(\\.)("+k+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","keyword.operator","text","storage.type","text","paren.lparen"],regex:"("+k+")(\\s*)(=)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","punctuation.operator","entity.name.function","text","keyword.operator","text","storage.type","text","entity.name.function","text","paren.lparen"],regex:"("+k+")(\\.)("+k+")(\\s*)(=)(\\s*)(function)(\\s+)(\\w+)(\\s*)(\\()",next:"function_arguments"},{token:["storage.type","text","entity.name.function","text","paren.lparen"],regex:"(function)(\\s+)("+k+")(\\s*)(\\()",next:"function_arguments"},{token:["entity.name.function","text","punctuation.operator","text","storage.type","text","paren.lparen"],regex:"("+k+")(\\s*)(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:["text","text","storage.type","text","paren.lparen"],regex:"(:)(\\s*)(function)(\\s*)(\\()",next:"function_arguments"},{token:"constant.language.boolean",regex:/(?:true|false)\b/},{token:"keyword",regex:"(?:"+c+")\\b",next:"regex_allowed"},{token:["punctuation.operator","support.function"],regex:/(\.)(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:opzzzz|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/},{token:["punctuation.operator","support.function.dom"],regex:/(\.)(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/},{token:["punctuation.operator","support.constant"],regex:/(\.)(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/},{token:["storage.type","punctuation.operator","support.function.firebug"],regex:/(console)(\.)(warn|info|log|error|time|timeEnd|assert)\b/},{token:function(c){return a.hasOwnProperty(c)?"variable.language":d.hasOwnProperty(c)?"invalid.deprecated":h.hasOwnProperty(c)?"storage.type":b.hasOwnProperty(c)?"keyword":i.hasOwnProperty(c)?"constant.language":j.hasOwnProperty(c)?"invalid.illegal":c=="debugger"?"invalid.deprecated":"identifier"},regex:k},{token:"keyword.operator",regex:/!|\$|%|&|\*|\-\-|\-|\+\+|\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\|\||\?\:|\*=|%=|\+=|\-=|&=|\^=|\b(?:in|instanceof|new|delete|typeof|void)/,next:"regex_allowed"},{token:"punctuation.operator",regex:/\?|\:|\,|\;|\./,next:"regex_allowed"},{token:"paren.lparen",regex:/[\[({]/,next:"regex_allowed"},{token:"paren.rparen",regex:/[\])}]/},{token:"keyword.operator",regex:/\/=?/,next:"regex_allowed"},{token:"comment",regex:/^#!.*$/},{token:"text",regex:/\s+/}],regex_allowed:[g.getStartRule("doc-start"),{token:"comment",merge:!0,regex:"\\/\\*",next:"comment_regex_allowed"},{token:"comment",regex:"\\/\\/.*$"},{token:"string.regexp",regex:"\\/",next:"regex",merge:!0},{token:"text",regex:"\\s+"},{token:"empty",regex:"",next:"start"}],regex:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"string.regexp",regex:"/\\w*",next:"start",merge:!0},{token:"string.regexp",regex:"[^\\\\/\\[]+",merge:!0},{token:"string.regexp.charachterclass",regex:"\\[",next:"regex_character_class",merge:!0},{token:"empty",regex:"",next:"start"}],regex_character_class:[{token:"regexp.keyword.operator",regex:"\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"},{token:"string.regexp.charachterclass",regex:"]",next:"regex",merge:!0},{token:"string.regexp.charachterclass",regex:"[^\\\\\\]]+",merge:!0},{token:"empty",regex:"",next:"start"}],function_arguments:[{token:"variable.parameter",regex:k},{token:"punctuation.operator",regex:"[, ]+",merge:!0},{token:"punctuation.operator",regex:"$",merge:!0},{token:"empty",regex:"",next:"start"}],comment_regex_allowed:[{token:"comment",regex:".*?\\*\\/",merge:!0,next:"regex_allowed"},{token:"comment",merge:!0,regex:".+"}],comment:[{token:"comment",regex:".*?\\*\\/",merge:!0,next:"start"},{token:"comment",merge:!0,regex:".+"}],qqstring:[{token:"constant.language.escape",regex:l},{token:"string",regex:'[^"\\\\]+',merge:!0},{token:"string",regex:"\\\\$",next:"qqstring",merge:!0},{token:"string",regex:'"|$',next:"start",merge:!0}],qstring:[{token:"constant.language.escape",regex:l},{token:"string",regex:"[^'\\\\]+",merge:!0},{token:"string",regex:"\\\\$",next:"qstring",merge:!0},{token:"string",regex:"'|$",next:"start",merge:!0}]},this.embedRules(g,"doc-",[g.getEndRule("start")])};d.inherits(i,h),b.JavaScriptHighlightRules=i}),ace.define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("./text_highlight_rules").TextHighlightRules,f=function(){this.$rules={start:[{token:"comment.doc.tag",regex:"@[\\w\\d_]+"},{token:"comment.doc",merge:!0,regex:"\\s+"},{token:"comment.doc",merge:!0,regex:"TODO"},{token:"comment.doc",merge:!0,regex:"[^@\\*]+"},{token:"comment.doc",merge:!0,regex:"."}]}};d.inherits(f,e),f.getStartRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\/\\*(?=\\*)",next:a}},f.getEndRule=function(a){return{token:"comment.doc",merge:!0,regex:"\\*\\/",next:a}},b.DocCommentHighlightRules=f}),ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"],function(a,b,c){var d=a("../range").Range,e=function(){};(function(){this.checkOutdent=function(a,b){return/^\s+$/.test(a)?/^\s*\}/.test(b):!1},this.autoOutdent=function(a,b){var c=a.getLine(b),e=c.match(/^(\s*\})/);if(!e)return 0;var f=e[1].length,g=a.findMatchingBracket({row:b,column:f});if(!g||g.row==b)return 0;var h=this.$getIndent(a.getLine(g.row));a.replace(new d(b,0,b,f-1),h)},this.$getIndent=function(a){var b=a.match(/^(\s+)/);return b?b[1]:""}}).call(e.prototype),b.MatchingBraceOutdent=e}),ace.define("ace/mode/behaviour/cstyle",["require","exports","module","ace/lib/oop","ace/mode/behaviour"],function(a,b,c){var d=a("../../lib/oop"),e=a("../behaviour").Behaviour,f=function(){this.add("braces","insertion",function(a,b,c,d,e){if(e=="{"){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"{"+g+"}",selection:!1}:{text:"{}",selection:[1,1]}}if(e=="}"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var k=d.$findOpeningBracket("}",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}else if(e=="\n"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="}"){var l=d.findMatchingBracket({row:h.row,column:h.column+1});if(!l)return null;var m=this.getNextLineIndent(a,i.substring(0,i.length-1),d.getTabString()),n=this.$getIndent(d.doc.getLine(l.row));return{text:"\n"+m+"\n"+n,selection:[1,m.length,1,m.length]}}}}),this.add("braces","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="{"){var g=d.doc.getLine(e.start.row),h=g.substring(e.end.column,e.end.column+1);if(h=="}")return e.end.column++,e}}),this.add("parens","insertion",function(a,b,c,d,e){if(e=="("){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"("+g+")",selection:!1}:{text:"()",selection:[1,1]}}if(e==")"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j==")"){var k=d.$findOpeningBracket(")",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}}),this.add("parens","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="("){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h==")")return e.end.column++,e}}),this.add("brackets","insertion",function(a,b,c,d,e){if(e=="["){var f=c.getSelectionRange(),g=d.doc.getTextRange(f);return g!==""?{text:"["+g+"]",selection:!1}:{text:"[]",selection:[1,1]}}if(e=="]"){var h=c.getCursorPosition(),i=d.doc.getLine(h.row),j=i.substring(h.column,h.column+1);if(j=="]"){var k=d.$findOpeningBracket("]",{column:h.column+1,row:h.row});if(k!==null)return{text:"",selection:[1,1]}}}}),this.add("brackets","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&f=="["){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h=="]")return e.end.column++,e}}),this.add("string_dquotes","insertion",function(a,b,c,d,e){if(e=='"'||e=="'"){var f=e,g=c.getSelectionRange(),h=d.doc.getTextRange(g);if(h!=="")return{text:f+h+f,selection:!1};var i=c.getCursorPosition(),j=d.doc.getLine(i.row),k=j.substring(i.column-1,i.column);if(k=="\\")return null;var l=d.getTokens(g.start.row),m=0,n,o=-1;for(var p=0;p<l.length;p++){n=l[p],n.type=="string"?o=-1:o<0&&(o=n.value.indexOf(f));if(n.value.length+m>g.start.column)break;m+=l[p].value.length}if(!n||o<0&&n.type!=="comment"&&(n.type!=="string"||g.start.column!==n.value.length+m-1&&n.value.lastIndexOf(f)===n.value.length-1))return{text:f+f,selection:[1,1]};if(n&&n.type==="string"){var q=j.substring(i.column,i.column+1);if(q==f)return{text:"",selection:[1,1]}}}}),this.add("string_dquotes","deletion",function(a,b,c,d,e){var f=d.doc.getTextRange(e);if(!e.isMultiLine()&&(f=='"'||f=="'")){var g=d.doc.getLine(e.start.row),h=g.substring(e.start.column+1,e.start.column+2);if(h=='"')return e.end.column++,e}})};d.inherits(f,e),b.CstyleBehaviour=f}),ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"],function(a,b,c){var d=a("../../lib/oop"),e=a("../../range").Range,f=a("./fold_mode").FoldMode,g=b.FoldMode=function(){};d.inherits(g,f),function(){this.foldingStartMarker=/(\{|\[)[^\}\]]*$|^\s*(\/\*)/,this.foldingStopMarker=/^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/,this.getFoldWidgetRange=function(a,b,c){var d=a.getLine(c),f=d.match(this.foldingStartMarker);if(f){var g=f.index;if(f[1])return this.openingBracketBlock(a,f[1],c,g);var h=a.getCommentFoldRange(c,g+f[0].length);return h.end.column-=2,h}if(b!=="markbeginend")return;var f=d.match(this.foldingStopMarker);if(f){var g=f.index+f[0].length;if(f[2]){var h=a.getCommentFoldRange(c,g);return h.end.column-=2,h}var i={row:c,column:g},j=a.$findOpeningBracket(f[1],i);if(!j)return;return j.column++,i.column--,e.fromPoints(j,i)}}}.call(g.prototype)}),ace.define("ace/mode/folding/fold_mode",["require","exports","module","ace/range"],function(a,b,c){var d=a("../../range").Range,e=b.FoldMode=function(){};(function(){this.foldingStartMarker=null,this.foldingStopMarker=null,this.getFoldWidget=function(a,b,c){var d=a.getLine(c);return this.foldingStartMarker.test(d)?"start":b=="markbeginend"&&this.foldingStopMarker&&this.foldingStopMarker.test(d)?"end":""},this.getFoldWidgetRange=function(a,b,c){return null},this.indentationBlock=function(a,b,c){var e=/\S/,f=a.getLine(b),g=f.search(e);if(g==-1)return;var h=c||f.length,i=a.getLength(),j=b,k=b;while(++b<i){var l=a.getLine(b).search(e);if(l==-1)continue;if(l<=g)break;k=b}if(k>j){var m=a.getLine(k).length;return new d(j,h,k,m)}},this.openingBracketBlock=function(a,b,c,e,f){var g={row:c,column:e+1},h=a.$findClosingBracket(b,g,f);if(!h)return;var i=a.foldWidgets[h.row];return i==null&&(i=this.getFoldWidget(a,h.row)),i=="start"&&h.row>g.row&&(h.row--,h.column=a.getLine(h.row).length),d.fromPoints(g,h)}}).call(e.prototype)}),ace.define("ace/mode/xml",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/xml_highlight_rules","ace/mode/behaviour/xml","ace/mode/folding/xml"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./xml_highlight_rules").XmlHighlightRules,h=a("./behaviour/xml").XmlBehaviour,i=a("./folding/xml").FoldMode,j=function(){this.$tokenizer=new f((new g).getRules()),this.$behaviour=new h,this.foldingRules=new i};d.inherits(j,e),function(){this.getNextLineIndent=function(a,b,c){return this.$getIndent(b)}}.call(j.prototype),b.Mode=j}),ace.define("ace/mode/xml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/xml_util","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("./xml_util"),f=a("./text_highlight_rules").TextHighlightRules,g=function(){this.$rules={start:[{token:"text",regex:"<\\!\\[CDATA\\[",next:"cdata"},{token:"xml_pe",regex:"<\\?.*?\\?>"},{token:"comment",merge:!0,regex:"<\\!--",next:"comment"},{token:"xml_pe",regex:"<\\!.*?>"},{token:"meta.tag",regex:"<\\/?",next:"tag"},{token:"text",regex:"\\s+"},{token:"constant.character.entity",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{token:"text",regex:"[^<]+"}],cdata:[{token:"text",regex:"\\]\\]>",next:"start"},{token:"text",regex:"\\s+"},{token:"text",regex:"(?:[^\\]]|\\](?!\\]>))+"}],comment:[{token:"comment",regex:".*?-->",next:"start"},{token:"comment",merge:!0,regex:".+"}]},e.tag(this.$rules,"tag","start")};d.inherits(g,f),b.XmlHighlightRules=g}),ace.define("ace/mode/xml_util",["require","exports","module"],function(a,b,c){function d(a){return[{token:"string",regex:'".*?"'},{token:"string",merge:!0,regex:'["].*',next:a+"_qqstring"},{token:"string",regex:"'.*?'"},{token:"string",merge:!0,regex:"['].*",next:a+"_qstring"}]}function e(a,b){return[{token:"string",merge:!0,regex:".*?"+a,next:b},{token:"string",merge:!0,regex:".+"}]}b.tag=function(a,b,c,f){a[b]=[{token:"text",regex:"\\s+"},{token:f?function(a){return f[a]?"meta.tag.tag-name."+f[a]:"meta.tag.tag-name"}:"meta.tag.tag-name",merge:!0,regex:"[-_a-zA-Z0-9:]+",next:b+"_embed_attribute_list"},{token:"empty",regex:"",next:b+"_embed_attribute_list"}],a[b+"_qstring"]=e("'",b+"_embed_attribute_list"),a[b+"_qqstring"]=e('"',b+"_embed_attribute_list"),a[b+"_embed_attribute_list"]=[{token:"meta.tag",merge:!0,regex:"/?>",next:c},{token:"keyword.operator",regex:"="},{token:"entity.other.attribute-name",regex:"[-_a-zA-Z0-9:]+"},{token:"constant.numeric",regex:"[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"},{token:"text",regex:"\\s+"}].concat(d(b))}}),ace.define("ace/mode/behaviour/xml",["require","exports","module","ace/lib/oop","ace/mode/behaviour","ace/mode/behaviour/cstyle","ace/token_iterator"],function(a,b,c){function h(a,b){var c=!0,d=a.type.split("."),e=b.split(".");return e.forEach(function(a){if(d.indexOf(a)==-1)return c=!1,!1}),c}var d=a("../../lib/oop"),e=a("../behaviour").Behaviour,f=a("./cstyle").CstyleBehaviour,g=a("../../token_iterator").TokenIterator,i=function(){this.inherit(f,["string_dquotes"]),this.add("autoclosing","insertion",function(a,b,c,d,e){if(e==">"){var f=c.getCursorPosition(),i=new g(d,f.row,f.column),j=i.getCurrentToken(),k=!1;if(!j||!h(j,"meta.tag")&&(!h(j,"text")||!j.value.match("/"))){do j=i.stepBackward();while(j&&(h(j,"string")||h(j,"keyword.operator")||h(j,"entity.attribute-name")||h(j,"text")))}else k=!0;if(!j||!h(j,"meta.tag-name")||i.stepBackward().value.match("/"))return;var l=j.value;if(k)var l=l.substring(0,f.column-j.start);return{text:"></"+l+">",selection:[1,1]}}}),this.add("autoindent","insertion",function(a,b,c,d,e){if(e=="\n"){var f=c.getCursorPosition(),g=d.doc.getLine(f.row),h=g.substring(f.column,f.column+2);if(h=="</"){var i=this.$getIndent(d.doc.getLine(f.row))+d.getTabString(),j=this.$getIndent(d.doc.getLine(f.row));return{text:"\n"+i+"\n"+j,selection:[1,i.length,1,i.length]}}}})};d.inherits(i,e),b.XmlBehaviour=i}),ace.define("ace/mode/folding/xml",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/range","ace/mode/folding/fold_mode","ace/token_iterator"],function(a,b,c){var d=a("../../lib/oop"),e=a("../../lib/lang"),f=a("../../range").Range,g=a("./fold_mode").FoldMode,h=a("../../token_iterator").TokenIterator,i=b.FoldMode=function(a){g.call(this),this.voidElements=a||{}};d.inherits(i,g),function(){this.getFoldWidget=function(a,b,c){var d=this._getFirstTagInLine(a,c);return d.closing?b=="markbeginend"?"end":"":!d.tagName||this.voidElements[d.tagName.toLowerCase()]?"":d.selfClosing?"":d.value.indexOf("/"+d.tagName)!==-1?"":"start"},this._getFirstTagInLine=function(a,b){var c=a.getTokens(b),d="";for(var f=0;f<c.length;f++){var g=c[f];g.type.indexOf("meta.tag")===0?d+=g.value:d+=e.stringRepeat(" ",g.value.length)}return this._parseTag(d)},this.tagRe=/^(\s*)(<?(\/?)([-_a-zA-Z0-9:!]*)\s*(\/?)>?)/,this._parseTag=function(a){var b=this.tagRe.exec(a),c=this.tagRe.lastIndex||0;return this.tagRe.lastIndex=0,{value:a,match:b?b[2]:"",closing:b?!!b[3]:!1,selfClosing:b?!!b[5]||b[2]=="/>":!1,tagName:b?b[4]:"",column:b[1]?c+b[1].length:c}},this._readTagForward=function(a){var b=a.getCurrentToken();if(!b)return null;var c="",d;do if(b.type.indexOf("meta.tag")===0){if(!d)var d={row:a.getCurrentTokenRow(),column:a.getCurrentTokenColumn()};c+=b.value;if(c.indexOf(">")!==-1){var e=this._parseTag(c);return e.start=d,e.end={row:a.getCurrentTokenRow(),column:a.getCurrentTokenColumn()+b.value.length},a.stepForward(),e}}while(b=a.stepForward());return null},this._readTagBackward=function(a){var b=a.getCurrentToken();if(!b)return null;var c="",d;do if(b.type.indexOf("meta.tag")===0){d||(d={row:a.getCurrentTokenRow(),column:a.getCurrentTokenColumn()+b.value.length}),c=b.value+c;if(c.indexOf("<")!==-1){var e=this._parseTag(c);return e.end=d,e.start={row:a.getCurrentTokenRow(),column:a.getCurrentTokenColumn()},a.stepBackward(),e}}while(b=a.stepBackward());return null},this._pop=function(a,b){while(a.length){var c=a[a.length-1];if(!b||c.tagName==b.tagName)return a.pop();if(this.voidElements[b.tagName])return;if(this.voidElements[c.tagName]){a.pop();continue}return null}},this.getFoldWidgetRange=function(a,b,c){var d=this._getFirstTagInLine(a,c);if(!d.match)return null;var e=d.closing||d.selfClosing,g=[],i;if(!e){var j=new h(a,c,d.column),k={row:c,column:d.column+d.tagName.length+2};while(i=this._readTagForward(j)){if(i.selfClosing){if(!g.length)return i.start.column+=i.tagName.length+2,i.end.column-=2,f.fromPoints(i.start,i.end);continue}if(i.closing){this._pop(g,i);if(g.length==0)return f.fromPoints(k,i.start)}else g.push(i)}}else{var j=new h(a,c,d.column+d.match.length),l={row:c,column:d.column};while(i=this._readTagBackward(j)){if(i.selfClosing){if(!g.length)return i.start.column+=i.tagName.length+2,i.end.column-=2,f.fromPoints(i.start,i.end);continue}if(!i.closing){this._pop(g,i);if(g.length==0)return i.start.column+=i.tagName.length+2,f.fromPoints(i.start,l)}else g.push(i)}}}}.call(i.prototype)}),ace.define("ace/mode/html",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/javascript","ace/mode/css","ace/tokenizer","ace/mode/html_highlight_rules","ace/mode/behaviour/html","ace/mode/folding/html"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("./javascript").Mode,g=a("./css").Mode,h=a("../tokenizer").Tokenizer,i=a("./html_highlight_rules").HtmlHighlightRules,j=a("./behaviour/html").HtmlBehaviour,k=a("./folding/html").FoldMode,l=function(){var a=new i;this.$tokenizer=new h(a.getRules()),this.$behaviour=new j,this.$embeds=a.getEmbeds(),this.createModeDelegates({"js-":f,"css-":g}),this.foldingRules=new k};d.inherits(l,e),function(){this.toggleCommentLines=function(a,b,c,d){return 0},this.getNextLineIndent=function(a,b,c){return this.$getIndent(b)},this.checkOutdent=function(a,b,c){return!1}}.call(l.prototype),b.Mode=l}),ace.define("ace/mode/css",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/css_highlight_rules","ace/mode/matching_brace_outdent","ace/worker/worker_client","ace/mode/folding/cstyle"],function(a,b,c){var d=a("../lib/oop"),e=a("./text").Mode,f=a("../tokenizer").Tokenizer,g=a("./css_highlight_rules").CssHighlightRules,h=a("./matching_brace_outdent").MatchingBraceOutdent,i=a("../worker/worker_client").WorkerClient,j=a("./folding/cstyle").FoldMode,k=function(){this.$tokenizer=new f((new g).getRules(),"i"),this.$outdent=new h,this.foldingRules=new j};d.inherits(k,e),function(){this.foldingRules="cStyle",this.getNextLineIndent=function(a,b,c){var d=this.$getIndent(b),e=this.$tokenizer.getLineTokens(b,a).tokens;if(e.length&&e[e.length-1].type=="comment")return d;var f=b.match(/^.*\{\s*$/);return f&&(d+=c),d},this.checkOutdent=function(a,b,c){return this.$outdent.checkOutdent(b,c)},this.autoOutdent=function(a,b,c){this.$outdent.autoOutdent(b,c)},this.createWorker=function(a){var b=new i(["ace"],"ace/mode/css_worker","Worker");return b.attachToDocument(a.getDocument()),b.on("csslint",function(b){var c=[];b.data.forEach(function(a){c.push({row:a.line-1,column:a.col-1,text:a.message,type:a.type,lint:a})}),a.setAnnotations(c)}),b}}.call(k.prototype),b.Mode=k}),ace.define("ace/mode/css_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./text_highlight_rules").TextHighlightRules,g=function(){var a=e.arrayToMap("animation-fill-mode|alignment-adjust|alignment-baseline|animation-delay|animation-direction|animation-duration|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|animation|appearance|azimuth|backface-visibility|background-attachment|background-break|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|background|baseline-shift|binding|bleed|bookmark-label|bookmark-level|bookmark-state|bookmark-target|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|border|bottom|box-align|box-decoration-break|box-direction|box-flex-group|box-flex|box-lines|box-ordinal-group|box-orient|box-pack|box-shadow|box-sizing|break-after|break-before|break-inside|caption-side|clear|clip|color-profile|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|crop|cue-after|cue-before|cue|cursor|direction|display|dominant-baseline|drop-initial-after-adjust|drop-initial-after-align|drop-initial-before-adjust|drop-initial-before-align|drop-initial-size|drop-initial-value|elevation|empty-cells|fit|fit-position|float-offset|float|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|font|grid-columns|grid-rows|hanging-punctuation|height|hyphenate-after|hyphenate-before|hyphenate-character|hyphenate-lines|hyphenate-resource|hyphens|icon|image-orientation|image-rendering|image-resolution|inline-box-align|left|letter-spacing|line-height|line-stacking-ruby|line-stacking-shift|line-stacking-strategy|line-stacking|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|margin|mark-after|mark-before|mark|marks|marquee-direction|marquee-play-count|marquee-speed|marquee-style|max-height|max-width|min-height|min-width|move-to|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|orphans|outline-color|outline-offset|outline-style|outline-width|outline|overflow-style|overflow-x|overflow-y|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page-policy|page|pause-after|pause-before|pause|perspective-origin|perspective|phonemes|pitch-range|pitch|play-during|position|presentation-level|punctuation-trim|quotes|rendering-intent|resize|rest-after|rest-before|rest|richness|right|rotation-point|rotation|ruby-align|ruby-overhang|ruby-position|ruby-span|size|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|string-set|table-layout|target-name|target-new|target-position|target|text-align-last|text-align|text-decoration|text-emphasis|text-height|text-indent|text-justify|text-outline|text-shadow|text-transform|text-wrap|top|transform-origin|transform-style|transform|transition-delay|transition-duration|transition-property|transition-timing-function|transition|unicode-bidi|vertical-align|visibility|voice-balance|voice-duration|voice-family|voice-pitch-range|voice-pitch|voice-rate|voice-stress|voice-volume|volume|white-space-collapse|white-space|widows|width|word-break|word-spacing|word-wrap|z-index".split("|")),b=e.arrayToMap("rgb|rgba|url|attr|counter|counters".split("|")),c=e.arrayToMap("absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|font-size|font|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|top|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero".split("|")),d=e.arrayToMap("aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow".split("|")),f=e.arrayToMap("arial|century|comic|courier|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace".split("|")),g="\\-?(?:(?:[0-9]+)|(?:[0-9]*\\.[0-9]+))",h="(\\:+)\\b(after|before|first-letter|first-line|moz-selection|selection)\\b",i="(:)\\b(active|checked|disabled|empty|enabled|first-child|first-of-type|focus|hover|indeterminate|invalid|last-child|last-of-type|link|not|nth-child|nth-last-child|nth-last-of-type|nth-of-type|only-child|only-of-type|required|root|target|valid|visited)\\b",j=[{token:"comment",merge:!0,regex:"\\/\\*",next:"ruleset_comment"},{token:"string",regex:'["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'},{token:"string",regex:"['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"},{token:["constant.numeric","keyword"],regex:"("+g+")(ch|cm|deg|em|ex|fr|gd|grad|Hz|in|kHz|mm|ms|pc|pt|px|rad|rem|s|turn|vh|vm|vw|%)"},{token:["constant.numeric"],regex:"([0-9]+)"},{token:"constant.numeric",regex:"#[a-f0-9]{6}"},{token:"constant.numeric",regex:"#[a-f0-9]{3}"},{token:["punctuation","entity.other.attribute-name.pseudo-element.css"],regex:h},{token:["punctuation","entity.other.attribute-name.pseudo-class.css"],regex:i},{token:function(e){return a.hasOwnProperty(e.toLowerCase())?"support.type":b.hasOwnProperty(e.toLowerCase())?"support.function":c.hasOwnProperty(e.toLowerCase())?"support.constant":d.hasOwnProperty(e.toLowerCase())?"support.constant.color":f.hasOwnProperty(e.toLowerCase())?"support.constant.fonts":"text"},regex:"\\-?[a-zA-Z_][a-zA-Z0-9_\\-]*"}],k=e.copyArray(j);k.unshift({token:"paren.rparen",regex:"\\}",next:"start"});var l=e.copyArray(j);l.unshift({token:"paren.rparen",regex:"\\}",next:"media"});var m=[{token:"comment",merge:!0,regex:".+"}],n=e.copyArray(m);n.unshift({token:"comment",regex:".*?\\*\\/",next:"start"});var o=e.copyArray(m);o.unshift({token:"comment",regex:".*?\\*\\/",next:"media"});var p=e.copyArray(m);p.unshift({token:"comment",regex:".*?\\*\\/",next:"ruleset"}),this.$rules={start:[{token:"comment",merge:!0,regex:"\\/\\*",next:"comment"},{token:"paren.lparen",regex:"\\{",next:"ruleset"},{token:"string",regex:"@.*?{",next:"media"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"}],media:[{token:"comment",merge:!0,regex:"\\/\\*",next:"media_comment"},{token:"paren.lparen",regex:"\\{",next:"media_ruleset"},{token:"string",regex:"\\}",next:"start"},{token:"keyword",regex:"#[a-z0-9-_]+"},{token:"variable",regex:"\\.[a-z0-9-_]+"},{token:"string",regex:":[a-z0-9-_]+"},{token:"constant",regex:"[a-z0-9-_]+"}],comment:n,ruleset:k,ruleset_comment:p,media_ruleset:l,media_comment:o}};d.inherits(g,f),b.CssHighlightRules=g}),ace.define("ace/mode/html_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/css_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/xml_util","ace/mode/text_highlight_rules"],function(a,b,c){var d=a("../lib/oop"),e=a("../lib/lang"),f=a("./css_highlight_rules").CssHighlightRules,g=a("./javascript_highlight_rules").JavaScriptHighlightRules,h=a("./xml_util"),i=a("./text_highlight_rules").TextHighlightRules,j=e.createMap({a:"anchor",button:"form",form:"form",img:"image",input:"form",label:"form",script:"script",select:"form",textarea:"form",style:"style",table:"table",tbody:"table",td:"table",tfoot:"table",th:"table",tr:"table"}),k=function(){this.$rules={start:[{token:"text",merge:!0,regex:"<\\!\\[CDATA\\[",next:"cdata"},{token:"xml_pe",regex:"<\\?.*?\\?>"},{token:"comment",merge:!0,regex:"<\\!--",next:"comment"},{token:"xml_pe",regex:"<\\!.*?>"},{token:"meta.tag",regex:"<(?=s*script\\b)",next:"script"},{token:"meta.tag",regex:"<(?=s*style\\b)",next:"style"},{token:"meta.tag",regex:"<\\/?",next:"tag"},{token:"text",regex:"\\s+"},{token:"constant.character.entity",regex:"(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"},{token:"text",regex:"[^<]+"}],cdata:[{token:"text",regex:"\\]\\]>",next:"start"},{token:"text",merge:!0,regex:"\\s+"},{token:"text",merge:!0,regex:".+"}],comment:[{token:"comment",regex:".*?-->",next:"start"},{token:"comment",merge:!0,regex:".+"}]},h.tag(this.$rules,"tag","start",j),h.tag(this.$rules,"style","css-start",j),h.tag(this.$rules,"script","js-start",j),this.embedRules(g,"js-",[{token:"comment",regex:"\\/\\/.*(?=<\\/script>)",next:"tag"},{token:"meta.tag",regex:"<\\/(?=script)",next:"tag"}]),this.embedRules(f,"css-",[{token:"meta.tag",regex:"<\\/(?=style)",next:"tag"}])};d.inherits(k,i),b.HtmlHighlightRules=k}),ace.define("ace/mode/behaviour/html",["require","exports","module","ace/lib/oop","ace/mode/behaviour/xml","ace/mode/behaviour/cstyle","ace/token_iterator"],function(a,b,c){function i(a,b){var c=!0,d=a.type.split("."),e=b.split(".");return e.forEach(function(a){if(d.indexOf(a)==-1)return c=!1,!1}),c}var d=a("../../lib/oop"),e=a("../behaviour/xml").XmlBehaviour,f=a("./cstyle").CstyleBehaviour,g=a("../../token_iterator").TokenIterator,h=["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"],j=function(){this.inherit(e),this.add("autoclosing","insertion",function(a,b,c,d,e){if(e==">"){var f=c.getCursorPosition(),j=new g(d,f.row,f.column),k=j.getCurrentToken(),l=!1;if(!k||!i(k,"meta.tag")&&(!i(k,"text")||!k.value.match("/"))){do k=j.stepBackward();while(k&&(i(k,"string")||i(k,"keyword.operator")||i(k,"entity.attribute-name")||i(k,"text")))}else l=!0;if(!k||!i(k,"meta.tag-name")||j.stepBackward().value.match("/"))return;var m=k.value;if(l)var m=m.substring(0,f.column-k.start);if(h.indexOf(m)!==-1)return;return{text:"></"+m+">",selection:[1,1]}}})};d.inherits(j,e),b.HtmlBehaviour=j}),ace.define("ace/mode/folding/html",["require","exports","module","ace/lib/oop","ace/mode/folding/mixed","ace/mode/folding/xml","ace/mode/folding/cstyle"],function(a,b,c){var d=a("../../lib/oop"),e=a("./mixed").FoldMode,f=a("./xml").FoldMode,g=a("./cstyle").FoldMode,h=b.FoldMode=function(){e.call(this,new f({area:1,base:1,br:1,col:1,command:1,embed:1,hr:1,img:1,input:1,keygen:1,link:1,meta:1,param:1,source:1,track:1,wbr:1,li:1,dt:1,dd:1,p:1,rt:1,rp:1,optgroup:1,option:1,colgroup:1,td:1,th:1}),{"js-":new g,"css-":new g})};d.inherits(h,e)}),ace.define("ace/mode/folding/mixed",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode"],function(a,b,c){var d=a("../../lib/oop"),e=a("./fold_mode").FoldMode,f=b.FoldMode=function(a,b){this.defaultMode=a,this.subModes=b};d.inherits(f,e),function(){this.$getMode=function(a){for(var b in this.subModes)if(a.indexOf(b)===0)return this.subModes[b];return null},this.$tryMode=function(a,b,c,d){var e=this.$getMode(a);return e?e.getFoldWidget(b,c,d):""},this.getFoldWidget=function(a,b,c){return this.$tryMode(a.getState(c-1),a,b,c)||this.$tryMode(a.getState(c),a,b,c)||this.defaultMode.getFoldWidget(a,b,c)},this.getFoldWidgetRange=function(a,b,c){var d=this.$getMode(a.getState(c-1));if(!d||!d.getFoldWidget(a,b,c))d=this.$getMode(a.getState(c));if(!d||!d.getFoldWidget(a,b,c))d=this.defaultMode;return d.getFoldWidgetRange(a,b,c)}}.call(f.prototype)}),ace.define("ace/mode/markdown_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/xml_highlight_rules","ace/mode/html_highlight_rules","ace/mode/css_highlight_rules"],function(a,b,c){function j(a,b){return{token:"support.function",regex:"^```"+a+"\\s*$",next:b+"start"}}var d=a("../lib/oop"),e=a("./text_highlight_rules").TextHighlightRules,f=a("./javascript_highlight_rules").JavaScriptHighlightRules,g=a("./xml_highlight_rules").XmlHighlightRules,h=a("./html_highlight_rules").HtmlHighlightRules,i=a("./css_highlight_rules").CssHighlightRules,k=function(){this.$rules={start:[{token:"empty_line",regex:"^$"},{token:["support.function","support.function","support.function"],regex:"(`+)([^\\r]*?[^`])(\\1)"},{token:"support.function",regex:"^[ ]{4}.+"},{token:"markup.heading.1",regex:"^=+(?=\\s*$)"},{token:"markup.heading.1",regex:"^\\-+(?=\\s*$)"},{token:function(a){return"markup.heading."+a.length},regex:"^#{1,6}"},j("(?:javascript|js)","js-"),j("xml","xml-"),j("html","html-"),j("css","css-"),{token:"support.function",regex:"^```[a-zA-Z]+\\s*$",next:"githubblock"},{token:"string",regex:"^>[ ].+$",next:"blockquote"},{token:["text","constant","text","url","string","text"],regex:'^([ ]{0,3}\\[)([^\\]]+)(\\]:\\s*)([^ ]+)(\\s*(?:["][^"]+["])?(\\s*))$'},{token:["text","string","text","constant","text"],regex:"(\\[)((?:[[^\\]]*\\]|[^\\[\\]])*)(\\][ ]?(?:\\n[ ]*)?\\[)(.*?)(\\])"},{token:["text","string","text","markup.underline","string","text"],regex:'(\\[)(\\[[^\\]]*\\]|[^\\[\\]]*)(\\]\\([ \\t]*)(<?(?:(?:[^\\(]*?\\([^\\)]*?\\)\\S*?)|(?:.*?))>?)((?:[ 	]*"(?:.*?)"[ \\t]*)?)(\\))'},{token:"constant",regex:"^[ ]{0,2}(?:[ ]?\\*[ ]?){3,}\\s*$"},{token:"constant",regex:"^[ ]{0,2}(?:[ ]?\\-[ ]?){3,}\\s*$"},{token:"constant",regex:"^[ ]{0,2}(?:[ ]?\\_[ ]?){3,}\\s*$"},{token:"markup.list",regex:"^\\s{0,3}(?:[*+-]|\\d+\\.)\\s+",next:"listblock"},{token:["string","string","string"],regex:"([*]{2}|[_]{2}(?=\\S))([^\\r]*?\\S[*_]*)(\\1)"},{token:["string","string","string"],regex:"([*]|[_](?=\\S))([^\\r]*?\\S[*_]*)(\\1)"},{token:["text","url","text"],regex:"(<)((?:https?|ftp|dict):[^'\">\\s]+|(?:mailto:)?[-.\\w]+\\@[-a-z0-9]+(?:\\.[-a-z0-9]+)*\\.[a-z]+)(>)"},{token:"text",regex:"[^\\*_%$`\\[#<>]+"}],listblock:[{token:"empty_line",regex:"^$",next:"start"},{token:"markup.list",regex:".+"}],blockquote:[{token:"empty_line",regex:"^\\s*$",next:"start"},{token:"string",regex:".+"}],githubblock:[{token:"support.function",regex:"^```",next:"start"},{token:"support.function",regex:".+"}]},this.embedRules(f,"js-",[{token:"support.function",regex:"^```",next:"start"}]),this.embedRules(h,"html-",[{token:"support.function",regex:"^```",next:"start"}]),this.embedRules(i,"css-",[{token:"support.function",regex:"^```",next:"start"}]),this.embedRules(g,"xml-",[{token:"support.function",regex:"^```",next:"start"}])};d.inherits(k,e),b.MarkdownHighlightRules=k})
-//
-// showdown.js -- A javascript port of Markdown.
-//
-// Copyright (c) 2007 John Fraser.
-//
-// Original Markdown Copyright (c) 2004-2005 John Gruber
-//   <http://daringfireball.net/projects/markdown/>
-//
-// Redistributable under a BSD-style open source license.
-// See license.txt for more information.
-//
-// The full source distribution is at:
-//
-//				A A L
-//				T C A
-//				T K B
-//
-//   <http://www.attacklab.net/>
-//
+/**
+ * marked - a markdown parser
+ * Copyright (c) 2011-2013, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/chjj/marked
+ */
 
-//
-// Wherever possible, Showdown is a straight, line-by-line port
-// of the Perl version of Markdown.
-//
-// This is not a normal parser design; it's basically just a
-// series of string substitutions.  It's hard to read and
-// maintain this way,  but keeping Showdown close to the original
-// design makes it easier to port new features.
-//
-// More importantly, Showdown behaves like markdown.pl in most
-// edge cases.  So web applications can do client-side preview
-// in Javascript, and then build identical HTML on the server.
-//
-// This port needs the new RegExp functionality of ECMA 262,
-// 3rd Edition (i.e. Javascript 1.5).  Most modern web browsers
-// should do fine.  Even with the new regular expression features,
-// We do a lot of work to emulate Perl's regex functionality.
-// The tricky changes in this file mostly have the "attacklab:"
-// label.  Major or self-explanatory changes don't.
-//
-// Smart diff tools like Araxis Merge will be able to match up
-// this file with markdown.pl in a useful way.  A little tweaking
-// helps: in a copy of markdown.pl, replace "#" with "//" and
-// replace "$text" with "text".  Be sure to ignore whitespace
-// and line endings.
-//
+;(function() {
 
+/**
+ * Block-Level Grammar
+ */
 
-//
-// Showdown usage:
-//
-//   var text = "Markdown *rocks*.";
-//
-//   var converter = new Showdown.converter();
-//   var html = converter.makeHtml(text);
-//
-//   alert(html);
-//
-// Note: move the sample code to the bottom of this
-// file before uncommenting it.
-//
-
-
-// **************************************************
-// GitHub Flavored Markdown modifications by Tekkub
-// http://github.github.com/github-flavored-markdown/
-//
-// Modifications are tagged with "GFM"
-// **************************************************
-
-//
-// Showdown namespace
-//
-var Showdown = {};
-
-//
-// converter
-//
-// Wraps all "globals" so that the only thing
-// exposed is makeHtml().
-//
-Showdown.converter = function() {
-
-//
-// Globals:
-//
-
-// Global hashes, used by various utility routines
-var g_urls;
-var g_titles;
-var g_html_blocks;
-
-// Used to track when we're inside an ordered or unordered list
-// (see _ProcessListItems() for details):
-var g_list_level = 0;
-
-
-this.makeHtml = function(text) {
-//
-// Main function. The order in which other subs are called here is
-// essential. Link and image substitutions need to happen before
-// _EscapeSpecialCharsWithinTagAttributes(), so that any *'s or _'s in the <a>
-// and <img> tags get encoded.
-//
-
-	// Clear the global hashes. If we don't clear these, you get conflicts
-	// from other articles when generating a page which contains more than
-	// one article (e.g. an index page that shows the N most recent
-	// articles):
-	g_urls = new Array();
-	g_titles = new Array();
-	g_html_blocks = new Array();
-
-	// attacklab: Replace ~ with ~T
-	// This lets us use tilde as an escape char to avoid md5 hashes
-	// The choice of character is arbitray; anything that isn't
-    // magic in Markdown will work.
-	text = text.replace(/~/g,"~T");
-
-	// attacklab: Replace $ with ~D
-	// RegExp interprets $ as a special character
-	// when it's in a replacement string
-	text = text.replace(/\$/g,"~D");
-
-	// Standardize line endings
-	text = text.replace(/\r\n/g,"\n"); // DOS to Unix
-	text = text.replace(/\r/g,"\n"); // Mac to Unix
-
-	// Make sure text begins and ends with a couple of newlines:
-	text = "\n\n" + text + "\n\n";
-
-	// Convert all tabs to spaces.
-	text = _Detab(text);
-
-	// Strip any lines consisting only of spaces and tabs.
-	// This makes subsequent regexen easier to write, because we can
-	// match consecutive blank lines with /\n+/ instead of something
-	// contorted like /[ \t]*\n+/ .
-	text = text.replace(/^[ \t]+$/mg,"");
-
-	// Turn block-level HTML blocks into hash entries
-	text = _HashHTMLBlocks(text);
-
-	// Strip link definitions, store in hashes.
-	text = _StripLinkDefinitions(text);
-
-	text = _RunBlockGamut(text);
-
-	text = _UnescapeSpecialChars(text);
-
-	// attacklab: Restore dollar signs
-	text = text.replace(/~D/g,"$$");
-
-	// attacklab: Restore tildes
-	text = text.replace(/~T/g,"~");
-
-  // ** GFM **  Auto-link URLs and emails
-  text = text.replace(/https?\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!]/g, function(wholeMatch,matchIndex){
-    var left = text.slice(0, matchIndex), right = text.slice(matchIndex)
-    if (left.match(/<[^>]+$/) && right.match(/^[^>]*>/)) {return wholeMatch}
-    href = wholeMatch.replace(/^http:\/\/github.com\//, "https://github.com/")
-    return "<a href='" + href + "'>" + wholeMatch + "</a>";
-  });
-  text = text.replace(/[a-z0-9_\-+=.]+@[a-z0-9\-]+(\.[a-z0-9-]+)+/ig, function(wholeMatch){return "<a href='mailto:" + wholeMatch + "'>" + wholeMatch + "</a>";});
-
-  // ** GFM ** Auto-link sha1 if GitHub.nameWithOwner is defined
-  text = text.replace(/[a-f0-9]{40}/ig, function(wholeMatch,matchIndex){
-    if (typeof(GitHub) == "undefined" || typeof(GitHub.nameWithOwner) == "undefined") {return wholeMatch;}
-    var left = text.slice(0, matchIndex), right = text.slice(matchIndex)
-    if (left.match(/@$/) || (left.match(/<[^>]+$/) && right.match(/^[^>]*>/))) {return wholeMatch;}
-    return "<a href='http://github.com/" + GitHub.nameWithOwner + "/commit/" + wholeMatch + "'>" + wholeMatch.substring(0,7) + "</a>";
-  });
-
-  // ** GFM ** Auto-link user@sha1 if GitHub.nameWithOwner is defined
-  text = text.replace(/([a-z0-9_\-+=.]+)@([a-f0-9]{40})/ig, function(wholeMatch,username,sha,matchIndex){
-    if (typeof(GitHub) == "undefined" || typeof(GitHub.nameWithOwner) == "undefined") {return wholeMatch;}
-    GitHub.repoName = GitHub.repoName || _GetRepoName()
-    var left = text.slice(0, matchIndex), right = text.slice(matchIndex)
-    if (left.match(/\/$/) || (left.match(/<[^>]+$/) && right.match(/^[^>]*>/))) {return wholeMatch;}
-    return "<a href='http://github.com/" + username + "/" + GitHub.repoName + "/commit/" + sha + "'>" + username + "@" + sha.substring(0,7) + "</a>";
-  });
-
-  // ** GFM ** Auto-link user/repo@sha1
-  text = text.replace(/([a-z0-9_\-+=.]+\/[a-z0-9_\-+=.]+)@([a-f0-9]{40})/ig, function(wholeMatch,repo,sha){
-    return "<a href='http://github.com/" + repo + "/commit/" + sha + "'>" + repo + "@" + sha.substring(0,7) + "</a>";
-  });
-
-  // ** GFM ** Auto-link #issue if GitHub.nameWithOwner is defined
-  text = text.replace(/#([0-9]+)/ig, function(wholeMatch,issue,matchIndex){
-    if (typeof(GitHub) == "undefined" || typeof(GitHub.nameWithOwner) == "undefined") {return wholeMatch;}
-    var left = text.slice(0, matchIndex), right = text.slice(matchIndex)
-    if (left == "" || left.match(/[a-z0-9_\-+=.]$/) || (left.match(/<[^>]+$/) && right.match(/^[^>]*>/))) {return wholeMatch;}
-    return "<a href='http://github.com/" + GitHub.nameWithOwner + "/issues/#issue/" + issue + "'>" + wholeMatch + "</a>";
-  });
-
-  // ** GFM ** Auto-link user#issue if GitHub.nameWithOwner is defined
-  text = text.replace(/([a-z0-9_\-+=.]+)#([0-9]+)/ig, function(wholeMatch,username,issue,matchIndex){
-    if (typeof(GitHub) == "undefined" || typeof(GitHub.nameWithOwner) == "undefined") {return wholeMatch;}
-    GitHub.repoName = GitHub.repoName || _GetRepoName()
-    var left = text.slice(0, matchIndex), right = text.slice(matchIndex)
-    if (left.match(/\/$/) || (left.match(/<[^>]+$/) && right.match(/^[^>]*>/))) {return wholeMatch;}
-    return "<a href='http://github.com/" + username + "/" + GitHub.repoName + "/issues/#issue/" + issue + "'>" + wholeMatch + "</a>";
-  });
-
-  // ** GFM ** Auto-link user/repo#issue
-  text = text.replace(/([a-z0-9_\-+=.]+\/[a-z0-9_\-+=.]+)#([0-9]+)/ig, function(wholeMatch,repo,issue){
-    return "<a href='http://github.com/" + repo + "/issues/#issue/" + issue + "'>" + wholeMatch + "</a>";
-  });
-
-	return text;
-}
-
-
-var _GetRepoName = function() {
-  return GitHub.nameWithOwner.match(/^.+\/(.+)$/)[1]
-}
-
-var _StripLinkDefinitions = function(text) {
-//
-// Strips link definitions from text, stores the URLs and titles in
-// hash references.
-//
-
-	// Link defs are in the form: ^[id]: url "optional title"
-
-	/*
-		var text = text.replace(/
-				^[ ]{0,3}\[(.+)\]:  // id = $1  attacklab: g_tab_width - 1
-				  [ \t]*
-				  \n?				// maybe *one* newline
-				  [ \t]*
-				<?(\S+?)>?			// url = $2
-				  [ \t]*
-				  \n?				// maybe one newline
-				  [ \t]*
-				(?:
-				  (\n*)				// any lines skipped = $3 attacklab: lookbehind removed
-				  ["(]
-				  (.+?)				// title = $4
-				  [")]
-				  [ \t]*
-				)?					// title is optional
-				(?:\n+|$)
-			  /gm,
-			  function(){...});
-	*/
-	var text = text.replace(/^[ ]{0,3}\[(.+)\]:[ \t]*\n?[ \t]*<?(\S+?)>?[ \t]*\n?[ \t]*(?:(\n*)["(](.+?)[")][ \t]*)?(?:\n+|\Z)/gm,
-		function (wholeMatch,m1,m2,m3,m4) {
-			m1 = m1.toLowerCase();
-			g_urls[m1] = _EncodeAmpsAndAngles(m2);  // Link IDs are case-insensitive
-			if (m3) {
-				// Oops, found blank lines, so it's not a title.
-				// Put back the parenthetical statement we stole.
-				return m3+m4;
-			} else if (m4) {
-				g_titles[m1] = m4.replace(/"/g,"&quot;");
-			}
-
-			// Completely remove the definition from the text
-			return "";
-		}
-	);
-
-	return text;
-}
-
-
-var _HashHTMLBlocks = function(text) {
-	// attacklab: Double up blank lines to reduce lookaround
-	text = text.replace(/\n/g,"\n\n");
-
-	// Hashify HTML blocks:
-	// We only want to do this for block-level HTML tags, such as headers,
-	// lists, and tables. That's because we still want to wrap <p>s around
-	// "paragraphs" that are wrapped in non-block-level tags, such as anchors,
-	// phrase emphasis, and spans. The list of tags we're looking for is
-	// hard-coded:
-	var block_tags_a = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del"
-	var block_tags_b = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math"
-
-	// First, look for nested blocks, e.g.:
-	//   <div>
-	//     <div>
-	//     tags for inner block must be indented.
-	//     </div>
-	//   </div>
-	//
-	// The outermost tags must start at the left margin for this to match, and
-	// the inner nested divs must be indented.
-	// We need to do this before the next, more liberal match, because the next
-	// match will start at the first `<div>` and stop at the first `</div>`.
-
-	// attacklab: This regex can be expensive when it fails.
-	/*
-		var text = text.replace(/
-		(						// save in $1
-			^					// start of line  (with /m)
-			<($block_tags_a)	// start tag = $2
-			\b					// word break
-								// attacklab: hack around khtml/pcre bug...
-			[^\r]*?\n			// any number of lines, minimally matching
-			</\2>				// the matching end tag
-			[ \t]*				// trailing spaces/tabs
-			(?=\n+)				// followed by a newline
-		)						// attacklab: there are sentinel newlines at end of document
-		/gm,function(){...}};
-	*/
-	text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del)\b[^\r]*?\n<\/\2>[ \t]*(?=\n+))/gm,hashElement);
-
-	//
-	// Now match more liberally, simply from `\n<tag>` to `</tag>\n`
-	//
-
-	/*
-		var text = text.replace(/
-		(						// save in $1
-			^					// start of line  (with /m)
-			<($block_tags_b)	// start tag = $2
-			\b					// word break
-								// attacklab: hack around khtml/pcre bug...
-			[^\r]*?				// any number of lines, minimally matching
-			.*</\2>				// the matching end tag
-			[ \t]*				// trailing spaces/tabs
-			(?=\n+)				// followed by a newline
-		)						// attacklab: there are sentinel newlines at end of document
-		/gm,function(){...}};
-	*/
-	text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math)\b[^\r]*?.*<\/\2>[ \t]*(?=\n+)\n)/gm,hashElement);
-
-	// Special case just for <hr />. It was easier to make a special case than
-	// to make the other regex more complicated.
-
-	/*
-		text = text.replace(/
-		(						// save in $1
-			\n\n				// Starting after a blank line
-			[ ]{0,3}
-			(<(hr)				// start tag = $2
-			\b					// word break
-			([^<>])*?			//
-			\/?>)				// the matching end tag
-			[ \t]*
-			(?=\n{2,})			// followed by a blank line
-		)
-		/g,hashElement);
-	*/
-	text = text.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g,hashElement);
-
-	// Special case for standalone HTML comments:
-
-	/*
-		text = text.replace(/
-		(						// save in $1
-			\n\n				// Starting after a blank line
-			[ ]{0,3}			// attacklab: g_tab_width - 1
-			<!
-			(--[^\r]*?--\s*)+
-			>
-			[ \t]*
-			(?=\n{2,})			// followed by a blank line
-		)
-		/g,hashElement);
-	*/
-	text = text.replace(/(\n\n[ ]{0,3}<!(--[^\r]*?--\s*)+>[ \t]*(?=\n{2,}))/g,hashElement);
-
-	// PHP and ASP-style processor instructions (<?...?> and <%...%>)
-
-	/*
-		text = text.replace(/
-		(?:
-			\n\n				// Starting after a blank line
-		)
-		(						// save in $1
-			[ ]{0,3}			// attacklab: g_tab_width - 1
-			(?:
-				<([?%])			// $2
-				[^\r]*?
-				\2>
-			)
-			[ \t]*
-			(?=\n{2,})			// followed by a blank line
-		)
-		/g,hashElement);
-	*/
-	text = text.replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g,hashElement);
-
-	// attacklab: Undo double lines (see comment at top of this function)
-	text = text.replace(/\n\n/g,"\n");
-	return text;
-}
-
-var hashElement = function(wholeMatch,m1) {
-	var blockText = m1;
-
-	// Undo double lines
-	blockText = blockText.replace(/\n\n/g,"\n");
-	blockText = blockText.replace(/^\n/,"");
-
-	// strip trailing blank lines
-	blockText = blockText.replace(/\n+$/g,"");
-
-	// Replace the element text with a marker ("~KxK" where x is its key)
-	blockText = "\n\n~K" + (g_html_blocks.push(blockText)-1) + "K\n\n";
-
-	return blockText;
+var block = {
+  newline: /^\n+/,
+  code: /^( {4}[^\n]+\n*)+/,
+  fences: noop,
+  hr: /^( *[-*_]){3,} *(?:\n+|$)/,
+  heading: /^ *(#{1,6}) *([^\n]+?) *#* *(?:\n+|$)/,
+  nptable: noop,
+  lheading: /^([^\n]+)\n *(=|-){2,} *(?:\n+|$)/,
+  blockquote: /^( *>[^\n]+(\n[^\n]+)*\n*)+/,
+  list: /^( *)(bull) [\s\S]+?(?:hr|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
+  html: /^ *(?:comment|closed|closing) *(?:\n{2,}|\s*$)/,
+  def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$)/,
+  table: noop,
+  paragraph: /^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def))+)\n*/,
+  text: /^[^\n]+/
 };
 
-var _RunBlockGamut = function(text) {
-//
-// These are all the transformations that form block-level
-// tags like paragraphs, headers, and list items.
-//
-	text = _DoHeaders(text);
+block.bullet = /(?:[*+-]|\d+\.)/;
+block.item = /^( *)(bull) [^\n]*(?:\n(?!\1bull )[^\n]*)*/;
+block.item = replace(block.item, 'gm')
+  (/bull/g, block.bullet)
+  ();
 
-	// Do Horizontal Rules:
-	var key = hashBlock("<hr />");
-	text = text.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm,key);
-	text = text.replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm,key);
-	text = text.replace(/^[ ]{0,2}([ ]?\_[ ]?){3,}[ \t]*$/gm,key);
+block.list = replace(block.list)
+  (/bull/g, block.bullet)
+  ('hr', /\n+(?=(?: *[-*_]){3,} *(?:\n+|$))/)
+  ();
 
-	text = _DoLists(text);
-	text = _DoCodeBlocks(text);
-	text = _DoBlockQuotes(text);
+block._tag = '(?!(?:'
+  + 'a|em|strong|small|s|cite|q|dfn|abbr|data|time|code'
+  + '|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo'
+  + '|span|br|wbr|ins|del|img)\\b)\\w+(?!:/|@)\\b';
 
-	// We already ran _HashHTMLBlocks() before, in Markdown(), but that
-	// was to escape raw HTML in the original Markdown source. This time,
-	// we're escaping the markup we've just created, so that we don't wrap
-	// <p> tags around block-level tags.
-	text = _HashHTMLBlocks(text);
-	text = _FormParagraphs(text);
+block.html = replace(block.html)
+  ('comment', /<!--[\s\S]*?-->/)
+  ('closed', /<(tag)[\s\S]+?<\/\1>/)
+  ('closing', /<tag(?:"[^"]*"|'[^']*'|[^'">])*?>/)
+  (/tag/g, block._tag)
+  ();
 
-	return text;
+block.paragraph = replace(block.paragraph)
+  ('hr', block.hr)
+  ('heading', block.heading)
+  ('lheading', block.lheading)
+  ('blockquote', block.blockquote)
+  ('tag', '<' + block._tag)
+  ('def', block.def)
+  ();
+
+/**
+ * Normal Block Grammar
+ */
+
+block.normal = merge({}, block);
+
+/**
+ * GFM Block Grammar
+ */
+
+block.gfm = merge({}, block.normal, {
+  fences: /^ *(`{3,}|~{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)/,
+  paragraph: /^/
+});
+
+block.gfm.paragraph = replace(block.paragraph)
+  ('(?!', '(?!'
+    + block.gfm.fences.source.replace('\\1', '\\2') + '|'
+    + block.list.source.replace('\\1', '\\3') + '|')
+  ();
+
+/**
+ * GFM + Tables Block Grammar
+ */
+
+block.tables = merge({}, block.gfm, {
+  nptable: /^ *(\S.*\|.*)\n *([-:]+ *\|[-| :]*)\n((?:.*\|.*(?:\n|$))*)\n*/,
+  table: /^ *\|(.+)\n *\|( *[-:]+[-| :]*)\n((?: *\|.*(?:\n|$))*)\n*/
+});
+
+/**
+ * Block Lexer
+ */
+
+function Lexer(options) {
+  this.tokens = [];
+  this.tokens.links = {};
+  this.options = options || marked.defaults;
+  this.rules = block.normal;
+
+  if (this.options.gfm) {
+    if (this.options.tables) {
+      this.rules = block.tables;
+    } else {
+      this.rules = block.gfm;
+    }
+  }
 }
 
+/**
+ * Expose Block Rules
+ */
 
-var _RunSpanGamut = function(text) {
-//
-// These are all the transformations that occur *within* block-level
-// tags like paragraphs, headers, and list items.
-//
+Lexer.rules = block;
 
-	text = _DoCodeSpans(text);
-	text = _EscapeSpecialCharsWithinTagAttributes(text);
-	text = _EncodeBackslashEscapes(text);
+/**
+ * Static Lex Method
+ */
 
-	// Process anchor and image tags. Images must come first,
-	// because ![foo][f] looks like an anchor.
-	text = _DoImages(text);
-	text = _DoAnchors(text);
+Lexer.lex = function(src, options) {
+  var lexer = new Lexer(options);
+  return lexer.lex(src);
+};
 
-	// Make links out of things like `<http://example.com/>`
-	// Must come after _DoAnchors(), because you can use < and >
-	// delimiters in inline links like [this](<url>).
-	text = _DoAutoLinks(text);
-	text = _EncodeAmpsAndAngles(text);
-	text = _DoItalicsAndBold(text);
+/**
+ * Preprocessing
+ */
 
-	// Do hard breaks:
-	text = text.replace(/  +\n/g," <br />\n");
+Lexer.prototype.lex = function(src) {
+  src = src
+    .replace(/\r\n|\r/g, '\n')
+    .replace(/\t/g, '    ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u2424/g, '\n');
 
-	return text;
+  return this.token(src, true);
+};
+
+/**
+ * Lexing
+ */
+
+Lexer.prototype.token = function(src, top) {
+  var src = src.replace(/^ +$/gm, '')
+    , next
+    , loose
+    , cap
+    , bull
+    , b
+    , item
+    , space
+    , i
+    , l;
+
+  while (src) {
+    // newline
+    if (cap = this.rules.newline.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[0].length > 1) {
+        this.tokens.push({
+          type: 'space'
+        });
+      }
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      cap = cap[0].replace(/^ {4}/gm, '');
+      this.tokens.push({
+        type: 'code',
+        text: !this.options.pedantic
+          ? cap.replace(/\n+$/, '')
+          : cap
+      });
+      continue;
+    }
+
+    // fences (gfm)
+    if (cap = this.rules.fences.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'code',
+        lang: cap[2],
+        text: cap[3]
+      });
+      continue;
+    }
+
+    // heading
+    if (cap = this.rules.heading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[1].length,
+        text: cap[2]
+      });
+      continue;
+    }
+
+    // table no leading pipe (gfm)
+    if (top && (cap = this.rules.nptable.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i].split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // lheading
+    if (cap = this.rules.lheading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[2] === '=' ? 1 : 2,
+        text: cap[1]
+      });
+      continue;
+    }
+
+    // hr
+    if (cap = this.rules.hr.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'hr'
+      });
+      continue;
+    }
+
+    // blockquote
+    if (cap = this.rules.blockquote.exec(src)) {
+      src = src.substring(cap[0].length);
+
+      this.tokens.push({
+        type: 'blockquote_start'
+      });
+
+      cap = cap[0].replace(/^ *> ?/gm, '');
+
+      // Pass `top` to keep the current
+      // "toplevel" state. This is exactly
+      // how markdown.pl works.
+      this.token(cap, top);
+
+      this.tokens.push({
+        type: 'blockquote_end'
+      });
+
+      continue;
+    }
+
+    // list
+    if (cap = this.rules.list.exec(src)) {
+      src = src.substring(cap[0].length);
+      bull = cap[2];
+
+      this.tokens.push({
+        type: 'list_start',
+        ordered: bull.length > 1
+      });
+
+      // Get each top-level item.
+      cap = cap[0].match(this.rules.item);
+
+      next = false;
+      l = cap.length;
+      i = 0;
+
+      for (; i < l; i++) {
+        item = cap[i];
+
+        // Remove the list item's bullet
+        // so it is seen as the next token.
+        space = item.length;
+        item = item.replace(/^ *([*+-]|\d+\.) +/, '');
+
+        // Outdent whatever the
+        // list item contains. Hacky.
+        if (~item.indexOf('\n ')) {
+          space -= item.length;
+          item = !this.options.pedantic
+            ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
+            : item.replace(/^ {1,4}/gm, '');
+        }
+
+        // Determine whether the next list item belongs here.
+        // Backpedal if it does not belong in this list.
+        if (this.options.smartLists && i !== l - 1) {
+          b = block.bullet.exec(cap[i + 1])[0];
+          if (bull !== b && !(bull.length > 1 && b.length > 1)) {
+            src = cap.slice(i + 1).join('\n') + src;
+            i = l - 1;
+          }
+        }
+
+        // Determine whether item is loose or not.
+        // Use: /(^|\n)(?! )[^\n]+\n\n(?!\s*$)/
+        // for discount behavior.
+        loose = next || /\n\n(?!\s*$)/.test(item);
+        if (i !== l - 1) {
+          next = item.charAt(item.length - 1) === '\n';
+          if (!loose) loose = next;
+        }
+
+        this.tokens.push({
+          type: loose
+            ? 'loose_item_start'
+            : 'list_item_start'
+        });
+
+        // Recurse.
+        this.token(item, false);
+
+        this.tokens.push({
+          type: 'list_item_end'
+        });
+      }
+
+      this.tokens.push({
+        type: 'list_end'
+      });
+
+      continue;
+    }
+
+    // html
+    if (cap = this.rules.html.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: this.options.sanitize
+          ? 'paragraph'
+          : 'html',
+        pre: cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    // def
+    if (top && (cap = this.rules.def.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.links[cap[1].toLowerCase()] = {
+        href: cap[2],
+        title: cap[3]
+      };
+      continue;
+    }
+
+    // table (gfm)
+    if (top && (cap = this.rules.table.exec(src))) {
+      src = src.substring(cap[0].length);
+
+      item = {
+        type: 'table',
+        header: cap[1].replace(/^ *| *\| *$/g, '').split(/ *\| */),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
+        cells: cap[3].replace(/(?: *\| *)?\n$/, '').split('\n')
+      };
+
+      for (i = 0; i < item.align.length; i++) {
+        if (/^ *-+: *$/.test(item.align[i])) {
+          item.align[i] = 'right';
+        } else if (/^ *:-+: *$/.test(item.align[i])) {
+          item.align[i] = 'center';
+        } else if (/^ *:-+ *$/.test(item.align[i])) {
+          item.align[i] = 'left';
+        } else {
+          item.align[i] = null;
+        }
+      }
+
+      for (i = 0; i < item.cells.length; i++) {
+        item.cells[i] = item.cells[i]
+          .replace(/^ *\| *| *\| *$/g, '')
+          .split(/ *\| */);
+      }
+
+      this.tokens.push(item);
+
+      continue;
+    }
+
+    // top-level paragraph
+    if (top && (cap = this.rules.paragraph.exec(src))) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'paragraph',
+        text: cap[1].charAt(cap[1].length - 1) === '\n'
+          ? cap[1].slice(0, -1)
+          : cap[1]
+      });
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      // Top-level should never reach here.
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'text',
+        text: cap[0]
+      });
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return this.tokens;
+};
+
+/**
+ * Inline-Level Grammar
+ */
+
+var inline = {
+  escape: /^\\([\\`*{}\[\]()#+\-.!_>])/,
+  autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
+  url: noop,
+  tag: /^<!--[\s\S]*?-->|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
+  link: /^!?\[(inside)\]\(href\)/,
+  reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
+  nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
+  strong: /^__([\s\S]+?)__(?!_)|^\*\*([\s\S]+?)\*\*(?!\*)/,
+  em: /^\b_((?:__|[\s\S])+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
+  code: /^(`+)\s*([\s\S]*?[^`])\s*\1(?!`)/,
+  br: /^ {2,}\n(?!\s*$)/,
+  del: noop,
+  text: /^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/
+};
+
+inline._inside = /(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;
+inline._href = /\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;
+
+inline.link = replace(inline.link)
+  ('inside', inline._inside)
+  ('href', inline._href)
+  ();
+
+inline.reflink = replace(inline.reflink)
+  ('inside', inline._inside)
+  ();
+
+/**
+ * Normal Inline Grammar
+ */
+
+inline.normal = merge({}, inline);
+
+/**
+ * Pedantic Inline Grammar
+ */
+
+inline.pedantic = merge({}, inline.normal, {
+  strong: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
+  em: /^_(?=\S)([\s\S]*?\S)_(?!_)|^\*(?=\S)([\s\S]*?\S)\*(?!\*)/
+});
+
+/**
+ * GFM Inline Grammar
+ */
+
+inline.gfm = merge({}, inline.normal, {
+  escape: replace(inline.escape)('])', '~|])')(),
+  url: /^(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/,
+  del: /^~~(?=\S)([\s\S]*?\S)~~/,
+  text: replace(inline.text)
+    (']|', '~]|')
+    ('|', '|https?://|')
+    ()
+});
+
+/**
+ * GFM + Line Breaks Inline Grammar
+ */
+
+inline.breaks = merge({}, inline.gfm, {
+  br: replace(inline.br)('{2,}', '*')(),
+  text: replace(inline.gfm.text)('{2,}', '*')()
+});
+
+/**
+ * Inline Lexer & Compiler
+ */
+
+function InlineLexer(links, options) {
+  this.options = options || marked.defaults;
+  this.links = links;
+  this.rules = inline.normal;
+
+  if (!this.links) {
+    throw new
+      Error('Tokens array requires a `links` property.');
+  }
+
+  if (this.options.gfm) {
+    if (this.options.breaks) {
+      this.rules = inline.breaks;
+    } else {
+      this.rules = inline.gfm;
+    }
+  } else if (this.options.pedantic) {
+    this.rules = inline.pedantic;
+  }
 }
 
-var _EscapeSpecialCharsWithinTagAttributes = function(text) {
-//
-// Within tags -- meaning between < and > -- encode [\ ` * _] so they
-// don't conflict with their use in Markdown for code, italics and strong.
-//
+/**
+ * Expose Inline Rules
+ */
 
-	// Build a regex to find HTML tags and comments.  See Friedl's
-	// "Mastering Regular Expressions", 2nd Ed., pp. 200-201.
-	var regex = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
+InlineLexer.rules = inline;
 
-	text = text.replace(regex, function(wholeMatch) {
-		var tag = wholeMatch.replace(/(.)<\/?code>(?=.)/g,"$1`");
-		tag = escapeCharacters(tag,"\\`*_");
-		return tag;
-	});
+/**
+ * Static Lexing/Compiling Method
+ */
 
-	return text;
+InlineLexer.output = function(src, links, options) {
+  var inline = new InlineLexer(links, options);
+  return inline.output(src);
+};
+
+/**
+ * Lexing/Compiling
+ */
+
+InlineLexer.prototype.output = function(src) {
+  var out = ''
+    , link
+    , text
+    , href
+    , cap;
+
+  while (src) {
+    // escape
+    if (cap = this.rules.escape.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += cap[1];
+      continue;
+    }
+
+    // autolink
+    if (cap = this.rules.autolink.exec(src)) {
+      src = src.substring(cap[0].length);
+      if (cap[2] === '@') {
+        text = cap[1].charAt(6) === ':'
+          ? this.mangle(cap[1].substring(7))
+          : this.mangle(cap[1]);
+        href = this.mangle('mailto:') + text;
+      } else {
+        text = escape(cap[1]);
+        href = text;
+      }
+      out += '<a href="'
+        + href
+        + '">'
+        + text
+        + '</a>';
+      continue;
+    }
+
+    // url (gfm)
+    if (cap = this.rules.url.exec(src)) {
+      src = src.substring(cap[0].length);
+      text = escape(cap[1]);
+      href = text;
+      out += '<a href="'
+        + href
+        + '">'
+        + text
+        + '</a>';
+      continue;
+    }
+
+    // tag
+    if (cap = this.rules.tag.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.options.sanitize
+        ? escape(cap[0])
+        : cap[0];
+      continue;
+    }
+
+    // link
+    if (cap = this.rules.link.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.outputLink(cap, {
+        href: cap[2],
+        title: cap[3]
+      });
+      continue;
+    }
+
+    // reflink, nolink
+    if ((cap = this.rules.reflink.exec(src))
+        || (cap = this.rules.nolink.exec(src))) {
+      src = src.substring(cap[0].length);
+      link = (cap[2] || cap[1]).replace(/\s+/g, ' ');
+      link = this.links[link.toLowerCase()];
+      if (!link || !link.href) {
+        out += cap[0].charAt(0);
+        src = cap[0].substring(1) + src;
+        continue;
+      }
+      out += this.outputLink(cap, link);
+      continue;
+    }
+
+    // strong
+    if (cap = this.rules.strong.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<strong>'
+        + this.output(cap[2] || cap[1])
+        + '</strong>';
+      continue;
+    }
+
+    // em
+    if (cap = this.rules.em.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<em>'
+        + this.output(cap[2] || cap[1])
+        + '</em>';
+      continue;
+    }
+
+    // code
+    if (cap = this.rules.code.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<code>'
+        + escape(cap[2], true)
+        + '</code>';
+      continue;
+    }
+
+    // br
+    if (cap = this.rules.br.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<br>';
+      continue;
+    }
+
+    // del (gfm)
+    if (cap = this.rules.del.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += '<del>'
+        + this.output(cap[1])
+        + '</del>';
+      continue;
+    }
+
+    // text
+    if (cap = this.rules.text.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += escape(this.smartypants(cap[0]));
+      continue;
+    }
+
+    if (src) {
+      throw new
+        Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
+  }
+
+  return out;
+};
+
+/**
+ * Compile Link
+ */
+
+InlineLexer.prototype.outputLink = function(cap, link) {
+  if (cap[0].charAt(0) !== '!') {
+    return '<a href="'
+      + escape(link.href)
+      + '"'
+      + (link.title
+      ? ' title="'
+      + escape(link.title)
+      + '"'
+      : '')
+      + '>'
+      + this.output(cap[1])
+      + '</a>';
+  } else {
+    return '<img src="'
+      + escape(link.href)
+      + '" alt="'
+      + escape(cap[1])
+      + '"'
+      + (link.title
+      ? ' title="'
+      + escape(link.title)
+      + '"'
+      : '')
+      + '>';
+  }
+};
+
+/**
+ * Smartypants Transformations
+ */
+
+InlineLexer.prototype.smartypants = function(text) {
+  if (!this.options.smartypants) return text;
+  return text
+    // em-dashes
+    .replace(/--/g, '\u2014')
+    // opening singles
+    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    // closing singles & apostrophes
+    .replace(/'/g, '\u2019')
+    // opening doubles
+    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    // closing doubles
+    .replace(/"/g, '\u201d')
+    // ellipses
+    .replace(/\.{3}/g, '\u2026');
+};
+
+/**
+ * Mangle Links
+ */
+
+InlineLexer.prototype.mangle = function(text) {
+  var out = ''
+    , l = text.length
+    , i = 0
+    , ch;
+
+  for (; i < l; i++) {
+    ch = text.charCodeAt(i);
+    if (Math.random() > 0.5) {
+      ch = 'x' + ch.toString(16);
+    }
+    out += '&#' + ch + ';';
+  }
+
+  return out;
+};
+
+/**
+ * Parsing & Compiling
+ */
+
+function Parser(options) {
+  this.tokens = [];
+  this.token = null;
+  this.options = options || marked.defaults;
 }
 
-var _DoAnchors = function(text) {
-//
-// Turn Markdown link shortcuts into XHTML <a> tags.
-//
-	//
-	// First, handle reference-style links: [link text] [id]
-	//
+/**
+ * Static Parse Method
+ */
 
-	/*
-		text = text.replace(/
-		(							// wrap whole match in $1
-			\[
-			(
-				(?:
-					\[[^\]]*\]		// allow brackets nested one level
-					|
-					[^\[]			// or anything else
-				)*
-			)
-			\]
+Parser.parse = function(src, options) {
+  var parser = new Parser(options);
+  return parser.parse(src);
+};
 
-			[ ]?					// one optional space
-			(?:\n[ ]*)?				// one optional newline followed by spaces
+/**
+ * Parse Loop
+ */
 
-			\[
-			(.*?)					// id = $3
-			\]
-		)()()()()					// pad remaining backreferences
-		/g,_DoAnchors_callback);
-	*/
-	text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeAnchorTag);
+Parser.prototype.parse = function(src) {
+  this.inline = new InlineLexer(src.links, this.options);
+  this.tokens = src.reverse();
 
-	//
-	// Next, inline-style links: [link text](url "optional title")
-	//
+  var out = '';
+  while (this.next()) {
+    out += this.tok();
+  }
 
-	/*
-		text = text.replace(/
-			(						// wrap whole match in $1
-				\[
-				(
-					(?:
-						\[[^\]]*\]	// allow brackets nested one level
-					|
-					[^\[\]]			// or anything else
-				)
-			)
-			\]
-			\(						// literal paren
-			[ \t]*
-			()						// no id, so leave $3 empty
-			<?(.*?)>?				// href = $4
-			[ \t]*
-			(						// $5
-				(['"])				// quote char = $6
-				(.*?)				// Title = $7
-				\6					// matching quote
-				[ \t]*				// ignore any spaces/tabs between closing quote and )
-			)?						// title is optional
-			\)
-		)
-		/g,writeAnchorTag);
-	*/
-	text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?(.*?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeAnchorTag);
+  return out;
+};
 
-	//
-	// Last, handle reference-style shortcuts: [link text]
-	// These must come last in case you've also got [link test][1]
-	// or [link test](/foo)
-	//
+/**
+ * Next Token
+ */
 
-	/*
-		text = text.replace(/
-		(		 					// wrap whole match in $1
-			\[
-			([^\[\]]+)				// link text = $2; can't contain '[' or ']'
-			\]
-		)()()()()()					// pad rest of backreferences
-		/g, writeAnchorTag);
-	*/
-	text = text.replace(/(\[([^\[\]]+)\])()()()()()/g, writeAnchorTag);
+Parser.prototype.next = function() {
+  return this.token = this.tokens.pop();
+};
 
-	return text;
+/**
+ * Preview Next Token
+ */
+
+Parser.prototype.peek = function() {
+  return this.tokens[this.tokens.length - 1] || 0;
+};
+
+/**
+ * Parse Text Tokens
+ */
+
+Parser.prototype.parseText = function() {
+  var body = this.token.text;
+
+  while (this.peek().type === 'text') {
+    body += '\n' + this.next().text;
+  }
+
+  return this.inline.output(body);
+};
+
+/**
+ * Parse Current Token
+ */
+
+Parser.prototype.tok = function() {
+  switch (this.token.type) {
+    case 'space': {
+      return '';
+    }
+    case 'hr': {
+      return '<hr>\n';
+    }
+    case 'heading': {
+      return '<h'
+        + this.token.depth
+        + ' id="'
+        + this.token.text.toLowerCase().replace(/[^\w]+/g, '-')
+        + '">'
+        + this.inline.output(this.token.text)
+        + '</h'
+        + this.token.depth
+        + '>\n';
+    }
+    case 'code': {
+      if (this.options.highlight) {
+        var code = this.options.highlight(this.token.text, this.token.lang);
+        if (code != null && code !== this.token.text) {
+          this.token.escaped = true;
+          this.token.text = code;
+        }
+      }
+
+      if (!this.token.escaped) {
+        this.token.text = escape(this.token.text, true);
+      }
+
+      return '<pre><code'
+        + (this.token.lang
+        ? ' class="'
+        + this.options.langPrefix
+        + this.token.lang
+        + '"'
+        : '')
+        + '>'
+        + this.token.text
+        + '</code></pre>\n';
+    }
+    case 'table': {
+      var body = ''
+        , heading
+        , i
+        , row
+        , cell
+        , j;
+
+      // header
+      body += '<thead>\n<tr>\n';
+      for (i = 0; i < this.token.header.length; i++) {
+        heading = this.inline.output(this.token.header[i]);
+        body += '<th';
+        if (this.token.align[i]) {
+          body += ' style="text-align:' + this.token.align[i] + '"';
+        }
+        body += '>' + heading + '</th>\n';
+      }
+      body += '</tr>\n</thead>\n';
+
+      // body
+      body += '<tbody>\n'
+      for (i = 0; i < this.token.cells.length; i++) {
+        row = this.token.cells[i];
+        body += '<tr>\n';
+        for (j = 0; j < row.length; j++) {
+          cell = this.inline.output(row[j]);
+          body += '<td';
+          if (this.token.align[j]) {
+            body += ' style="text-align:' + this.token.align[j] + '"';
+          }
+          body += '>' + cell + '</td>\n';
+        }
+        body += '</tr>\n';
+      }
+      body += '</tbody>\n';
+
+      return '<table>\n'
+        + body
+        + '</table>\n';
+    }
+    case 'blockquote_start': {
+      var body = '';
+
+      while (this.next().type !== 'blockquote_end') {
+        body += this.tok();
+      }
+
+      return '<blockquote>\n'
+        + body
+        + '</blockquote>\n';
+    }
+    case 'list_start': {
+      var type = this.token.ordered ? 'ol' : 'ul'
+        , body = '';
+
+      while (this.next().type !== 'list_end') {
+        body += this.tok();
+      }
+
+      return '<'
+        + type
+        + '>\n'
+        + body
+        + '</'
+        + type
+        + '>\n';
+    }
+    case 'list_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.token.type === 'text'
+          ? this.parseText()
+          : this.tok();
+      }
+
+      return '<li>'
+        + body
+        + '</li>\n';
+    }
+    case 'loose_item_start': {
+      var body = '';
+
+      while (this.next().type !== 'list_item_end') {
+        body += this.tok();
+      }
+
+      return '<li>'
+        + body
+        + '</li>\n';
+    }
+    case 'html': {
+      return !this.token.pre && !this.options.pedantic
+        ? this.inline.output(this.token.text)
+        : this.token.text;
+    }
+    case 'paragraph': {
+      return '<p>'
+        + this.inline.output(this.token.text)
+        + '</p>\n';
+    }
+    case 'text': {
+      return '<p>'
+        + this.parseText()
+        + '</p>\n';
+    }
+  }
+};
+
+/**
+ * Helpers
+ */
+
+function escape(html, encode) {
+  return html
+    .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-var writeAnchorTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
-	if (m7 == undefined) m7 = "";
-	var whole_match = m1;
-	var link_text   = m2;
-	var link_id	 = m3.toLowerCase();
-	var url		= m4;
-	var title	= m7;
-
-	if (url == "") {
-		if (link_id == "") {
-			// lower-case and turn embedded newlines into spaces
-			link_id = link_text.toLowerCase().replace(/ ?\n/g," ");
-		}
-		url = "#"+link_id;
-
-		if (g_urls[link_id] != undefined) {
-			url = g_urls[link_id];
-			if (g_titles[link_id] != undefined) {
-				title = g_titles[link_id];
-			}
-		}
-		else {
-			if (whole_match.search(/\(\s*\)$/m)>-1) {
-				// Special case for explicit empty url
-				url = "";
-			} else {
-				return whole_match;
-			}
-		}
-	}
-
-	url = escapeCharacters(url,"*_");
-	var result = "<a href=\"" + url + "\"";
-
-	if (title != "") {
-		title = title.replace(/"/g,"&quot;");
-		title = escapeCharacters(title,"*_");
-		result +=  " title=\"" + title + "\"";
-	}
-
-	result += ">" + link_text + "</a>";
-
-	return result;
+function replace(regex, opt) {
+  regex = regex.source;
+  opt = opt || '';
+  return function self(name, val) {
+    if (!name) return new RegExp(regex, opt);
+    val = val.source || val;
+    val = val.replace(/(^|[^\[])\^/g, '$1');
+    regex = regex.replace(name, val);
+    return self;
+  };
 }
 
+function noop() {}
+noop.exec = noop;
 
-var _DoImages = function(text) {
-//
-// Turn Markdown image shortcuts into <img> tags.
-//
+function merge(obj) {
+  var i = 1
+    , target
+    , key;
 
-	//
-	// First, handle reference-style labeled images: ![alt text][id]
-	//
+  for (; i < arguments.length; i++) {
+    target = arguments[i];
+    for (key in target) {
+      if (Object.prototype.hasOwnProperty.call(target, key)) {
+        obj[key] = target[key];
+      }
+    }
+  }
 
-	/*
-		text = text.replace(/
-		(						// wrap whole match in $1
-			!\[
-			(.*?)				// alt text = $2
-			\]
-
-			[ ]?				// one optional space
-			(?:\n[ ]*)?			// one optional newline followed by spaces
-
-			\[
-			(.*?)				// id = $3
-			\]
-		)()()()()				// pad rest of backreferences
-		/g,writeImageTag);
-	*/
-	text = text.replace(/(!\[(.*?)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeImageTag);
-
-	//
-	// Next, handle inline images:  ![alt text](url "optional title")
-	// Don't forget: encode * and _
-
-	/*
-		text = text.replace(/
-		(						// wrap whole match in $1
-			!\[
-			(.*?)				// alt text = $2
-			\]
-			\s?					// One optional whitespace character
-			\(					// literal paren
-			[ \t]*
-			()					// no id, so leave $3 empty
-			<?(\S+?)>?			// src url = $4
-			[ \t]*
-			(					// $5
-				(['"])			// quote char = $6
-				(.*?)			// title = $7
-				\6				// matching quote
-				[ \t]*
-			)?					// title is optional
-		\)
-		)
-		/g,writeImageTag);
-	*/
-	text = text.replace(/(!\[(.*?)\]\s?\([ \t]*()<?(\S+?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeImageTag);
-
-	return text;
+  return obj;
 }
 
-var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
-	var whole_match = m1;
-	var alt_text   = m2;
-	var link_id	 = m3.toLowerCase();
-	var url		= m4;
-	var title	= m7;
+/**
+ * Marked
+ */
 
-	if (!title) title = "";
+function marked(src, opt, callback) {
+  if (callback || typeof opt === 'function') {
+    if (!callback) {
+      callback = opt;
+      opt = null;
+    }
 
-	if (url == "") {
-		if (link_id == "") {
-			// lower-case and turn embedded newlines into spaces
-			link_id = alt_text.toLowerCase().replace(/ ?\n/g," ");
-		}
-		url = "#"+link_id;
+    opt = merge({}, marked.defaults, opt || {});
 
-		if (g_urls[link_id] != undefined) {
-			url = g_urls[link_id];
-			if (g_titles[link_id] != undefined) {
-				title = g_titles[link_id];
-			}
-		}
-		else {
-			return whole_match;
-		}
-	}
+    var highlight = opt.highlight
+      , tokens
+      , pending
+      , i = 0;
 
-	alt_text = alt_text.replace(/"/g,"&quot;");
-	url = escapeCharacters(url,"*_");
-	var result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+    try {
+      tokens = Lexer.lex(src, opt)
+    } catch (e) {
+      return callback(e);
+    }
 
-	// attacklab: Markdown.pl adds empty title attributes to images.
-	// Replicate this bug.
+    pending = tokens.length;
 
-	//if (title != "") {
-		title = title.replace(/"/g,"&quot;");
-		title = escapeCharacters(title,"*_");
-		result +=  " title=\"" + title + "\"";
-	//}
+    var done = function() {
+      var out, err;
 
-	result += " />";
+      try {
+        out = Parser.parse(tokens, opt);
+      } catch (e) {
+        err = e;
+      }
 
-	return result;
+      opt.highlight = highlight;
+
+      return err
+        ? callback(err)
+        : callback(null, out);
+    };
+
+    if (!highlight || highlight.length < 3) {
+      return done();
+    }
+
+    delete opt.highlight;
+
+    if (!pending) return done();
+
+    for (; i < tokens.length; i++) {
+      (function(token) {
+        if (token.type !== 'code') {
+          return --pending || done();
+        }
+        return highlight(token.text, token.lang, function(err, code) {
+          if (code == null || code === token.text) {
+            return --pending || done();
+          }
+          token.text = code;
+          token.escaped = true;
+          --pending || done();
+        });
+      })(tokens[i]);
+    }
+
+    return;
+  }
+  try {
+    if (opt) opt = merge({}, marked.defaults, opt);
+    return Parser.parse(Lexer.lex(src, opt), opt);
+  } catch (e) {
+    e.message += '\nPlease report this to https://github.com/chjj/marked.';
+    if ((opt || marked.defaults).silent) {
+      return '<p>An error occured:</p><pre>'
+        + escape(e.message + '', true)
+        + '</pre>';
+    }
+    throw e;
+  }
 }
 
+/**
+ * Options
+ */
 
-var _DoHeaders = function(text) {
+marked.options =
+marked.setOptions = function(opt) {
+  merge(marked.defaults, opt);
+  return marked;
+};
 
-	// Setext-style headers:
-	//	Header 1
-	//	========
-	//
-	//	Header 2
-	//	--------
-	//
-	text = text.replace(/^(.+)[ \t]*\n=+[ \t]*\n+/gm,
-		function(wholeMatch,m1){return hashBlock("<h1>" + _RunSpanGamut(m1) + "</h1>");});
+marked.defaults = {
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: false,
+  silent: false,
+  highlight: null,
+  langPrefix: 'lang-',
+  smartypants: false
+};
 
-	text = text.replace(/^(.+)[ \t]*\n-+[ \t]*\n+/gm,
-		function(matchFound,m1){return hashBlock("<h2>" + _RunSpanGamut(m1) + "</h2>");});
+/**
+ * Expose
+ */
 
-	// atx-style headers:
-	//  # Header 1
-	//  ## Header 2
-	//  ## Header 2 with closing hashes ##
-	//  ...
-	//  ###### Header 6
-	//
+marked.Parser = Parser;
+marked.parser = Parser.parse;
 
-	/*
-		text = text.replace(/
-			^(\#{1,6})				// $1 = string of #'s
-			[ \t]*
-			(.+?)					// $2 = Header text
-			[ \t]*
-			\#*						// optional closing #'s (not counted)
-			\n+
-		/gm, function() {...});
-	*/
+marked.Lexer = Lexer;
+marked.lexer = Lexer.lex;
 
-	text = text.replace(/^(\#{1,6})[ \t]*(.+?)[ \t]*\#*\n+/gm,
-		function(wholeMatch,m1,m2) {
-			var h_level = m1.length;
-			return hashBlock("<h" + h_level + ">" + _RunSpanGamut(m2) + "</h" + h_level + ">");
-		});
+marked.InlineLexer = InlineLexer;
+marked.inlineLexer = InlineLexer.output;
 
-	return text;
+marked.parse = marked;
+
+if (typeof exports === 'object') {
+  module.exports = marked;
+} else if (typeof define === 'function' && define.amd) {
+  define(function() { return marked; });
+} else {
+  this.marked = marked;
 }
 
-// This declaration keeps Dojo compressor from outputting garbage:
-var _ProcessListItems;
-
-var _DoLists = function(text) {
-//
-// Form HTML ordered (numbered) and unordered (bulleted) lists.
-//
-
-	// attacklab: add sentinel to hack around khtml/safari bug:
-	// http://bugs.webkit.org/show_bug.cgi?id=11231
-	text += "~0";
-
-	// Re-usable pattern to match any entirel ul or ol list:
-
-	/*
-		var whole_list = /
-		(									// $1 = whole list
-			(								// $2
-				[ ]{0,3}					// attacklab: g_tab_width - 1
-				([*+-]|\d+[.])				// $3 = first list item marker
-				[ \t]+
-			)
-			[^\r]+?
-			(								// $4
-				~0							// sentinel for workaround; should be $
-			|
-				\n{2,}
-				(?=\S)
-				(?!							// Negative lookahead for another list item marker
-					[ \t]*
-					(?:[*+-]|\d+[.])[ \t]+
-				)
-			)
-		)/g
-	*/
-	var whole_list = /^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;
-
-	if (g_list_level) {
-		text = text.replace(whole_list,function(wholeMatch,m1,m2) {
-			var list = m1;
-			var list_type = (m2.search(/[*+-]/g)>-1) ? "ul" : "ol";
-
-			// Turn double returns into triple returns, so that we can make a
-			// paragraph for the last item in a list, if necessary:
-			list = list.replace(/\n{2,}/g,"\n\n\n");;
-			var result = _ProcessListItems(list);
-
-			// Trim any trailing whitespace, to put the closing `</$list_type>`
-			// up on the preceding line, to get it past the current stupid
-			// HTML block parser. This is a hack to work around the terrible
-			// hack that is the HTML block parser.
-			result = result.replace(/\s+$/,"");
-			result = "<"+list_type+">" + result + "</"+list_type+">\n";
-			return result;
-		});
-	} else {
-		whole_list = /(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/g;
-		text = text.replace(whole_list,function(wholeMatch,m1,m2,m3) {
-			var runup = m1;
-			var list = m2;
-
-			var list_type = (m3.search(/[*+-]/g)>-1) ? "ul" : "ol";
-			// Turn double returns into triple returns, so that we can make a
-			// paragraph for the last item in a list, if necessary:
-			var list = list.replace(/\n{2,}/g,"\n\n\n");;
-			var result = _ProcessListItems(list);
-			result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";
-			return result;
-		});
-	}
-
-	// attacklab: strip sentinel
-	text = text.replace(/~0/,"");
-
-	return text;
-}
-
-_ProcessListItems = function(list_str) {
-//
-//  Process the contents of a single ordered or unordered list, splitting it
-//  into individual list items.
-//
-	// The $g_list_level global keeps track of when we're inside a list.
-	// Each time we enter a list, we increment it; when we leave a list,
-	// we decrement. If it's zero, we're not in a list anymore.
-	//
-	// We do this because when we're not inside a list, we want to treat
-	// something like this:
-	//
-	//    I recommend upgrading to version
-	//    8. Oops, now this line is treated
-	//    as a sub-list.
-	//
-	// As a single paragraph, despite the fact that the second line starts
-	// with a digit-period-space sequence.
-	//
-	// Whereas when we're inside a list (or sub-list), that line will be
-	// treated as the start of a sub-list. What a kludge, huh? This is
-	// an aspect of Markdown's syntax that's hard to parse perfectly
-	// without resorting to mind-reading. Perhaps the solution is to
-	// change the syntax rules such that sub-lists must start with a
-	// starting cardinal number; e.g. "1." or "a.".
-
-	g_list_level++;
-
-	// trim trailing blank lines:
-	list_str = list_str.replace(/\n{2,}$/,"\n");
-
-	// attacklab: add sentinel to emulate \z
-	list_str += "~0";
-
-	/*
-		list_str = list_str.replace(/
-			(\n)?							// leading line = $1
-			(^[ \t]*)						// leading whitespace = $2
-			([*+-]|\d+[.]) [ \t]+			// list marker = $3
-			([^\r]+?						// list item text   = $4
-			(\n{1,2}))
-			(?= \n* (~0 | \2 ([*+-]|\d+[.]) [ \t]+))
-		/gm, function(){...});
-	*/
-	list_str = list_str.replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
-		function(wholeMatch,m1,m2,m3,m4){
-			var item = m4;
-			var leading_line = m1;
-			var leading_space = m2;
-
-			if (leading_line || (item.search(/\n{2,}/)>-1)) {
-				item = _RunBlockGamut(_Outdent(item));
-			}
-			else {
-				// Recursion for sub-lists:
-				item = _DoLists(_Outdent(item));
-				item = item.replace(/\n$/,""); // chomp(item)
-				item = _RunSpanGamut(item);
-			}
-
-			return  "<li>" + item + "</li>\n";
-		}
-	);
-
-	// attacklab: strip sentinel
-	list_str = list_str.replace(/~0/g,"");
-
-	g_list_level--;
-	return list_str;
-}
-
-
-var _DoCodeBlocks = function(text) {
-//
-//  Process Markdown `<pre><code>` blocks.
-//
-
-	/*
-		text = text.replace(text,
-			/(?:\n\n|^)
-			(								// $1 = the code block -- one or more lines, starting with a space/tab
-				(?:
-					(?:[ ]{4}|\t)			// Lines must start with a tab or a tab-width of spaces - attacklab: g_tab_width
-					.*\n+
-				)+
-			)
-			(\n*[ ]{0,3}[^ \t\n]|(?=~0))	// attacklab: g_tab_width
-		/g,function(){...});
-	*/
-
-	// attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
-	text += "~0";
-
-	text = text.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
-		function(wholeMatch,m1,m2) {
-			var codeblock = m1;
-			var nextChar = m2;
-
-			codeblock = _EncodeCode( _Outdent(codeblock));
-			codeblock = _Detab(codeblock);
-			codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
-			codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
-
-			codeblock = "<pre><code>" + codeblock + "\n</code></pre>";
-
-			return hashBlock(codeblock) + nextChar;
-		}
-	);
-
-	// attacklab: strip sentinel
-	text = text.replace(/~0/,"");
-
-	return text;
-}
-
-var hashBlock = function(text) {
-	text = text.replace(/(^\n+|\n+$)/g,"");
-	return "\n\n~K" + (g_html_blocks.push(text)-1) + "K\n\n";
-}
-
-
-var _DoCodeSpans = function(text) {
-//
-//   *  Backtick quotes are used for <code></code> spans.
-//
-//   *  You can use multiple backticks as the delimiters if you want to
-//	 include literal backticks in the code span. So, this input:
-//
-//		 Just type ``foo `bar` baz`` at the prompt.
-//
-//	   Will translate to:
-//
-//		 <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
-//
-//	There's no arbitrary limit to the number of backticks you
-//	can use as delimters. If you need three consecutive backticks
-//	in your code, use four for delimiters, etc.
-//
-//  *  You can use spaces to get literal backticks at the edges:
-//
-//		 ... type `` `bar` `` ...
-//
-//	   Turns to:
-//
-//		 ... type <code>`bar`</code> ...
-//
-
-	/*
-		text = text.replace(/
-			(^|[^\\])					// Character before opening ` can't be a backslash
-			(`+)						// $2 = Opening run of `
-			(							// $3 = The code block
-				[^\r]*?
-				[^`]					// attacklab: work around lack of lookbehind
-			)
-			\2							// Matching closer
-			(?!`)
-		/gm, function(){...});
-	*/
-
-	text = text.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm,
-		function(wholeMatch,m1,m2,m3,m4) {
-			var c = m3;
-			c = c.replace(/^([ \t]*)/g,"");	// leading whitespace
-			c = c.replace(/[ \t]*$/g,"");	// trailing whitespace
-			c = _EncodeCode(c);
-			return m1+"<code>"+c+"</code>";
-		});
-
-	return text;
-}
-
-
-var _EncodeCode = function(text) {
-//
-// Encode/escape certain characters inside Markdown code runs.
-// The point is that in code, these characters are literals,
-// and lose their special Markdown meanings.
-//
-	// Encode all ampersands; HTML entities are not
-	// entities within a Markdown code span.
-	text = text.replace(/&/g,"&amp;");
-
-	// Do the angle bracket song and dance:
-	text = text.replace(/</g,"&lt;");
-	text = text.replace(/>/g,"&gt;");
-
-	// Now, escape characters that are magic in Markdown:
-	text = escapeCharacters(text,"\*_{}[]\\",false);
-
-// jj the line above breaks this:
-//---
-
-//* Item
-
-//   1. Subitem
-
-//            special char: *
-//---
-
-	return text;
-}
-
-
-var _DoItalicsAndBold = function(text) {
-
-	// <strong> must go first:
-	text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
-		"<strong>$2</strong>");
-
-	text = text.replace(/(\w)_(\w)/g, "$1~E95E$2") // ** GFM **  "~E95E" == escaped "_"
-	text = text.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g,
-		"<em>$2</em>");
-
-	return text;
-}
-
-
-var _DoBlockQuotes = function(text) {
-
-	/*
-		text = text.replace(/
-		(								// Wrap whole match in $1
-			(
-				^[ \t]*>[ \t]?			// '>' at the start of a line
-				.+\n					// rest of the first line
-				(.+\n)*					// subsequent consecutive lines
-				\n*						// blanks
-			)+
-		)
-		/gm, function(){...});
-	*/
-
-	text = text.replace(/((^[ \t]*>[ \t]?.+\n(.+\n)*\n*)+)/gm,
-		function(wholeMatch,m1) {
-			var bq = m1;
-
-			// attacklab: hack around Konqueror 3.5.4 bug:
-			// "----------bug".replace(/^-/g,"") == "bug"
-
-			bq = bq.replace(/^[ \t]*>[ \t]?/gm,"~0");	// trim one level of quoting
-
-			// attacklab: clean up hack
-			bq = bq.replace(/~0/g,"");
-
-			bq = bq.replace(/^[ \t]+$/gm,"");		// trim whitespace-only lines
-			bq = _RunBlockGamut(bq);				// recurse
-
-			bq = bq.replace(/(^|\n)/g,"$1  ");
-			// These leading spaces screw with <pre> content, so we need to fix that:
-			bq = bq.replace(
-					/(\s*<pre>[^\r]+?<\/pre>)/gm,
-				function(wholeMatch,m1) {
-					var pre = m1;
-					// attacklab: hack around Konqueror 3.5.4 bug:
-					pre = pre.replace(/^  /mg,"~0");
-					pre = pre.replace(/~0/g,"");
-					return pre;
-				});
-
-			return hashBlock("<blockquote>\n" + bq + "\n</blockquote>");
-		});
-	return text;
-}
-
-
-var _FormParagraphs = function(text) {
-//
-//  Params:
-//    $text - string to process with html <p> tags
-//
-
-	// Strip leading and trailing lines:
-	text = text.replace(/^\n+/g,"");
-	text = text.replace(/\n+$/g,"");
-
-	var grafs = text.split(/\n{2,}/g);
-	var grafsOut = new Array();
-
-	//
-	// Wrap <p> tags.
-	//
-	var end = grafs.length;
-	for (var i=0; i<end; i++) {
-		var str = grafs[i];
-
-		// if this is an HTML marker, copy it
-		if (str.search(/~K(\d+)K/g) >= 0) {
-			grafsOut.push(str);
-		}
-		else if (str.search(/\S/) >= 0) {
-			str = _RunSpanGamut(str);
-			str = str.replace(/\n/g,"<br />");  // ** GFM **
-			str = str.replace(/^([ \t]*)/g,"<p>");
-			str += "</p>"
-			grafsOut.push(str);
-		}
-
-	}
-
-	//
-	// Unhashify HTML blocks
-	//
-	end = grafsOut.length;
-	for (var i=0; i<end; i++) {
-		// if this is a marker for an html block...
-		while (grafsOut[i].search(/~K(\d+)K/) >= 0) {
-			var blockText = g_html_blocks[RegExp.$1];
-			blockText = blockText.replace(/\$/g,"$$$$"); // Escape any dollar signs
-			grafsOut[i] = grafsOut[i].replace(/~K\d+K/,blockText);
-		}
-	}
-
-	return grafsOut.join("\n\n");
-}
-
-
-var _EncodeAmpsAndAngles = function(text) {
-// Smart processing for ampersands and angle brackets that need to be encoded.
-
-	// Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
-	//   http://bumppo.net/projects/amputator/
-	text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g,"&amp;");
-
-	// Encode naked <'s
-	text = text.replace(/<(?![a-z\/?\$!])/gi,"&lt;");
-
-	return text;
-}
-
-
-var _EncodeBackslashEscapes = function(text) {
-//
-//   Parameter:  String.
-//   Returns:	The string, with after processing the following backslash
-//			   escape sequences.
-//
-
-	// attacklab: The polite way to do this is with the new
-	// escapeCharacters() function:
-	//
-	// 	text = escapeCharacters(text,"\\",true);
-	// 	text = escapeCharacters(text,"`*_{}[]()>#+-.!",true);
-	//
-	// ...but we're sidestepping its use of the (slow) RegExp constructor
-	// as an optimization for Firefox.  This function gets called a LOT.
-
-	text = text.replace(/\\(\\)/g,escapeCharacters_callback);
-	text = text.replace(/\\([`*_{}\[\]()>#+-.!])/g,escapeCharacters_callback);
-	return text;
-}
-
-
-var _DoAutoLinks = function(text) {
-
-	text = text.replace(/<((https?|ftp|dict):[^'">\s]+)>/gi,"<a href=\"$1\">$1</a>");
-
-	// Email addresses: <address@domain.foo>
-
-	/*
-		text = text.replace(/
-			<
-			(?:mailto:)?
-			(
-				[-.\w]+
-				\@
-				[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+
-			)
-			>
-		/gi, _DoAutoLinks_callback());
-	*/
-	text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
-		function(wholeMatch,m1) {
-			return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
-		}
-	);
-
-	return text;
-}
-
-
-var _EncodeEmailAddress = function(addr) {
-//
-//  Input: an email address, e.g. "foo@example.com"
-//
-//  Output: the email address as a mailto link, with each character
-//	of the address encoded as either a decimal or hex entity, in
-//	the hopes of foiling most address harvesting spam bots. E.g.:
-//
-//	<a href="&#x6D;&#97;&#105;&#108;&#x74;&#111;:&#102;&#111;&#111;&#64;&#101;
-//	   x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;">&#102;&#111;&#111;
-//	   &#64;&#101;x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;</a>
-//
-//  Based on a filter by Matthew Wickline, posted to the BBEdit-Talk
-//  mailing list: <http://tinyurl.com/yu7ue>
-//
-
-	// attacklab: why can't javascript speak hex?
-	function char2hex(ch) {
-		var hexDigits = '0123456789ABCDEF';
-		var dec = ch.charCodeAt(0);
-		return(hexDigits.charAt(dec>>4) + hexDigits.charAt(dec&15));
-	}
-
-	var encode = [
-		function(ch){return "&#"+ch.charCodeAt(0)+";";},
-		function(ch){return "&#x"+char2hex(ch)+";";},
-		function(ch){return ch;}
-	];
-
-	addr = "mailto:" + addr;
-
-	addr = addr.replace(/./g, function(ch) {
-		if (ch == "@") {
-		   	// this *must* be encoded. I insist.
-			ch = encode[Math.floor(Math.random()*2)](ch);
-		} else if (ch !=":") {
-			// leave ':' alone (to spot mailto: later)
-			var r = Math.random();
-			// roughly 10% raw, 45% hex, 45% dec
-			ch =  (
-					r > .9  ?	encode[2](ch)   :
-					r > .45 ?	encode[1](ch)   :
-								encode[0](ch)
-				);
-		}
-		return ch;
-	});
-
-	addr = "<a href=\"" + addr + "\">" + addr + "</a>";
-	addr = addr.replace(/">.+:/g,"\">"); // strip the mailto: from the visible part
-
-	return addr;
-}
-
-
-var _UnescapeSpecialChars = function(text) {
-//
-// Swap back in all the special characters we've hidden.
-//
-	text = text.replace(/~E(\d+)E/g,
-		function(wholeMatch,m1) {
-			var charCodeToReplace = parseInt(m1);
-			return String.fromCharCode(charCodeToReplace);
-		}
-	);
-	return text;
-}
-
-
-var _Outdent = function(text) {
-//
-// Remove one level of line-leading tabs or spaces
-//
-
-	// attacklab: hack around Konqueror 3.5.4 bug:
-	// "----------bug".replace(/^-/g,"") == "bug"
-
-	text = text.replace(/^(\t|[ ]{1,4})/gm,"~0"); // attacklab: g_tab_width
-
-	// attacklab: clean up hack
-	text = text.replace(/~0/g,"")
-
-	return text;
-}
-
-var _Detab = function(text) {
-// attacklab: Detab's completely rewritten for speed.
-// In perl we could fix it by anchoring the regexp with \G.
-// In javascript we're less fortunate.
-
-	// expand first n-1 tabs
-	text = text.replace(/\t(?=\t)/g,"    "); // attacklab: g_tab_width
-
-	// replace the nth with two sentinels
-	text = text.replace(/\t/g,"~A~B");
-
-	// use the sentinel to anchor our regex so it doesn't explode
-	text = text.replace(/~B(.+?)~A/g,
-		function(wholeMatch,m1,m2) {
-			var leadingText = m1;
-			var numSpaces = 4 - leadingText.length % 4;  // attacklab: g_tab_width
-
-			// there *must* be a better way to do this:
-			for (var i=0; i<numSpaces; i++) leadingText+=" ";
-
-			return leadingText;
-		}
-	);
-
-	// clean up sentinels
-	text = text.replace(/~A/g,"    ");  // attacklab: g_tab_width
-	text = text.replace(/~B/g,"");
-
-	return text;
-}
-
-
-//
-//  attacklab: Utility functions
-//
-
-
-var escapeCharacters = function(text, charsToEscape, afterBackslash) {
-	// First we have to escape the escape characters so that
-	// we can build a character class out of them
-	var regexString = "([" + charsToEscape.replace(/([\[\]\\])/g,"\\$1") + "])";
-
-	if (afterBackslash) {
-		regexString = "\\\\" + regexString;
-	}
-
-	var regex = new RegExp(regexString,"g");
-	text = text.replace(regex,escapeCharacters_callback);
-
-	return text;
-}
-
-
-var escapeCharacters_callback = function(wholeMatch,m1) {
-	var charCodeToEscape = m1.charCodeAt(0);
-	return "~E"+charCodeToEscape+"E";
-}
-
-} // end of Showdown.converter
+}).call(function() {
+  return this || (typeof window !== 'undefined' ? window : global);
+}());
 //     keymaster.js
 //     (c) 2011 Thomas Fuchs
 //     keymaster.js may be freely distributed under the MIT license.

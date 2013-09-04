@@ -258,8 +258,20 @@ $(function(){
       initAce()
       
       initUi()
+
+      marked.setOptions({
+        gfm: true,
+        tables: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        langPrefix: 'lang-'
+      })
+
       
-      converter = new Showdown.converter()
+      converter = marked
+      // converter = new Showdown.converter()
       
       bindPreview()
 
@@ -464,7 +476,7 @@ $(function(){
   function previewMd(){
     
     var unmd = editor.getSession().getValue()
-      , md = converter.makeHtml(unmd)
+      , md = converter(unmd)
     
     $preview
       .html('') // unnecessary?
