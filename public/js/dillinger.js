@@ -268,10 +268,8 @@ $(function(){
         smartypants: false,
         langPrefix: 'lang-'
       })
-
       
       converter = marked
-      // converter = new Showdown.converter()
       
       bindPreview()
 
