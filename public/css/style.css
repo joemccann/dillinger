@@ -4633,19 +4633,6 @@ nav {
   -o-box-flex: 1;
   box-flex: 1;
 }
-#wordcounter {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    background-color: #f1eeee;
-    padding: 2px 6px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
 .shadowbox {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
