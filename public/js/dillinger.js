@@ -15,6 +15,7 @@ $(function(){
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
         }
+      , wordcount: true
       , current_filename : 'Untitled Document'
       , dropbox:
         {
@@ -32,7 +33,9 @@ $(function(){
   var $theme = $('#theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
+    , $wordcount = $('#wordcount')
     , $import_github = $('#import_github')
+    , $wordcounter = $('#wordcounter')
 
     
   // Hash of themes and their respective background colors
@@ -239,6 +242,42 @@ $(function(){
     $('#filename > span[contenteditable="true"]').text( str || profile.current_filename || "Untitled Document")
   }
 
+  /**
+   * Returns the full text of an element and all its children.
+   * The script recursively traverses all text nodes, and returns a
+   * concatenated string of all texts.
+   *
+   * Taken from
+   * http://stackoverflow.com/questions/2653670/innertext-textcontent-vs-retrieving-each-text-node
+   *
+   * @param node
+   * @return {int}
+   */
+  function getTextInElement(node) {
+      if (node.nodeType === 3) {
+          return node.data;
+      }
+
+      var txt = '';
+
+      if (node = node.firstChild) do {
+          txt += getTextInElement(node);
+      } while (node = node.nextSibling);
+
+      return txt;
+  }
+
+  /**
+   * Counts the words in a string
+   *
+   * @param string
+   * @return int
+   */
+  function countWords(string) {
+    var words = string.replace(/W+/g, ' ').match(/\S+/g);
+    return words && words.length || 0;
+  }
+
 
   /**
    * Initialize application.
@@ -280,8 +319,13 @@ $(function(){
       bindDelegation()
       
       bindFilenameField()
+
+      bindWordCountEvents();
               
       autoSave()
+
+      initWordCount();
+      refreshWordCount();
       
     }
 
@@ -325,8 +369,9 @@ $(function(){
     // TODO: FIX THIS BUG
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
     
-    // Set text for dis/enable autosave
+    // Set text for dis/enable autosave / word counter
     $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
+    $wordcount.html( !profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count' )
     
     // Check for logged in Github user and notifiy
     githubUser = $import_github.attr('data-github-username')
@@ -479,7 +524,18 @@ $(function(){
     $preview
       .html('') // unnecessary?
       .html(md)
-      
+
+    refreshWordCount();
+  }
+
+  function refreshWordCount(selectionCount){
+    var msg = "Words: ";
+    if (selectionCount !== undefined) {
+      msg += selectionCount + " of ";
+    }
+    if(profile.wordcount){
+      $wordcounter.text(msg + countWords(getTextInElement($preview[0])));
+    }
   }
 
   /**
@@ -722,6 +778,28 @@ $(function(){
   
   }
 
+  function initWordCount(){
+    if (profile.wordcount === true) {
+      $("#wordcounter").removeClass('hidden');
+    } else {
+      $("#wordcounter").addClass('hidden');
+    }
+  }
+
+  /**
+   * Toggles the wordcounter feature.
+   *
+   * @return {Void}
+   */
+  function toggleWordCount() {
+    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count' )
+
+    updateUserProfile({wordcount: !profile.wordcount })
+
+    initWordCount();
+
+  }
+
 
   /**
    * Bind keyup handler to the editor.
@@ -731,7 +809,31 @@ $(function(){
   function bindFilenameField(){
     $('#filename > span[contenteditable="true"]').bind('keyup', updateFilename)
   }
-  
+
+  /**
+   * Makes the selection check fire after every mouse up event.
+   *
+   * @return void
+   */
+  function bindWordCountEvents() {
+    $preview.bind('mouseup', checkForSelection);
+  }
+
+  /**
+   * Checks if there is some selected text. If so, the word counter gets updated.
+   *
+   * @return void
+   */
+  function checkForSelection() {
+    if (profile.wordcount) {
+      var selection = window.getSelection().toString();
+      if (selection !== "") {
+        refreshWordCount(countWords(selection));
+      } else {
+        refreshWordCount();
+      }
+    }
+  }
   
   /**
    * Bind keyup handler to the editor.
@@ -739,7 +841,7 @@ $(function(){
    * @return {Void}
    */  
   function bindPreview(){
-    $('#editor').bind('keyup', previewMd)
+    $('#editor').bind('keyup', previewMd);
   }
   
   /**
@@ -788,6 +890,12 @@ $(function(){
     $("#autosave")
       .on('click', function(){
         toggleAutoSave()
+        return false
+    })
+
+    $("#wordcount")
+      .on('click', function(){
+        toggleWordCount()
         return false
     })
 
@@ -1102,7 +1210,7 @@ $(function(){
       repos.sort(_alphaNumSort)
 
       repos.forEach(function(item){
-        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item['private'] + '"><a class="repo" href="#">' + item.name + '</a></li>'
+        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
       })
 
       list += '</ul>'
