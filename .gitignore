@@ -5,3 +5,37 @@ public/files/md/*.md
 public/files/html/*.html
 *-config.json
 backup/*
+
+# IntelliJ - PhpStorm and PyCharm
+.idea
+.idea/
+.idea/*
+*.iml
+*.ipr
+*.iws
+
+# Netbeans
+nbproject
+.nbproject
+.nbproject/*
+nbproject/*
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Mac OSX
+.DS_Store
+# Thumbnails
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# SublimeText project files
+/*.sublime-project
+*.sublime-workspace
+
