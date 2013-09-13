@@ -36,6 +36,7 @@ $(function(){
     , $wordcount = $('#wordcount')
     , $import_github = $('#import_github')
     , $wordcounter = $('#wordcounter')
+    , $filename = $('#filename')
 
     
   // Hash of themes and their respective background colors
@@ -779,10 +780,14 @@ $(function(){
   }
 
   function initWordCount(){
-    if (profile.wordcount === true) {
-      $("#wordcounter").removeClass('hidden');
+    if (profile.wordcount) {
+      $wordcounter.removeClass('hidden');
+      // Modify the width of the document name
+      $filename.addClass('show-word-count-filename-adjust')
     } else {
-      $("#wordcounter").addClass('hidden');
+      $wordcounter.addClass('hidden');
+      // Modify the width of the document name
+      $filename.removeClass('show-word-count-filename-adjust')
     }
   }
 
