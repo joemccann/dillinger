@@ -85,5 +85,3 @@ MIT
   [@tjholowaychuk]: http://twitter.com/tjholowaychuk
   [express]: http://expressjs.com
   
-
-    
