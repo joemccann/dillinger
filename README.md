@@ -20,7 +20,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.  
 
 Version
--
+----
 
 2.0
 
@@ -30,7 +30,7 @@ Tech
 Dillinger uses a number of open source projects to work properly:
 
 * [Ace Editor] - awesome web-based text editor
-* [Showdown] - a port of Markdown to JavaScript
+* [Marked] - a super fast port of Markdown to JavaScript
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
@@ -76,7 +76,7 @@ MIT
   [john gruber]: http://daringfireball.net/
   [@thomasfuchs]: http://twitter.com/thomasfuchs
   [1]: http://daringfireball.net/projects/markdown/
-  [showdown]: https://github.com/coreyti/showdown
+  [Marked]: https://github.com/chjj/marked
   [ace editor]: http://ace.ajax.org
   [node.js]: http://nodejs.org
   [Twitter Bootstrap]: http://twitter.github.com/bootstrap/
