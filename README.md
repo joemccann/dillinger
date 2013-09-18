@@ -67,7 +67,7 @@ jitsu deploy
 
 
 License
--
+----
 
 MIT
 
