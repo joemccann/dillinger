@@ -14,10 +14,7 @@
 .navbar-inner
   padding-left:  20px
   padding-right: 20px
-  gradient-vertical($navbarBackgroundHighlight, $navbarBackground)
-  border-radius(4px)
-  $shadow = 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1)
-  box-shadow($shadow)
+  background $navbarBackground
 
 
 // Navbar button for toggling navbar items in responsive layouts
@@ -27,17 +24,13 @@
   padding: 7px 10px
   margin-left: 5px
   margin-right: 5px
-  buttonBackground($navbarBackgroundHighlight, $navbarBackground)
-  $shadow = inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075)
-  box-shadow($shadow)
-
+  background $navbarBackground
+  
 .btn-navbar .icon-bar
   display: block
   width: 18px
   height: 2px
   background-color: #f5f5f5
-  border-radius(1px)
-  box-shadow(0 1px 0 rgba(0,0,0,.25))
 
 .btn-navbar .icon-bar + .icon-bar
   margin-top: 3px
@@ -236,7 +229,6 @@
 // Menu position and menu carets
 .navbar .dropdown-menu
   margin-top: 1px
-  border-radius(4px)
   &:before
     content: ''
     display: inline-block
