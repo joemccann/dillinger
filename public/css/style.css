@@ -4381,6 +4381,18 @@ nav {
   right: 10px;
   position: fixed;
 }
+noscript {
+  z-index: 99999;
+  position: absolute;
+  top: 30px;
+  width: 100%;
+}
+noscript p {
+  color: #000;
+  font-size: 24px;
+  text-align: center;
+  padding: 10px 0;
+}
 #app_wrap > #editor {
   position: absolute;
   margin-right: 5px;
@@ -4566,20 +4578,6 @@ nav {
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   filter: alpha(opacity=0);
 }
-.slick {
-  opacity: 1;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  filter: alpha(opacity=100);
-  -webkit-transition: opacity bodyTransitiontime linear;
-  -moz-transition: opacity bodyTransitiontime linear;
-  -ms-transition: opacity bodyTransitiontime linear;
-  -o-transition: opacity bodyTransitiontime linear;
-  transition: opacity bodyTransitiontime linear;
-  -webkit-transition: opacity 0.2s linear;
-  -moz-transition: opacity 0.2s linear;
-  -o-transition: opacity 0.2s linear;
-  -ms-transition: opacity 0.2s linear;
-}
 #loading {
   position: absolute;
   top: 0;
@@ -4601,18 +4599,6 @@ nav {
   margin: 42px auto;
   text-align: center;
   font-size: 18px;
-}
-noscript {
-  z-index: 99999;
-  position: absolute;
-  top: 30px;
-  width: 100%;
-}
-noscript p {
-  color: #000;
-  font-size: 24px;
-  text-align: center;
-  padding: 10px 0;
 }
 #loading.swift_top {
   top: -100%;
@@ -4640,6 +4626,20 @@ noscript p {
   -ms-transition: opacity 0.15s ease-in;
   -o-transition: opacity 0.15s ease-in;
   transition: opacity 0.15s ease-in;
+}
+.slick {
+  opacity: 1;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  filter: alpha(opacity=100);
+  -webkit-transition: opacity bodyTransitiontime linear;
+  -moz-transition: opacity bodyTransitiontime linear;
+  -ms-transition: opacity bodyTransitiontime linear;
+  -o-transition: opacity bodyTransitiontime linear;
+  transition: opacity bodyTransitiontime linear;
+  -webkit-transition: opacity 0.2s linear;
+  -moz-transition: opacity 0.2s linear;
+  -o-transition: opacity 0.2s linear;
+  -ms-transition: opacity 0.2s linear;
 }
 .bye {
   opacity: 0;

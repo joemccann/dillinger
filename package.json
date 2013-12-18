@@ -31,7 +31,7 @@
     "url": "git://github.com/joemccann/dillinger"
   },
   "engines": {
-    "node": "0.8.x"
+    "node": "0.10.x"
   },
   "dependencies": {
     "express": ">=3.0.0rc3",
@@ -44,7 +44,8 @@
     "lodash": ">=0.6.1",
     "dbox": "0.6.3",
     "googleapis": "0.2.12-alpha",
-    "marked": "~0.2.9"
+    "marked": "~0.2.9",
+    "phantomjs": "~1.9.0-6"
   },
   "devDependencies": {
     "smoosh": ">=0.3.2",
