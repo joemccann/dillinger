@@ -1093,7 +1093,8 @@ $(function(){
             // find the first text file
             do {
               file = files[i++]
-            } while (file && file.type.substr(0, 4) !== 'text' && file.name.substr(file.name.length - 3) !== '.md')
+            } while (file && file.type.substr(0, 4) !== 'text' 
+              && file.name.substr(file.name.length - 3) !== '.md')
 
             if (!file) return
 
@@ -1503,8 +1504,14 @@ $(function(){
       },
       save: function() {
         var content = encodeURIComponent(editor.getSession().getValue());
-        var postData = 'title=' + encodeURIComponent(profile.current_filename)+ '.md' +
-            '&content=' + content
+        // https://github.com/joemccann/dillinger/issues/90
+        // If filename contains .md or .markdown as extension...
+        var hasMdExtension = /(.md|.markdown)$/.test(profile.current_filename)
+        
+        var postData = 'title=' + encodeURIComponent(profile.current_filename)
+          + (hasMdExtension ? '' : '.md') 
+          + '&content=' 
+          + content
 
          $.ajax({
           dataType: 'json',
