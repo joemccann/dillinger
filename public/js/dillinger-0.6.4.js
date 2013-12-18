@@ -641,13 +641,13 @@ $(function(){
     }
 
     var config = {
-                      type: 'POST',
-                      data: "unmd=" + encodeURIComponent(unmd),
-                      dataType: 'json',
-                      url: '/factory/fetch_pdf',
-                      error: _failHandler,
-                      success: _doneHandler
-                    }
+                  type: 'POST',
+                  data: "unmd=" + encodeURIComponent(unmd),
+                  dataType: 'json',
+                  url: '/factory/fetch_pdf',
+                  error: _failHandler,
+                  success: _doneHandler
+                }
 
     $.ajax(config)
 
