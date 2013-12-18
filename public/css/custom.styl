@@ -1,26 +1,19 @@
 @import 'dillinger-params'
 
+
+bodyTransitionTime = .2s
+mainTransitionTime = .15s
+tr = top .25s ease-out
+
+*
+  outline 0
+
 html
   overflow-y: hidden
 
 nav
   text-align left
   padding 12px 20px 12px 9px
-
-.relative
-  position relative
-
-.vendor, .save
-  padding-left 30px
-
-.icon_vendor
-  position absolute
-
-.icon_vendor.github
-  margin 3px 0 0 6px
-
-.icon_vendor.dropbox
-  margin 6px 0 0 9px
 
 #app_wrap
   top 50px
@@ -29,13 +22,25 @@ nav
   right 10px
   position fixed
 
+noscript
+  z-index 99999
+  position absolute
+  top 30px
+  width 100%
+
+noscript p
+  color #000
+  font-size 24px
+  text-align center
+  padding 10px 0
+
 /* 
 https://github.com/joemccann/dillinger/issues/126
 */
 
 #app_wrap > #editor
   position absolute
-  margin-right: 5px;
+  margin-right: 5px
   top 50px
   left 10px
   bottom 10px
@@ -45,7 +50,7 @@ https://github.com/joemccann/dillinger/issues/126
 
 #app_wrap > #preview
   position absolute
-  margin-left: 5px;
+  margin-left: 5px
   padding 20px
   left 50%
   bottom 10px
@@ -61,181 +66,44 @@ https://github.com/joemccann/dillinger/issues/126
   color blue
 
 #github-button
-  margin: 1% -9px 0 0; 
-  float: right;
-
-.shadowbox
-  margin 0 auto
-  
-.opacity_ten
-  normOpacity(10)
-  
-.opacity_thirty
-  normOpacity(30)
-
-.set_wrap
-  color #CCC
-  display block
-  line-height 27px
-  font-size 0
+  margin: 1% -9px 0 0 
+  float: right
 
 #filename-counter-container
-  position: absolute;
-  left: 10px;
-  top: 5px;
-  padding-right: 15px;
-  width: 50%;
-  z-index: 0;
-  boxSizing();
+  position: absolute
+  left: 10px
+  top: 5px
+  padding-right: 15px
+  width: 50%
+  z-index: 0
+  boxSizing()
 
-
-#filename
+/* Have to scope because someone could type "## filename" */
+#filename-counter-container > #filename
   width 100%
 
-#wordcounter
+#filename-counter-container > #wordcounter
   width 18.5%
   
-#filename > span, #wordcounter
+#filename-counter-container > #filename > span, #wordcounter
   font-size: 16px
   font-style: normal
   background: #F1EEEE
-  height: 30px;
-  line-height: 30px;
-  padding: 0 6px;
+  height: 30px
+  line-height: 30px
+  padding: 0 6px
   display inline-block
   boxSizing()
 
-#filename > span
+#filename-counter-container > #filename > span
   width 100%
   &:focus
     outline: 0
 
-#filename.show-word-count-filename-adjust
+#filename-counter-container > #filename.show-word-count-filename-adjust
   width 80%
   display inline-block
-  margin 0 1% 0 0
-
-
-#settings
-  background url(settingsImg)
-  background-position 0 0
-  display block
-  font-size 0
-  height 17px
-  width 16px
-  position absolute
-  right 35px
-  top 15px
-  
-.cont
-  position absolute
-  right 25px
-  top 12px
-  display inline-block
-  font-family arial, sans-serif
-  height 29px
-  padding 0
-  margin 0
-  text-align right
-  white-space nowrap
-  width 88px
-  z-index auto
-
-        
-.core_inner
-  userSelect()
-  gradient-vertical(rgb(245,245,245), rgb(241,241,241))
-  border-color rgba(0, 0, 0, 0.097)
-  border-style solid
-  border-top-width 1px
-  color #444
-  cursor default
-  display inline-block
-  font-family arial, sans-serif
-  font-size 11px
-  font-weight bold
-  height 27px
-  line-height 27px
-  margin-left 16px
-  outline-color #444
-  outline-style none
-  outline-width 0px
-  padding-left 8px
-  padding-right 8px
-  position relative
-  text-align center
-  white-space nowrap
-  width 54px
-  z-index 2
-
-.core_menu
-  userSelect()
-  gradient-vertical(rgb(245,245,245), rgb(241,241,241))
-  border-color rgba(0, 0, 0, 0.0976562)
-  border-style solid
-  border-width 1px
-  color #444
-  cursor default
-  display inline-block
-  font-family arial, sans-serif
-  font-size 11px
-  font-weight bold
-  height auto
-  line-height 27px
-  margin-left 0
-  padding-bottom 0px
-  padding-left 8px
-  padding-right 22px
-  position relative
-  text-align center
-  white-space nowrap
-  width 100%
-  z-index 2
-  display none
-  right 28px
-
-.topbar div ul
-  float none
-  margin 2px auto
-
-.topbar div .core_menu ul li
-  display block
-  float none
-  
-        
-.inner_one
-  background url(innerOneImg) no-repeat 0 -21px
-  height 21px
-  width 21px
-  margin-top -3px
-  vertical-align middle
-  opacity .55
-  cursor default
-  font-size 11px
-  font-weight bold
-  text-align center
-  line-height 27px
-  color #444
-  position relative
-  display inline-block
-  
-
-.inner_two
-  opacity .55
-  margin-top -3px
-  vertical-align middle
-  background url(innerTwoImg) no-repeat 0 1px
-  position relative
-  display inline-block
-  height 6px
-  width 7px
-  font-size 0
-  margin-left 3px
-  color #444
-  cursor default
-  font-weight bold
-  text-align center
-  line-height 27px
+  margin 0 1% 0 0        
 
 #notify_container
   userSelect(none)
@@ -263,20 +131,6 @@ https://github.com/joemccann/dillinger/issues/126
   overflow auto
   display none
 
-.modal-body ul
-  margin 0
-  padding 0 0 18px 25px
-  overflow auto
-
-.private_repo
-  background transparent url(/img/icon_lock_16x16.png) no-repeat scroll top left
-
-.private_repo .tree_file
-  padding-left 20px
-
-bodyTransitionTime = .2s
-mainTransitionTime = .15s
-
 #main
   opacity 1
   transition opacity mainTransitionTime linear  
@@ -284,20 +138,10 @@ mainTransitionTime = .15s
   -moz-transition opacity mainTransitionTime linear  
   -o-transition opacity mainTransitionTime linear  
   -ms-transition opacity mainTransitionTime linear  
-  
-.bye
-  opacity 0
+
 
 #main.bye
   opacity 0
-
-.slick
-  opacity 1
-  transition opacity bodyTransitiontime linear  
-  -webkit-transition opacity bodyTransitionTime linear
-  -moz-transition opacity bodyTransitionTime linear  
-  -o-transition opacity bodyTransitionTime linear  
-  -ms-transition opacity bodyTransitionTime linear  
 
 #loading
   position absolute
@@ -321,20 +165,6 @@ mainTransitionTime = .15s
   text-align center
   font-size 18px
 
-noscript
-  z-index 99999
-  position absolute
-  top 30px
-  width 100%
-
-noscript p
-  color #000
-  font-size 24px
-  text-align center
-  padding 10px 0
-
-tr = top .25s ease-out
-
 #loading.swift_top
   top -100%
   transition tr  
@@ -351,6 +181,67 @@ tr = top .25s ease-out
   -o-transition tr  
   -ms-transition tr  
   transition tr  
+
+.slick
+  opacity 1
+  transition opacity bodyTransitiontime linear  
+  -webkit-transition opacity bodyTransitionTime linear
+  -moz-transition opacity bodyTransitionTime linear  
+  -o-transition opacity bodyTransitionTime linear  
+  -ms-transition opacity bodyTransitionTime linear    
+
+.bye
+  opacity 0
+
+.modal-body ul
+  margin 0
+  padding 0 0 18px 25px
+  overflow auto
+
+.private_repo
+  background transparent url(/img/icon_lock_16x16.png) no-repeat scroll top left
+
+.private_repo .tree_file
+  padding-left 20px
+
+.topbar div ul
+  float none
+  margin 2px auto
+
+.topbar div .core_menu ul li
+  display block
+  float none
+
+.shadowbox
+  margin 0 auto
+  
+.opacity_ten
+  normOpacity(10)
+  
+.opacity_thirty
+  normOpacity(30)
+
+.set_wrap
+  color #CCC
+  display block
+  line-height 27px
+  font-size 0
+
+.relative
+  position relative
+
+.vendor, .save
+  padding-left 30px
+
+.icon_vendor
+  position absolute
+
+.icon_vendor.github
+  margin 3px 0 0 6px
+
+.icon_vendor.dropbox
+  margin 6px 0 0 9px
+
 
 .slide_out
   margin-top -60px
