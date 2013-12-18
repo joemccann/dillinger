@@ -85,6 +85,10 @@ exports.Dropbox = (function() {
 
       dboxclient.get(pathToMdFile, function(status, reply, metadata) {
 
+        // https://github.com/joemccann/dillinger/issues/64
+        // In case of an empty file...
+        reply = reply ? reply.toString() : ''
+
         return res.json({data: reply.toString()})
 
       })
