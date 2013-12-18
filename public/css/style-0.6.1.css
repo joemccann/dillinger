@@ -4439,6 +4439,10 @@ nav {
   -o-box-flex: 1;
   box-flex: 1;
 }
+#app_wrap > #preview a {
+  text-decoration: underline;
+  color: #00f;
+}
 #github-button {
   margin: 1% -9px 0 0;
   float: right;
