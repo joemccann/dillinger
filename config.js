@@ -1,7 +1,12 @@
-var rc = require('rc');
-var defaultConfig = {
-  // googleWebmasterMeta: 'your google site verification content string - used for enabling Google Webmaster tools on the site',
-};
-module.exports = function() {
-  return rc('dillinger', defaultConfig);
+var rc = require('rc')
+  , defaultConfig = {
+      title: 'Online Markdown Editor - Dillinger, the Last Markdown Editor ever.'
+    , description:  'Dillinger is an online cloud based HTML5 filled Markdown Editor. '+
+                    'Sync with Dropbox, Github and Google Drive. 100% Open Source!'
+    , googleWebmasterMeta: 'DAyGOgtsg8rJpq9VVktKzDkQ1UhXm1FYl8SD47hPkjA'
+  }
+  ;
+
+module.exports = function(){
+  return rc('dillinger', defaultConfig)
 }
