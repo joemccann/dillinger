@@ -1098,6 +1098,13 @@ $(function(){
         LocalFiles.loadFile(fileName)
         return false
       })
+      .on('click', '.delete_local_file', function(){
+        var $parentLi = $(this).parent('li')
+        var fileName = $parentLi.attr('data-file-name')
+        LocalFiles.deleteFile(fileName)
+        $parentLi.remove()
+        return false
+      })
 
       // Check for support of drag/drop
       if('draggable' in document.createElement('span')){
@@ -1150,6 +1157,7 @@ $(function(){
           profileUpdated: "Profile updated"
           , profileCleared: "Profile cleared"
           , docSavedLocal: "Document saved locally"
+          , docDeletedLocal: "Document deleted from local storage"
           , docSavedServer: "Document saved on our server"
           , docSavedDropbox: "Document saved on dropbox"
           , dropboxImportNeeded: "Please import a file from dropbox first."
@@ -1849,7 +1857,7 @@ $(function(){
       files.forEach(function(item){
         // var name = item.path.split('/').pop()
         list += '<li data-file-name="'
-              + item + '"><a class="local_file" href="#">'
+              + item + '"><a class="delete_local_file"><i class="icon-remove"></i></a><a class="local_file" href="#">'
               + item + '</a></li>'
       })
 
@@ -1898,6 +1906,12 @@ $(function(){
 
         updateUserProfile(saveObj)
         Notifier.showMessage(Notifier.messages.docSavedLocal)
+      },
+      deleteFile: function(fileName){
+        var files = profile.local_files;
+        delete profile.local_files[fileName];
+        updateUserProfile()
+        Notifier.showMessage(Notifier.messages.docDeletedLocal)
       }
     } // end return obj
   })() // end IIFE

@@ -64,6 +64,37 @@
 .modal-body
   padding: 15px
 
+  ul
+    list-style-type none
+    margin 0
+    padding 0
+
+    li
+      border-bottom 1px solid #ccc
+      margin 5px 0
+
+    li:last-child
+      border none
+
+    li a
+      text-decoration none
+      color #000
+
+      &.delete_local_file
+        float: right
+        background none
+
+        &:hover
+          background none
+          color #f00
+
+        &:hover:before
+          content "Delete "
+
+      &:hover
+        background #f6f6f6
+
+
 #myModalBody {
     position: absolute;
     width: 565px;
