@@ -987,6 +987,13 @@ $(function(){
         return false;
       })
 
+    $('#save_local_file').
+      on('click', function(){
+        LocalFiles.saveFile();
+        $('.dropdown').removeClass('open')
+        return false;
+      })
+
   } // end bindNav()
 
   /**
@@ -1877,9 +1884,19 @@ $(function(){
         setCurrentFilenameField()
         editor.getSession().setValue(profile.local_files[fileName])
         previewMd()
+      },
+      saveFile: function(){
+        var fileName = getCurrentFilenameFromField()
+        var md = editor.getSession().getValue()
+        var saveObj = { local_files: { } }
+        saveObj.local_files[fileName] = md
+
+        updateUserProfile(saveObj)
+        Notifier.showMessage(Notifier.messages.docSavedLocal)
       }
     } // end return obj
   })() // end IIFE
+  window.foo = LocalFiles.saveFile
 
   init()
 
