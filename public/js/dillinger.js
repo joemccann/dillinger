@@ -21,6 +21,7 @@ $(function(){
         {
           filepath: '/Dillinger/'
         }
+      , local_files: { "Untitiled Document": "#Hello world" }
       }
 
   // Feature detect ish
@@ -974,6 +975,18 @@ $(function(){
         return false
       })
 
+    $('#new_local_file').
+      on('click', function(){
+        LocalFiles.newFile();
+        return false;
+      })
+
+    $('#import_local_file').
+      on('click', function(){
+        LocalFiles.search();
+        return false;
+      })
+
   } // end bindNav()
 
   /**
@@ -1070,6 +1083,12 @@ $(function(){
         GoogleDrive.get()
         return false
       })
+      .on('click', '.local_file', function(){
+        var fileName = $(this).parent('li').attr('data-file-name')
+        profile.current_filename = $(this).html()
+        LocalFiles.loadFile(fileName)
+        return false
+      })
 
       // Check for support of drag/drop
       if('draggable' in document.createElement('span')){
@@ -1093,7 +1112,7 @@ $(function(){
             // find the first text file
             do {
               file = files[i++]
-            } while (file && file.type.substr(0, 4) !== 'text' 
+            } while (file && file.type.substr(0, 4) !== 'text'
               && file.name.substr(file.name.length - 3) !== '.md')
 
             if (!file) return
@@ -1507,10 +1526,10 @@ $(function(){
         // https://github.com/joemccann/dillinger/issues/90
         // If filename contains .md or .markdown as extension...
         var hasMdExtension = /(.md|.markdown)$/.test(profile.current_filename)
-        
+
         var postData = 'title=' + encodeURIComponent(profile.current_filename)
-          + (hasMdExtension ? '' : '.md') 
-          + '&content=' 
+          + (hasMdExtension ? '' : '.md')
+          + '&content='
           + content
 
          $.ajax({
@@ -1797,6 +1816,70 @@ $(function(){
     } // end return obj
   })() // end IIFE
 
+  // LocalFiles Module
+  var LocalFiles = (function(){
+
+    // Sorting regardless of upper/lowercase
+    // TODO: Let's be DRY and merge this with the
+    // sort method in Github module.
+    function _alphaNumSort(m,n) {
+      var a = m.toLowerCase()
+      var b = n.toLowerCase()
+      if (a === b) { return 0 }
+      if (isNaN(m) || isNaN(n)){ return ( a > b ? 1 : -1)}
+      else {return m-n}
+    }
+
+    function _listMdFiles(files){
+
+      var list = '<ul>'
+
+      // Sort alpha
+      files.sort(_alphaNumSort)
+
+      files.forEach(function(item){
+        // var name = item.path.split('/').pop()
+        list += '<li data-file-name="'
+              + item + '"><a class="local_file" href="#">'
+              + item + '</a></li>'
+      })
+
+      list += '</ul>'
+
+      $('.modal-header h3').text('Your Local Files')
+
+      $('.modal-body').html(list)
+
+      $('#modal-generic').modal({
+        keyboard: true,
+        backdrop: true,
+        show: true
+      })
+
+      return false
+
+    }
+
+    return {
+      newFile: function(){
+      },
+      search: function(){
+        var fileList = Object.keys(profile.local_files);
+        if(fileList.length < 1) {
+          Notifier.showMessage('No files saved locally');
+        } else {
+          _listMdFiles(fileList);
+        }
+      },
+      loadFile: function(fileName){
+        $('#modal-generic').modal('hide')
+        updateFilename(fileName)
+        setCurrentFilenameField()
+        editor.getSession().setValue(profile.local_files[fileName])
+        previewMd()
+      }
+    } // end return obj
+  })() // end IIFE
 
   init()
 
