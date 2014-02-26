@@ -977,20 +977,22 @@ $(function(){
 
     $('#new_local_file').
       on('click', function(){
+        $('.dropdown').removeClass('open')
         LocalFiles.newFile();
         return false;
       })
 
     $('#import_local_file').
       on('click', function(){
+        $('.dropdown').removeClass('open')
         LocalFiles.search();
         return false;
       })
 
     $('#save_local_file').
       on('click', function(){
-        LocalFiles.saveFile();
         $('.dropdown').removeClass('open')
+        LocalFiles.saveFile();
         return false;
       })
 
