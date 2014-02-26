@@ -1869,6 +1869,9 @@ $(function(){
 
     return {
       newFile: function(){
+        updateFilename("")
+        setCurrentFilenameField()
+        editor.getSession().setValue("")
       },
       search: function(){
         var fileList = Object.keys(profile.local_files);
