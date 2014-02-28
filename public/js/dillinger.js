@@ -21,7 +21,7 @@ $(function(){
         {
           filepath: '/Dillinger/'
         }
-      , local_files: { "Untitiled Document": "#Hello world" }
+      , local_files: { "Untitiled Document": "" }
       }
 
   // Feature detect ish
