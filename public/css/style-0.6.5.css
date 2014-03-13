@@ -3048,6 +3048,36 @@ input[type="submit"].btn.small {
 .modal-body {
   padding: 15px;
 }
+.modal-body ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.modal-body ul li {
+  border-bottom: 1px solid #ccc;
+  margin: 5px 0;
+}
+.modal-body ul li:last-child {
+  border: none;
+}
+.modal-body ul li a {
+  text-decoration: none;
+  color: #000;
+}
+.modal-body ul li a.delete_local_file {
+  float: right;
+  background: none;
+}
+.modal-body ul li a.delete_local_file:hover {
+  background: none;
+  color: #f00;
+}
+.modal-body ul li a.delete_local_file:hover:before {
+  content: "Delete ";
+}
+.modal-body ul li a:hover {
+  background: #f6f6f6;
+}
 #myModalBody {
   position: absolute;
   width: 565px;
