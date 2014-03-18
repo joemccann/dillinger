@@ -14,6 +14,18 @@ var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
 if(fs.existsSync(dropbox_config_file)) {
   dropbox_config = JSON.parse( fs.readFileSync( dropbox_config_file, 'utf-8' ) )
   isConfigEnabled = true
+} else if(process.env.dropbox_app_key !== undefined) {
+  dropbox_config = {
+    "app_key": process.env.dropbox_app_key,
+    "app_secret": process.env.dropbox_app_secret,
+    "callback_url": process.env.dropbox_callback_url,
+    "auth_url": "https://www.dropbox.com/1/oauth/authorize",
+    "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
+    "access_token_url": "https://api.dropbox.com/1/oauth/access_token",
+    "collections_url": "https://api-content.dropbox.com/1"
+  };
+  isConfigEnabled = true
+  console.log('Dropbox config found in environment. Plugin enabled. (Key: "' + dropbox_config.app_key + '")');
 } else {
   dropbox_config = {
     "app_key": "YOUR_KEY"
@@ -29,18 +41,18 @@ if(fs.existsSync(dropbox_config_file)) {
 
 exports.Dropbox = (function() {
 
-  var dboxapp = dbox.app({ 
-  	"app_key": dropbox_config.app_key, 
-  	"app_secret": dropbox_config.app_secret, 
+  var dboxapp = dbox.app({
+  	"app_key": dropbox_config.app_key,
+  	"app_secret": dropbox_config.app_secret,
   	"root": "dropbox" })
 
-  
+
   return {
-    isConfigured: isConfigEnabled, 
+    isConfigured: isConfigEnabled,
     config: dropbox_config,
     getNewRequestToken: function(req, res, cb) {
 
-      // Create your auth_url for the view   
+      // Create your auth_url for the view
       dboxapp.requesttoken(function(status, request_token){
 
         return cb(status, request_token)
@@ -55,7 +67,7 @@ exports.Dropbox = (function() {
       dboxapp.accesstoken(req_token, function(status, access_token){
 	      return cb(status, access_token)
       })
-      
+
     }, // end getRemoteAccessToken()
     getAccountInfo: function(dropbox_obj, cb) {
       var access_token = {oauth_token : dropbox_obj.oauth.access_token, oauth_token_secret : dropbox_obj.oauth.access_token_secret};
@@ -65,22 +77,22 @@ exports.Dropbox = (function() {
       dboxclient.account(function(status, reply){
         return cb(status, reply)
       })
-      
+
     }, // end getAccountInfo()
     fetchDropboxFile: function(req, res) {
-      
+
       if(!req.session.isDropboxSynced){
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
-      } 
+      }
 
       var access_token = {
-      	oauth_token : req.session.dropbox.oauth.access_token, 
+      	oauth_token : req.session.dropbox.oauth.access_token,
       	oauth_token_secret : req.session.dropbox.oauth.access_token_secret
      	}
 
       var dboxclient = dboxapp.client(access_token)
-                  
+
       var pathToMdFile = req.body.mdFile
 
       dboxclient.get(pathToMdFile, function(status, reply, metadata) {
@@ -95,9 +107,9 @@ exports.Dropbox = (function() {
 
     },
     searchForMdFiles: function(dropbox_obj, cb) {
-      
+
       // *sigh* http://forums.dropbox.com/topic.php?id=50266&replies=1
-      
+
       var access_token = {oauth_token : dropbox_obj.oauth.access_token, oauth_token_secret : dropbox_obj.oauth.access_token_secret};
 
       var dboxclient = dboxapp.client(access_token)
@@ -133,14 +145,14 @@ exports.Dropbox = (function() {
         })
 
       })
-        
+
     },
     saveToDropbox: function(req, res){
 
       if(!req.session.isDropboxSynced){
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
-      } 
+      }
 
       var access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret};
 
@@ -173,6 +185,6 @@ exports.Dropbox = (function() {
     } // end handleIncomingFlowRequest
 
   }
-  
+
 })()
 
