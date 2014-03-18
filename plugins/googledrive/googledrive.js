@@ -12,6 +12,16 @@ var configFile = path.resolve(__dirname, 'googledrive-config.json')
 if (fs.existsSync(configFile)) {
   config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
   isConfigEnabled = true;
+} else if(process.env.googledrive_client_id !== undefined) {
+  config = {
+    "client_id": process.env.googledrive_client_id,
+    "client_secret": process.env.googledrive_client_secret,
+    "redirect_uri": process.env.googledrive_redirect_uri
+  };
+
+  isConfigEnabled = true;
+  console.log('Google Drive config found in environment. Plugin enabled. (Key: "' + config.client_id + '")');
+
 } else {
   config = {
     "client_id": "CLIENT_ID"
@@ -85,7 +95,7 @@ var GoogleDrive = {
                'Content-Type: application/json; charset=UTF-8\n\n' +
                JSON.stringify({ title: title }) + '\n\n' +
                '--' + boundaryTag + '\n' +
-               'Content-Type: text/x-markdown\n\n' + 
+               'Content-Type: text/x-markdown\n\n' +
                content + '\n\n' +
                '--' + boundaryTag + '--';
 
