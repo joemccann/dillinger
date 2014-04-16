@@ -1006,8 +1006,14 @@ $(function(){
   function bindKeyboard(){
     // CMD+s TO SAVE DOC
     key('command+s, ctrl+s', function(e){
-     saveFile(true)
-     e.preventDefault() // so we don't save the webpage - native browser functionality
+      saveFile(true);
+      e.preventDefault(); // so we don't save the webpage - native browser functionality
+    })
+
+    key('enter', function(e) {
+      if (e.target.parentNode && e.target.parentNode.id === "filename") {
+        e.preventDefault();
+      }
     })
 
     var saveCommand = {
