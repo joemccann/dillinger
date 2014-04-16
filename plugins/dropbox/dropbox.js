@@ -35,17 +35,16 @@ if(fs.existsSync(dropbox_config_file)) {
   , "request_token_url": "https://api.dropbox.com/1/oauth/request_token"
   , "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
   , "collections_url": "https://api-content.dropbox.com/1"
-  }
-  console.warn('Dropbox config not found at ' + dropbox_config_file + '. Plugin disabled.')
+  };
+  console.warn('Dropbox config not found at ' + dropbox_config_file + '. Plugin disabled.');
 }
 
 exports.Dropbox = (function() {
 
   var dboxapp = dbox.app({
-  	"app_key": dropbox_config.app_key,
-  	"app_secret": dropbox_config.app_secret,
-  	"root": "dropbox" })
-
+    "app_key": dropbox_config.app_key,
+    "app_secret": dropbox_config.app_secret,
+    "root": "dropbox" });
 
   return {
     isConfigured: isConfigEnabled,
@@ -65,7 +64,7 @@ exports.Dropbox = (function() {
       var req_token = {oauth_token : request_token, oauth_token_secret : request_token_secret}
 
       dboxapp.accesstoken(req_token, function(status, access_token){
-	      return cb(status, access_token)
+        return cb(status, access_token)
       })
 
     }, // end getRemoteAccessToken()
@@ -87,9 +86,9 @@ exports.Dropbox = (function() {
       }
 
       var access_token = {
-      	oauth_token : req.session.dropbox.oauth.access_token,
-      	oauth_token_secret : req.session.dropbox.oauth.access_token_secret
-     	}
+        oauth_token : req.session.dropbox.oauth.access_token,
+        oauth_token_secret : req.session.dropbox.oauth.access_token_secret
+      }
 
       var dboxclient = dboxapp.client(access_token)
 
@@ -121,11 +120,11 @@ exports.Dropbox = (function() {
 
       dboxclient.search("/", ".md", options, function(status, reply) {
         var regex = /.*\.md$/i
-        	,	files = []
-        	;
+          , files = []
+          ;
 
         if(status > 399 || !reply){
-        	return cb(new Error('Bad response.'))
+          return cb(new Error('Bad response.'))
         }
 
         reply.forEach(function(item){
@@ -170,16 +169,16 @@ exports.Dropbox = (function() {
     }, // end saveToDropbox
     handleIncomingFlowRequest: function(req, res, cb){
 
-    	var	filePath = req.query['path']
-    		,	access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
-    		,	dboxclient = dboxapp.client(access_token)
+      var filePath = req.query['path']
+        , access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
+        , dboxclient = dboxapp.client(access_token)
 
-    	if(!access_token){
-	    	return res.redirect('/redirect/dropbox')
-    	}
+      if(!access_token){
+        return res.redirect('/redirect/dropbox')
+      }
 
       dboxclient.get(filePath, function(status, reply, metadata){
-	      return res.json({data: reply.toString(), filename: path.basename(filePath)})
+        return res.json({data: reply.toString(), filename: path.basename(filePath)})
       })
 
     } // end handleIncomingFlowRequest
