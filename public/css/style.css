@@ -181,6 +181,100 @@ textarea:invalid {
 .fixed-container:after {
   clear: both;
 }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+}
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+a:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+a:hover,
+a:active {
+  outline: 0;
+}
+sub,
+sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+}
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font-size: 100%;
+  vertical-align: middle;
+}
+button,
+input {
+  *overflow: visible;
+  line-height: normal;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
 .clearfix {
   *zoom: 1;
 }
@@ -613,6 +707,113 @@ pre code {
   max-height: 340px;
 overflow-y
 scroll
+}
+.hljs {
+  display: block;
+  padding: 0.5em;
+  color: #333;
+  background: #f8f8f8;
+}
+.hljs-comment,
+.hljs-template_comment,
+.diff .hljs-header,
+.hljs-javadoc {
+  color: #998;
+  font-style: italic;
+}
+.hljs-keyword,
+.css .rule .hljs-keyword,
+.hljs-winutils,
+.javascript .hljs-title,
+.nginx .hljs-title,
+.hljs-subst,
+.hljs-request,
+.hljs-status {
+  color: #333;
+  font-weight: bold;
+}
+.hljs-number,
+.hljs-hexcolor,
+.ruby .hljs-constant {
+  color: #099;
+}
+.hljs-string,
+.hljs-tag .hljs-value,
+.hljs-phpdoc,
+.tex .hljs-formula {
+  color: #d14;
+}
+.hljs-title,
+.hljs-id,
+.coffeescript .hljs-params,
+.scss .hljs-preprocessor {
+  color: #900;
+  font-weight: bold;
+}
+.javascript .hljs-title,
+.lisp .hljs-title,
+.clojure .hljs-title,
+.hljs-subst {
+  font-weight: normal;
+}
+.hljs-class .hljs-title,
+.haskell .hljs-type,
+.vhdl .hljs-literal,
+.tex .hljs-command {
+  color: #458;
+  font-weight: bold;
+}
+.hljs-tag,
+.hljs-tag .hljs-title,
+.hljs-rules .hljs-property,
+.django .hljs-tag .hljs-keyword {
+  color: #000080;
+  font-weight: normal;
+}
+.hljs-attribute,
+.hljs-variable,
+.lisp .hljs-body {
+  color: #008080;
+}
+.hljs-regexp {
+  color: #009926;
+}
+.hljs-symbol,
+.ruby .hljs-symbol .hljs-string,
+.lisp .hljs-keyword,
+.tex .hljs-special,
+.hljs-prompt {
+  color: #990073;
+}
+.hljs-built_in,
+.lisp .hljs-title,
+.clojure .hljs-built_in {
+  color: #0086b3;
+}
+.hljs-preprocessor,
+.hljs-pragma,
+.hljs-pi,
+.hljs-doctype,
+.hljs-shebang,
+.hljs-cdata {
+  color: #999;
+  font-weight: bold;
+}
+.hljs-deletion {
+  background: #fdd;
+}
+.hljs-addition {
+  background: #dfd;
+}
+.diff .hljs-change {
+  background: #0086b3;
+}
+.hljs-chunk {
+  color: #aaa;
+}
+pre,
+code {
+  font-family: Consolas, "Liberation Mono", Courier, monospace !important;
 }
 form {
   margin: 0 0 18px;
@@ -1154,8 +1355,6 @@ select:focus:required:invalid:focus {
 .form-inline .input-prepend {
   display: inline-block;
 }
-.form-search .input-append .add-on,
-.form-inline .input-prepend .add-on,
 .form-search .input-append .add-on,
 .form-inline .input-prepend .add-on {
   vertical-align: middle;
@@ -2847,6 +3046,11 @@ input[type="submit"].btn.small {
 .breadcrumb {
   padding: 7px 14px;
   margin: 0 0 18px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f5f5f5));
+  background-image: -webkit-linear-gradient(top, #fff 0%, #f5f5f5 100%);
+  background-image: -moz-linear-gradient(top, #fff 0%, #f5f5f5 100%);
+  background-image: -ms-linear-gradient(top, #fff 0%, #f5f5f5 100%);
+  background-image: -o-linear-gradient(top, #fff 0%, #f5f5f5 100%);
   background-color: #f5f5f5;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#fff), to(#f5f5f5));
@@ -2855,11 +3059,6 @@ input[type="submit"].btn.small {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #f5f5f5));
   background-image: -webkit-linear-gradient(top, #fff, #f5f5f5);
   background-image: -o-linear-gradient(top, #fff, #f5f5f5);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f5f5f5));
-  background-image: -webkit-linear-gradient(top, #fff 0%, #f5f5f5 100%);
-  background-image: -moz-linear-gradient(top, #fff 0%, #f5f5f5 100%);
-  background-image: -ms-linear-gradient(top, #fff 0%, #f5f5f5 100%);
-  background-image: -o-linear-gradient(top, #fff 0%, #f5f5f5 100%);
   background-image: linear-gradient(top, #fff 0%, #f5f5f5 100%);
   border: 1px solid #ddd;
   -webkit-border-radius: 3px;
@@ -3421,6 +3620,11 @@ a.thumbnail:hover {
   overflow: hidden;
   height: 18px;
   margin-bottom: 18px;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f5f5f5), color-stop(1, #f9f9f9));
+  background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
+  background-image: -moz-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
+  background-image: -ms-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
+  background-image: -o-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
   background-color: #f9f9f9;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#f5f5f5), to(#f9f9f9));
@@ -3429,11 +3633,6 @@ a.thumbnail:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #f9f9f9));
   background-image: -webkit-linear-gradient(top, #f5f5f5, #f9f9f9);
   background-image: -o-linear-gradient(top, #f5f5f5, #f9f9f9);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f5f5f5), color-stop(1, #f9f9f9));
-  background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
-  background-image: -moz-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
-  background-image: -ms-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
-  background-image: -o-linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
   background-image: linear-gradient(top, #f5f5f5 0%, #f9f9f9 100%);
   -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
   -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
@@ -3449,6 +3648,11 @@ a.thumbnail:hover {
   font-size: 12px;
   text-align: center;
   text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #149bdf), color-stop(1, #0480be));
+  background-image: -webkit-linear-gradient(top, #149bdf 0%, #0480be 100%);
+  background-image: -moz-linear-gradient(top, #149bdf 0%, #0480be 100%);
+  background-image: -ms-linear-gradient(top, #149bdf 0%, #0480be 100%);
+  background-image: -o-linear-gradient(top, #149bdf 0%, #0480be 100%);
   background-color: #0480be;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#149bdf), to(#0480be));
@@ -3457,11 +3661,6 @@ a.thumbnail:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #149bdf), color-stop(100%, #0480be));
   background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
   background-image: -o-linear-gradient(top, #149bdf, #0480be);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #149bdf), color-stop(1, #0480be));
-  background-image: -webkit-linear-gradient(top, #149bdf 0%, #0480be 100%);
-  background-image: -moz-linear-gradient(top, #149bdf 0%, #0480be 100%);
-  background-image: -ms-linear-gradient(top, #149bdf 0%, #0480be 100%);
-  background-image: -o-linear-gradient(top, #149bdf 0%, #0480be 100%);
   background-image: linear-gradient(top, #149bdf 0%, #0480be 100%);
   -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
   -moz-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
@@ -3476,12 +3675,12 @@ a.thumbnail:hover {
   transition: width 0.6s ease;
 }
 .progress-striped .bar {
-  background-color: #62c462;
   background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(255,255,255,0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255,255,255,0.15)), color-stop(0.75, rgba(255,255,255,0.15)), color-stop(0.75, transparent), color-stop(1, transparent));
   background-image: -webkit-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -moz-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -ms-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -o-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
+  background-color: #62c462;
   background-image: linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   -webkit-background-size: 40px 40px;
   -moz-background-size: 40px 40px;
@@ -3494,6 +3693,11 @@ a.thumbnail:hover {
   animation: progress-bar-stripes 2s linear infinite;
 }
 .progress-danger .bar {
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ee5f5b), color-stop(1, #c43c35));
+  background-image: -webkit-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
+  background-image: -moz-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
+  background-image: -ms-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
+  background-image: -o-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
   background-color: #c43c35;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#ee5f5b), to(#c43c35));
@@ -3502,23 +3706,23 @@ a.thumbnail:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ee5f5b), color-stop(100%, #c43c35));
   background-image: -webkit-linear-gradient(top, #ee5f5b, #c43c35);
   background-image: -o-linear-gradient(top, #ee5f5b, #c43c35);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ee5f5b), color-stop(1, #c43c35));
-  background-image: -webkit-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
-  background-image: -moz-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
-  background-image: -ms-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
-  background-image: -o-linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
   background-image: linear-gradient(top, #ee5f5b 0%, #c43c35 100%);
 }
 .progress-danger.progress-striped .bar {
-  background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(255,255,255,0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255,255,255,0.15)), color-stop(0.75, rgba(255,255,255,0.15)), color-stop(0.75, transparent), color-stop(1, transparent));
   background-image: -webkit-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -moz-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -ms-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -o-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
+  background-color: #ee5f5b;
   background-image: linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
 }
 .progress-success .bar {
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #62c462), color-stop(1, #57a957));
+  background-image: -webkit-linear-gradient(top, #62c462 0%, #57a957 100%);
+  background-image: -moz-linear-gradient(top, #62c462 0%, #57a957 100%);
+  background-image: -ms-linear-gradient(top, #62c462 0%, #57a957 100%);
+  background-image: -o-linear-gradient(top, #62c462 0%, #57a957 100%);
   background-color: #57a957;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#62c462), to(#57a957));
@@ -3527,23 +3731,23 @@ a.thumbnail:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #62c462), color-stop(100%, #57a957));
   background-image: -webkit-linear-gradient(top, #62c462, #57a957);
   background-image: -o-linear-gradient(top, #62c462, #57a957);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #62c462), color-stop(1, #57a957));
-  background-image: -webkit-linear-gradient(top, #62c462 0%, #57a957 100%);
-  background-image: -moz-linear-gradient(top, #62c462 0%, #57a957 100%);
-  background-image: -ms-linear-gradient(top, #62c462 0%, #57a957 100%);
-  background-image: -o-linear-gradient(top, #62c462 0%, #57a957 100%);
   background-image: linear-gradient(top, #62c462 0%, #57a957 100%);
 }
 .progress-success.progress-striped .bar {
-  background-color: #62c462;
   background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(255,255,255,0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255,255,255,0.15)), color-stop(0.75, rgba(255,255,255,0.15)), color-stop(0.75, transparent), color-stop(1, transparent));
   background-image: -webkit-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -moz-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -ms-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -o-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
+  background-color: #62c462;
   background-image: linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
 }
 .progress-info .bar {
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5bc0de), color-stop(1, #339bb9));
+  background-image: -webkit-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
+  background-image: -moz-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
+  background-image: -ms-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
+  background-image: -o-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
   background-color: #339bb9;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#5bc0de), to(#339bb9));
@@ -3552,20 +3756,15 @@ a.thumbnail:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5bc0de), color-stop(100%, #339bb9));
   background-image: -webkit-linear-gradient(top, #5bc0de, #339bb9);
   background-image: -o-linear-gradient(top, #5bc0de, #339bb9);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5bc0de), color-stop(1, #339bb9));
-  background-image: -webkit-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
-  background-image: -moz-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
-  background-image: -ms-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
-  background-image: -o-linear-gradient(top, #5bc0de 0%, #339bb9 100%);
   background-image: linear-gradient(top, #5bc0de 0%, #339bb9 100%);
 }
 .progress-info.progress-striped .bar {
-  background-color: #5bc0de;
   background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(255,255,255,0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255,255,255,0.15)), color-stop(0.75, rgba(255,255,255,0.15)), color-stop(0.75, transparent), color-stop(1, transparent));
   background-image: -webkit-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -moz-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -ms-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
   background-image: -o-linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
+  background-color: #5bc0de;
   background-image: linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
 }
 @-moz-keyframes progress-bar-stripes {
@@ -4537,6 +4736,11 @@ noscript p {
   -moz-user-select: none;
   width: 160px;
   margin: 0 auto;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cfc), color-stop(1, #6c6));
+  background-image: -webkit-linear-gradient(top, #cfc 0%, #6c6 100%);
+  background-image: -moz-linear-gradient(top, #cfc 0%, #6c6 100%);
+  background-image: -ms-linear-gradient(top, #cfc 0%, #6c6 100%);
+  background-image: -o-linear-gradient(top, #cfc 0%, #6c6 100%);
   background-color: #6c6;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#cfc), to(#6c6));
@@ -4545,12 +4749,11 @@ noscript p {
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cfc), color-stop(100%, #6c6));
   background-image: -webkit-linear-gradient(top, #cfc, #6c6);
   background-image: -o-linear-gradient(top, #cfc, #6c6);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cfc), color-stop(1, #6c6));
-  background-image: -webkit-linear-gradient(top, #cfc 0%, #6c6 100%);
-  background-image: -moz-linear-gradient(top, #cfc 0%, #6c6 100%);
-  background-image: -ms-linear-gradient(top, #cfc 0%, #6c6 100%);
-  background-image: -o-linear-gradient(top, #cfc 0%, #6c6 100%);
   background-image: linear-gradient(top, #cfc 0%, #6c6 100%);
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: -o-box;
   display: -webkit-box;
   -webkit-box-orient: horizontal;
   -webkit-box-pack: center;
@@ -4559,10 +4762,6 @@ noscript p {
   -moz-box-orient: horizontal;
   -moz-box-pack: center;
   -moz-box-align: center;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: -o-box;
   display: box;
   -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;

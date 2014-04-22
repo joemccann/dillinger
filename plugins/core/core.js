@@ -11,9 +11,12 @@ markdown.setOptions({
   tables: true,
   breaks: false,
   pedantic: false,
-  sanitize: false,
+  sanitize: true,
   smartLists: true,
-  smartypants: false
+  smartypants: false,
+  highlighter: function(code) {
+    return require('highlight.js').highlightAuto(code).value;
+  }
 })
 
 

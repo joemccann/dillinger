@@ -43,8 +43,9 @@
     "lodash": ">=0.6.1",
     "dbox": "0.6.3",
     "googleapis": "0.2.12-alpha",
-    "marked": "~0.2.9",
-    "phantomjs": "~1.9.0-6"
+    "marked": "^0.3.2",
+    "phantomjs": "~1.9.0-6",
+    "highlight.js": "~8.0.0"
   },
   "devDependencies": {
     "smoosh": ">=0.3.2",
