@@ -25,6 +25,10 @@ exports.Core = (function(){
   function _generateRandomMdFilename(ext){
     return 'dillinger_' +(new Date()).toISOString().replace(/[\.:-]/g, "_")+ '.' + ext
   }
+
+  function _getFullHtml(str){
+    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Exported HTML</title></head><body>\n' + markdown(str) + '\n</body></html>'
+  }
   
   function _getHtml(str){
     return markdown(str) 
@@ -95,7 +99,7 @@ exports.Core = (function(){
         , error: false
         }
 
-      var html = _getHtml(req.body.unmd)  
+      var html = _getFullHtml(req.body.unmd)  
 
       var name = _generateRandomMdFilename('html') 
 
@@ -165,7 +169,7 @@ exports.Core = (function(){
       , error: false
       }
 
-      var html = _getHtml(unmd)
+      var html = _getFullHtml(unmd)
       var temp = path.resolve(__dirname, '../../public/files/pdf/temp.html')
 
       fs.writeFile( temp, html, 'utf8', function(err, data){
