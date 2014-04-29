@@ -1070,6 +1070,9 @@ $(function() {
 
         return false
       })
+      .on('click', '.github_user', function() {
+        Github.fetchRepos()
+      })
       .on('click', '.dropbox_file', function() {
 
         // We stash the current filename in the local profile only; not in localStorage.
@@ -1274,7 +1277,7 @@ $(function() {
     // Show a list of branches
     function _listBranches(repoName, branches) {
 
-      var list = ''
+      var list = '<li class="github_user"><a href="#">Back to repositories...</a></li>'
 
       branches.forEach(function(item) {
         var name = item.name
@@ -1293,20 +1296,25 @@ $(function() {
     }
 
     // Show a list of tree files
-    function _listTreeFiles(repoName, treefiles){
+    function _listTreeFiles(repoName, commitSha, treefiles) {
 
       var mdFiles = _extractMdFiles(repoName, treefiles)
-        , list = ''
+        , list = '<li class="refresh_branches" data-repo-name="' + repoName + '"><a class="repo" href="#">Back to branches in ' + repoName + '...</a></li>'
 
-      mdFiles.forEach(function(item){
-        // add class to <li> if private
-        list += Github.isRepoPrivate
-                ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
-                : '<li data-tree-file="' + item.link + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
+      if (mdFiles.length === 0) {
+        list += '<li class="no_files">No Markdown files in this branch</li>'
+      }
+      else {
+        mdFiles.forEach(function(item) {
+          // add class to <li> if private
+          list += Github.isRepoPrivate
+                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  : '<li data-tree-file="' + item.link + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
 
-      })
+        });
+      }
 
-      $('.modal-header h3').text(repoName)
+      $('.modal-header h3').text(repoName + " > " + Github.currentBranch)
 
       $('.modal-body')
         .find('ul')
@@ -1403,7 +1411,7 @@ $(function() {
             $('#modal-generic').modal('hide')
           }
           else {
-            _listTreeFiles(repoName, response.tree)
+            _listTreeFiles(repoName, sha, response.tree)
           } // end else
         } // end done handler
 
