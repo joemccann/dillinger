@@ -10,7 +10,7 @@ var configFile = path.resolve(__dirname, 'googledrive-config.json')
   , client = null;
 
 if (fs.existsSync(configFile)) {
-  config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+  config = require(configFile);
   isConfigEnabled = true;
 } else if(process.env.googledrive_client_id !== undefined) {
   config = {

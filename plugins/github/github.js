@@ -9,7 +9,7 @@ var github_config_file = path.resolve(__dirname, 'github-config.json')
 // ^^^helps with the home page view; should we show the github dropdown?
 
 if(fs.existsSync(github_config_file)) {
-  github_config = JSON.parse( fs.readFileSync( github_config_file, 'utf-8' ) );
+  github_config = require(github_config_file);
   isConfigEnabled = true;
 } else if(process.env.github_client_id !== undefined) {
     github_config = {

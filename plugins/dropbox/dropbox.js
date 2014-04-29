@@ -12,8 +12,8 @@ var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
 // ^^^helps with the home page view; should we show the dropbox dropdown?
 
 if(fs.existsSync(dropbox_config_file)) {
-  dropbox_config = JSON.parse( fs.readFileSync( dropbox_config_file, 'utf-8' ) )
-  isConfigEnabled = true
+  dropbox_config = require(dropbox_config_file);
+  isConfigEnabled = true;
 } else if(process.env.dropbox_app_key !== undefined) {
   dropbox_config = {
     "app_key": process.env.dropbox_app_key,
