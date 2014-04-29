@@ -250,8 +250,8 @@ exports.import_github_file = function(req,res){
 
 exports.save_github = function(req,res){
 
-  Github.saveToDropbox(req, res)
-  
+  Github.saveToGithub(req, res)
+
 }
 
 /* End Github stuff */
