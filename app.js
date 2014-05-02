@@ -106,13 +106,13 @@ app.post('/save/googledrive', routes.save_googledrive);
 
 /* Dillinger Actions */
 
-// save a markdown file and send header to download it directly as response 
+// save a markdown file and send header to download it directly as response
 app.post('/factory/fetch_markdown', routes.fetch_md)
 
 // Route to handle download of md file
 app.get('/files/md/:mdid', routes.download_md)
 
-// Save an html file and send header to download it directly as response 
+// Save an html file and send header to download it directly as response
 app.post('/factory/fetch_html', routes.fetch_html)
 
 app.post('/factory/fetch_html_direct', routes.fetch_html_direct)

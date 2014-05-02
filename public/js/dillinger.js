@@ -9,8 +9,7 @@ $(function() {
         theme: 'ace/theme/idle_fingers'
       , showPaper: false
       , currentMd: ''
-      , autosave:
-        {
+      , autosave: {
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
         }
@@ -79,21 +78,21 @@ $(function() {
    * @param {Function} Optional callback to be executed after the script loads.
    * @return {void}
    */
-  function asyncLoad(filename,cb) {
-    (function(d,t) {
+  function asyncLoad(filename, cb) {
+    (function(d, t) {
 
       var leScript = d.createElement(t)
         , scripts = d.getElementsByTagName(t)[0]
 
       leScript.async = 1
       leScript.src = filename
-      scripts.parentNode.insertBefore(leScript,scripts)
+      scripts.parentNode.insertBefore(leScript, scripts)
 
       leScript.onload = function() {
         cb && cb()
       }
 
-    }(document,'script'))
+    }(document, 'script'))
   }
 
   /**
@@ -212,7 +211,7 @@ $(function() {
    * @return {String}
    */
   function generateRandomFilename(ext) {
-    return 'dillinger_' +(new Date()).toISOString().replace(/[\.:-]/g, "_")+ '.' + ext
+    return 'dillinger_' + (new Date()).toISOString().replace(/[\.:-]/g, "_") + '.' + ext
   }
 
 
@@ -301,8 +300,8 @@ $(function() {
       , smartypants: false
       , langPrefix: 'lang-'
       , highlight: function (code) {
-        return hljs.highlightAuto(code).value;
-      }
+          return hljs.highlightAuto(code).value;
+        }
       })
 
       converter = marked
@@ -408,7 +407,7 @@ $(function() {
    */
   function saveFile(isManual) {
 
-    updateUserProfile({currentMd: editor.getSession().getValue()})
+    updateUserProfile({ currentMd: editor.getSession().getValue() })
 
     isManual && Notifier.showMessage(Notifier.messages.docSavedLocal)
 
@@ -421,15 +420,15 @@ $(function() {
    */
   function autoSave() {
 
-    if(profile.autosave.enabled) {
-      autoInterval = setInterval( function() {
+    if (profile.autosave.enabled) {
+      autoInterval = setInterval(function() {
         // firefox barfs if I don't pass in anon func to setTimeout.
         saveFile()
       }, profile.autosave.interval)
 
     }
-    else{
-      clearInterval( autoInterval )
+    else {
+      clearInterval(autoInterval)
     }
 
   }
@@ -459,19 +458,21 @@ $(function() {
    function changeTheme(e) {
      // check for same theme
      var $target = $(e.target)
-     if( $target.attr('data-value') === profile.theme) { return }
-     else{
-       // add/remove class
-       $theme.find('li > a.selected').removeClass('selected')
-       $target.addClass('selected')
-       // grabnew theme
-       var newTheme = $target.attr('data-value')
-       $(e.target).blur()
-       fetchTheme(newTheme, function() {
-         Notifier.showMessage(Notifier.messages.profileUpdated)
-       })
-      }
-   }
+     if ($target.attr('data-value') === profile.theme) { return }
+     else {
+      // add/remove class
+      $theme.find('li > a.selected').removeClass('selected')
+      $target.addClass('selected')
+      // grabnew theme
+      var newTheme = $target.attr('data-value')
+
+      $(e.target).blur()
+
+      fetchTheme(newTheme, function() {
+        Notifier.showMessage(Notifier.messages.profileUpdated)
+      })
+    }
+  }
 
   // TODO: Maybe we just load them all once and stash in appcache?
   /**
@@ -544,13 +545,13 @@ $(function() {
   function updateFilename(str) {
     // Check for string because it may be keyup event object
     var f
-    if(typeof str === 'string') {
+    if (typeof str === 'string') {
       f = str
-    }else
-    {
+    }
+    else {
       f = getCurrentFilenameFromField()
     }
-    updateUserProfile( {current_filename: f })
+    updateUserProfile({ current_filename: f })
   }
 
   /**
@@ -572,17 +573,17 @@ $(function() {
     }
 
     function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
+      alert("Roh-roh. Something went wrong. :(")
     }
 
     var mdConfig = {
-                      type: 'POST',
-                      data: "unmd=" + encodeURIComponent(unmd),
-                      dataType: 'json',
-                      url: '/factory/fetch_markdown',
-                      error: _failHandler,
-                      success: _doneHandler
-                    }
+      type: 'POST'
+    , data: "unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_markdown'
+    , error: _failHandler
+    , success: _doneHandler
+    }
 
     $.ajax(mdConfig)
 
@@ -649,36 +650,37 @@ $(function() {
 
   }
 
-    function showHtml() {
+  function showHtml() {
 
-      // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
-      var unmd = editor.getSession().getValue()
+    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
+    var unmd = editor.getSession().getValue()
 
-      function _doneHandler(jqXHR, data, response) {
-        var resp = JSON.parse(response.responseText)
-        var textarea = $('#modalBodyText')
-        $(textarea).val(resp.data)
-        $('#myModal').on('shown.bs.modal', function (e) {
-          $(textarea).focus().select()
-        }).modal()
-      }
-
-      function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
-      }
-
-      var config = {
-        type: 'POST'
-      , data: "unmd=" + encodeURIComponent(unmd)
-      , dataType: 'json'
-      , url: '/factory/fetch_html_direct'
-      , error: _failHandler
-      , success: _doneHandler
-      }
-
-      $.ajax(config)
-
+    function _doneHandler(jqXHR, data, response) {
+      var resp = JSON.parse(response.responseText)
+      var textarea = $('#modalBodyText')
+      $(textarea).val(resp.data)
+      $('#myModal').on('shown.bs.modal', function (e) {
+        $(textarea).focus().select()
+      }).modal()
     }
+
+    function _failHandler() {
+      alert("Roh-roh. Something went wrong. :(")
+    }
+
+    var config = {
+      type: 'POST'
+    , data: "unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_html_direct'
+    , error: _failHandler
+    , success: _doneHandler
+    }
+
+    $.ajax(config)
+
+  }
+
   /**
    * Show a sad panda because they are using a shitty browser.
    *
@@ -752,9 +754,9 @@ $(function() {
    */
   function togglePaper() {
 
-    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")'  )
+    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")')
 
-    updateUserProfile({showPaper: !profile.showPaper})
+    updateUserProfile({ showPaper: !profile.showPaper })
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
@@ -767,9 +769,9 @@ $(function() {
    */
   function toggleAutoSave() {
 
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' )
+    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled')
 
-    updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
+    updateUserProfile({ autosave: { enabled: !profile.autosave.enabled } })
 
     autoSave()
 
@@ -793,9 +795,9 @@ $(function() {
    * @return {Void}
    */
   function toggleWordCount() {
-    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' )
+    $wordcount.html(profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled')
 
-    updateUserProfile({wordcount: !profile.wordcount })
+    updateUserProfile({ wordcount: !profile.wordcount })
 
     initWordCount();
 
@@ -1082,9 +1084,9 @@ $(function() {
 
         profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
 
-        Dropbox.setFilePath( dboxFilePath )
+        Dropbox.setFilePath(dboxFilePath)
 
-        Dropbox.fetchMarkdownFile( dboxFilePath )
+        Dropbox.fetchMarkdownFile(dboxFilePath)
 
         return false
 
@@ -1192,7 +1194,7 @@ $(function() {
       var a = m.url.toLowerCase()
       var b = n.url.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1) }
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
       else { return m-n }
     }
 
@@ -1406,7 +1408,7 @@ $(function() {
           response = JSON.parse(response.responseText)
           // console.log('\nFetch Tree Files...')
           // console.dir(response)
-          if(!response.tree.length) {
+          if (!response.tree.length) {
             Notifier.showMessage('No tree files available!')
             $('#modal-generic').modal('hide')
           }
@@ -1489,17 +1491,16 @@ $(function() {
 
   var GoogleDrive = (function() {
     function _errorHandler(a, b, res) {
-      Notifier.showMessage(res.responseText );
+      Notifier.showMessage(res.responseText);
     }
 
     function renderSearchResults(a, b, res) {
-
 
       var result = JSON.parse(res.responseText)
         , list = '<ul>'
 
       // Handle empty array case.
-      if(!Array.isArray(result.items)) return _errorHandler(null, null, {responseText: "No Markdown files found!"} )
+      if (!Array.isArray(result.items)) return _errorHandler(null, null, { responseText: "No Markdown files found!" })
 
       result.items.forEach(function(item) {
         list += '<li data-file-id="'
@@ -1652,13 +1653,13 @@ $(function() {
         }
 
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/account/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'GET'
+        , dataType: 'json'
+        , url: '/account/dropbox'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1679,13 +1680,13 @@ $(function() {
         }
 
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/dropbox/metadata',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'GET'
+        , dataType: 'json'
+        , url: '/dropbox/metadata'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1779,13 +1780,13 @@ $(function() {
         filename = path + enc
 
         var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: 'mdFile=' + filename,
-                        url: '/fetch/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST'
+        , dataType: 'json'
+        , data: 'mdFile=' + filename
+        , url: '/fetch/dropbox'
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1811,9 +1812,7 @@ $(function() {
 
             $('#modal-generic').modal('hide')
 
-            // console.dir(JSON.parse(response.data))
-
-            Notifier.showMessage( Notifier.messages.docSavedDropbox )
+            Notifier.showMessage(Notifier.messages.docSavedDropbox)
 
           } // end else
         } // end done handler
@@ -1827,13 +1826,13 @@ $(function() {
         var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
 
         var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: postData,
-                        url: '/save/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST'
+        , dataType: 'json'
+        , data: postData
+        , url: '/save/dropbox'
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
