@@ -811,8 +811,8 @@ scroll
 .hljs-chunk {
   color: #aaa;
 }
-pre,
-code {
+code,
+pre {
   font-family: Consolas, "Liberation Mono", Courier, monospace !important;
 }
 form {
@@ -4734,7 +4734,7 @@ noscript p {
 #notify {
   -webkit-user-select: none;
   -moz-user-select: none;
-  width: 160px;
+  width: 300px;
   margin: 0 auto;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cfc), color-stop(1, #6c6));
   background-image: -webkit-linear-gradient(top, #cfc 0%, #6c6 100%);
