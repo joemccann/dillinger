@@ -122,7 +122,7 @@ exports.Github = (function() {
         }
       }) // end request callback
     }, // end searchForMdFiles
-    fetchGithubBranches: function(req,res){
+    fetchBranches: function(req, res) {
 
       var uri = githubApi
         + 'repos/'
@@ -150,7 +150,7 @@ exports.Github = (function() {
         }
       }) // end request callback
 
-    }, // end fetchGithubBranches
+    }, // end fetchBranches
     fetchTreeFiles: function(req, res) {
 
       // /repos/:user/:repo/git/trees/:sha

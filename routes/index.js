@@ -232,7 +232,7 @@ exports.import_github_repos = function(req, res) {
 
 exports.import_github_branches = function(req, res) {
 
-  Github.fetchGithubBranches(req, res)
+  Github.fetchBranches(req, res)
 
 }
 
