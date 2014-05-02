@@ -82,7 +82,7 @@ exports.Github = (function() {
       }) // end request.get()
 
     }, // end getUsername
-    searchForMdFiles: function(req, res) {
+    fetchRepos: function(req, res) {
 
       var uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
 
@@ -121,7 +121,7 @@ exports.Github = (function() {
           res.json({ error: 'Unable to fetch repos from Github.' })
         }
       }) // end request callback
-    }, // end searchForMdFiles
+    }, // end fetchRepos
     fetchBranches: function(req, res) {
 
       var uri = githubApi

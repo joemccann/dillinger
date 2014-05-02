@@ -226,7 +226,7 @@ exports.unlink_github = function(req, res) {
 
 exports.import_github_repos = function(req, res) {
 
-  Github.searchForMdFiles(req,res)
+  Github.fetchRepos(req, res)
 
 }
 
