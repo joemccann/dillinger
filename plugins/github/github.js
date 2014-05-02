@@ -82,9 +82,59 @@ exports.Github = (function() {
       }) // end request.get()
 
     }, // end getUsername
+    fetchOrgs: function(req, res) {
+      var uri = githubApi + 'user/orgs?access_token=' + req.session.github.oauth
+
+      var options = {
+        headers: headers
+      , uri: uri
+      }
+
+      request(options, function(e, r, d) {
+        if (e) {
+          res.send({
+            error: 'Request error.',
+            data: r.statusCode
+          })
+        }
+        else if (!e && r.statusCode == 200) {
+          var set = []
+
+          d = JSON.parse(d)
+
+          d.forEach(function(el) {
+
+            // Right now GitHub does not display a "Company Name" in user/orgs API route
+            // Hopefully they will add it in later, for now use "login" name.
+
+            var item = {
+              url: el.url
+            , name: el.login
+            }
+
+            set.push(item)
+          })
+
+          res.json(set)
+
+        } // end else if
+        else {
+          res.json({ error: 'Unable to fetch organizations from Github.' })
+        }
+      }) // end request callback
+
+    }, // end fetchOrgs
+
     fetchRepos: function(req, res) {
 
-      var uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
+      var uri;
+
+      if (req.body.org !== req.session.github.username) {
+        uri = githubApi + 'orgs/' + req.body.org + '/repos?access_token=' + req.session.github.oauth
+      }
+      else {
+        uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
+      }
 
       var options = {
         headers: headers
@@ -126,10 +176,11 @@ exports.Github = (function() {
 
       var uri = githubApi
         + 'repos/'
-        + req.session.github.username
+        + req.body.org // org can also be the user
         + '/'
         + req.body.repo
         +'/branches?access_token=' + req.session.github.oauth
+
       var options = {
         headers: headers
       , uri: uri
@@ -157,7 +208,7 @@ exports.Github = (function() {
 
       var uri = githubApi
         + 'repos/'
-        + req.session.github.username
+        + req.body.org // org can also be the user
         + '/'
         + req.body.repo
         + '/git/trees/'
@@ -215,17 +266,17 @@ exports.Github = (function() {
         }
         else if (!e && r.statusCode === 200) {
 
-          var json_resp = {
+          var jsonResp = {
             data: d
           , error: false
           }
 
           if (isPrivateRepo) {
             d = JSON.parse(d)
-            json_resp.data = (new Buffer(d.content, 'base64').toString('ascii'))
+            jsonResp.data = (new Buffer(d.content, 'base64').toString('ascii'))
           }
 
-          res.json(json_resp)
+          res.json(jsonResp)
 
         } // end else if
         else {

@@ -224,6 +224,12 @@ exports.unlink_github = function(req, res) {
   res.redirect('/')
 }
 
+exports.import_github_orgs = function(req, res) {
+
+  Github.fetchOrgs(req, res)
+
+}
+
 exports.import_github_repos = function(req, res) {
 
   Github.fetchRepos(req, res)

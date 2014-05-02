@@ -918,7 +918,7 @@ $(function() {
 
     $import_github
       .on('click', function() {
-        Github.fetchRepos()
+        Github.fetchOrgs()
         return false
       })
 
@@ -962,40 +962,40 @@ $(function() {
         return false
       })
 
-    $('#preferences').
-      on('click', function() {
+    $('#preferences')
+      .on('click', function() {
         showPreferences()
         return false
       })
 
-    $('#about').
-      on('click', function() {
+    $('#about')
+      .on('click', function() {
         showAboutInfo()
         return false
       })
 
-    $('#cheat').
-      on('click', function() {
+    $('#cheat')
+      .on('click', function() {
         window.open("https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet", "_blank")
         return false
       })
 
-    $('#new_local_file').
-      on('click', function() {
+    $('#new_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.newFile();
         return false;
       })
 
-    $('#import_local_file').
-      on('click', function() {
+    $('#import_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.search();
         return false;
       })
 
-    $('#save_local_file').
-      on('click', function() {
+    $('#save_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.saveFile();
         return false;
@@ -1054,34 +1054,50 @@ $(function() {
    */
   function bindDelegation() {
     $(document)
+      .on('click', '.org', function() {
+        var org = $(this).parent('li').attr('data-org-name')
+
+        Github.currentOrg = org
+        Github.fetchRepos(org)
+        return false
+      })
+
       .on('click', '.repo', function() {
-        var repoName = $(this).parent('li').attr('data-repo-name')
+        var org = Github.currentOrg
+          , repo = $(this).parent('li').attr('data-repo-name')
 
         Github.isRepoPrivate = $(this).parent('li').attr('data-repo-private') === 'true' ? true : false
-        Github.fetchBranches(repoName)
+        Github.fetchBranches(org, repo)
         return false
       })
       .on('click', '.branch', function() {
 
-        var repo = $(this).parent('li').attr('data-repo-name')
+        var org = Github.currentOrg
+          , repo = $(this).parent('li').attr('data-repo-name')
           , sha = $(this).parent('li').attr('data-commit-sha')
 
         Github.currentBranch = $(this).text()
 
-        Github.fetchTreeFiles(repo, sha)
+        Github.fetchTreeFiles(org, repo, sha)
         return false
       })
       .on('click', '.tree_file', function() {
 
-        var file = $(this).parent('li').attr('data-tree-file')
+        var file = $(this).text()
 
         Github.fetchMarkdownFile(file)
 
         return false
       })
-      .on('click', '.github_user', function() {
-        Github.fetchRepos()
+
+      .on('click', '.github_org', function() {
+        Github.fetchOrgs()
       })
+
+      .on('click', '.github_repo', function() {
+        Github.fetchRepos(Github.currentOrg)
+      })
+
       .on('click', '.dropbox_file', function() {
 
         // We stash the current filename in the local profile only; not in localStorage.
@@ -1238,7 +1254,7 @@ $(function() {
           }
           else {
             // we go straight to raw as it's faster (don't need to base64 decode the sha as in the private case)
-            fullpath = raw + slash + githubUser + slash + repoName + slash + Github.currentBranch + slash + el.path
+            fullpath = raw + slash + Github.currentOrg + slash + repoName + slash + Github.currentBranch + slash + el.path
           }
 
           var item = {
@@ -1256,21 +1272,23 @@ $(function() {
 
     }
 
-    // Show a list of repos
-    function _listRepos(repos) {
+    // Show a list of orgs
+    function _listOrgs(orgs) {
 
-      var list = '<ul>'
+      var list = '<ul>' +
+        '<li data-org-name="' + githubUser + '" data-user="true"><a class="org" href="#">' + githubUser + '</a><li>'
+      ;
 
       // Sort alpha
-      repos.sort(_alphaNumSort)
+      orgs.sort(_alphaNumSort)
 
-      repos.forEach(function(item) {
-        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
+      orgs.forEach(function(item) {
+        list += '<li data-org-name="' + item.name + '"><a class="org" href="#">' + item.name + '</a></li>'
       })
 
       list += '</ul>'
-
-      $('.modal-header h3').text('Your Github Repos')
+      console.log(list)
+      $('.modal-header h3').text('Your Github Orgs')
 
       $('.modal-body').html(list)
 
@@ -1284,10 +1302,40 @@ $(function() {
 
     }
 
+    // Show a list of repos
+    function _listRepos(repos) {
+
+      var list = '<li class="github_org"><a href="#">Back to organizations...</a></li>'
+
+      // Sort alpha
+      repos.sort(_alphaNumSort)
+
+      repos.forEach(function(item) {
+        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
+      })
+
+      $('.modal-header h3').text(Github.currentOrg)
+
+      $('.modal-body')
+        .find('ul')
+          .find('li')
+          .remove()
+          .end()
+        .append(list)
+
+      $('#modal-generic').modal({
+        keyboard: true
+      , backdrop: true
+      , show: true
+      })
+
+      return false
+    }
+
     // Show a list of branches
     function _listBranches(repoName, branches) {
 
-      var list = '<li class="github_user"><a href="#">Back to repositories...</a></li>'
+      var list = '<li class="github_repo"><a href="#">Back to repositories...</a></li>'
 
       branches.forEach(function(item) {
         var name = item.name
@@ -1295,7 +1343,7 @@ $(function() {
         list += '<li data-repo-name="' + repoName + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
       })
 
-      $('.modal-header h3').text(repoName)
+      $('.modal-header h3').text(Github.currentOrg + " > " + repoName)
 
       $('.modal-body')
         .find('ul')
@@ -1324,7 +1372,7 @@ $(function() {
         });
       }
 
-      $('.modal-header h3').text(repoName + " > " + Github.currentBranch)
+      $('.modal-header h3').text(Github.currentOrg + " > " + repoName + " > " + Github.currentBranch)
 
       $('.modal-body')
         .find('ul')
@@ -1337,7 +1385,37 @@ $(function() {
     return {
       currentBranch: '',
       isRepoPrivate: false,
-      fetchRepos: function() {
+      fetchOrgs: function() {
+
+        function _beforeSendHandler() {
+          Notifier.showMessage('Fetching Orgs...')
+        }
+
+        function _doneHandler(a, b, response) {
+          a = b = null
+          response = JSON.parse(response.responseText)
+          // Don't throw error if user has no orgs, still has individual user.
+          _listOrgs(response)
+        } // end done handler
+
+        function _failHandler(resp, err) {
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
+        }
+
+        var config = {
+          type: 'POST'
+        , dataType: 'text'
+        , url: '/import/github/orgs'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
+
+        $.ajax(config)
+
+      }, // end fetchRepos
+
+      fetchRepos: function(orgName) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Repos...')
@@ -1366,10 +1444,13 @@ $(function() {
         , success: _doneHandler
         }
 
+        if (orgName) {
+          config.data = 'org=' + orgName
+        }
         $.ajax(config)
 
       }, // end fetchRepos
-      fetchBranches: function(repoName) {
+      fetchBranches: function(orgName, repoName) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Branches for Repo ' + repoName)
@@ -1378,7 +1459,7 @@ $(function() {
         function _doneHandler(a, b, response) {
           a = b = null
           response = JSON.parse(response.responseText)
-          //console.dir(response)
+
           if(!response.length) {
             Notifier.showMessage('No branches available!')
             $('#modal-generic').modal('hide')
@@ -1395,7 +1476,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'repo=' + repoName
+        , data: 'org=' + orgName + '&repo=' + repoName
         , url: '/import/github/branches'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1405,7 +1486,7 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchBranches()
-      fetchTreeFiles: function(repoName, sha) {
+      fetchTreeFiles: function(orgName, repoName, sha) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Tree for Repo ' + repoName)
@@ -1432,7 +1513,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'repo=' + repoName + '&sha=' + sha
+        , data: 'org=' + orgName + '&repo=' + repoName + '&sha=' + sha
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1657,8 +1738,8 @@ $(function() {
       var a = m.path.toLowerCase()
       var b = n.path.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
+      else { return m-n }
     }
 
     function _listMdFiles(files) {
@@ -1920,8 +2001,8 @@ $(function() {
       var a = m.toLowerCase()
       var b = n.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
+      else { return m-n }
     }
 
     function _listMdFiles(files) {

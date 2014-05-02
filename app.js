@@ -35,7 +35,7 @@ app.configure(function(){
   app.locals.node_version = process.version.replace('v', '')
   app.locals.app_version = require('./package.json').version
   app.locals.env = process.env.NODE_ENV
-  app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
+  app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8')
 })
 
 app.configure('development', function(){
@@ -74,6 +74,8 @@ app.get('/oauth/github', routes.oauth_github)
 app.get('/unlink/github', routes.unlink_github)
 
 // app.get('/account/github', routes.account_info_github)
+
+app.post('/import/github/orgs', routes.import_github_orgs)
 
 app.post('/import/github/repos', routes.import_github_repos)
 
