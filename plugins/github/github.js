@@ -39,6 +39,9 @@ if (fs.existsSync(githubConfigFile)) {
 exports.Github = (function() {
 
   var githubApi = 'https://api.github.com/'
+    , headers = {
+      "User-Agent": "X-Dillinger-App"
+    }
 
   // String builder for auth url...
   function _buildAuthUrl() {
@@ -59,10 +62,8 @@ exports.Github = (function() {
       var uri = githubApi + 'user?access_token=' + req.session.github.oauth
 
       var options = {
-        headers: {
-          "User-Agent": "X-Dillinger-App"
-        },
-        uri: uri
+        headers: headers
+      , uri: uri
       }
 
       console.log('getting username from github: ' + uri)
@@ -85,10 +86,8 @@ exports.Github = (function() {
       var uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
 
       var options = {
-        headers: {
-          "User-Agent": "X-Dillinger-App"
-        },
-        uri: uri
+        headers: headers
+      , uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -131,10 +130,8 @@ exports.Github = (function() {
         + req.body.repo
         +'/branches?access_token=' + req.session.github.oauth
       var options = {
-        headers: {
-          "User-Agent": "X-Dillinger-App"
-        },
-        uri: uri
+        headers: headers
+      , uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -166,10 +163,8 @@ exports.Github = (function() {
         + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
 
       var options = {
-        headers: {
-          "User-Agent": "X-Dillinger-App"
-        },
-        uri: uri
+        headers: headers
+      , uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -202,10 +197,8 @@ exports.Github = (function() {
       }
 
       var options = {
-        headers: {
-          "User-Agent": "X-Dillinger-App"
-        },
-        uri: uri
+        headers: headers
+      , uri: uri
       }
 
       console.dir(options)
