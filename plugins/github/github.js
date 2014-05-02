@@ -1,6 +1,7 @@
 var fs = require('fs')
   , path = require('path')
   , request = require('request')
+  , url = require('url')
 
 var githubConfigFile = path.resolve(__dirname, 'github-config.json')
   , githubConfig = {}
@@ -232,7 +233,67 @@ exports.Github = (function() {
         }
       }) // end request callback
 
-    } // end fetchFile
+    }, // end fetchFile
+
+    saveToGithub: function(req, res) {
+
+      var data = req.body
+      if (!data.uri) {
+        res.json(400, { "error": "Requires Github URI" })
+      }
+      else {
+        // uri = "https://api.github.com/repos/:owner/:repo/contents/:path"
+        var options, parseUrl, uri, repo, branch, sha
+
+        parseUrl = url.parse(data.uri).path.split("/")
+
+        branch = parseUrl[3]
+        repo = parseUrl[2]
+        path = parseUrl.slice(4).join("/")
+
+        uri = githubApi + "repos/" + req.session.github.username + '/' + repo + '/contents/' + path
+
+        uri += '?access_token=' + req.session.github.oauth
+
+        options = {
+          headers: headers
+        , uri: uri
+        }
+
+        request(options, function(_, __, dd) {
+          var options, commit
+
+          sha = JSON.parse(dd).sha
+
+          console.log("The sha is ", sha)
+
+          commit = {
+            message: "Modified file using Dillinger" // Better commit messages?
+          , path: parseUrl.slice(4).join("/")
+          , branch: parseUrl[3]
+          , content: data.data
+          , sha: sha
+          }
+
+          options = {
+            headers: headers
+          , uri: uri
+          , method: "PUT"
+          , body: JSON.stringify(commit)
+          }
+
+          request(options, function(e, r, d) {
+            if (!e && r.statusCode === 200) {
+              return res.json(200, d)
+
+            }
+            return res.json(400, { "error": "Unable to save file " + e })
+          })
+        })
+
+        res.json(200, { "uri": data.uri })
+      }
+    }
   }
 
 })()

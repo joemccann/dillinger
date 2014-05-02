@@ -867,12 +867,19 @@ $(function() {
         return false
       })
 
+    $("#save_github")
+      .on('click', function() {
+        Github.save()
+        saveFile()
+
+        return false
+    })
+
     $("#save_dropbox")
       .on('click', function() {
         profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
 
         Dropbox.putMarkdownFile()
-
         saveFile()
 
         return false
@@ -1032,7 +1039,7 @@ $(function() {
               },
        exec: function() {
         var profile = JSON.parse(localStorage.profile);
-        alert( profile.current_filename.replace(/\s/g, '-').toLowerCase())
+        alert(profile.current_filename.replace(/\s/g, '-').toLowerCase())
       }
     }
 
@@ -1165,8 +1172,9 @@ $(function() {
         , docSavedLocal: "Document saved locally"
         , docDeletedLocal: "Document deleted from local storage"
         , docSavedServer: "Document saved on our server"
-        , docSavedDropbox: "Document saved on dropbox"
-        , dropboxImportNeeded: "Please import a file from dropbox first."
+        , docSavedDropbox: "Document saved on Dropbox"
+        , docSavedGithub: "Document saved on Github"
+        , dropboxImportNeeded: "Please import a file from Dropbox first."
       },
       showMessage: function(msg,delay) {
 
@@ -1454,9 +1462,13 @@ $(function() {
 
             // Update it in localStorage
             var name = filename.split('/').pop()
+
             updateFilename(name)
+
             // Show it in the field
             setCurrentFilenameField(name)
+
+            Github.setUri(filename);
 
             previewMd()
 
@@ -1483,7 +1495,55 @@ $(function() {
 
         $.ajax(config)
 
-      } // end fetchMarkdownFile()
+      }, // end fetchMarkdownFile()
+      clearUri: function() {
+        delete profile.github.current_uri;
+        $('#save_github').css('display', 'none')
+      },
+      setUri: function(uri) {
+        profile.github.current_uri = uri;
+        $('#save_github').css('display', '')
+      },
+      getUri: function() {
+        return profile.github.current_uri;
+      },
+      save: function() {
+        // convert file inside ACE editor from UTF-8 text into base64
+        // reference: https://developer.mozilla.org/en-US/docs/Web/API/Window.btoa
+
+        function _failHandler(e) {
+          alert("Roh-roh. Something went wrong. :(", e);
+        }
+
+        function _doneHandler(a, b, res) {
+          console.log("abres", a, b, res)
+          var response = JSON.parse(res.responseText);
+          console.log("response", response, res)
+          if (res.status < 400) {
+            Notifier.showMessage(Notifier.messages.docSavedGithub + " as " + response.uri);
+          } else {
+            Notifier.showMessage('An error occurred!');
+          }
+        } // end done handler
+        console.log(this.getUri.call(Github))
+        console.log(Github.getUri)
+        var postData = {
+          uri: Github.getUri() || "",
+          data: btoa(editor.getSession().getValue()),
+          d: "go"
+        }
+
+        var config = {
+          type: 'POST'
+        , dataType: 'json'
+        , data: postData
+        , url: '/save/github'
+        , error: _failHandler
+        , success: _doneHandler
+        }
+        console.log("config?", config)
+        $.ajax(config)
+      } // end save
 
     } // end return obj
 
@@ -1520,9 +1580,18 @@ $(function() {
 
     function renderFile(a, b, res) {
       var result = JSON.parse(res.responseText);
-      $('#modal-generic').modal('hide')
-      editor.getSession().setValue(result.content)
-      previewMd()
+      $('#modal-generic').modal('hide');
+      editor.getSession().setValue(result.content);
+      previewMd();
+
+      // TODO:
+      // Allow Github to unload it's current file if another file
+      // gets loaded without touching these Dropbox/GoogleDrive objects.
+
+      // This is to prevent a file not loaded from Github
+      // from overwriting your file.
+
+      Github.clearUri();
     }
 
     // TODO: what to do if access token expires?
@@ -1765,6 +1834,7 @@ $(function() {
 
             editor.getSession().setValue( response.data )
             previewMd()
+            Github.clearUri();
 
           } // end else
         } // end done handler
@@ -1904,6 +1974,15 @@ $(function() {
         setCurrentFilenameField()
         editor.getSession().setValue(profile.local_files[fileName])
         previewMd()
+
+        // TODO:
+        // Allow Github to unload it's current file if another file
+        // gets loaded without touching these Dropbox/GoogleDrive objects.
+
+        // This is to prevent a file not loaded from Github
+        // from overwriting your file.
+        Github.clearUri()
+
       },
       saveFile: function() {
         var fileName = getCurrentFilenameFromField()
