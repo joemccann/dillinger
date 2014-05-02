@@ -1,5 +1,5 @@
 Dropbox Dillinger Plugin
-=
+==
 
 0. Create your app with dropbox:  https://www.dropbox.com/developers/apps
 1. Create your `dropbox-config.json`.  It needs to contain:

@@ -9,18 +9,24 @@ var github_config_file = path.resolve(__dirname, 'github-config.json')
 // ^^^helps with the home page view; should we show the github dropdown?
 
 if(fs.existsSync(github_config_file)) {
-  github_config = JSON.parse( fs.readFileSync( github_config_file, 'utf-8' ) );
+  github_config = require(github_config_file);
   isConfigEnabled = true;
 } else if(process.env.github_client_id !== undefined) {
-    github_config = {
-      "client_id": process.env.github_client_id,
-      "redirect_uri": process.env.github_redirect_uri,
-      "client_secret": process.env.github_client_secret,
-      "callback_url": process.env.github_callback_url
-    };
-    isConfigEnabled = true;
-    console.log('Github config found in environment. Plugin enabled. (Key: "' + github_config.client_id +'")');
-  } else {
+  github_config = {
+    "client_id": process.env.github_client_id,
+    "redirect_uri": process.env.github_redirect_uri,
+    "client_secret": process.env.github_client_secret,
+    "callback_url": process.env.github_callback_url
+  };
+  isConfigEnabled = true;
+  console.log('Github config found in environment. Plugin enabled. (Key: "' + github_config.client_id +'")');
+} else if(process.env.github_access_token !== undefined) {
+  github_config = {
+    "access_token": process.env.github_access_token
+  };
+  isConfigEnabled = true;
+  console.log('Github config found in environment. Plugin enabled using a personal access_token.');
+} else {
   github_config = {
     "client_id": "YOUR_ID"
   , "redirect_uri": "http://dillinger.io/"
