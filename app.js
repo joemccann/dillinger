@@ -9,6 +9,7 @@ var config = require('./config')()
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
+  , sharejs = require('share').server
   , app = express();
 
 app.configure(function(){

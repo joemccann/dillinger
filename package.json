@@ -44,7 +44,9 @@
     "googleapis": "0.2.12-alpha",
     "marked": "^0.3.2",
     "phantomjs": "~1.9.0-6",
-    "highlight.js": "~8.0.0"
+    "highlight.js": "~8.0.0",
+    "share": "<0.7",
+    "connect": "2.0.0"
   },
   "devDependencies": {
     "smoosh": ">=0.3.2",

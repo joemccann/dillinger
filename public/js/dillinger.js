@@ -348,11 +348,21 @@ $(function() {
   /**
    * Initialize theme and other options of Ace editor.
    *
+   * Attach ShareJS to the editor and listen for updates.
+   *
    * @return {Void}
    */
   function initAce() {
 
     editor = ace.edit("editor")
+    // FIXME: Grab actual document title.
+    doc = sharejs.open('test', 'text', function(error, doc) {
+        doc.attach_ace(editor);
+        doc.on('remoteop', function(op) {
+            previewMd();
+        });
+        previewMd();
+    });
 
   } // end initAce
 
