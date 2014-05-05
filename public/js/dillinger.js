@@ -367,8 +367,8 @@ $(function() {
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
 
     // Set text for dis/enable autosave / word counter
-    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave')
-    $wordcount.html(!profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count')
+    $autosave.html(profile.autosave.enabled ? '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' : '<i class="icon-remove"></i>&nbsp;Autosave is Disabled')
+    $wordcount.html(profile.wordcount ? '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' : '<i class="icon-remove"></i>&nbsp;Word Count is Disabled')
 
     // Check for logged in Github user and notifiy
     githubUser = $import_github.attr('data-github-username')
@@ -767,7 +767,7 @@ $(function() {
    */
   function toggleAutoSave() {
 
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
+    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' )
 
     updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
 
@@ -793,7 +793,7 @@ $(function() {
    * @return {Void}
    */
   function toggleWordCount() {
-    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count' )
+    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' )
 
     updateUserProfile({wordcount: !profile.wordcount })
 
