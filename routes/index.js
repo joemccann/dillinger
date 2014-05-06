@@ -156,8 +156,8 @@ exports.oauth_github_redirect = function(req, res) {
   // Create GitHub session object and stash for later.
   var uri;
   req.session.github = {};
-  if (Github.github_config.access_token !== undefined) {
-    req.session.github.oauth = Github.github_config.access_token;
+  if (Github.githubConfig.access_token !== undefined) {
+    req.session.github.oauth = Github.githubConfig.access_token;
     req.session.isGithubSynced = true;
     console.log('/')
     Github.getUsername(req, res,function() {
@@ -183,9 +183,9 @@ exports.oauth_github = function(req, res, cb) {
     req.session.oauth = {}
 
     var code = req.query.code
-      , client_id = Github.github_config.client_id
-      , redirect_uri = Github.github_config.redirect_uri
-      , client_secret = Github.github_config.client_secret
+      , client_id = Github.githubConfig.client_id
+      , redirect_uri = Github.githubConfig.redirect_uri
+      , client_secret = Github.githubConfig.client_secret
 
     var params = '?code='+code
                   +'&client_id='+client_id
