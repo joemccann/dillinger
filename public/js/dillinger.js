@@ -1083,9 +1083,14 @@ $(function() {
       })
       .on('click', '.tree_file', function() {
 
-        var file = $(this).text()
+        var url = $(this).parent('li').attr('data-tree-file')
+          , name = $(this).parent('li').attr('data-name')
+          , sha = $(this).parent('li').attr('data-tree-file-sha')
 
-        Github.fetchMarkdownFile(file)
+        Github.currentName = name
+        Github.currentSha = sha
+
+        Github.fetchMarkdownFile(url, name)
 
         return false
       })
@@ -1242,25 +1247,36 @@ $(function() {
       var sorted = []
         , raw = 'https://raw.github.com'
         , slash = '/'
+        , ghRegex = /https:\/\/api.github.com\/(.*?)\/(.*?)\/(.*?)\/(.*)/i
+        ;
 
       treefiles.forEach(function(el) {
 
         if (_isMdFile(el.path)) {
 
           var fullpath
+            , ghArr
+            , repo
+            , owner
+
+          ghArr = el.url.match(ghRegex)
+          owner = ghArr[2]
+          repo = ghArr[3]
 
           if (Github.isRepoPrivate) {
             fullpath = el.url
           }
           else {
             // we go straight to raw as it's faster (don't need to base64 decode the sha as in the private case)
-            fullpath = raw + slash + Github.currentOrg + slash + repoName + slash + Github.currentBranch + slash + el.path
+            fullpath = raw + slash + owner + slash + repo + slash + Github.currentBranch + slash + el.path
           }
 
           var item = {
             link: fullpath
           , path: el.path
           , sha: el.sha
+          , repo: repo
+          , owner: owner
           }
 
           sorted.push(item)
@@ -1276,13 +1292,14 @@ $(function() {
     function _listOrgs(orgs) {
 
       var list = '<ul>' +
-        '<li data-org-name="' + githubUser + '" data-user="true"><a class="org" href="#">' + githubUser + '</a><li>'
+        '<li data-org-name="' + githubUser + '" data-user="true"><a class="org" href="#">' + githubUser + '</a></li>'
       ;
 
       // Sort alpha
       orgs.sort(_alphaNumSort)
 
       orgs.forEach(function(item) {
+
         list += '<li data-org-name="' + item.name + '"><a class="org" href="#">' + item.name + '</a></li>'
       })
 
@@ -1366,8 +1383,8 @@ $(function() {
         mdFiles.forEach(function(item) {
           // add class to <li> if private
           list += Github.isRepoPrivate
-                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
-                  : '<li data-tree-file="' + item.link + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  : '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
 
         });
       }
@@ -1523,13 +1540,13 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchTreeFiles()
-      fetchMarkdownFile: function(filename) {
+      fetchMarkdownFile: function(url, name) {
 
         function _doneHandler(a, b, response) {
           a = b = null
           response = JSON.parse(response.responseText)
           // console.dir(response)
-          if( response.error ) {
+          if (response.error) {
 
             Notifier.showMessage('No markdown for you!')
             $('#modal-generic').modal('hide')
@@ -1539,17 +1556,15 @@ $(function() {
 
             $('#modal-generic').modal('hide')
 
-            editor.getSession().setValue( response.data )
+            editor.getSession().setValue(response.data)
 
             // Update it in localStorage
-            var name = filename.split('/').pop()
-
             updateFilename(name)
 
             // Show it in the field
             setCurrentFilenameField(name)
 
-            Github.setUri(filename);
+            Github.setUri(url);
 
             previewMd()
 
@@ -1567,7 +1582,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'mdFile=' + filename
+        , data: 'url=' + url + "&name=" + name
         , url: '/import/github/file'
         , error: _failHandler
         , success: _doneHandler
@@ -1579,11 +1594,9 @@ $(function() {
       }, // end fetchMarkdownFile()
       clearUri: function() {
         delete profile.github.current_uri;
-        $('#save_github').css('display', 'none')
       },
       setUri: function(uri) {
         profile.github.current_uri = uri;
-        $('#save_github').css('display', '')
       },
       getUri: function() {
         return profile.github.current_uri;
@@ -1597,32 +1610,33 @@ $(function() {
         }
 
         function _doneHandler(a, b, res) {
-          console.log("abres", a, b, res)
-          var response = JSON.parse(res.responseText);
-          console.log("response", response, res)
+          var data = JSON.parse(res.responseText);
+
           if (res.status < 400) {
-            Notifier.showMessage(Notifier.messages.docSavedGithub + " as " + response.uri);
+            Github.currentSha = data.content.sha
+            Notifier.showMessage(Notifier.messages.docSavedGithub + " as " + data.content.path);
           } else {
             Notifier.showMessage('An error occurred!');
           }
         } // end done handler
-        console.log(this.getUri.call(Github))
-        console.log(Github.getUri)
+
         var postData = {
-          uri: Github.getUri() || "",
-          data: btoa(editor.getSession().getValue()),
-          d: "go"
+          uri: Github.getUri() || ""
+        , data: btoa(editor.getSession().getValue())
+        , name: Github.currentName
+        , sha: Github.currentSha
+        , branch: Github.currentBranch
+
         }
 
         var config = {
           type: 'POST'
-        , dataType: 'json'
         , data: postData
         , url: '/save/github'
         , error: _failHandler
         , success: _doneHandler
         }
-        console.log("config?", config)
+
         $.ajax(config)
       } // end save
 

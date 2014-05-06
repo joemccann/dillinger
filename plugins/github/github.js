@@ -159,6 +159,8 @@ exports.Github = (function() {
               url: el.url
             , name: el.name
             , private: el.private
+            // future property we will need to pass so we can know whether we can "write" to repo
+            //, permissions: el.permissions
             }
 
             set.push(item)
@@ -239,7 +241,7 @@ exports.Github = (function() {
     }, // end fetchTreeFiles
     fetchFile: function(req, res) {
 
-      var uri = req.body.mdFile
+      var uri = req.body.url
         , isPrivateRepo = /blob/.test(uri)
 
       // https://api.github.com/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132
@@ -294,55 +296,50 @@ exports.Github = (function() {
       }
       else {
         // uri = "https://api.github.com/repos/:owner/:repo/contents/:path"
-        var options, parseUrl, uri, repo, branch, sha
+        var options, parseUrl, uri, owner, repo, branch, sha, isPrivateRepo
 
+        isPrivateRepo = /blob/.test(data.uri)
         parseUrl = url.parse(data.uri).path.split("/")
 
-        branch = parseUrl[3]
-        repo = parseUrl[2]
-        path = parseUrl.slice(4).join("/")
+        branch = data.branch
+        path = data.name
+        sha = data.sha
+        if (isPrivateRepo) {
+          repo = parseUrl[3]
+          owner = parseUrl[2]
+        } else {
+          repo = parseUrl[2]
+          owner = parseUrl[1]
 
-        uri = githubApi + "repos/" + req.session.github.username + '/' + repo + '/contents/' + path
+        }
 
+        uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path
         uri += '?access_token=' + req.session.github.oauth
+
+        commit = {
+          message: "Modified file using Dillinger" // Better commit messages?
+        , path: path
+        , branch: branch
+        , content: data.data
+        , sha: sha
+        }
 
         options = {
           headers: headers
         , uri: uri
+        , method: "PUT"
+        , body: JSON.stringify(commit)
         }
 
-        request(options, function(_, __, dd) {
-          var options, commit
-
-          sha = JSON.parse(dd).sha
-
-          console.log("The sha is ", sha)
-
-          commit = {
-            message: "Modified file using Dillinger" // Better commit messages?
-          , path: parseUrl.slice(4).join("/")
-          , branch: parseUrl[3]
-          , content: data.data
-          , sha: sha
+        request(options, function(e, r, d) {
+          // console.log(uri, e, r.statusCode, JSON.stringify(commit), d)
+          if (!e && r.statusCode === 200) {
+            return res.json(200, JSON.parse(d))
           }
+          return res.json(400, { "error": "Unable to save file: " + (e || d.message) })
 
-          options = {
-            headers: headers
-          , uri: uri
-          , method: "PUT"
-          , body: JSON.stringify(commit)
-          }
-
-          request(options, function(e, r, d) {
-            if (!e && r.statusCode === 200) {
-              return res.json(200, d)
-
-            }
-            return res.json(400, { "error": "Unable to save file " + e })
-          })
         })
 
-        res.json(200, { "uri": data.uri })
       }
     }
   }
