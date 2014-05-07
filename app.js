@@ -35,7 +35,7 @@ app.configure(function(){
   app.locals.node_version = process.version.replace('v', '')
   app.locals.app_version = require('./package.json').version
   app.locals.env = process.env.NODE_ENV
-  app.locals.readme = fs.readFileSync( path.resolve(__dirname, './README.md'), 'utf-8')
+  app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8')
 })
 
 app.configure('development', function(){
@@ -75,6 +75,8 @@ app.get('/unlink/github', routes.unlink_github)
 
 // app.get('/account/github', routes.account_info_github)
 
+app.post('/import/github/orgs', routes.import_github_orgs)
+
 app.post('/import/github/repos', routes.import_github_repos)
 
 app.post('/import/github/branches', routes.import_github_branches)
@@ -106,13 +108,13 @@ app.post('/save/googledrive', routes.save_googledrive);
 
 /* Dillinger Actions */
 
-// save a markdown file and send header to download it directly as response 
+// save a markdown file and send header to download it directly as response
 app.post('/factory/fetch_markdown', routes.fetch_md)
 
 // Route to handle download of md file
 app.get('/files/md/:mdid', routes.download_md)
 
-// Save an html file and send header to download it directly as response 
+// Save an html file and send header to download it directly as response
 app.post('/factory/fetch_html', routes.fetch_html)
 
 app.post('/factory/fetch_html_direct', routes.fetch_html_direct)

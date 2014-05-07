@@ -39,3 +39,5 @@ nb-configuration.xml
 /*.sublime-project
 *.sublime-workspace
 
+# NPM debug log
+npm-debug.log

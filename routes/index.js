@@ -20,11 +20,11 @@ exports.index = function(req, res) {
     isGoogleDriveConfigured: GoogleDrive.isConfigured
   }
 
-  if(!req.session.isEvernoteSynced){
+  if (!req.session.isEvernoteSynced) {
     console.warn('Evernote not implemented yet.')
   }
 
-  if(req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
+  if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
   return res.render('index', indexConfig)
 
 }
@@ -77,7 +77,7 @@ exports.oauth_dropbox = function(req, res) {
 
   // console.dir(req.query)
 
-    if(!req.session.dropbox){
+    if (!req.session.dropbox) {
       console.log('No dropbox session - browser bug')
       req.session.dropbox = {}
       req.session.dropbox.oauth = {}
@@ -92,7 +92,7 @@ exports.oauth_dropbox = function(req, res) {
     Dropbox.getRemoteAccessToken(
       req.session.dropbox.oauth.request_token,
       req.session.dropbox.oauth.request_token_secret,
-      function(status, access_token){
+      function(status, access_token) {
 
           console.log(access_token)
           req.session.dropbox.oauth.access_token_secret = access_token.oauth_token_secret,
@@ -101,7 +101,7 @@ exports.oauth_dropbox = function(req, res) {
           req.session.isDropboxSynced = true
 
           // Check to see it works by fetching account info
-          Dropbox.getAccountInfo(req.session.dropbox, function(status, reply){
+          Dropbox.getAccountInfo(req.session.dropbox, function(status, reply) {
 
             console.log('Got account info!')
             console.log(reply)
@@ -127,8 +127,8 @@ exports.import_dropbox = function(req, res) {
 
   Dropbox.searchForMdFiles(req.session.dropbox, function(status, data) {
     console.log(status)
-    if(status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
-    if(status > 399) return res.status(status).send("Something went wrong. Please refresh.")
+    if (status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
+    if (status > 399) return res.status(status).send("Something went wrong. Please refresh.")
     return res.json(data)
   })
 
@@ -136,7 +136,7 @@ exports.import_dropbox = function(req, res) {
 
 exports.fetch_dropbox_file = function(req, res) {
 
-  Dropbox.fetchDropboxFile(req,res)
+  Dropbox.fetchDropboxFile(req, res)
 
 }
 
@@ -156,11 +156,11 @@ exports.oauth_github_redirect = function(req, res) {
   // Create GitHub session object and stash for later.
   var uri;
   req.session.github = {};
-  if(Github.github_config.access_token !== undefined) {
-    req.session.github.oauth = Github.github_config.access_token;
+  if (Github.githubConfig.access_token !== undefined) {
+    req.session.github.oauth = Github.githubConfig.access_token;
     req.session.isGithubSynced = true;
     console.log('/')
-    Github.getUsername(req,res,function(){
+    Github.getUsername(req, res,function() {
       res.redirect('/')
     });
   } else {
@@ -177,15 +177,15 @@ exports.oauth_github_redirect = function(req, res) {
 }
 
 exports.oauth_github = function(req, res, cb) {
-  if(!req.query.code) {
+  if (!req.query.code) {
     cb();
   } else {
     req.session.oauth = {}
 
     var code = req.query.code
-      , client_id = Github.github_config.client_id
-      , redirect_uri = Github.github_config.redirect_uri
-      , client_secret = Github.github_config.client_secret
+      , client_id = Github.githubConfig.client_id
+      , redirect_uri = Github.githubConfig.redirect_uri
+      , client_secret = Github.githubConfig.client_secret
 
     var params = '?code='+code
                   +'&client_id='+client_id
@@ -194,12 +194,12 @@ exports.oauth_github = function(req, res, cb) {
 
     var uri = 'https://github.com/login/oauth/access_token'+params
 
-    request.post(uri, function(err, resp, body){
+    request.post(uri, function(err, resp, body) {
       // TODO: MAKE THIS MORE GRACEFUL
-      if(err) res.send(err.message)
+      if (err) res.send(err.message)
       else {
         // access_token=519e3f859210aa34265a52acb6b88290087f8996&token_type=bearer
-        if(!req.session.github){
+        if (!req.session.github) {
           req.session.github = {
             oauth: null
           }
@@ -207,7 +207,7 @@ exports.oauth_github = function(req, res, cb) {
         req.session.github.oauth = (qs.parse(body)).access_token
         req.session.isGithubSynced = true
         console.log('about')
-        Github.getUsername(req,res,function(){
+        Github.getUsername(req, res,function() {
           res.redirect('/')
         })
 
@@ -217,41 +217,47 @@ exports.oauth_github = function(req, res, cb) {
   } // end else
 }
 
-exports.unlink_github = function(req,res){
+exports.unlink_github = function(req, res) {
   // Essentially remove the session for dropbox...
   delete req.session.github
   req.session.isGithubSynced = false
   res.redirect('/')
 }
 
-exports.import_github_repos = function(req,res){
+exports.import_github_orgs = function(req, res) {
 
-  Github.searchForMdFiles(req,res)
-
-}
-
-exports.import_github_branches = function(req,res){
-
-  Github.fetchGithubBranches(req,res)
+  Github.fetchOrgs(req, res)
 
 }
 
-exports.import_tree_files = function(req,res){
+exports.import_github_repos = function(req, res) {
 
-  Github.fetchTreeFiles(req,res)
-
-}
-
-exports.import_github_file = function(req,res){
-
-  Github.fetchFile(req,res)
+  Github.fetchRepos(req, res)
 
 }
 
-exports.save_github = function(req,res){
+exports.import_github_branches = function(req, res) {
 
-  Github.saveToDropbox(req, res)
-  
+  Github.fetchBranches(req, res)
+
+}
+
+exports.import_tree_files = function(req, res) {
+
+  Github.fetchTreeFiles(req, res)
+
+}
+
+exports.import_github_file = function(req, res) {
+
+  Github.fetchFile(req, res)
+
+}
+
+exports.save_github = function(req, res) {
+
+  Github.saveToGithub(req, res)
+
 }
 
 /* End Github stuff */

@@ -9,14 +9,15 @@ $(function() {
         theme: 'ace/theme/idle_fingers'
       , showPaper: false
       , currentMd: ''
-      , autosave:
-        {
+      , autosave: {
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
         }
       , wordcount: true
       , current_filename: 'Untitled Document'
       , github: {
+          current_uri: ''
+        , opts: {}
         }
       , dropbox: {
           filepath: '/Dillinger/'
@@ -79,21 +80,21 @@ $(function() {
    * @param {Function} Optional callback to be executed after the script loads.
    * @return {void}
    */
-  function asyncLoad(filename,cb) {
-    (function(d,t) {
+  function asyncLoad(filename, cb) {
+    (function(d, t) {
 
       var leScript = d.createElement(t)
         , scripts = d.getElementsByTagName(t)[0]
 
       leScript.async = 1
       leScript.src = filename
-      scripts.parentNode.insertBefore(leScript,scripts)
+      scripts.parentNode.insertBefore(leScript, scripts)
 
       leScript.onload = function() {
         cb && cb()
       }
 
-    }(document,'script'))
+    }(document, 'script'))
   }
 
   /**
@@ -212,7 +213,7 @@ $(function() {
    * @return {String}
    */
   function generateRandomFilename(ext) {
-    return 'dillinger_' +(new Date()).toISOString().replace(/[\.:-]/g, "_")+ '.' + ext
+    return 'dillinger_' + (new Date()).toISOString().replace(/[\.:-]/g, "_") + '.' + ext
   }
 
 
@@ -301,8 +302,8 @@ $(function() {
       , smartypants: false
       , langPrefix: 'lang-'
       , highlight: function (code) {
-        return hljs.highlightAuto(code).value;
-      }
+          return hljs.highlightAuto(code).value;
+        }
       })
 
       converter = marked
@@ -408,7 +409,7 @@ $(function() {
    */
   function saveFile(isManual) {
 
-    updateUserProfile({currentMd: editor.getSession().getValue()})
+    updateUserProfile({ currentMd: editor.getSession().getValue() })
 
     isManual && Notifier.showMessage(Notifier.messages.docSavedLocal)
 
@@ -421,15 +422,15 @@ $(function() {
    */
   function autoSave() {
 
-    if(profile.autosave.enabled) {
-      autoInterval = setInterval( function() {
+    if (profile.autosave.enabled) {
+      autoInterval = setInterval(function() {
         // firefox barfs if I don't pass in anon func to setTimeout.
         saveFile()
       }, profile.autosave.interval)
 
     }
-    else{
-      clearInterval( autoInterval )
+    else {
+      clearInterval(autoInterval)
     }
 
   }
@@ -459,19 +460,21 @@ $(function() {
    function changeTheme(e) {
      // check for same theme
      var $target = $(e.target)
-     if( $target.attr('data-value') === profile.theme) { return }
-     else{
-       // add/remove class
-       $theme.find('li > a.selected').removeClass('selected')
-       $target.addClass('selected')
-       // grabnew theme
-       var newTheme = $target.attr('data-value')
-       $(e.target).blur()
-       fetchTheme(newTheme, function() {
-         Notifier.showMessage(Notifier.messages.profileUpdated)
-       })
-      }
-   }
+     if ($target.attr('data-value') === profile.theme) { return }
+     else {
+      // add/remove class
+      $theme.find('li > a.selected').removeClass('selected')
+      $target.addClass('selected')
+      // grabnew theme
+      var newTheme = $target.attr('data-value')
+
+      $(e.target).blur()
+
+      fetchTheme(newTheme, function() {
+        Notifier.showMessage(Notifier.messages.profileUpdated)
+      })
+    }
+  }
 
   // TODO: Maybe we just load them all once and stash in appcache?
   /**
@@ -544,13 +547,13 @@ $(function() {
   function updateFilename(str) {
     // Check for string because it may be keyup event object
     var f
-    if(typeof str === 'string') {
+    if (typeof str === 'string') {
       f = str
-    }else
-    {
+    }
+    else {
       f = getCurrentFilenameFromField()
     }
-    updateUserProfile( {current_filename: f })
+    updateUserProfile({ current_filename: f })
   }
 
   /**
@@ -572,17 +575,17 @@ $(function() {
     }
 
     function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
+      alert("Roh-roh. Something went wrong. :(")
     }
 
     var mdConfig = {
-                      type: 'POST',
-                      data: "unmd=" + encodeURIComponent(unmd),
-                      dataType: 'json',
-                      url: '/factory/fetch_markdown',
-                      error: _failHandler,
-                      success: _doneHandler
-                    }
+      type: 'POST'
+    , data: "unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_markdown'
+    , error: _failHandler
+    , success: _doneHandler
+    }
 
     $.ajax(mdConfig)
 
@@ -649,36 +652,37 @@ $(function() {
 
   }
 
-    function showHtml() {
+  function showHtml() {
 
-      // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
-      var unmd = editor.getSession().getValue()
+    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
+    var unmd = editor.getSession().getValue()
 
-      function _doneHandler(jqXHR, data, response) {
-        var resp = JSON.parse(response.responseText)
-        var textarea = $('#modalBodyText')
-        $(textarea).val(resp.data)
-        $('#myModal').on('shown.bs.modal', function (e) {
-          $(textarea).focus().select()
-        }).modal()
-      }
-
-      function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
-      }
-
-      var config = {
-        type: 'POST'
-      , data: "unmd=" + encodeURIComponent(unmd)
-      , dataType: 'json'
-      , url: '/factory/fetch_html_direct'
-      , error: _failHandler
-      , success: _doneHandler
-      }
-
-      $.ajax(config)
-
+    function _doneHandler(jqXHR, data, response) {
+      var resp = JSON.parse(response.responseText)
+      var textarea = $('#modalBodyText')
+      $(textarea).val(resp.data)
+      $('#myModal').on('shown.bs.modal', function (e) {
+        $(textarea).focus().select()
+      }).modal()
     }
+
+    function _failHandler() {
+      alert("Roh-roh. Something went wrong. :(")
+    }
+
+    var config = {
+      type: 'POST'
+    , data: "unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_html_direct'
+    , error: _failHandler
+    , success: _doneHandler
+    }
+
+    $.ajax(config)
+
+  }
+
   /**
    * Show a sad panda because they are using a shitty browser.
    *
@@ -752,9 +756,9 @@ $(function() {
    */
   function togglePaper() {
 
-    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")'  )
+    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")')
 
-    updateUserProfile({showPaper: !profile.showPaper})
+    updateUserProfile({ showPaper: !profile.showPaper })
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
@@ -767,9 +771,9 @@ $(function() {
    */
   function toggleAutoSave() {
 
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' )
+    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled')
 
-    updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
+    updateUserProfile({ autosave: { enabled: !profile.autosave.enabled } })
 
     autoSave()
 
@@ -793,9 +797,9 @@ $(function() {
    * @return {Void}
    */
   function toggleWordCount() {
-    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' )
+    $wordcount.html(profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled')
 
-    updateUserProfile({wordcount: !profile.wordcount })
+    updateUserProfile({ wordcount: !profile.wordcount })
 
     initWordCount();
 
@@ -865,12 +869,19 @@ $(function() {
         return false
       })
 
+    $("#save_github")
+      .on('click', function() {
+        Github.save()
+        saveFile()
+
+        return false
+    })
+
     $("#save_dropbox")
       .on('click', function() {
         profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
 
         Dropbox.putMarkdownFile()
-
         saveFile()
 
         return false
@@ -909,7 +920,7 @@ $(function() {
 
     $import_github
       .on('click', function() {
-        Github.fetchRepos()
+        Github.fetchOrgs()
         return false
       })
 
@@ -953,40 +964,40 @@ $(function() {
         return false
       })
 
-    $('#preferences').
-      on('click', function() {
+    $('#preferences')
+      .on('click', function() {
         showPreferences()
         return false
       })
 
-    $('#about').
-      on('click', function() {
+    $('#about')
+      .on('click', function() {
         showAboutInfo()
         return false
       })
 
-    $('#cheat').
-      on('click', function() {
+    $('#cheat')
+      .on('click', function() {
         window.open("https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet", "_blank")
         return false
       })
 
-    $('#new_local_file').
-      on('click', function() {
+    $('#new_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.newFile();
         return false;
       })
 
-    $('#import_local_file').
-      on('click', function() {
+    $('#import_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.search();
         return false;
       })
 
-    $('#save_local_file').
-      on('click', function() {
+    $('#save_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.saveFile();
         return false;
@@ -1030,7 +1041,7 @@ $(function() {
               },
        exec: function() {
         var profile = JSON.parse(localStorage.profile);
-        alert( profile.current_filename.replace(/\s/g, '-').toLowerCase())
+        alert(profile.current_filename.replace(/\s/g, '-').toLowerCase())
       }
     }
 
@@ -1045,34 +1056,65 @@ $(function() {
    */
   function bindDelegation() {
     $(document)
+      .on('click', '.org', function() {
+        var owner = $(this).parent('li').attr('data-org-name')
+
+        Github.currentOwner = owner
+        Github.fetchRepos(owner)
+        return false
+      })
+
       .on('click', '.repo', function() {
-        var repoName = $(this).parent('li').attr('data-repo-name')
+        var owner = Github.currentOwner
+          , repo = $(this).parent('li').attr('data-repo-name')
 
         Github.isRepoPrivate = $(this).parent('li').attr('data-repo-private') === 'true' ? true : false
-        Github.fetchBranches(repoName)
+        Github.fetchBranches(owner, repo)
         return false
       })
       .on('click', '.branch', function() {
 
-        var repo = $(this).parent('li').attr('data-repo-name')
+        var owner = Github.currentOwner
+          , repo = $(this).parent('li').attr('data-repo-name')
           , sha = $(this).parent('li').attr('data-commit-sha')
+          , branch = $(this).text()
 
-        Github.currentBranch = $(this).text()
+        Github.currentBranch = branch
 
-        Github.fetchTreeFiles(repo, sha)
+        Github.fetchTreeFiles(owner, repo, branch, sha)
         return false
       })
       .on('click', '.tree_file', function() {
 
-        var file = $(this).parent('li').attr('data-tree-file')
+        var url = $(this).parent('li').attr('data-tree-file')
+          , name = $(this).parent('li').attr('data-name')
+          , sha = $(this).parent('li').attr('data-tree-file-sha')
+          , owner = $(this).parent('li').attr('data-owner')
+          , branch = $(this).parent('li').attr('data-branch')
+          , repo = $(this).parent('li').attr('data-repo')
 
-        Github.fetchMarkdownFile(file)
+        Github.currentName = name
+        Github.currentSha = sha
+
+        Github.fetchMarkdownFile(url, {
+          name: name
+        , sha: sha
+        , branch: branch
+        , owner: owner
+        , repo: repo
+        })
 
         return false
       })
-      .on('click', '.github_user', function() {
-        Github.fetchRepos()
+
+      .on('click', '.github_org', function() {
+        Github.fetchOrgs()
       })
+
+      .on('click', '.github_repo', function() {
+        Github.fetchRepos(Github.currentOwner)
+      })
+
       .on('click', '.dropbox_file', function() {
 
         // We stash the current filename in the local profile only; not in localStorage.
@@ -1082,9 +1124,9 @@ $(function() {
 
         profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
 
-        Dropbox.setFilePath( dboxFilePath )
+        Dropbox.setFilePath(dboxFilePath)
 
-        Dropbox.fetchMarkdownFile( dboxFilePath )
+        Dropbox.fetchMarkdownFile(dboxFilePath)
 
         return false
 
@@ -1163,8 +1205,9 @@ $(function() {
         , docSavedLocal: "Document saved locally"
         , docDeletedLocal: "Document deleted from local storage"
         , docSavedServer: "Document saved on our server"
-        , docSavedDropbox: "Document saved on dropbox"
-        , dropboxImportNeeded: "Please import a file from dropbox first."
+        , docSavedDropbox: "Document saved on Dropbox"
+        , docSavedGithub: "Document saved on Github"
+        , dropboxImportNeeded: "Please import a file from Dropbox first."
       },
       showMessage: function(msg,delay) {
 
@@ -1192,7 +1235,7 @@ $(function() {
       var a = m.url.toLowerCase()
       var b = n.url.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1) }
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
       else { return m-n }
     }
 
@@ -1202,7 +1245,7 @@ $(function() {
     }
 
     // Returns an array of only md files from a tree
-    function _extractMdFiles(repoName, treefiles) {
+    function _extractMdFiles(repo, treefiles) {
       /*
       mode: "100644"
       path: ".gitignore"
@@ -1216,25 +1259,36 @@ $(function() {
       var sorted = []
         , raw = 'https://raw.github.com'
         , slash = '/'
+        , ghRegex = /https:\/\/api.github.com\/(.*?)\/(.*?)\/(.*?)\/(.*)/i
+        ;
 
       treefiles.forEach(function(el) {
 
         if (_isMdFile(el.path)) {
 
           var fullpath
+            , ghArr
+            , repo
+            , owner
+
+          ghArr = el.url.match(ghRegex)
+          owner = ghArr[2]
+          repo = ghArr[3]
 
           if (Github.isRepoPrivate) {
             fullpath = el.url
           }
           else {
             // we go straight to raw as it's faster (don't need to base64 decode the sha as in the private case)
-            fullpath = raw + slash + githubUser + slash + repoName + slash + Github.currentBranch + slash + el.path
+            fullpath = raw + slash + owner + slash + repo + slash + Github.currentBranch + slash + el.path
           }
 
           var item = {
             link: fullpath
           , path: el.path
           , sha: el.sha
+          , repo: repo
+          , owner: owner
           }
 
           sorted.push(item)
@@ -1246,21 +1300,24 @@ $(function() {
 
     }
 
-    // Show a list of repos
-    function _listRepos(repos) {
+    // Show a list of orgs
+    function _listOrgs(orgs) {
 
-      var list = '<ul>'
+      var list = '<ul>' +
+        '<li data-org-name="' + githubUser + '" data-user="true"><a class="org" href="#">' + githubUser + '</a></li>'
+      ;
 
       // Sort alpha
-      repos.sort(_alphaNumSort)
+      orgs.sort(_alphaNumSort)
 
-      repos.forEach(function(item) {
-        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
+      orgs.forEach(function(item) {
+
+        list += '<li data-org-name="' + item.name + '"><a class="org" href="#">' + item.name + '</a></li>'
       })
 
       list += '</ul>'
-
-      $('.modal-header h3').text('Your Github Repos')
+      console.log(list)
+      $('.modal-header h3').text('Your Github Orgs')
 
       $('.modal-body').html(list)
 
@@ -1274,18 +1331,48 @@ $(function() {
 
     }
 
-    // Show a list of branches
-    function _listBranches(repoName, branches) {
+    // Show a list of repos
+    function _listRepos(repos) {
 
-      var list = '<li class="github_user"><a href="#">Back to repositories...</a></li>'
+      var list = '<li class="github_org"><a href="#">Back to organizations...</a></li>'
+
+      // Sort alpha
+      repos.sort(_alphaNumSort)
+
+      repos.forEach(function(item) {
+        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
+      })
+
+      $('.modal-header h3').text(Github.currentOwner)
+
+      $('.modal-body')
+        .find('ul')
+          .find('li')
+          .remove()
+          .end()
+        .append(list)
+
+      $('#modal-generic').modal({
+        keyboard: true
+      , backdrop: true
+      , show: true
+      })
+
+      return false
+    }
+
+    // Show a list of branches
+    function _listBranches(repo, branches) {
+
+      var list = '<li class="github_repo"><a href="#">Back to repositories...</a></li>'
 
       branches.forEach(function(item) {
         var name = item.name
           , commit = item.commit.sha
-        list += '<li data-repo-name="' + repoName + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
+        list += '<li data-repo-name="' + repo + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
       })
 
-      $('.modal-header h3').text(repoName)
+      $('.modal-header h3').text(Github.currentOwner + " > " + repo)
 
       $('.modal-body')
         .find('ul')
@@ -1296,10 +1383,10 @@ $(function() {
     }
 
     // Show a list of tree files
-    function _listTreeFiles(repoName, commitSha, treefiles) {
+    function _listTreeFiles(repo, branch, sha, treefiles) {
 
-      var mdFiles = _extractMdFiles(repoName, treefiles)
-        , list = '<li class="refresh_branches" data-repo-name="' + repoName + '"><a class="repo" href="#">Back to branches in ' + repoName + '...</a></li>'
+      var mdFiles = _extractMdFiles(repo, treefiles)
+        , list = '<li class="refresh_branches" data-repo-name="' + repo + '"><a class="repo" href="#">Back to branches in ' + repo + '...</a></li>'
 
       if (mdFiles.length === 0) {
         list += '<li class="no_files">No Markdown files in this branch</li>'
@@ -1308,13 +1395,13 @@ $(function() {
         mdFiles.forEach(function(item) {
           // add class to <li> if private
           list += Github.isRepoPrivate
-                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
-                  : '<li data-tree-file="' + item.link + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" data-branch="' + branch + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  : '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" data-branch="' + branch + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
 
         });
       }
 
-      $('.modal-header h3').text(repoName + " > " + Github.currentBranch)
+      $('.modal-header h3').text(Github.currentOwner + " > " + repo + " > " + Github.currentBranch)
 
       $('.modal-body')
         .find('ul')
@@ -1327,7 +1414,37 @@ $(function() {
     return {
       currentBranch: '',
       isRepoPrivate: false,
-      fetchRepos: function() {
+      fetchOrgs: function() {
+
+        function _beforeSendHandler() {
+          Notifier.showMessage('Fetching Orgs...')
+        }
+
+        function _doneHandler(a, b, response) {
+          a = b = null
+          response = JSON.parse(response.responseText)
+          // Don't throw error if user has no orgs, still has individual user.
+          _listOrgs(response)
+        } // end done handler
+
+        function _failHandler(resp, err) {
+          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
+        }
+
+        var config = {
+          type: 'POST'
+        , dataType: 'text'
+        , url: '/import/github/orgs'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
+
+        $.ajax(config)
+
+      }, // end fetchRepos
+
+      fetchRepos: function(owner) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Repos...')
@@ -1343,7 +1460,7 @@ $(function() {
           } // end else
         } // end done handler
 
-        function _failHandler(resp,err) {
+        function _failHandler(resp, err) {
           alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
@@ -1356,25 +1473,28 @@ $(function() {
         , success: _doneHandler
         }
 
+        if (owner) {
+          config.data = 'owner=' + owner
+        }
         $.ajax(config)
 
       }, // end fetchRepos
-      fetchBranches: function(repoName) {
+      fetchBranches: function(owner, repo) {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Branches for Repo ' + repoName)
+          Notifier.showMessage('Fetching Branches for Repo ' + repo)
         }
 
         function _doneHandler(a, b, response) {
           a = b = null
           response = JSON.parse(response.responseText)
-          //console.dir(response)
+
           if(!response.length) {
             Notifier.showMessage('No branches available!')
             $('#modal-generic').modal('hide')
           }
           else {
-            _listBranches(repoName, response)
+            _listBranches(repo, response)
           } // end else
         } // end done handler
 
@@ -1385,7 +1505,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'repo=' + repoName
+        , data: 'owner=' + owner + '&repo=' + repo
         , url: '/import/github/branches'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1395,10 +1515,10 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchBranches()
-      fetchTreeFiles: function(repoName, sha) {
+      fetchTreeFiles: function(owner, repo, branch, sha) {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Tree for Repo ' + repoName)
+          Notifier.showMessage('Fetching Tree for Repo ' + repo)
         }
 
         function _doneHandler(a, b, response) {
@@ -1406,12 +1526,12 @@ $(function() {
           response = JSON.parse(response.responseText)
           // console.log('\nFetch Tree Files...')
           // console.dir(response)
-          if(!response.tree.length) {
+          if (!response.tree.length) {
             Notifier.showMessage('No tree files available!')
             $('#modal-generic').modal('hide')
           }
           else {
-            _listTreeFiles(repoName, sha, response.tree)
+            _listTreeFiles(repo, branch, sha, response.tree)
           } // end else
         } // end done handler
 
@@ -1422,7 +1542,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'repo=' + repoName + '&sha=' + sha
+        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1432,29 +1552,32 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchTreeFiles()
-      fetchMarkdownFile: function(filename) {
+      fetchMarkdownFile: function(url, opts) {
 
         function _doneHandler(a, b, response) {
           a = b = null
           response = JSON.parse(response.responseText)
           // console.dir(response)
-          if( response.error ) {
+          if (response.error) {
 
             Notifier.showMessage('No markdown for you!')
             $('#modal-generic').modal('hide')
 
           }
-          else{
+          else {
 
             $('#modal-generic').modal('hide')
 
-            editor.getSession().setValue( response.data )
+            editor.getSession().setValue(response.data)
 
             // Update it in localStorage
-            var name = filename.split('/').pop()
             updateFilename(name)
+
             // Show it in the field
             setCurrentFilenameField(name)
+
+            Github.setInfo(url, opts);
+
 
             previewMd()
 
@@ -1472,7 +1595,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'mdFile=' + filename
+        , data: 'url=' + url + "&name=" + name
         , url: '/import/github/file'
         , error: _failHandler
         , success: _doneHandler
@@ -1481,7 +1604,64 @@ $(function() {
 
         $.ajax(config)
 
-      } // end fetchMarkdownFile()
+      }, // end fetchMarkdownFile()
+
+      clear: function() {
+        delete profile.github.current_uri;
+        delete profile.github.opts;
+      },
+      setInfo: function(uri, opts) {
+        profile.github.current_uri = uri;
+        profile.github.opts = opts;
+      },
+      getUri: function() {
+        return profile.github.current_uri;
+      },
+      save: function() {
+        // convert file inside ACE editor from UTF-8 text into base64
+        // reference: https://developer.mozilla.org/en-US/docs/Web/API/Window.btoa
+
+        function _failHandler(e) {
+          alert("Roh-roh. Something went wrong. :(", e);
+        }
+
+        function _doneHandler(a, b, res) {
+          var data = JSON.parse(res.responseText);
+
+          if (res.status < 400) {
+            Github.currentSha = data.content.sha
+            Notifier.showMessage(Notifier.messages.docSavedGithub + " as " + data.content.path);
+          } else {
+            Notifier.showMessage('An error occurred!');
+          }
+        } // end done handler
+
+        function _alwaysHandler() {
+          // close saving modal
+          $('#modal-generic').modal('hide');
+        }
+
+        var postData = {
+          uri: Github.getUri() || ""
+        , data: btoa(editor.getSession().getValue())
+        , name: profile.github.opts.name
+        , sha: profile.github.opts.sha
+        , branch: profile.github.opts.branch
+        , repo: profile.github.opts.repo
+        , owner: profile.github.opts.owner
+
+        }
+
+        var config = {
+          type: 'POST'
+        , data: postData
+        , url: '/save/github'
+        , error: _failHandler
+        , success: _doneHandler
+        }
+
+        $.ajax(config)
+      } // end save
 
     } // end return obj
 
@@ -1489,17 +1669,16 @@ $(function() {
 
   var GoogleDrive = (function() {
     function _errorHandler(a, b, res) {
-      Notifier.showMessage(res.responseText );
+      Notifier.showMessage(res.responseText);
     }
 
     function renderSearchResults(a, b, res) {
-
 
       var result = JSON.parse(res.responseText)
         , list = '<ul>'
 
       // Handle empty array case.
-      if(!Array.isArray(result.items)) return _errorHandler(null, null, {responseText: "No Markdown files found!"} )
+      if (!Array.isArray(result.items)) return _errorHandler(null, null, { responseText: "No Markdown files found!" })
 
       result.items.forEach(function(item) {
         list += '<li data-file-id="'
@@ -1519,9 +1698,18 @@ $(function() {
 
     function renderFile(a, b, res) {
       var result = JSON.parse(res.responseText);
-      $('#modal-generic').modal('hide')
-      editor.getSession().setValue(result.content)
-      previewMd()
+      $('#modal-generic').modal('hide');
+      editor.getSession().setValue(result.content);
+      previewMd();
+
+      // TODO:
+      // Allow Github to unload it's current file if another file
+      // gets loaded without touching these Dropbox/GoogleDrive objects.
+
+      // This is to prevent a file not loaded from Github
+      // from overwriting your file.
+
+      Github.clear();
     }
 
     // TODO: what to do if access token expires?
@@ -1587,8 +1775,8 @@ $(function() {
       var a = m.path.toLowerCase()
       var b = n.path.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
+      else { return m-n }
     }
 
     function _listMdFiles(files) {
@@ -1652,13 +1840,13 @@ $(function() {
         }
 
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/account/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'GET'
+        , dataType: 'json'
+        , url: '/account/dropbox'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1679,13 +1867,13 @@ $(function() {
         }
 
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/dropbox/metadata',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'GET'
+        , dataType: 'json'
+        , url: '/dropbox/metadata'
+        , beforeSend: _beforeSendHandler
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1764,6 +1952,7 @@ $(function() {
 
             editor.getSession().setValue( response.data )
             previewMd()
+            Github.clear();
 
           } // end else
         } // end done handler
@@ -1779,13 +1968,13 @@ $(function() {
         filename = path + enc
 
         var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: 'mdFile=' + filename,
-                        url: '/fetch/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST'
+        , dataType: 'json'
+        , data: 'mdFile=' + filename
+        , url: '/fetch/dropbox'
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1811,9 +2000,7 @@ $(function() {
 
             $('#modal-generic').modal('hide')
 
-            // console.dir(JSON.parse(response.data))
-
-            Notifier.showMessage( Notifier.messages.docSavedDropbox )
+            Notifier.showMessage(Notifier.messages.docSavedDropbox)
 
           } // end else
         } // end done handler
@@ -1827,13 +2014,13 @@ $(function() {
         var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
 
         var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: postData,
-                        url: '/save/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST'
+        , dataType: 'json'
+        , data: postData
+        , url: '/save/dropbox'
+        , error: _failHandler
+        , success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -1851,8 +2038,8 @@ $(function() {
       var a = m.toLowerCase()
       var b = n.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
+      else { return m-n }
     }
 
     function _listMdFiles(files) {
@@ -1905,6 +2092,15 @@ $(function() {
         setCurrentFilenameField()
         editor.getSession().setValue(profile.local_files[fileName])
         previewMd()
+
+        // TODO:
+        // Allow Github to unload it's current file if another file
+        // gets loaded without touching these Dropbox/GoogleDrive objects.
+
+        // This is to prevent a file not loaded from Github
+        // from overwriting your file.
+        Github.clear()
+
       },
       saveFile: function() {
         var fileName = getCurrentFilenameFromField()
