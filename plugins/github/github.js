@@ -129,8 +129,8 @@ exports.Github = (function() {
 
       var uri;
 
-      if (req.body.org !== req.session.github.username) {
-        uri = githubApi + 'orgs/' + req.body.org + '/repos?access_token=' + req.session.github.oauth
+      if (req.body.owner !== req.session.github.username) {
+        uri = githubApi + 'orgs/' + req.body.owner + '/repos?access_token=' + req.session.github.oauth
       }
       else {
         uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
@@ -178,7 +178,7 @@ exports.Github = (function() {
 
       var uri = githubApi
         + 'repos/'
-        + req.body.org // org can also be the user
+        + req.body.owner
         + '/'
         + req.body.repo
         +'/branches?access_token=' + req.session.github.oauth
@@ -210,7 +210,7 @@ exports.Github = (function() {
 
       var uri = githubApi
         + 'repos/'
-        + req.body.org // org can also be the user
+        + req.body.owner
         + '/'
         + req.body.repo
         + '/git/trees/'
@@ -231,6 +231,7 @@ exports.Github = (function() {
         }
         else if (!e && r.statusCode === 200) {
           d = JSON.parse(d)
+          d.branch = req.body.branch // inject branch info
           res.json(d)
         } // end else if
         else {
@@ -296,22 +297,15 @@ exports.Github = (function() {
       }
       else {
         // uri = "https://api.github.com/repos/:owner/:repo/contents/:path"
-        var options, parseUrl, uri, owner, repo, branch, sha, isPrivateRepo
+        var options, uri, owner, repo, branch, sha, isPrivateRepo
 
         isPrivateRepo = /blob/.test(data.uri)
-        parseUrl = url.parse(data.uri).path.split("/")
 
         branch = data.branch
         path = data.name
         sha = data.sha
-        if (isPrivateRepo) {
-          repo = parseUrl[3]
-          owner = parseUrl[2]
-        } else {
-          repo = parseUrl[2]
-          owner = parseUrl[1]
-
-        }
+        repo = data.repo
+        owner = data.owner
 
         uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path
         uri += '?access_token=' + req.session.github.oauth

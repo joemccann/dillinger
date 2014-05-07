@@ -16,6 +16,8 @@ $(function() {
       , wordcount: true
       , current_filename: 'Untitled Document'
       , github: {
+          current_uri: ''
+        , opts: {}
         }
       , dropbox: {
           filepath: '/Dillinger/'
@@ -1055,30 +1057,31 @@ $(function() {
   function bindDelegation() {
     $(document)
       .on('click', '.org', function() {
-        var org = $(this).parent('li').attr('data-org-name')
+        var owner = $(this).parent('li').attr('data-org-name')
 
-        Github.currentOrg = org
-        Github.fetchRepos(org)
+        Github.currentOwner = owner
+        Github.fetchRepos(owner)
         return false
       })
 
       .on('click', '.repo', function() {
-        var org = Github.currentOrg
+        var owner = Github.currentOwner
           , repo = $(this).parent('li').attr('data-repo-name')
 
         Github.isRepoPrivate = $(this).parent('li').attr('data-repo-private') === 'true' ? true : false
-        Github.fetchBranches(org, repo)
+        Github.fetchBranches(owner, repo)
         return false
       })
       .on('click', '.branch', function() {
 
-        var org = Github.currentOrg
+        var owner = Github.currentOwner
           , repo = $(this).parent('li').attr('data-repo-name')
           , sha = $(this).parent('li').attr('data-commit-sha')
+          , branch = $(this).text()
 
-        Github.currentBranch = $(this).text()
+        Github.currentBranch = branch
 
-        Github.fetchTreeFiles(org, repo, sha)
+        Github.fetchTreeFiles(owner, repo, branch, sha)
         return false
       })
       .on('click', '.tree_file', function() {
@@ -1086,11 +1089,20 @@ $(function() {
         var url = $(this).parent('li').attr('data-tree-file')
           , name = $(this).parent('li').attr('data-name')
           , sha = $(this).parent('li').attr('data-tree-file-sha')
+          , owner = $(this).parent('li').attr('data-owner')
+          , branch = $(this).parent('li').attr('data-branch')
+          , repo = $(this).parent('li').attr('data-repo')
 
         Github.currentName = name
         Github.currentSha = sha
 
-        Github.fetchMarkdownFile(url, name)
+        Github.fetchMarkdownFile(url, {
+          name: name
+        , sha: sha
+        , branch: branch
+        , owner: owner
+        , repo: repo
+        })
 
         return false
       })
@@ -1100,7 +1112,7 @@ $(function() {
       })
 
       .on('click', '.github_repo', function() {
-        Github.fetchRepos(Github.currentOrg)
+        Github.fetchRepos(Github.currentOwner)
       })
 
       .on('click', '.dropbox_file', function() {
@@ -1233,7 +1245,7 @@ $(function() {
     }
 
     // Returns an array of only md files from a tree
-    function _extractMdFiles(repoName, treefiles) {
+    function _extractMdFiles(repo, treefiles) {
       /*
       mode: "100644"
       path: ".gitignore"
@@ -1331,7 +1343,7 @@ $(function() {
         list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
       })
 
-      $('.modal-header h3').text(Github.currentOrg)
+      $('.modal-header h3').text(Github.currentOwner)
 
       $('.modal-body')
         .find('ul')
@@ -1350,17 +1362,17 @@ $(function() {
     }
 
     // Show a list of branches
-    function _listBranches(repoName, branches) {
+    function _listBranches(repo, branches) {
 
       var list = '<li class="github_repo"><a href="#">Back to repositories...</a></li>'
 
       branches.forEach(function(item) {
         var name = item.name
           , commit = item.commit.sha
-        list += '<li data-repo-name="' + repoName + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
+        list += '<li data-repo-name="' + repo + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
       })
 
-      $('.modal-header h3').text(Github.currentOrg + " > " + repoName)
+      $('.modal-header h3').text(Github.currentOwner + " > " + repo)
 
       $('.modal-body')
         .find('ul')
@@ -1371,10 +1383,10 @@ $(function() {
     }
 
     // Show a list of tree files
-    function _listTreeFiles(repoName, commitSha, treefiles) {
+    function _listTreeFiles(repo, branch, sha, treefiles) {
 
-      var mdFiles = _extractMdFiles(repoName, treefiles)
-        , list = '<li class="refresh_branches" data-repo-name="' + repoName + '"><a class="repo" href="#">Back to branches in ' + repoName + '...</a></li>'
+      var mdFiles = _extractMdFiles(repo, treefiles)
+        , list = '<li class="refresh_branches" data-repo-name="' + repo + '"><a class="repo" href="#">Back to branches in ' + repo + '...</a></li>'
 
       if (mdFiles.length === 0) {
         list += '<li class="no_files">No Markdown files in this branch</li>'
@@ -1383,13 +1395,13 @@ $(function() {
         mdFiles.forEach(function(item) {
           // add class to <li> if private
           list += Github.isRepoPrivate
-                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
-                  : '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" data-branch="' + branch + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
+                  : '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" data-repo="' + item.repo + '" data-owner="' + item.owner + '" data-name="' + item.path + '" data-branch="' + branch + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
 
         });
       }
 
-      $('.modal-header h3').text(Github.currentOrg + " > " + repoName + " > " + Github.currentBranch)
+      $('.modal-header h3').text(Github.currentOwner + " > " + repo + " > " + Github.currentBranch)
 
       $('.modal-body')
         .find('ul')
@@ -1432,7 +1444,7 @@ $(function() {
 
       }, // end fetchRepos
 
-      fetchRepos: function(orgName) {
+      fetchRepos: function(owner) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Repos...')
@@ -1448,7 +1460,7 @@ $(function() {
           } // end else
         } // end done handler
 
-        function _failHandler(resp,err) {
+        function _failHandler(resp, err) {
           alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
@@ -1461,16 +1473,16 @@ $(function() {
         , success: _doneHandler
         }
 
-        if (orgName) {
-          config.data = 'org=' + orgName
+        if (owner) {
+          config.data = 'owner=' + owner
         }
         $.ajax(config)
 
       }, // end fetchRepos
-      fetchBranches: function(orgName, repoName) {
+      fetchBranches: function(owner, repo) {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Branches for Repo ' + repoName)
+          Notifier.showMessage('Fetching Branches for Repo ' + repo)
         }
 
         function _doneHandler(a, b, response) {
@@ -1482,7 +1494,7 @@ $(function() {
             $('#modal-generic').modal('hide')
           }
           else {
-            _listBranches(repoName, response)
+            _listBranches(repo, response)
           } // end else
         } // end done handler
 
@@ -1493,7 +1505,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'org=' + orgName + '&repo=' + repoName
+        , data: 'owner=' + owner + '&repo=' + repo
         , url: '/import/github/branches'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1503,10 +1515,10 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchBranches()
-      fetchTreeFiles: function(orgName, repoName, sha) {
+      fetchTreeFiles: function(owner, repo, branch, sha) {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Tree for Repo ' + repoName)
+          Notifier.showMessage('Fetching Tree for Repo ' + repo)
         }
 
         function _doneHandler(a, b, response) {
@@ -1519,7 +1531,7 @@ $(function() {
             $('#modal-generic').modal('hide')
           }
           else {
-            _listTreeFiles(repoName, sha, response.tree)
+            _listTreeFiles(repo, branch, sha, response.tree)
           } // end else
         } // end done handler
 
@@ -1530,7 +1542,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'org=' + orgName + '&repo=' + repoName + '&sha=' + sha
+        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1540,7 +1552,7 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchTreeFiles()
-      fetchMarkdownFile: function(url, name) {
+      fetchMarkdownFile: function(url, opts) {
 
         function _doneHandler(a, b, response) {
           a = b = null
@@ -1552,7 +1564,7 @@ $(function() {
             $('#modal-generic').modal('hide')
 
           }
-          else{
+          else {
 
             $('#modal-generic').modal('hide')
 
@@ -1564,7 +1576,8 @@ $(function() {
             // Show it in the field
             setCurrentFilenameField(name)
 
-            Github.setUri(url);
+            Github.setInfo(url, opts);
+
 
             previewMd()
 
@@ -1592,11 +1605,14 @@ $(function() {
         $.ajax(config)
 
       }, // end fetchMarkdownFile()
-      clearUri: function() {
+
+      clear: function() {
         delete profile.github.current_uri;
+        delete profile.github.opts;
       },
-      setUri: function(uri) {
+      setInfo: function(uri, opts) {
         profile.github.current_uri = uri;
+        profile.github.opts = opts;
       },
       getUri: function() {
         return profile.github.current_uri;
@@ -1620,12 +1636,19 @@ $(function() {
           }
         } // end done handler
 
+        function _alwaysHandler() {
+          // close saving modal
+          $('#modal-generic').modal('hide');
+        }
+
         var postData = {
           uri: Github.getUri() || ""
         , data: btoa(editor.getSession().getValue())
-        , name: Github.currentName
-        , sha: Github.currentSha
-        , branch: Github.currentBranch
+        , name: profile.github.opts.name
+        , sha: profile.github.opts.sha
+        , branch: profile.github.opts.branch
+        , repo: profile.github.opts.repo
+        , owner: profile.github.opts.owner
 
         }
 
@@ -1686,7 +1709,7 @@ $(function() {
       // This is to prevent a file not loaded from Github
       // from overwriting your file.
 
-      Github.clearUri();
+      Github.clear();
     }
 
     // TODO: what to do if access token expires?
@@ -1929,7 +1952,7 @@ $(function() {
 
             editor.getSession().setValue( response.data )
             previewMd()
-            Github.clearUri();
+            Github.clear();
 
           } // end else
         } // end done handler
@@ -2076,7 +2099,7 @@ $(function() {
 
         // This is to prevent a file not loaded from Github
         // from overwriting your file.
-        Github.clearUri()
+        Github.clear()
 
       },
       saveFile: function() {
