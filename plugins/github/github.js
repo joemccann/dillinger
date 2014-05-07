@@ -330,7 +330,7 @@ exports.Github = (function() {
           if (!e && r.statusCode === 200) {
             return res.json(200, JSON.parse(d))
           }
-          return res.json(400, { "error": "Unable to save file: " + (e || d.message) })
+          return res.json(400, { "error": "Unable to save file: " + (e || JSON.parse(d).message) })
 
         })
 

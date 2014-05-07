@@ -1093,9 +1093,6 @@ $(function() {
           , branch = $(this).parent('li').attr('data-branch')
           , repo = $(this).parent('li').attr('data-repo')
 
-        Github.currentName = name
-        Github.currentSha = sha
-
         Github.fetchMarkdownFile(url, {
           name: name
         , sha: sha
@@ -1631,7 +1628,7 @@ $(function() {
           var data = JSON.parse(res.responseText);
 
           if (res.status < 400) {
-            Github.currentSha = data.content.sha
+            profile.github.opts.sha = data.content.sha
             Notifier.showMessage(Notifier.messages.docSavedGithub + " as " + data.content.path);
           } else {
             Notifier.showMessage('An error occurred!');
