@@ -1570,6 +1570,8 @@ $(function() {
 
             editor.getSession().setValue(response.data)
 
+            var name = opts.name.split('/').pop()
+
             // Update it in localStorage
             updateFilename(name)
 
