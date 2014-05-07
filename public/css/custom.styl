@@ -198,6 +198,15 @@ https://github.com/joemccann/dillinger/issues/126
   padding 0 0 18px 25px
   overflow auto
 
+/*
+  Adding in bootstrap ~3.0 pager.disabled css.
+  if upgrading bootstrap, check that this is still needed
+*/
+.pager .disabled>a, .pager .disabled>a:hover, .pager .disabled>a:focus, .pager .disabled>span
+  color #999
+  background-color #fff
+  cursor not-allowed
+
 .private_repo
   background transparent url(/img/icon_lock_16x16.png) no-repeat scroll top left
 
