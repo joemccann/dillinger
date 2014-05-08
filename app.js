@@ -12,10 +12,12 @@ var config = require('./config')()
   , sharejs = require('share').server
   , app = express();
 
-var cert_options = {
-  key: fs.readFileSync('/home/tyree/cert/server-key.pem'),
-  cert: fs.readFileSync('/home/tyree/cert/server-cert.pem'),
-};
+/* This is only needed when using https
+ * var cert_options = {
+ *   key: fs.readFileSync('/home/john/cert/server-key.pem'),
+ *   cert: fs.readFileSync('/home/john/cert/server-cert.pem'),
+ * };
+ */
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8080);
