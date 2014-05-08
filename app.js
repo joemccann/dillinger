@@ -6,7 +6,7 @@
 var config = require('./config')()
   , express = require('express')
   , routes = require('./routes')
-  , https = require('https')
+  , http = require('http')
   , path = require('path')
   , fs = require('fs')
   , sharejs = require('share').server
@@ -138,7 +138,8 @@ app.get('/files/pdf/:pdf', routes.download_pdf);
 /* End Dillinger Actions */
 
 
-https.createServer(cert_options, app).listen(app.get('port'), function(){
+// https.createServer(cert_options, app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'))
-  console.log("\nhttps://localhost:" + app.get('port') + "\n")
+  console.log("\nhttp://localhost:" + app.get('port') + "\n")
 })
