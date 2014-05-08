@@ -811,8 +811,8 @@ scroll
 .hljs-chunk {
   color: #aaa;
 }
-pre,
-code {
+code,
+pre {
   font-family: Consolas, "Liberation Mono", Courier, monospace !important;
 }
 form {
@@ -3768,47 +3768,34 @@ a.thumbnail:hover {
   background-image: linear-gradient(top left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent 100%);
 }
 @-moz-keyframes progress-bar-stripes {
-  0% {
+  from {
     background-position: 0 0;
   }
-
-  100% {
+  to {
     background-position: 40px 0;
   }
 }
 @-webkit-keyframes progress-bar-stripes {
-  0% {
+  from {
     background-position: 0 0;
   }
-
-  100% {
+  to {
     background-position: 40px 0;
   }
 }
 @-o-keyframes progress-bar-stripes {
-  0% {
+  from {
     background-position: 0 0;
   }
-
-  100% {
-    background-position: 40px 0;
-  }
-}
-@-ms-keyframes progress-bar-stripes {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
+  to {
     background-position: 40px 0;
   }
 }
 @keyframes progress-bar-stripes {
-  0% {
+  from {
     background-position: 0 0;
   }
-
-  100% {
+  to {
     background-position: 40px 0;
   }
 }
