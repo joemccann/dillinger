@@ -356,8 +356,10 @@ $(function() {
 
     editor = ace.edit("editor")
     // FIXME: Grab actual document title.
-    doc = sharejs.open('test', 'text', function(error, doc) {
+    doc = sharejs.open('share_doc', 'text', function(error, doc) {
+        editor.setReadOnly(true);
         doc.attach_ace(editor);
+        editor.setReadOnly(false);
         doc.on('remoteop', function(op) {
             previewMd();
         });
