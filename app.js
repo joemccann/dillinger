@@ -6,11 +6,16 @@
 var config = require('./config')()
   , express = require('express')
   , routes = require('./routes')
-  , http = require('http')
+  , https = require('https')
   , path = require('path')
   , fs = require('fs')
   , sharejs = require('share').server
   , app = express();
+
+var cert_options = {
+  key: fs.readFileSync('/home/tyree/cert/server-key.pem'),
+  cert: fs.readFileSync('/home/tyree/cert/server-cert.pem'),
+};
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8080);
@@ -132,7 +137,7 @@ app.get('/files/pdf/:pdf', routes.download_pdf);
 /* End Dillinger Actions */
 
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-  console.log("\nhttp://localhost:" + app.get('port') + "\n");
-});
+https.createServer(cert_options, app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'))
+  console.log("\nhttps://localhost:" + app.get('port') + "\n")
+})
