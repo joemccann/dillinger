@@ -136,6 +136,10 @@ exports.Github = (function() {
         uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
       }
 
+      if (isFinite(req.body.page) && +req.body.page > 1) {
+        uri += "&page=" + req.body.page
+      }
+
       var options = {
         headers: headers
       , uri: uri

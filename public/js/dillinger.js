@@ -1059,11 +1059,28 @@ $(function() {
       .on('click', '.org', function() {
         var owner = $(this).parent('li').attr('data-org-name')
 
+        // reset currentPage to 1 if the org/user is not the same as the last selected one
+        if (owner !== Github.currentOwner) {
+           Github.currentPage = 1
+        }
+        else {
+          Github.currentPage = (Github.currentPage || 1)
+        }
         Github.currentOwner = owner
-        Github.fetchRepos(owner)
+        Github.fetchRepos(Github.currentOwner)
         return false
       })
-
+      .on('click', '.repos.pager .next', function() {
+        Github.fetchRepos(Github.currentOwner, 'next')
+        return false
+      })
+      .on('click', '.repos.pager .previous', function() {
+        if (Github.currentPage <= 1) {
+          return false
+        }
+        Github.fetchRepos(Github.currentOwner, 'prev')
+        return false
+      })
       .on('click', '.repo', function() {
         var owner = Github.currentOwner
           , repo = $(this).parent('li').attr('data-repo-name')
@@ -1080,7 +1097,6 @@ $(function() {
           , branch = $(this).text()
 
         Github.currentBranch = branch
-
         Github.fetchTreeFiles(owner, repo, branch, sha)
         return false
       })
@@ -1104,11 +1120,12 @@ $(function() {
         return false
       })
 
-      .on('click', '.github_org', function() {
+      .on('click', '.github_org', function() { // Back to organizations link
+        delete Github.currentPage
         Github.fetchOrgs()
       })
 
-      .on('click', '.github_repo', function() {
+      .on('click', '.github_repo', function() { // Back to repos link
         Github.fetchRepos(Github.currentOwner)
       })
 
@@ -1313,7 +1330,7 @@ $(function() {
       })
 
       list += '</ul>'
-      console.log(list)
+
       $('.modal-header h3').text('Your Github Orgs')
 
       $('.modal-body').html(list)
@@ -1332,6 +1349,7 @@ $(function() {
     function _listRepos(repos) {
 
       var list = '<li class="github_org"><a href="#">Back to organizations...</a></li>'
+        , pagination = '<ul class="repos pager"><li class="previous' + (!Github.currentPage || Github.currentPage === 1 ? " disabled" : "") + '"><a href="#">&larr; Prev</a></li><li class="next"><a href="#">Next &rarr;</a></li></ul>'
 
       // Sort alpha
       repos.sort(_alphaNumSort)
@@ -1348,6 +1366,11 @@ $(function() {
           .remove()
           .end()
         .append(list)
+        .end()
+        .find('.pager')
+          .remove()
+          .end()
+          .append(pagination)
 
       $('#modal-generic').modal({
         keyboard: true
@@ -1377,6 +1400,10 @@ $(function() {
           .remove()
           .end()
         .append(list)
+        .end()
+        .find('.pager')
+          .remove()
+
     }
 
     // Show a list of tree files
@@ -1406,10 +1433,12 @@ $(function() {
           .remove()
           .end()
         .append(list)
+        .end()
+        .find('.pager')
+          .remove()
     }
 
     return {
-      currentBranch: '',
       isRepoPrivate: false,
       fetchOrgs: function() {
 
@@ -1441,7 +1470,7 @@ $(function() {
 
       }, // end fetchRepos
 
-      fetchRepos: function(owner) {
+      fetchRepos: function(owner, pager) {
 
         function _beforeSendHandler() {
           Notifier.showMessage('Fetching Repos...')
@@ -1453,6 +1482,25 @@ $(function() {
           // console.dir(response)
           if (!response.length) { Notifier.showMessage('No repos available!') }
           else {
+
+            if (pager === 'next') {
+              Github.currentPage++;
+            }
+            if (pager === 'prev') {
+              Github.currentPage--;
+            }
+
+            if (Github.currentPage <= 1) {
+              $('.repos.pager .previous').addClass('disabled')
+            }
+            else {
+              $('.repos.pager .previous').removeClass('disabled')
+            }
+
+            if (Github.currentPage < 1) {
+              Github.currentPage = 1
+            }
+
             _listRepos(response)
           } // end else
         } // end done handler
@@ -1469,10 +1517,24 @@ $(function() {
         , error: _failHandler
         , success: _doneHandler
         }
+        var page
 
-        if (owner) {
-          config.data = 'owner=' + owner
+        config.data = 'owner=' + owner
+
+        if (pager === 'next') {
+          page = Github.currentPage + 1
         }
+        else if (pager === 'prev') {
+          page = Github.currentPage - 1
+        }
+        else {
+          page = Github.currentPage
+        }
+
+        if (page > 1) {
+          config.data += '&page=' + page
+        }
+
         $.ajax(config)
 
       }, // end fetchRepos
