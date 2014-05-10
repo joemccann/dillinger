@@ -620,7 +620,7 @@ blockquote {
 }
 blockquote p {
   margin-bottom: 0;
-  /*font-size: 16px;*/
+  font-size: 16px;
   font-weight: 300;
   line-height: 22.5px;
 }
@@ -4879,6 +4879,14 @@ noscript p {
   margin: 0;
   padding: 0 0 18px 25px;
   overflow: auto;
+}
+.pager .disabled>a,
+.pager .disabled>a:hover,
+.pager .disabled>a:focus,
+.pager .disabled>span {
+  color: #999;
+  background-color: #fff;
+  cursor: not-allowed;
 }
 .private_repo {
   background: transparent url("/img/icon_lock_16x16.png") no-repeat scroll top left;
