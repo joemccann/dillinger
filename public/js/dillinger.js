@@ -426,6 +426,7 @@ $(function() {
       autoInterval = setInterval(function() {
         // firefox barfs if I don't pass in anon func to setTimeout.
         saveFile()
+        LocalFiles.saveFile(false)
       }, profile.autosave.interval)
 
     }
@@ -1030,7 +1031,8 @@ $(function() {
                 win: "Ctrl-S"
               },
        exec: function() {
-         saveFile(true)
+         saveFile()
+         LocalFiles.saveFile()
        }
     }
     var fileForUrlNamer = {
@@ -2163,14 +2165,16 @@ $(function() {
         Github.clear()
 
       },
-      saveFile: function() {
+      saveFile: function(bool) {
         var fileName = getCurrentFilenameFromField()
         var md = editor.getSession().getValue()
         var saveObj = { local_files: { } }
         saveObj.local_files[fileName] = md
 
         updateUserProfile(saveObj)
-        Notifier.showMessage(Notifier.messages.docSavedLocal)
+        if(bool !== false) {
+          Notifier.showMessage(Notifier.messages.docSavedLocal)
+        }
       },
       deleteFile: function(fileName) {
         var files = profile.local_files;
