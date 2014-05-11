@@ -351,19 +351,24 @@ $(function() {
   }
 
   function initShareJS() {
-      function littleToggleThing() {
-          box = $('#sharejs-toggle')[0];
-          box.checked = !box.checked;
+      icon = $('#collaborate-icon')[0].style;
+      function set_color(color) {
+          icon.color = color;
       }
+      icon.fontSize = '130%';
+      icon.verticalAlign = 'center';
+      set_color('green');
       $('#sharejs-toggle-text').click(function () {
-          // littleToggleThing();
           var title = profile.current_filename;
           if (ShareJS.doc) {
-              alert("Detach from '" + title + "'");
-              // ShareJS.close(ShareJS.doc);
+              set_color('');
+              console.log("Detach from '" + title + "'");
+              set_color('green');
+              ShareJS.close(ShareJS.doc);
           } else {
-              alert("Attach to '" + title + "'");
-              // ShareJS.doc = ShareJS.open(title);
+              console.log("Attach to '" + title + "'");
+              set_color('red');
+              ShareJS.doc = ShareJS.open(title);
           }
       });
   }
