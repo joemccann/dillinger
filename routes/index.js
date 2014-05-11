@@ -1,10 +1,11 @@
 var path = require('path')
   , request = require('request')
   , qs = require('querystring')
-  , Core = require( path.resolve(__dirname, '../plugins/core/core.js') ).Core
-  , Dropbox = require( path.resolve(__dirname, '../plugins/dropbox/dropbox.js') ).Dropbox
-  , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
+  , Core = require(path.resolve(__dirname, '../plugins/core/core.js')).Core
+  , Dropbox = require(path.resolve(__dirname, '../plugins/dropbox/dropbox.js')).Dropbox
+  , Github = require(path.resolve(__dirname, '../plugins/github/github.js')).Github
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
+  , ShareJS = require('../plugins/sharejs/sharejs.js').ShareJS
 
 // Show the home page
 exports.index = function(req, res) {
@@ -17,7 +18,8 @@ exports.index = function(req, res) {
     isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
-    isGoogleDriveConfigured: GoogleDrive.isConfigured
+    isGoogleDriveConfigured: GoogleDrive.isConfigured,
+    isShareJS: ShareJS.isEnabled
   }
 
   if (!req.session.isEvernoteSynced) {
