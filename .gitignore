@@ -1,8 +1,12 @@
 .DS_Store
+
+#Dillinger
 node_modules/*
 logs/*
 public/files/md/*.md
 public/files/html/*.html
+public/css/style.css
+
 *-config.json
 backup/*
 
