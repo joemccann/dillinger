@@ -1851,6 +1851,7 @@ $(function() {
     */
     open: function (title) {
       self = this;
+      title = title ? title : "Untitled Document";
       var doc = sharejs.open(title, 'text', function(error, doc) {
         if (error) {
           console.log('ShareJS error:', error);
