@@ -5,7 +5,6 @@ var path = require('path')
   , Dropbox = require(path.resolve(__dirname, '../plugins/dropbox/dropbox.js')).Dropbox
   , Github = require(path.resolve(__dirname, '../plugins/github/github.js')).Github
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
-  , ShareJS = require('../plugins/sharejs/sharejs.js').ShareJS
 
 // Show the home page
 exports.index = function(req, res) {
@@ -19,7 +18,6 @@ exports.index = function(req, res) {
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
-    isShareJS: ShareJS.isEnabled
   }
 
   if (!req.session.isEvernoteSynced) {

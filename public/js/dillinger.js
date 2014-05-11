@@ -15,6 +15,9 @@ $(function() {
         }
       , wordcount: true
       , current_filename: 'Untitled Document'
+      , sharejs: {
+          doc: {}
+        }
       , github: {
           current_uri: ''
         , opts: {}
@@ -308,6 +311,8 @@ $(function() {
 
       initEditorType()
 
+      initShareJS()
+
       initUi()
 
       marked.setOptions({
@@ -338,45 +343,32 @@ $(function() {
       autoSave()
 
       initWordCount()
-      
+
       refreshWordCount()
 
     }
 
   }
 
-  /*
-   * Attach ShareJS to the editor and sync it.
-   */
-  function attachShareJS(title) {
-
-    doc = sharejs.open(title, 'text', function(error, doc) {
-        if (error) {
-            console.log('ShareJS error:', error);
-            return;
-        }
-        editor.setReadOnly(true);
-        doc.attach_ace(editor);
-        editor.setReadOnly(false);
-        doc.on('remoteop', function(op) {
-            previewMd();
-        });
-        isShareJS = true;
-        previewMd();
-    });
+  function initShareJS() {
+      $('#sharejs-toggle').click(function () {
+          // var title = $('#filename span').text();
+          var title = profile.current_filename;
+          if (ShareJS.doc) {
+              alert("Detach from '" + title + "'");
+              ShareJS.close(ShareJS.doc);
+          } else {
+              alert("Attach to '" + title + "'");
+              ShareJS.doc = ShareJS.open(title);
+          }
+      });
   }
-
-  function detachShareJS() {
 
   /**
    * Initialize theme and other options of Ace editor.
    *
-   * Attach ShareJS to the editor and listen for updates.
-   *
    * @return {Void}
    */
-  }
-
   function initAce() {
 
     editor = ace.edit("editor")
@@ -1849,6 +1841,39 @@ $(function() {
     } // end return obj
 
   })() // end IIFE
+
+  var ShareJS = {
+    doc: null,
+    /*
+    * Attach ShareJS to the editor and sync it.
+    *
+    * @return {sharejs doc}
+    */
+    open: function (title) {
+      self = this;
+      var doc = sharejs.open(title, 'text', function(error, doc) {
+        if (error) {
+          console.log('ShareJS error:', error);
+        }
+        doc.attach_ace(editor);
+        doc.on('remoteop', previewMd);
+        previewMd();
+        console.log(self);
+        self.doc = doc;
+      });
+    },
+
+    /**
+    * Detach ShareJS from the editor.
+    *
+    * @return {Void}
+    */
+    close: function (doc) {
+      console.log(doc);
+      doc.detach_ace();
+      this.doc = null;
+    }
+  };
 
   var GoogleDrive = (function() {
     function _errorHandler(a, b, res) {
