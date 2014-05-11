@@ -351,15 +351,19 @@ $(function() {
   }
 
   function initShareJS() {
-      $('#sharejs-toggle').click(function () {
-          // var title = $('#filename span').text();
+      function littleToggleThing() {
+          box = $('#sharejs-toggle')[0];
+          box.checked = !box.checked;
+      }
+      $('#sharejs-toggle-text').click(function () {
+          // littleToggleThing();
           var title = profile.current_filename;
           if (ShareJS.doc) {
               alert("Detach from '" + title + "'");
-              ShareJS.close(ShareJS.doc);
+              // ShareJS.close(ShareJS.doc);
           } else {
               alert("Attach to '" + title + "'");
-              ShareJS.doc = ShareJS.open(title);
+              // ShareJS.doc = ShareJS.open(title);
           }
       });
   }
@@ -1851,7 +1855,7 @@ $(function() {
     */
     open: function (title) {
       self = this;
-      title = title ? title : "Untitled Document";
+      title = title ? title : "Untitled Document (ShareJS)";
       var doc = sharejs.open(title, 'text', function(error, doc) {
         if (error) {
           console.log('ShareJS error:', error);
