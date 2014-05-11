@@ -345,6 +345,29 @@ $(function() {
 
   }
 
+  /*
+   * Attach ShareJS to the editor and sync it.
+   */
+  function attachShareJS(title) {
+
+    doc = sharejs.open(title, 'text', function(error, doc) {
+        if (error) {
+            console.log('ShareJS error:', error);
+            return;
+        }
+        editor.setReadOnly(true);
+        doc.attach_ace(editor);
+        editor.setReadOnly(false);
+        doc.on('remoteop', function(op) {
+            previewMd();
+        });
+        isShareJS = true;
+        previewMd();
+    });
+  }
+
+  function detachShareJS() {
+
   /**
    * Initialize theme and other options of Ace editor.
    *
@@ -352,19 +375,11 @@ $(function() {
    *
    * @return {Void}
    */
+  }
+
   function initAce() {
 
     editor = ace.edit("editor")
-    // FIXME: Grab actual document title.
-    doc = sharejs.open('share_doc', 'text', function(error, doc) {
-        editor.setReadOnly(true);
-        doc.attach_ace(editor);
-        editor.setReadOnly(false);
-        doc.on('remoteop', function(op) {
-            previewMd();
-        });
-        previewMd();
-    });
 
   } // end initAce
 
