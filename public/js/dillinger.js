@@ -1855,15 +1855,22 @@ $(function() {
 
   var ShareJS = {
     doc: null,
+
     /*
     * Attach ShareJS to the editor and sync it.
     *
     * @return {sharejs doc}
     */
     open: function (title) {
+      if (!title) {
+        console.warn("No title specified for ShareJS. Aborting.");
+        return;
+      }
+
+      // self is this ShareJS object
       self = this;
-      title = title ? title : "Untitled Document (ShareJS)";
-      var doc = sharejs.open(title, 'text', function(error, doc) {
+
+      sharejs.open(title, 'text', function(error, doc) {
         if (error) {
           console.log('ShareJS error:', error);
         }
