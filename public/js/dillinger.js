@@ -444,6 +444,8 @@ $(function() {
 
       editor.getSession().setValue(profile.currentFile || editor.getSession().getValue())
 
+      editor.focus()
+
       // Immediately populate the preview <div>
       previewMd()
 
@@ -1865,11 +1867,25 @@ $(function() {
         if (error) {
           console.log('ShareJS error:', error);
         }
-        doc.attach_ace(editor);
-        doc.on('remoteop', previewMd);
-        previewMd();
-        console.log(self);
+
+        // Save a reference to the document at ShareJS.doc
         self.doc = doc;
+
+        // If an empty document is found, insert the default text,
+        // otherwise leave the contents alone when attaching
+        var unmd = profile.currentMd || editor.getSession().getValue()
+        if (!doc.getText()) {
+            doc.insert(0, unmd);
+        }
+
+        // Hookup ShareJS and put the cursor back at the top of the text entry
+        doc.attach_ace(editor);
+        editor.gotoLine(0, 0);
+
+        // Update the preview now and then whenever we receive remote updates
+        // from ShareJS
+        previewMd();
+        doc.on('remoteop', previewMd);
       });
     },
 
