@@ -361,14 +361,14 @@ $(function() {
   function initShareJS() {
       // Grab the docid from the URL and connect to ShareJS
       var path = document.location.pathname;
-      var title = path.match(/doc\/(\w+)/);
-      if (title.length == 2) {
-          title = title[1];
+      var m = path.match(/doc\/(\w+)/);
+      if (m.length == 2) {
+          docid = m[1];
       } else {
           console.warn("Crazy url has no identifiable docid: ", path);
           return;
       }
-      ShareJS.doc = ShareJS.open(title);
+      ShareJS.open(docid);
 
       // Make the green peace sign ☮ :)
       // FIXME: This should be done in proper CSS.
