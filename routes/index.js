@@ -6,6 +6,22 @@ var path = require('path')
   , Github = require(path.resolve(__dirname, '../plugins/github/github.js')).Github
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
 
+
+exports.generate_hash = function(req, res) {
+    function randomstring(L){
+        var s = '';
+        var randomchar = function(){
+            var n = Math.floor(Math.random()*62);
+            if (n < 10) return n; //1-10
+            if (n < 36) return String.fromCharCode(n+55); //A-Z
+            return String.fromCharCode(n+61); //a-z
+        }
+        while(s.length < L) s += randomchar();
+        return s;
+    }
+    res.redirect('/doc/' + randomstring(5));
+}
+
 // Show the home page
 exports.index = function(req, res) {
 
