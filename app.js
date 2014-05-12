@@ -33,7 +33,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
-  sharejs.attach(app, {db: {type: 'redis'}})
+  sharejs.attach(app, {db: {type: 'none'}})
 
   // Setup local variables to be available in the views.
   app.locals.title = config.title || "Dillinger.";
