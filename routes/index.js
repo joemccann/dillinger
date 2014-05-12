@@ -22,6 +22,27 @@ exports.generate_hash = function(req, res) {
     res.redirect('/doc/' + randomstring(5));
 }
 
+exports.grab_docid_from_url = function() {
+      var path = document.location.pathname;
+      var title = path.match(/doc\/(\w+)/);
+      if (title.length == 2) {
+          title = title[1];
+      } else {
+          console.warn("Crazy url has no identifiable docid: ", path);
+          return;
+      }
+};
+
+exports.grab_docid_from_req = function(req) {
+    var docid = req.params.docid;
+    if (!docid) docid = req.query.docid;
+    if (!docid) {
+        console.warn("docid not found!\n" + req);
+    }
+    return docid;
+};
+
+
 // Show the home page
 exports.index = function(req, res) {
 
@@ -34,6 +55,7 @@ exports.index = function(req, res) {
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
+    docid: exports.grab_docid_from_req(req),
   }
 
   if (!req.session.isEvernoteSynced) {
@@ -68,10 +90,13 @@ exports.download_pdf = Core.downloadPdf
 exports.oauth_dropbox_redirect = function(req, res) {
   Dropbox.getNewRequestToken(req, res, function(status, request_token) {
 
+    console.log(req.query);
+    var docid = exports.grab_docid_from_req(req);
+    var callback_url = Dropbox.config.callback_url + '?docid=' + docid
+
     var dropbox_auth_url = Dropbox.config.auth_url +
                     "?oauth_token=" + request_token.oauth_token +
-                    "&oauth_callback=" +
-                    Dropbox.config.callback_url
+                    "&oauth_callback=" + callback_url
 
     console.log(dropbox_auth_url + " is the auth_url for dropbox")
 
@@ -91,7 +116,7 @@ exports.oauth_dropbox_redirect = function(req, res) {
 
 exports.oauth_dropbox = function(req, res) {
 
-  // console.dir(req.query)
+    var docid = exports.grab_docid_from_req(req);
 
     if (!req.session.dropbox) {
       console.log('No dropbox session - browser bug')
@@ -120,12 +145,12 @@ exports.oauth_dropbox = function(req, res) {
           Dropbox.getAccountInfo(req.session.dropbox, function(status, reply) {
 
             console.log('Got account info!')
-            console.log(reply)
+            // console.log(reply)
             console.log("User %s is now authenticated.", reply.display_name )
           })
 
           // Now go back to home page with session data in tact.
-          res.redirect('/')
+          res.redirect('/doc/' + docid)
 
     })  // end dbox.getRemoteAccessToken()
 
@@ -136,7 +161,8 @@ exports.unlink_dropbox = function(req, res) {
   // Essentially remove the session for dropbox...
   delete req.session.dropbox
   req.session.isDropboxSynced = false
-  res.redirect('/')
+  var docid = exports.grab_docid_from_req(req);
+  res.redirect('/doc/' + docid)
 }
 
 exports.import_dropbox = function(req, res) {

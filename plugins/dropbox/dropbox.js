@@ -185,8 +185,9 @@ exports.Dropbox = (function() {
         , access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
         , dboxclient = dboxapp.client(access_token)
 
-      if (!access_token) {
-        return res.redirect('/redirect/dropbox')
+      if(!access_token){
+        var docid = req.params.docid;
+        return res.redirect('/redirect/dropbox?docid=' + docid)
       }
 
       dboxclient.get(filePath, function(status, reply, metadata){
