@@ -370,7 +370,21 @@ $(function() {
       }
 
       var btn = $('#collaborate-btn');
-      var onShareJSLoad = function () {
+
+      // Prevent clients from making edits that will be destroyed
+      editor.setReadOnly(true);
+
+      // Make the red loading peace sign ☮ :)
+      // FIXME: This should be done in proper CSS.
+      btn.button('loading');
+      $('#loading-icon').css({
+          fontSize: '130%',
+          verticalAlign: 'center',
+          color: 'red',
+      });
+
+
+      ShareJS.open(docid, function () {
         // Change back to normal from loading state
         btn.button('reset');
 
@@ -378,19 +392,10 @@ $(function() {
         btn.click(function () {
             alert("This should be a pretty modal that says to share the url");
         });
+
+        // Ready to go, allow editing again
         editor.setReadOnly(false);
-      };
-
-      editor.setReadOnly(true);
-      ShareJS.open(docid, onShareJSLoad);
-
-      // Make the red loading peace sign ☮ :)
-      // FIXME: This should be done in proper CSS.
-      btn.button('loading');
-      var icon = $('#loading-icon')[0].style;
-      icon.fontSize = '130%';
-      icon.verticalAlign = 'center';
-      icon.color = 'red';
+      });
 
       $(window).on('unload', ShareJS.close);
   }
