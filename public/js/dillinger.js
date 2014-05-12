@@ -368,20 +368,31 @@ $(function() {
           console.warn("Crazy url has no identifiable docid: ", path);
           return;
       }
-      ShareJS.open(docid);
-      $(window).on('unload', ShareJS.close);
 
-      // Make the green peace sign ☮ :)
+      var btn = $('#collaborate-btn');
+      var onShareJSLoad = function () {
+        // Change back to normal from loading state
+        btn.button('reset');
+
+        // Wire up the button with sharing instructions
+        btn.click(function () {
+            alert("This should be a pretty modal that says to share the url");
+        });
+        editor.setReadOnly(false);
+      };
+
+      editor.setReadOnly(true);
+      ShareJS.open(docid, onShareJSLoad);
+
+      // Make the red loading peace sign ☮ :)
       // FIXME: This should be done in proper CSS.
-      var icon = $('#collaborate-icon')[0].style;
+      btn.button('loading');
+      var icon = $('#loading-icon')[0].style;
       icon.fontSize = '130%';
       icon.verticalAlign = 'center';
-      icon.color = 'green';
+      icon.color = 'red';
 
-      // Wire up the button with sharing instructions
-      $('#collaborate-btn').click(function () {
-          alert("This should be a pretty modal that says to share the url");
-      });
+      $(window).on('unload', ShareJS.close);
   }
 
   function initEditorType() {
@@ -1863,7 +1874,7 @@ $(function() {
     *
     * @return {sharejs doc}
     */
-    open: function (title) {
+    open: function (title, callback) {
       if (!title) {
         console.warn("No title specified for ShareJS. Aborting.");
         return;
@@ -1895,6 +1906,7 @@ $(function() {
         // from ShareJS
         previewMd();
         doc.on('remoteop', previewMd);
+        if (callback) callback();
       });
     },
 
