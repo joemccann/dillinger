@@ -351,25 +351,22 @@ $(function() {
   }
 
   function initShareJS() {
-      icon = $('#collaborate-icon')[0].style;
-      function set_color(color) {
-          icon.color = color;
+      // FIXME: This should be done in proper CSS.
+      var path = document.location.pathname;
+      var title = path.match(/doc\/(\w+)/);
+      if (title.length == 2) {
+          title = title[1];
+      } else {
+          console.warn("Crazy url has no identifiable docid: ", path);
+          return;
       }
+      var icon = $('#collaborate-icon')[0].style;
       icon.fontSize = '130%';
       icon.verticalAlign = 'center';
-      set_color('green');
-      $('#sharejs-toggle-text').click(function () {
-          var title = profile.current_filename;
-          if (ShareJS.doc) {
-              set_color('');
-              console.log("Detach from '" + title + "'");
-              set_color('green');
-              ShareJS.close(ShareJS.doc);
-          } else {
-              console.log("Attach to '" + title + "'");
-              set_color('red');
-              ShareJS.doc = ShareJS.open(title);
-          }
+      icon.color = 'green';
+      ShareJS.doc = ShareJS.open(title);
+      $('#collaborate-btn').click(function () {
+          alert("This should be a pretty modal that says to share the url");
       });
   }
 
