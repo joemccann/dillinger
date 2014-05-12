@@ -350,6 +350,17 @@ $(function() {
 
   }
 
+  /**
+   * Initialize theme and other options of Ace editor.
+   *
+   * @return {Void}
+   */
+  function initAce() {
+
+    editor = ace.edit("editor")
+
+  } // end initAce
+
   function initShareJS() {
       // Grab the docid from the URL and connect to ShareJS
       var path = document.location.pathname;
@@ -374,17 +385,6 @@ $(function() {
           alert("This should be a pretty modal that says to share the url");
       });
   }
-
-  /**
-   * Initialize theme and other options of Ace editor.
-   *
-   * @return {Void}
-   */
-  function initAce() {
-
-    editor = ace.edit("editor")
-
-  } // end initAce
 
   function initEditorType() {
     if ($('#editor-dropdown li').length === 0) {
@@ -430,6 +430,7 @@ $(function() {
       .append("<b class='caret'></b>")
 
   }
+
   /**
    * Initialize various UI elements based on userprofile data.
    *
