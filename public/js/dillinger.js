@@ -15,9 +15,6 @@ $(function() {
         }
       , wordcount: true
       , current_filename: 'Untitled Document'
-      , sharejs: {
-          doc: {}
-        }
       , github: {
           current_uri: ''
         , opts: {}
