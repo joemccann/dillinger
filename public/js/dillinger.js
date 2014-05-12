@@ -351,7 +351,7 @@ $(function() {
   }
 
   function initShareJS() {
-      // FIXME: This should be done in proper CSS.
+      // Grab the docid from the URL and connect to ShareJS
       var path = document.location.pathname;
       var title = path.match(/doc\/(\w+)/);
       if (title.length == 2) {
@@ -360,11 +360,16 @@ $(function() {
           console.warn("Crazy url has no identifiable docid: ", path);
           return;
       }
+      ShareJS.doc = ShareJS.open(title);
+
+      // Make the green peace sign ☮ :)
+      // FIXME: This should be done in proper CSS.
       var icon = $('#collaborate-icon')[0].style;
       icon.fontSize = '130%';
       icon.verticalAlign = 'center';
       icon.color = 'green';
-      ShareJS.doc = ShareJS.open(title);
+
+      // Wire up the button with sharing instructions
       $('#collaborate-btn').click(function () {
           alert("This should be a pretty modal that says to share the url");
       });

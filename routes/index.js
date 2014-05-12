@@ -6,7 +6,6 @@ var path = require('path')
   , Github = require(path.resolve(__dirname, '../plugins/github/github.js')).Github
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
 
-
 exports.generate_hash = function(req, res) {
     function randomstring(L){
         var s = '';
