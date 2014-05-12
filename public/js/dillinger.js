@@ -369,6 +369,7 @@ $(function() {
           return;
       }
       ShareJS.open(docid);
+      $(window).on('unload', ShareJS.close);
 
       // Make the green peace sign ☮ :)
       // FIXME: This should be done in proper CSS.
@@ -1854,6 +1855,7 @@ $(function() {
   })() // end IIFE
 
   var ShareJS = {
+    // The currently opened document
     doc: null,
 
     /*
@@ -1896,7 +1898,7 @@ $(function() {
       });
     },
 
-    /**
+    /*
     * Detach ShareJS from the editor.
     *
     * @return {Void}
