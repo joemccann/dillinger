@@ -402,17 +402,18 @@ $(function() {
 
   // TODO: WEBSOCKET MESSAGE?
   /**
-   * Save the markdown via localStorage - isManual is from a click or key event.
+   * Save the markdown via localStorage - eventType.manual is from a click or key event.
    *
-   * @param {Boolean}
+   * @param {Object}
    * @return {Void}
    */
-  function saveFile(isManual) {
+  function saveFile(eventType) {
 
-    updateUserProfile({ currentMd: editor.getSession().getValue() })
-
-    isManual && Notifier.showMessage(Notifier.messages.docSavedLocal)
-
+    updateUserProfile({ currentMd: editor.getSession().getValue() })  
+    
+    if((typeof eventType === 'object') && eventType.manual === true) {
+      Notifier.showMessage(Notifier.messages.docSavedLocal)
+    }
   }
 
   /**
@@ -426,7 +427,7 @@ $(function() {
       autoInterval = setInterval(function() {
         // firefox barfs if I don't pass in anon func to setTimeout.
         saveFile()
-        LocalFiles.saveFile(false)
+        LocalFiles.saveFile({ show: false })
       }, profile.autosave.interval)
 
     }
@@ -660,11 +661,24 @@ $(function() {
 
     function _doneHandler(jqXHR, data, response) {
       var resp = JSON.parse(response.responseText)
-      var textarea = $('#modalBodyText')
-      $(textarea).val(resp.data)
-      $('#myModal').on('shown.bs.modal', function (e) {
-        $(textarea).focus().select()
-      }).modal()
+      //var textarea = $('#modalBodyText')
+      //$(textarea).val(resp.data)
+      //$('#myModal').on('shown.bs.modal', function (e) {
+      //  $(textarea).focus().select()
+      //}).modal()
+
+      $textarea = '<textarea id="modalBodyText">' + resp.data + '</textarea>'
+      $('.modal-header h3').text('Show HTML')
+      $('.modal-body').css('height', '80%').html($textarea)
+      $('#modal-generic').on('shown.bs.modal', function(e) {
+        $('#modalBodyText').focus().select()
+      }).modal({
+        keyboard: true
+        , backdrop: true
+        , show: true
+      })
+
+      return false
     }
 
     function _failHandler() {
@@ -1014,7 +1028,7 @@ $(function() {
   function bindKeyboard() {
     // CMD+s TO SAVE DOC
     key('command+s, ctrl+s', function(e) {
-      saveFile(true);
+      saveFile({ manual: true });
       e.preventDefault(); // so we don't save the webpage - native browser functionality
     })
 
@@ -2165,16 +2179,18 @@ $(function() {
         Github.clear()
 
       },
-      saveFile: function(bool) {
+      saveFile: function(showNotice) {
         var fileName = getCurrentFilenameFromField()
         var md = editor.getSession().getValue()
         var saveObj = { local_files: { } }
         saveObj.local_files[fileName] = md
 
         updateUserProfile(saveObj)
-        if(bool !== false) {
+        
+        if((typeof showNotice !== 'object') || showNotice.show !== false) {
           Notifier.showMessage(Notifier.messages.docSavedLocal)
         }
+
       },
       deleteFile: function(fileName) {
         var files = profile.local_files;
