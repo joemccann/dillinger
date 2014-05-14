@@ -409,8 +409,8 @@ $(function() {
    */
   function saveFile(eventType) {
 
-    updateUserProfile({ currentMd: editor.getSession().getValue() })  
-    
+    updateUserProfile({ currentMd: editor.getSession().getValue() })
+
     if((typeof eventType === 'object') && eventType.manual === true) {
       Notifier.showMessage(Notifier.messages.docSavedLocal)
     }
@@ -2186,7 +2186,7 @@ $(function() {
         saveObj.local_files[fileName] = md
 
         updateUserProfile(saveObj)
-        
+
         if((typeof showNotice !== 'object') || showNotice.show !== false) {
           Notifier.showMessage(Notifier.messages.docSavedLocal)
         }

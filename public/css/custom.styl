@@ -66,15 +66,18 @@ https://github.com/joemccann/dillinger/issues/126
   color blue
 
 #github-button
-  margin: 1% -9px 0 0
-  float: right
+  width 5%
+  min-width 94px
+  float right
+  line-height 30px
+  margin 5px 0
 
 #filename-counter-container
   position: absolute
   left: 10px
   top: 5px
   padding-right: 15px
-  width: 50%
+  width: 100%
   z-index: 0
   boxSizing()
 
@@ -83,11 +86,10 @@ https://github.com/joemccann/dillinger/issues/126
   width 100%
 
 #filename-counter-container > #wordcounter
-  width 18.5%
-  /* floating this right fixes some rendering issues in SOME smaller viewports - not a fixall though */
-  float:right
+  width 10%
 
 #filename-counter-container > #filename > span, #wordcounter
+  overflow hidden
   font-size: 16px
   font-style: normal
   background: #F1EEEE
@@ -103,7 +105,7 @@ https://github.com/joemccann/dillinger/issues/126
     outline: 0
 
 #filename-counter-container > #filename.show-word-count-filename-adjust
-  width 80%
+  width 50%
   display inline-block
   margin 0 1% 0 0
 
