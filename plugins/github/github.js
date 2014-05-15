@@ -37,6 +37,10 @@ if (fs.existsSync(githubConfigFile)) {
   console.warn('Github config not found at ' + githubConfigFile + '. Plugin disabled.')
 }
 
+function arrayToRegExp(arr) {
+  return new RegExp("(" + arr.map(function(e) { return e.replace('.','\\.'); }).join('|') + ")$", 'i');
+}
+
 exports.Github = (function() {
 
   var githubApi = 'https://api.github.com/'
@@ -209,33 +213,42 @@ exports.Github = (function() {
 
     }, // end fetchBranches
     fetchTreeFiles: function(req, res) {
-
       // /repos/:user/:repo/git/trees/:sha
 
-      var uri = githubApi
+      var uri, options, fileExts, regExp
+
+      uri = githubApi
         + 'repos/'
         + req.body.owner
         + '/'
         + req.body.repo
         + '/git/trees/'
         + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
+        ;
 
-      var options = {
+      options = {
         headers: headers
       , uri: uri
-      }
+      };
+
+      fileExts = req.body.fileExts.split("|");
+      regExp = arrayToRegExp(fileExts);
 
       request(options, function(e, r, d) {
+
         if (e) {
-          res.send(
-            {
-              error: 'Request error.'
-            , data: r.statusCode
-            })
+          res.send({
+            error: 'Request error.'
+          , data: r.statusCode
+          })
         }
         else if (!e && r.statusCode === 200) {
           d = JSON.parse(d)
           d.branch = req.body.branch // inject branch info
+
+          // overwrite d.tree to only return items that match regexp
+          d.tree = d.tree.filter(function(item) { return regExp.test(item.path) });
+
           res.json(d)
         } // end else if
         else {
@@ -343,4 +356,3 @@ exports.Github = (function() {
   }
 
 })()
-

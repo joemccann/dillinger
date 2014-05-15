@@ -26,7 +26,8 @@ $(function() {
       , editor: {
           type: 'markdown-gfm'
         , name: 'Github Markdown'
-        , filetypes: ['md', 'markdown']
+        , fileExts: ['.md', '.markdown', '.mdown']
+        , regExp: /\.md|\.markdown/i
         }
       }
 
@@ -75,9 +76,13 @@ $(function() {
   }
 
   var editors = {
-    'markdown-gfm': { name: "Github Markdown", filetypes: ['md', 'markdown'] }
-  , 'markdown': { name: "Markdown", filetypes: ['md', 'markdown'] }
-  , 'html': { name: "HTML", filetypes: ['html', 'htm'] }
+    'markdown-gfm': { name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+  , 'markdown': { name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+  , 'html': { name: 'HTML', fileExts: ['.html', '.htm'] }
+  }
+
+  function arrayToRegExp(arr) {
+    return new RegExp('(' + arr.map(function(e) { return e.replace('.','\\.') }).join('|') + ')$', 'i')
   }
 
   /// UTILS =================
@@ -1043,8 +1048,10 @@ $(function() {
           profile.editor = {
             type: pickEditor
           , name: editors[pickEditor].name
-          , filetypes: editors[pickEditor].filetypes
+          , fileExts: editors[pickEditor].fileExts
+          , regExp: arrayToRegExp(editors[pickEditor].fileExts)
           }
+
           initEditorType()
           previewMd()
         }
@@ -1184,7 +1191,7 @@ $(function() {
 
         var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
+        profile.current_filename = dboxFilePath.split('/').pop().replace(profile.editor.regExp, '')
 
         Dropbox.setFilePath(dboxFilePath)
 
@@ -1237,7 +1244,7 @@ $(function() {
             do {
               file = files[i++]
             } while (file && file.type.substr(0, 4) !== 'text'
-              && file.name.substr(file.name.length - 3) !== '.md')
+              && !profile.editor.regExp.test(file.name))
 
             if (!file) return
 
@@ -1301,12 +1308,12 @@ $(function() {
       else { return m-n }
     }
 
-    // Test for md file extension
-    function _isMdFile(file) {
-      return (/(\.md)|(\.markdown)/i).test(file)
+    // Test for file extension
+    function _isFileExt(file) {
+      return profile.editor.regExp.test(file)
     }
 
-    // Returns an array of only md files from a tree
+    // Returns an array of only files from a tree that matches editor file extension
     function _extractMdFiles(repo, treefiles) {
       /*
       mode: "100644"
@@ -1326,7 +1333,7 @@ $(function() {
 
       treefiles.forEach(function(el) {
 
-        if (_isMdFile(el.path)) {
+        if (_isFileExt(el.path)) {
 
           var fullpath
             , ghArr
@@ -1596,9 +1603,8 @@ $(function() {
           a = b = null
           response = JSON.parse(response.responseText)
 
-          if(!response.length) {
+          if (!response.length) {
             Notifier.showMessage('No branches available!')
-            $('#modal-generic').modal('hide')
           }
           else {
             _listBranches(repo, response)
@@ -1635,7 +1641,6 @@ $(function() {
           // console.dir(response)
           if (!response.tree.length) {
             Notifier.showMessage('No tree files available!')
-            $('#modal-generic').modal('hide')
           }
           else {
             _listTreeFiles(repo, branch, sha, response.tree)
@@ -1649,7 +1654,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha
+        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha + '&fileExts=' + profile.editor.fileExts.join('|')
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1666,10 +1671,7 @@ $(function() {
           response = JSON.parse(response.responseText)
           // console.dir(response)
           if (response.error) {
-
             Notifier.showMessage('No markdown for you!')
-            $('#modal-generic').modal('hide')
-
           }
           else {
 
@@ -1829,7 +1831,7 @@ $(function() {
           dataType: 'json',
           url: '/import/googledrive',
           beforeSend: function() {
-            Notifier.showMessage('Searching for .md files')
+            Notifier.showMessage('Searching for .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files')
           },
           error: _errorHandler,
           success: renderSearchResults
@@ -1847,10 +1849,10 @@ $(function() {
         var content = encodeURIComponent(editor.getSession().getValue());
         // https://github.com/joemccann/dillinger/issues/90
         // If filename contains .md or .markdown as extension...
-        var hasMdExtension = /(.md|.markdown)$/.test(profile.current_filename)
+        var hasExtension = profile.editor.regExp.test(profile.current_filename)
 
         var postData = 'title=' + encodeURIComponent(profile.current_filename)
-          + (hasMdExtension ? '' : '.md')
+          + (hasExtension ? '' : profile.editor.fileExts[0])
           + '&content='
           + content
 
@@ -1990,7 +1992,7 @@ $(function() {
       searchDropbox: function() {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Searching for .md Files')
+          Notifier.showMessage('Searching for  .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files')
         }
 
         function _doneHandler(a, b, response) {
@@ -2014,7 +2016,7 @@ $(function() {
           }
 
           if(!resp.length) {
-            Notifier.showMessage('No .md files found!')
+            Notifier.showMessage('No .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files found!')
           }
           else{
             // console.dir(resp)
@@ -2118,9 +2120,14 @@ $(function() {
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        var md = encodeURIComponent( editor.getSession().getValue() )
+        var content = encodeURIComponent(editor.getSession().getValue())
 
-        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
+        var hasExtension = profile.editor.regExp.test(profile.current_filename)
+
+        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename)
+          + (hasExtension ? '' : profile.editor.fileExts[0])
+          + '&fileContents='
+          + content
 
         var config = {
           type: 'POST'
