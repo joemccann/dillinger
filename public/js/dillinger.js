@@ -22,7 +22,7 @@ $(function() {
       , dropbox: {
           filepath: '/Dillinger/'
         }
-      , local_files: { "Untitiled Document": "" }
+      , local_files: { "Untitled Document": "" }
       }
 
   // Feature detect ish
@@ -1035,23 +1035,23 @@ $(function() {
     })
 
     var saveCommand = {
-       name: "save",
-       bindKey: {
-                mac: "Command-S",
-                win: "Ctrl-S"
-              },
-       exec: function() {
-         saveFile()
-         LocalFiles.saveFile()
-       }
+      name: "save",
+      bindKey: {
+        mac: "Command-S",
+        win: "Ctrl-S"
+      },
+      exec: function() {
+        saveFile()
+        LocalFiles.saveFile()
+      }
     }
     var fileForUrlNamer = {
-       name: "filenamer",
-       bindKey: {
-                mac: "Command-Shift-M",
-                win: "Ctrl-Shift-M"
-              },
-       exec: function() {
+      name: "filenamer",
+      bindKey: {
+        mac: "Command-Shift-M",
+        win: "Ctrl-Shift-M"
+      },
+      exec: function() {
         var profile = JSON.parse(localStorage.profile);
         alert(profile.current_filename.replace(/\s/g, '-').toLowerCase())
       }

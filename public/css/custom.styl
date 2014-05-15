@@ -142,7 +142,6 @@ https://github.com/joemccann/dillinger/issues/126
   -o-transition opacity mainTransitionTime linear
   -ms-transition opacity mainTransitionTime linear
 
-
 #main.bye
   opacity 0
 
@@ -216,6 +215,12 @@ https://github.com/joemccann/dillinger/issues/126
 .private_repo .tree_file
   padding-left 20px
 
+/* fix for lock being hidden by hover */
+.private_repo a:hover
+  background #f6f6f6
+  padding-left 0px
+  margin-left 20px
+
 .topbar div ul
   float none
   margin 2px auto
@@ -253,7 +258,6 @@ https://github.com/joemccann/dillinger/issues/126
 
 .icon_vendor.dropbox
   margin 6px 0 0 9px
-
 
 .slide_out
   margin-top -60px
