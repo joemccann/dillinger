@@ -4,20 +4,33 @@
   <%- include nav %>
 
   <div id="app_wrap" class="container-fluid">
-    <div id="editor"><%- readme %>
-    </div>
     <div id="filename-counter-container">
       <div id="filename">
         <span contenteditable="true">foo</span>
-
       </div>
-
       <div id="wordcounter"></div>
+
     </div>
 
-    <iframe id="github-button" src="http://ghbtns.com/github-btn.html?user=joemccann&repo=dillinger&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="94" height="20"></iframe>
+    <div id="editor-selector-container">
+      <ul id="editor-selector" class="nav nav-pills">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Markdown <b class="caret"></b></a>
+          <ul id="editor-dropdown" class="dropdown-menu">
+            <li><a href="#" data-value="markdown-gfm">Github Markdown</a></li>
+            <li><a href="#" data-value="markdown">Markdown</a></li>
+            <li class="divider"></li>
+            <li><a href="#" data-value="html">HTML</a></li>
+          </ul>
+        </li>
+      </ul>
 
+      <iframe id="github-button" src="http://ghbtns.com/github-btn.html?user=joemccann&repo=dillinger&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="94" height="20"></iframe>
+    </div>
+
+    <div id="editor"><%- readme %></div>
     <div id="preview" class="shadowbox"></div>
+
   </div> <!-- end #app_wrap -->
 </div> <!-- end #main -->
 <iframe id="downloader" class="hide"></iframe>

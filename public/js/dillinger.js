@@ -8,7 +8,7 @@ $(function() {
     , profile = {
         theme: 'ace/theme/idle_fingers'
       , showPaper: false
-      , currentMd: ''
+      , currentFile: ''
       , autosave: {
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
@@ -23,6 +23,11 @@ $(function() {
           filepath: '/Dillinger/'
         }
       , local_files: { "Untitled Document": "" }
+      , editor: {
+          type: 'markdown-gfm'
+        , name: 'Github Markdown'
+        , filetypes: ['md', 'markdown']
+        }
       }
 
   // Feature detect ish
@@ -69,9 +74,13 @@ $(function() {
   , 'vibrant_ink': '#363636'
   }
 
+  var editors = {
+    'markdown-gfm': { name: "Github Markdown", filetypes: ['md', 'markdown'] }
+  , 'markdown': { name: "Markdown", filetypes: ['md', 'markdown'] }
+  , 'html': { name: "HTML", filetypes: ['html', 'htm'] }
+  }
 
   /// UTILS =================
-
 
   /**
    * Utility method to async load a JavaScript file.
@@ -291,22 +300,9 @@ $(function() {
 
       initAce()
 
+      initEditorType()
+
       initUi()
-
-      marked.setOptions({
-        gfm: true
-      , tables: true
-      , pedantic: false
-      , sanitize: false
-      , smartLists: true
-      , smartypants: false
-      , langPrefix: 'lang-'
-      , highlight: function (code) {
-          return hljs.highlightAuto(code).value;
-        }
-      })
-
-      converter = marked
 
       bindPreview()
 
@@ -340,6 +336,31 @@ $(function() {
 
   } // end initAce
 
+  function initEditorType() {
+    if (profile.editor.type.substring(0, 8) == "markdown") {
+      marked.setOptions({
+        gfm: (profile.editor.type === "markdown-gfm" ? true : false)
+      , tables: true
+      , pedantic: false
+      , sanitize: false
+      , smartLists: true
+      , smartypants: false
+      , langPrefix: 'lang-'
+      , highlight: function (code) {
+          return hljs.highlightAuto(code).value;
+        }
+      })
+      converter = marked
+      editor.getSession().setMode('ace/mode/markdown')
+    }
+    else { // html
+      converter = String
+      editor.getSession().setMode('ace/mode/html')
+    }
+    $("#editor-selector a.dropdown-toggle")
+      .text(profile.editor.name)
+      .append("<b class='caret'></b>")
+  }
   /**
    * Initialize various UI elements based on userprofile data.
    *
@@ -354,9 +375,7 @@ $(function() {
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
 
-      editor.getSession().setMode('ace/mode/markdown')
-
-      editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
+      editor.getSession().setValue(profile.currentFile || editor.getSession().getValue())
 
       // Immediately populate the preview <div>
       previewMd()
@@ -409,7 +428,7 @@ $(function() {
    */
   function saveFile(eventType) {
 
-    updateUserProfile({ currentMd: editor.getSession().getValue() })
+    updateUserProfile({ currentFile: editor.getSession().getValue() })
 
     if((typeof eventType === 'object') && eventType.manual === true) {
       Notifier.showMessage(Notifier.messages.docSavedLocal)
@@ -1014,6 +1033,23 @@ $(function() {
         return false;
       })
 
+    $('#editor-dropdown > li > a')
+      .on('click', function() {
+        var pickEditor = $(this).attr("data-value")
+        if (!editors[pickEditor]) {
+          Notifier.showMessage("Sorry, " + pickEditor + " isn't supported")
+        }
+        else {
+          profile.editor = {
+            type: pickEditor
+          , name: editors[pickEditor].name
+          , filetypes: editors[pickEditor].filetypes
+          }
+          initEditorType()
+          previewMd()
+        }
+      })
+
   } // end bindNav()
 
   /**
@@ -1249,7 +1285,7 @@ $(function() {
               .slideUp(250)
           })
 
-        } // end showMesssage
+        } // end showMessage
     } // end return obj
   })() // end IIFE
 
