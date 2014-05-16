@@ -2028,14 +2028,16 @@ $(function() {
           alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
+        // when passing file extensions, use pipe as it is not a valid filename character
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/import/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST',
+          dataType: 'json',
+          data: 'fileExts=' + profile.editor.fileExts.join('|'),
+          url: '/import/dropbox',
+          beforeSend: _beforeSendHandler,
+          error: _failHandler,
+          success: _doneHandler
+        }
 
         $.ajax(config)
 

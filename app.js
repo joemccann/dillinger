@@ -54,7 +54,7 @@ app.get('/oauth/dropbox', routes.oauth_dropbox);
 
 app.get('/unlink/dropbox', routes.unlink_dropbox);
 
-app.get('/import/dropbox', routes.import_dropbox);
+app.post('/import/dropbox', routes.import_dropbox);
 
 // app.get('/account/dropbox', routes.account_info_dropbox)
 

@@ -124,8 +124,9 @@ exports.unlink_dropbox = function(req, res) {
 }
 
 exports.import_dropbox = function(req, res) {
+  var postBody = req.body || {}
 
-  Dropbox.searchForMdFiles(req.session.dropbox, function(status, data) {
+  Dropbox.searchForMdFiles({ dropboxObj: req.session.dropbox, fileExts: postBody.fileExts }, function(status, data) {
     console.log(status)
     if (status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
     if (status > 399) return res.status(status).send("Something went wrong. Please refresh.")
