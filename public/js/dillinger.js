@@ -566,7 +566,6 @@ $(function() {
    */
   function fetchMarkdownFile() {
 
-    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     var unmd = editor.getSession().getValue()
 
     function _doneHandler(a, b, response) {
@@ -582,7 +581,7 @@ $(function() {
 
     var mdConfig = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_markdown'
     , error: _failHandler
@@ -601,8 +600,6 @@ $(function() {
    */
   function fetchHtmlFile() {
 
-    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
-
     var unmd = editor.getSession().getValue()
 
     function _doneHandler(jqXHR, data, response) {
@@ -617,7 +614,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -643,7 +640,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_pdf'
     , error: _failHandler
@@ -656,7 +653,6 @@ $(function() {
 
   function showHtml() {
 
-    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     var unmd = editor.getSession().getValue()
 
     function _doneHandler(jqXHR, data, response) {
@@ -668,7 +664,7 @@ $(function() {
       //}).modal()
 
       $textarea = '<textarea id="modalBodyText">' + resp.data + '</textarea>'
-      $('.modal-header h3').text('Show HTML')
+      $('.modal-header h3').text('Show HTML: ' + getCurrentFilenameFromField())
       $('.modal-body').css('height', '80%').html($textarea)
       $('#modal-generic').on('shown.bs.modal', function(e) {
         $('#modalBodyText').focus().select()
@@ -687,7 +683,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_html_direct'
     , error: _failHandler
