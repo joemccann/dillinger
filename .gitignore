@@ -45,3 +45,6 @@ nb-configuration.xml
 
 # NPM debug log
 npm-debug.log
+
+# Vim
+*.swp
