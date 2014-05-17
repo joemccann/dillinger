@@ -27,7 +27,6 @@ $(function() {
           type: 'markdown-gfm'
         , name: 'Github Markdown'
         , fileExts: ['.md', '.markdown', '.mdown']
-        , regExp: /\.md|\.markdown/i
         }
       }
 
@@ -85,6 +84,11 @@ $(function() {
     return new RegExp('(' + arr.map(function(e) { return e.replace('.','\\.') }).join('|') + ')$', 'i')
   }
 
+  // Test for file extension
+  function _isFileExt(file) {
+    return arrayToRegExp(profile.editor.fileExts).test(file)
+  }
+
   /// UTILS =================
 
   /**
@@ -140,6 +144,12 @@ $(function() {
     }
 
     profile = p
+
+    // because the profile uses $.extend(true) in jQuery, we need to reset the
+    // accepted file types.
+    if (profile.editor) {
+      profile.editor.fileExts = editors[profile.editor.type].fileExts
+    }
 
     // console.dir(profile)
   }
@@ -1049,7 +1059,6 @@ $(function() {
             type: pickEditor
           , name: editors[pickEditor].name
           , fileExts: editors[pickEditor].fileExts
-          , regExp: arrayToRegExp(editors[pickEditor].fileExts)
           }
 
           initEditorType()
@@ -1191,7 +1200,7 @@ $(function() {
 
         var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        profile.current_filename = dboxFilePath.split('/').pop().replace(profile.editor.regExp, '')
+        profile.current_filename = dboxFilePath.split('/').pop().replace(arrayToRegExp(profile.editor.fileExts), '')
 
         Dropbox.setFilePath(dboxFilePath)
 
@@ -1244,7 +1253,7 @@ $(function() {
             do {
               file = files[i++]
             } while (file && file.type.substr(0, 4) !== 'text'
-              && !profile.editor.regExp.test(file.name))
+              && !_isFileExt(file.name))
 
             if (!file) return
 
@@ -1306,11 +1315,6 @@ $(function() {
       if (a === b) { return 0 }
       if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
       else { return m-n }
-    }
-
-    // Test for file extension
-    function _isFileExt(file) {
-      return profile.editor.regExp.test(file)
     }
 
     // Returns an array of only files from a tree that matches editor file extension
@@ -1849,7 +1853,7 @@ $(function() {
         var content = encodeURIComponent(editor.getSession().getValue());
         // https://github.com/joemccann/dillinger/issues/90
         // If filename contains .md or .markdown as extension...
-        var hasExtension = profile.editor.regExp.test(profile.current_filename)
+        var hasExtension = _isFileExt(profile.current_filename)
 
         var postData = 'title=' + encodeURIComponent(profile.current_filename)
           + (hasExtension ? '' : profile.editor.fileExts[0])
@@ -2124,7 +2128,7 @@ $(function() {
 
         var content = encodeURIComponent(editor.getSession().getValue())
 
-        var hasExtension = profile.editor.regExp.test(profile.current_filename)
+        var hasExtension = _isFileExt(profile.current_filename)
 
         var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename)
           + (hasExtension ? '' : profile.editor.fileExts[0])
