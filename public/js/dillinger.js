@@ -352,6 +352,7 @@ $(function() {
   } // end initAce
 
   function initEditorType() {
+
     if (profile.editor.type.substring(0, 8) == "markdown") {
       marked.setOptions({
         gfm: (profile.editor.type === "markdown-gfm" ? true : false)
@@ -369,12 +370,19 @@ $(function() {
       editor.getSession().setMode('ace/mode/markdown')
     }
     else { // html
-      converter = String
+      converter = function(input) {
+        var htmlEle = document.createElement("div")
+
+        htmlEle.innerHTML = input;
+
+        return htmlEle.innerHTML.replace(/(?:^\s*|\s*$)/g, '');
+      }
       editor.getSession().setMode('ace/mode/html')
     }
     $("#editor-selector a.dropdown-toggle")
       .text(profile.editor.name)
       .append("<b class='caret'></b>")
+
   }
   /**
    * Initialize various UI elements based on userprofile data.
@@ -557,9 +565,16 @@ $(function() {
     var unmd = editor.getSession().getValue()
       , md = converter(unmd)
 
-    $preview
-      .html('') // unnecessary?
-      .html(md)
+    if (profile.editor.type === 'html') {
+      $preview.html('')
+      $('<iframe>').appendTo($preview).contents().find('body').html(md)
+    }
+    else {
+      $preview
+        .html('') // unnecessary?
+        .html(md)
+
+    }
 
     refreshWordCount();
   }
