@@ -23,12 +23,12 @@ $(function() {
           filepath: '/Dillinger/'
         }
       , local_files: { "Untitled Document": "" }
-      , editor: {
-          type: 'markdown-gfm'
-        , name: 'Github Markdown'
-        , fileExts: ['.md', '.markdown', '.mdown']
-        }
+      , editing: 'markdown-gfm'
+      , editors: {
+        'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
       }
+    }
 
   // Feature detect ish
   var dillinger = 'dillinger'
@@ -74,10 +74,8 @@ $(function() {
   , 'vibrant_ink': '#363636'
   }
 
-  var editors = {
-    'markdown-gfm': { name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
-  , 'markdown': { name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
-  , 'html': { name: 'HTML', fileExts: ['.html', '.htm'] }
+  function editorType() {
+    return profile.editors[profile.editing]
   }
 
   function arrayToRegExp(arr) {
@@ -86,7 +84,7 @@ $(function() {
 
   // Test for file extension
   function _isFileExt(file) {
-    return arrayToRegExp(profile.editor.fileExts).test(file)
+    return arrayToRegExp(editorType().fileExts).test(file)
   }
 
   /// UTILS =================
@@ -145,13 +143,6 @@ $(function() {
 
     profile = p
 
-    // because the profile uses $.extend(true) in jQuery, we need to reset the
-    // accepted file types.
-    if (profile.editor) {
-      profile.editor.fileExts = editors[profile.editor.type].fileExts
-    }
-
-    // console.dir(profile)
   }
 
   /**
@@ -352,10 +343,20 @@ $(function() {
   } // end initAce
 
   function initEditorType() {
+    if ($('#editor-dropdown li').length === 0) {
+      var list = ""
+        , eds = Object.keys(profile.editors)
 
-    if (profile.editor.type.substring(0, 8) == "markdown") {
+      eds.forEach(function(type) {
+        var editor = profile.editors[type]
+        list += '<li><a href="#" data-value="' + type + '">' + editor.name + '</a></li>'
+      })
+
+      $('#editor-dropdown').find('li').remove().end().append(list)
+    }
+    if (editorType().type.substring(0, 8) == "markdown") {
       marked.setOptions({
-        gfm: (profile.editor.type === "markdown-gfm" ? true : false)
+        gfm: (editorType().type === "markdown-gfm" ? true : false)
       , tables: true
       , pedantic: false
       , sanitize: false
@@ -379,8 +380,9 @@ $(function() {
       }
       editor.getSession().setMode('ace/mode/html')
     }
+
     $("#editor-selector a.dropdown-toggle")
-      .text(profile.editor.name)
+      .text(editorType().name)
       .append("<b class='caret'></b>")
 
   }
@@ -565,7 +567,7 @@ $(function() {
     var unmd = editor.getSession().getValue()
       , md = converter(unmd)
 
-    if (profile.editor.type === 'html') {
+    if (editorType().type === 'html') {
       $preview.html('')
       $('<iframe>').appendTo($preview).contents().find('body').html(md)
     }
@@ -573,7 +575,6 @@ $(function() {
       $preview
         .html('') // unnecessary?
         .html(md)
-
     }
 
     refreshWordCount();
@@ -792,6 +793,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
+                            +'<li><a href="#" id="html-editing">Toggle HTML Editing</a></li>'
                             +'<li><a href="#" id="reset">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
@@ -822,6 +824,18 @@ $(function() {
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
+  }
+
+  function toggleHTML() {
+    if (profile.editors && profile.editors.html) {
+      delete profile.editors.html
+    }
+    else {
+      profile.editors.html = { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
+    }
+    Notifier.showMessage((profile.editors.html ? "Enabled" : "Disabled") + " HTML Editing")
+    $('#editor-dropdown li').remove()
+    initEditorType()
   }
 
   /**
@@ -955,10 +969,19 @@ $(function() {
 
       })
 
-    $(".modal-body").delegate("#paper", "click", function() {
-      togglePaper()
-      return false
-    })
+    $('.modal-body')
+      .on('click', '#paper', function() {
+        togglePaper()
+        return false
+      })
+      .on('click', '#html-editing', function() {
+        toggleHTML();
+        return false;
+      })
+      .on('click', '#reset', function() {
+        resetProfile();
+        return false;
+      })
 
     $("#autosave")
       .on('click', function() {
@@ -971,12 +994,6 @@ $(function() {
         toggleWordCount()
         return false
     })
-
-    $('#reset')
-      .on('click', function() {
-        resetProfile()
-        return false
-      })
 
     $import_github
       .on('click', function() {
@@ -1063,19 +1080,14 @@ $(function() {
         return false;
       })
 
-    $('#editor-dropdown > li > a')
-      .on('click', function() {
+    $('#editor-dropdown')// > li > a')
+      .on('click', 'li > a', function() {
         var pickEditor = $(this).attr("data-value")
-        if (!editors[pickEditor]) {
+        if (!profile.editors[pickEditor]) {
           Notifier.showMessage("Sorry, " + pickEditor + " isn't supported")
         }
         else {
-          profile.editor = {
-            type: pickEditor
-          , name: editors[pickEditor].name
-          , fileExts: editors[pickEditor].fileExts
-          }
-
+          profile.editing = pickEditor
           initEditorType()
           previewMd()
         }
@@ -1215,7 +1227,7 @@ $(function() {
 
         var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        profile.current_filename = dboxFilePath.split('/').pop().replace(arrayToRegExp(profile.editor.fileExts), '')
+        profile.current_filename = dboxFilePath.split('/').pop().replace(arrayToRegExp(editorType().fileExts), '')
 
         Dropbox.setFilePath(dboxFilePath)
 
@@ -1673,7 +1685,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha + '&fileExts=' + profile.editor.fileExts.join('|')
+        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha + '&fileExts=' + editorType().fileExts.join('|')
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1850,7 +1862,7 @@ $(function() {
           dataType: 'json',
           url: '/import/googledrive',
           beforeSend: function() {
-            Notifier.showMessage('Searching for .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files')
+            Notifier.showMessage('Searching for .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files')
           },
           error: _errorHandler,
           success: renderSearchResults
@@ -1871,7 +1883,7 @@ $(function() {
         var hasExtension = _isFileExt(profile.current_filename)
 
         var postData = 'title=' + encodeURIComponent(profile.current_filename)
-          + (hasExtension ? '' : profile.editor.fileExts[0])
+          + (hasExtension ? '' : editorType().fileExts[0])
           + '&content='
           + content
 
@@ -2011,7 +2023,7 @@ $(function() {
       searchDropbox: function() {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Searching for  .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files')
+          Notifier.showMessage('Searching for  .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files')
         }
 
         function _doneHandler(a, b, response) {
@@ -2035,7 +2047,7 @@ $(function() {
           }
 
           if(!resp.length) {
-            Notifier.showMessage('No .' + profile.editor.name + ' (' + profile.editor.fileExts.join(', ') + ') files found!')
+            Notifier.showMessage('No .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files found!')
           }
           else{
             // console.dir(resp)
@@ -2051,7 +2063,7 @@ $(function() {
         var config = {
           type: 'POST',
           dataType: 'json',
-          data: 'fileExts=' + profile.editor.fileExts.join('|'),
+          data: 'fileExts=' + editorType().fileExts.join('|'),
           url: '/import/dropbox',
           beforeSend: _beforeSendHandler,
           error: _failHandler,
@@ -2146,7 +2158,7 @@ $(function() {
         var hasExtension = _isFileExt(profile.current_filename)
 
         var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename)
-          + (hasExtension ? '' : profile.editor.fileExts[0])
+          + (hasExtension ? '' : editorType().fileExts[0])
           + '&fileContents='
           + content
 
