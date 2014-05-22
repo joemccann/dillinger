@@ -1,11 +1,11 @@
 <% if(isGoogleDriveConfigured){ %>
 
 <% if(isGoogleDriveAuth) {
- var icon = 'icon-minus'
+ var icon = 'glyphicon glyphicon-icon-minus'
  var copy = 'Unlink'
  var href = '/unlink/googledrive'
 } else {
-  var icon = 'icon-plus'
+  var icon = 'glyphicon glyphicon-icon-plus'
   var copy = 'Link'
   var href =  '/redirect/googledrive'
 }
@@ -13,7 +13,7 @@
 <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Google Drive <b class="caret"></b></a>
 <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
   <li><a tabindex="-1" href="<%- href %>"><i class="<%- icon %>"></i>&nbsp;<%- copy %> with Google Drive</a></li>
-  <li><a tabindex="-1" href="#" id="import_googledrive"><i class="icon-download-alt"></i>&nbsp;Import from Google Drive</a></li>
-  <li><a tabindex="-1" href="#" id="save_googledrive"><i class="icon-hdd"></i>&nbsp;Save to Google Drive</a></li>
+  <li><a tabindex="-1" href="#" id="import_googledrive"><i class="glyphicon glyphicon-download-alt"></i>&nbsp;Import from Google Drive</a></li>
+  <li><a tabindex="-1" href="#" id="save_googledrive"><i class="glyphicon glyphicon-hdd"></i>&nbsp;Save to Google Drive</a></li>
 </ul>
 <% } %>

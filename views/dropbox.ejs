@@ -1,11 +1,11 @@
-<% if(isDropboxConfigured){ %>
+<% if (isDropboxConfigured) { %>
 
-<% if(isDropboxAuth) {
- var icon = 'icon-minus'
+<% if (isDropboxAuth) {
+ var icon = 'glyphicon glyphicon-minus'
  var copy = 'Unlink'
  var href = '/unlink/dropbox'
-}else{
-  var icon = 'icon-plus'
+} else {
+  var icon = 'glyphicon glyphicon-plus'
   var copy = 'Link'
   var href = '/redirect/dropbox'
 }
@@ -13,7 +13,7 @@
 <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropbox <b class="caret"></b></a>
 <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
   <li><a tabindex="-1" href="<%- href %>"><i class="<%- icon %>"></i>&nbsp;<%- copy %> with Dropbox</a></li>
-  <li><a tabindex="-1" href="#" id="import_dropbox"><i class="icon-download-alt"></i>&nbsp;Import from Dropbox</a></li>
-  <li><a tabindex="-1" href="#" id="save_dropbox"><i class="icon-hdd"></i>&nbsp;Save to Dropbox</a></li>
+  <li><a tabindex="-1" href="#" id="import_dropbox"><i class="glyphicon glyphicon-download-alt"></i>&nbsp;Import from Dropbox</a></li>
+  <li><a tabindex="-1" href="#" id="save_dropbox"><i class="glyphicon glyphicon-hdd"></i>&nbsp;Save to Dropbox</a></li>
 </ul>
 <% } %>
