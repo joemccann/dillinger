@@ -1,0 +1,93 @@
+
+@import 'nib/vendor'
+@import 'nib/flex'
+
+section
+  display: flex
+  flex-direction: row
+
+  div
+    flex: 1 0
+
+section
+  display: inline-flex
+
+flex-flow
+  flex-flow row-reverse
+  flex-flow row wrap
+  flex-flow wrap-reverse column-reverse
+
+justify-content
+  justify-content flex-start
+  justify-content flex-end
+  justify-content center
+  justify-content space-between
+  justify-content space-around
+
+align-items
+  align-items flex-start
+  align-items flex-end
+  align-items center
+
+align-content
+  align-content flex-start
+  align-content flex-end
+  align-content center
+  align-content space-between
+  align-content space-around
+
+flex
+  flex 0 auto
+  flex auto 0
+  flex initial
+  flex auto
+  flex none
+  flex 1
+  flex 0px 0 0
+  flex 1 2 0
+
+order
+  order 0
+
+section
+  display: flex !important
+
+section
+  display: inline-flex !important
+// Obsolete property conditional rendering
+flex-version = box
+
+section
+  display: flex
+  flex-direction: row
+
+  div
+    flex: 1 0
+
+section
+  display: inline-flex
+
+section
+  display: flex !important
+
+section
+  display: inline-flex !important
+
+// New property conditional rendering
+flex-version = flex
+
+section
+  display: flex
+  flex-direction: row
+
+  div
+    flex: 1 0
+
+section
+  display: inline-flex
+
+section
+  display: flex !important
+
+section
+  display: inline-flex !important

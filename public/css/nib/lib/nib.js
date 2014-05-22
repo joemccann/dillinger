@@ -10,6 +10,7 @@
  */
 
 var stylus = require('stylus')
+  , path = require('path')
   , nodes = stylus.nodes
   , utils = stylus.utils
   , Canvas
@@ -31,7 +32,7 @@ try {
  * Library version.
  */
 
-exports.version = '0.3.2';
+exports.version = require(path.join(__dirname, '../package.json')).version;
 
 /**
  * Stylus path.

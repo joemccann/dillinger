@@ -1,34 +1,36 @@
-// THUMBNAILS
-// ----------
+//
+// Thumbnails
+// --------------------------------------------------
 
-.thumbnails
-  margin-left: (- $gridGutterWidth)
-  list-style: none
-  clearfix()
 
-.thumbnails > li
-  float: left
-  margin: 0 0 $baseLineHeight $gridGutterWidth
+// Mixin and adjust the regular image class
+.thumbnail {
+  display: block;
+  padding: $thumbnail-padding;
+  margin-bottom: $line-height-computed;
+  line-height: $line-height-base;
+  background-color: $thumbnail-bg;
+  border: 1px solid $thumbnail-border;
+  border-radius: $thumbnail-border-radius;
+  transition: all .2s ease-in-out;
 
-.thumbnail
-  display: block
-  padding: 4px
-  line-height: 1
-  border: 1px solid #ddd
-  border-radius(4px)
-  box-shadow(0 1px 1px rgba(0,0,0,.075))
+  > img,
+  a > img {
+    @extend .img-responsive
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-// Add a hover state for linked versions only
-a.thumbnail:hover
-  border-color: $linkColor
-  box-shadow(0 1px 4px rgba(0,105,214,.25))
+  // Add a hover state for linked versions only
+  a&:hover,
+  a&:focus,
+  a&.active {
+    border-color: $link-color;
+  }
 
-// Images and captions
-.thumbnail > img
-  display: block
-  max-width: 100%
-  margin-left: auto
-  margin-right: auto
-
-.thumbnail .caption
-  padding: 9px
+  // Image captions
+  .caption {
+    padding: $thumbnail-caption-padding;
+    color: $thumbnail-caption-color;
+  }
+}

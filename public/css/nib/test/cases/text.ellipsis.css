@@ -1,0 +1,14 @@
+button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

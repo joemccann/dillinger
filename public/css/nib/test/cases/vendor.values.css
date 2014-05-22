@@ -1,0 +1,56 @@
+button {
+  -webkit-transition: -webkit-transform;
+  -moz-transition: -moz-transform;
+  -o-transition: -o-transform;
+  -ms-transition: -ms-transform;
+  transition: transform;
+}
+button {
+  -webkit-transition: -webkit-transform 0.3s 0.2s linear;
+  -moz-transition: -moz-transform 0.3s 0.2s linear;
+  -o-transition: -o-transform 0.3s 0.2s linear;
+  -ms-transition: -ms-transform 0.3s 0.2s linear;
+  transition: transform 0.3s 0.2s linear;
+}
+button {
+  -webkit-transition: -webkit-transform cubic-bezier(1, 1, 1);
+  -moz-transition: -moz-transform cubic-bezier(1, 1, 1);
+  -o-transition: -o-transform cubic-bezier(1, 1, 1);
+  -ms-transition: -ms-transform cubic-bezier(1, 1, 1);
+  transition: transform cubic-bezier(1, 1, 1);
+}
+button {
+  -webkit-transition: -webkit-transform 2s, width 0.3s linear, height;
+  -moz-transition: -moz-transform 2s, width 0.3s linear, height;
+  -o-transition: -o-transform 2s, width 0.3s linear, height;
+  -ms-transition: -ms-transform 2s, width 0.3s linear, height;
+  transition: transform 2s, width 0.3s linear, height;
+}
+button {
+  -webkit-transition: height, -webkit-transform 2s, width 0.3s linear;
+  -moz-transition: height, -moz-transform 2s, width 0.3s linear;
+  -o-transition: height, -o-transform 2s, width 0.3s linear;
+  -ms-transition: height, -ms-transform 2s, width 0.3s linear;
+  transition: height, transform 2s, width 0.3s linear;
+}
+button {
+  -webkit-transition: -webkit-transform 1s !important;
+  -moz-transition: -moz-transform 1s !important;
+  -o-transition: -o-transform 1s !important;
+  -ms-transition: -ms-transform 1s !important;
+  transition: transform 1s !important;
+}
+button {
+  -webkit-transition: -webkit-transform, height !important;
+  -moz-transition: -moz-transform, height !important;
+  -o-transition: -o-transform, height !important;
+  -ms-transition: -ms-transform, height !important;
+  transition: transform, height !important;
+}
+button {
+  -webkit-transition: -webkit-transform 1s, width 2s linear, cubic-bezier(1, 1, 1);
+  -moz-transition: -moz-transform 1s, width 2s linear, cubic-bezier(1, 1, 1);
+  -o-transition: -o-transform 1s, width 2s linear, cubic-bezier(1, 1, 1);
+  -ms-transition: -ms-transform 1s, width 2s linear, cubic-bezier(1, 1, 1);
+  transition: transform 1s, width 2s linear, cubic-bezier(1, 1, 1);
+}

@@ -2,33 +2,6 @@
 @import 'config'
 
 /*
- * Replace the given str with val in the expr.
- */
-
-replace(expr, str, val)
-  expr = clone(expr)
-  for e, i in expr
-    if length(e) > 1
-      expr[i] = replace(e, str, val)
-    else
-      if str == e
-        expr[i] = val
-  expr
-
-/*
- * Normalize gradient points.
- */
-
-grad-point(pos)
-  if length(pos) == 1
-    return left pos if pos in (top bottom)
-    return pos top if pos in (left right)
-  else if pos[0] in (top bottom)
-    pos[1] pos[0]
-  else
-    pos
-
-/*
  * Implicit color stop position.
  */
 
@@ -39,14 +12,14 @@ pos-in-stops(i, stops)
   else if i
     unit(i / len * 100, '%')
   else
-    0%
+    0
 
 /*
  * Normalize color stops:
- * 
+ *
  *   - (color pos) -> (pos color)
  *   - (color) -> (implied-pos color)
- * 
+ *
  */
 
 normalize-stops(stops)
@@ -77,59 +50,29 @@ join-stops(stops, translate)
   unquote(str)
 
 /*
- * Legacy Webkit color stop.
- */
-
-webkit-stop(color, pos)
-  'color-stop(%d, %s)' % (pos / 100 color)
-
-/*
  * Standard color stop.
  */
 
 std-stop(color, pos)
-  '%s %s' % (color pos) 
+  '%s %s' % (color pos)
 
 /*
  * Create a linear gradient with the given start position
  * and variable number of color stops.
- * 
+ *
  * Examples:
- * 
+ *
  *    background: linear-gradient(top, red, green, blue)
  *    background: linear-gradient(bottom, red, green 50%, blue)
  *    background: linear-gradient(bottom, red, 50% green, blue)
  *    background: linear-gradient(bottom, red, 50% green, 90% white, blue)
- * 
+ *
  */
 
 linear-gradient(start, stops...)
   error('color stops required') unless length(stops)
-  prop = current-property[0]
-  val = current-property[1]
-  stops = normalize-stops(stops)
 
-  // gradient image
-  if start[0] is a 'unit'
-    if has-canvas
-      img = linear-gradient-image(start, stops)
-      add-property(prop, replace(val, '__CALL__', img))
-    start = start[1]
-
-  // legacy webkit
-  end = grad-point(opposite-position(start))
-  webkit-legacy = '-webkit-gradient(linear, %s, %s, %s)' % (grad-point(start) end join-stops(stops, webkit-stop))
-  add-property(prop, replace(val, '__CALL__', webkit-legacy))
-
-  // vendor prefixed
-  stops = join-stops(stops, std-stop)
-  for prefix in vendor-prefixes
-    unless prefix == official
-      gradient = '-%s-linear-gradient(%s, %s)' % (prefix start stops)   
-      add-property(prop, replace(val, '__CALL__', gradient))
-
-  // standard 
-  'linear-gradient(%s, %s)' % (start stops)
+  unquote('linear-gradient(' + join(', ',arguments) + ')')
 
 /*
  * Create a linear gradient image with the given start position

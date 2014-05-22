@@ -1,39 +1,55 @@
-// BADGES
-// ------
+//
+// Badges
+// --------------------------------------------------
 
-.badge 
-  padding 1px 9px 2px
-  font-size $baseFontSize * .85
-  font-weight bold
-  white-space nowrap
-  color $white
-  background-color $grayLight
-  border-radius(9px) 9px
 
-// Hover state
-.badge:hover 
-  color $white
-  text-decoration none
-  cursor pointer
+// Base classes
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: $font-size-small;
+  font-weight: $badge-font-weight;
+  color: $badge-color;
+  line-height: $badge-line-height;
+  vertical-align: baseline;
+  white-space: nowrap;
+  text-align: center;
+  background-color: $badge-bg;
+  border-radius: $badge-border-radius;
 
-//Colors
-.badge-error
-  background-color $errorText
-.badge-error:hover
-  background-color darken($errorText, 10%)
-.badge-warning
-  background-color $orange
-.badge-warning:hover
-  background-color darken($orange, 10%)
-.badge-success
-  background-color $successText
-.badge-success:hover
-  background-color darken($successText, 10%)
-.badge-info
-  background-color $infoText
-.badge-info:hover 
-  background-color darken($infoText, 10%)
-.badge-inverse
-  background-color $grayDark
-.badge-inverse:hover
-  background-color darken($grayDark, 10%)
+  // Empty badges collapse automatically (not available in IE8)
+  &:empty {
+    display: none;
+  }
+
+  // Quick fix for badges in buttons
+  .btn & {
+    position: relative;
+    top: -1px;
+  }
+  .btn-xs & {
+    top: 0;
+    padding: 1px 5px;
+  }
+}
+
+// Hover state, but only for links
+a.badge {
+  &:hover,
+  &:focus {
+    color: $badge-link-hover-color;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+// Account for counters in navs
+a.list-group-item.active > .badge,
+.nav-pills > .active > a > .badge {
+  color: $badge-active-color;
+  background-color: $badge-active-bg;
+}
+.nav-pills > li > a > .badge {
+  margin-left: 3px;
+}

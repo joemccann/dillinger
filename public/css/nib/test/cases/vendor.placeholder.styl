@@ -1,0 +1,22 @@
+
+@import 'nib/vendor'
+
+$placeholderFont = Helvetica, arial, sans-serif
+
+body
+  placeholder(color #333, font-weight normal, font-family $placeholderFont)
+
+.placeholder-red
+  placeholder(color red,)
+
+green-placeholder()
+  color green
+.placeholder-green
+  placeholder(green-placeholder)
+
+.input-placeholder-gray
+  input-placeholder(color gray,)
+
+textarea
+  placeholder((font-style italic) (font-weight bold) (padding '4px 10px'))
+  

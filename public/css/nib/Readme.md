@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/visionmedia/nib.png?branch=master)](https://travis-ci.org/visionmedia/nib)
+
 # Nib
 
   Stylus mixins, utilities, components, and gradient image generation. Don't forget to check out the [documentation](http://visionmedia.github.com/nib/).
@@ -70,43 +72,22 @@ to be continued....
  Run the automated test cases:
  
  ```bash
-    $ make test
+    $ npm test
  ```
  
  For visual testing run the test server:
  
  ```bash
-    $ make test-server
+    $ npm run-script test-server
  ```
  
  Then visit `localhost:3000` in your browser.
 
 ## Contributors
 
-  - TJ Holowaychuk
-  - Isaac Johnston
+I would love more contributors. And if you have helped out, you are awesome! I want to give a huge thanks to these people:
 
-## License 
-
-(The MIT License)
-
-Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  - [TJ Holowaychuk](https://github.com/visionmedia) (Original Creator)
+  - [Sean Lang](https://github.com/slang800) (Current Maintainer)
+  - [Isaac Johnston](https://github.com/superstructor)
+  - [Everyone Else](https://github.com/visionmedia/nib/contributors)

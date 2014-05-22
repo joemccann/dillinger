@@ -1,0 +1,49 @@
+html
+  head
+    title Nib
+    link(rel='stylesheet', href='/test.css')
+    link(rel='stylesheet', href='/gradients.css')
+    link(rel='stylesheet', href='/buttons.css')
+    link(rel='stylesheet', href='/clearfix.css')
+    link(rel='stylesheet', href='/color-images.css')
+    script(src='/jquery.min.js')
+    script.
+      $(function(){
+        $(':button, :submit, a.button').click(function(){
+          return false;
+        });
+      });
+  body
+    h2 Gradients
+    table#gradients
+      - var n = 9
+      tbody
+        - while (n--)
+          tr
+            td
+            td
+    h2 Color images
+    #color-images
+      .rgba rgba()
+      .hexa-short #0003
+      .hexa #ffffff80
+      .rgb rgb()
+      .hex #fff
+    h2 Clearfix
+    div#clearfix-left-only
+      div
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut commodo
+        | turpis quis mauris tempus commodo a non tellus. Sed eu convallis
+        | mauris. Donec scelerisque lacus quis orci viverra tincidunt. Nunc sed
+        | risus lectus. Proin vulputate elit sed eros consectetur interdum.
+    div#clearfix-left-right
+      div.left
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut commodo
+        | turpis quis mauris tempus commodo a non tellus. Sed eu convallis
+        | mauris. Donec scelerisque lacus quis orci viverra tincidunt. Nunc sed
+        | risus lectus. Proin vulputate elit sed eros consectetur interdum.
+      div.right
+        | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut commodo
+        | turpis quis mauris tempus commodo a non tellus. Sed eu convallis
+        | mauris. Donec scelerisque lacus quis orci viverra tincidunt. Nunc sed
+        | risus lectus. Proin vulputate elit sed eros consectetur interdum.

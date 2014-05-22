@@ -1,0 +1,138 @@
+body {
+  background: -webkit-linear-gradient(#fff, #000);
+  background: -moz-linear-gradient(#fff, #000);
+  background: -o-linear-gradient(#fff, #000);
+  background: -ms-linear-gradient(#fff, #000);
+  background: linear-gradient(#fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(top, #fff, #000);
+  background: -moz-linear-gradient(top, #fff, #000);
+  background: -o-linear-gradient(top, #fff, #000);
+  background: -ms-linear-gradient(top, #fff, #000);
+  background: linear-gradient(to bottom, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(bottom, #fff, #000);
+  background: -moz-linear-gradient(bottom, #fff, #000);
+  background: -o-linear-gradient(bottom, #fff, #000);
+  background: -ms-linear-gradient(bottom, #fff, #000);
+  background: linear-gradient(to top, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(top left, #fff, #000);
+  background: -moz-linear-gradient(top left, #fff, #000);
+  background: -o-linear-gradient(top left, #fff, #000);
+  background: -ms-linear-gradient(top left, #fff, #000);
+  background: linear-gradient(to bottom right, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(45deg, #fff, #000);
+  background: -moz-linear-gradient(45deg, #fff, #000);
+  background: -o-linear-gradient(45deg, #fff, #000);
+  background: -ms-linear-gradient(45deg, #fff, #000);
+  background: linear-gradient(45deg, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(135deg, #fff, #000);
+  background: -moz-linear-gradient(135deg, #fff, #000);
+  background: -o-linear-gradient(135deg, #fff, #000);
+  background: -ms-linear-gradient(135deg, #fff, #000);
+  background: linear-gradient(-45deg, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(top left, #fff, #f00, #00f, #000);
+  background: -moz-linear-gradient(top left, #fff, #f00, #00f, #000);
+  background: -o-linear-gradient(top left, #fff, #f00, #00f, #000);
+  background: -ms-linear-gradient(top left, #fff, #f00, #00f, #000);
+  background: linear-gradient(to bottom right, #fff, #f00, #00f, #000);
+}
+body {
+  background: -webkit-linear-gradient(bottom right, #fff, #000 80%);
+  background: -moz-linear-gradient(bottom right, #fff, #000 80%);
+  background: -o-linear-gradient(bottom right, #fff, #000 80%);
+  background: -ms-linear-gradient(bottom right, #fff, #000 80%);
+  background: linear-gradient(to top left, #fff, #000 80%);
+}
+body {
+  background: -webkit-linear-gradient(right bottom, #fff, #000 80%);
+  background: -moz-linear-gradient(right bottom, #fff, #000 80%);
+  background: -o-linear-gradient(right bottom, #fff, #000 80%);
+  background: -ms-linear-gradient(right bottom, #fff, #000 80%);
+  background: linear-gradient(to left top, #fff, #000 80%);
+}
+body {
+  background: -webkit-linear-gradient(right bottom, #fff 80%, #000);
+  background: -moz-linear-gradient(right bottom, #fff 80%, #000);
+  background: -o-linear-gradient(right bottom, #fff 80%, #000);
+  background: -ms-linear-gradient(right bottom, #fff 80%, #000);
+  background: linear-gradient(to left top, #fff 80%, #000);
+}
+body {
+  background: -webkit-linear-gradient(right bottom, rgba(0,0,0,0.5) 80%, #000);
+  background: -moz-linear-gradient(right bottom, rgba(0,0,0,0.5) 80%, #000);
+  background: -o-linear-gradient(right bottom, rgba(0,0,0,0.5) 80%, #000);
+  background: -ms-linear-gradient(right bottom, rgba(0,0,0,0.5) 80%, #000);
+  background: linear-gradient(to left top, rgba(0,0,0,0.5) 80%, #000);
+}
+body {
+  background: -webkit-linear-gradient(right bottom, hsla(0,0,0,0.5) 80.5%, #000);
+  background: -moz-linear-gradient(right bottom, hsla(0,0,0,0.5) 80.5%, #000);
+  background: -o-linear-gradient(right bottom, hsla(0,0,0,0.5) 80.5%, #000);
+  background: -ms-linear-gradient(right bottom, hsla(0,0,0,0.5) 80.5%, #000);
+  background: linear-gradient(to left top, hsla(0,0,0,0.5) 80.5%, #000);
+}
+body {
+  background: -webkit-linear-gradient(right bottom, #fff 20px, #000);
+  background: -moz-linear-gradient(right bottom, #fff 20px, #000);
+  background: -o-linear-gradient(right bottom, #fff 20px, #000);
+  background: -ms-linear-gradient(right bottom, #fff 20px, #000);
+  background: linear-gradient(to left top, #fff 20px, #000);
+}
+body {
+  background: -webkit-linear-gradient(top, #fff, #000);
+  background: -moz-linear-gradient(top, #fff, #000);
+  background: -ms-linear-gradient(top, #fff, #000);
+  background: -o-linear-gradient(top, #fff, #000);
+  background: linear-gradient(to bottom, #fff, #000);
+}
+body {
+  background: -webkit-linear-gradient(top, #fff, #000), #fff;
+  background: -moz-linear-gradient(top, #fff, #000), #fff;
+  background: -ms-linear-gradient(top, #fff, #000), #fff;
+  background: -o-linear-gradient(top, #fff, #000), #fff;
+  background: linear-gradient(to bottom, #fff, #000), #fff;
+}
+body {
+  -webkit-border-image: -webkit-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  -moz-border-image: -moz-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  -o-border-image: -o-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  border-image: linear-gradient(to bottom, #fff, #000) 20% stretch stretch;
+}
+body {
+  -webkit-border-image: -webkit-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  -moz-border-image: -moz-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  -o-border-image: -o-linear-gradient(top, #fff, #000) 20% stretch stretch;
+  border-image: linear-gradient(to bottom, #fff, #000) 20% fill stretch stretch;
+}
+body {
+  cursor: -webkit-linear-gradient(50deg, #f00, #0f0);
+  cursor: -moz-linear-gradient(50deg, #f00, #0f0);
+  cursor: -ms-linear-gradient(50deg, #f00, #0f0);
+  cursor: -o-linear-gradient(50deg, #f00, #0f0);
+  cursor: linear-gradient(40deg, #f00, #0f0);
+}
+body {
+  list-style: -webkit-linear-gradient(50deg, #f00, #0f0);
+  list-style: -moz-linear-gradient(50deg, #f00, #0f0);
+  list-style: -ms-linear-gradient(50deg, #f00, #0f0);
+  list-style: -o-linear-gradient(50deg, #f00, #0f0);
+  list-style: linear-gradient(40deg, #f00, #0f0);
+}
+body {
+  list-style-image: -webkit-linear-gradient(50deg, #f00, #0f0);
+  list-style-image: -moz-linear-gradient(50deg, #f00, #0f0);
+  list-style-image: -ms-linear-gradient(50deg, #f00, #0f0);
+  list-style-image: -o-linear-gradient(50deg, #f00, #0f0);
+  list-style-image: linear-gradient(40deg, #f00, #0f0);
+}

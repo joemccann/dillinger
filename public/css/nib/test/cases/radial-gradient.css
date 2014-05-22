@@ -1,0 +1,7 @@
+body {
+  background: -webkit-radial-gradient(50% 0, farthest-side, rgba(9,36,95,0.175), rgba(9,36,95,0));
+  background: -moz-radial-gradient(50% 0, farthest-side, rgba(9,36,95,0.175), rgba(9,36,95,0));
+  background: -o-radial-gradient(50% 0, farthest-side, rgba(9,36,95,0.175), rgba(9,36,95,0));
+  background: -ms-radial-gradient(50% 0, farthest-side, rgba(9,36,95,0.175), rgba(9,36,95,0));
+  background: radial-gradient(50% 0, farthest-side, rgba(9,36,95,0.175), rgba(9,36,95,0));
+}

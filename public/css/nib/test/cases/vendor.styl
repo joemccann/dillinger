@@ -1,0 +1,89 @@
+
+@import 'nib/vendor'
+@import 'nib/gradients'
+
+vendor-prefixes = webkit moz official
+
+button
+  box-shadow: 1px 1px 5px #eee
+
+button
+  opacity: 0.5
+
+support-for-ie = false
+
+button
+  opacity: 0.75
+  whitespace: no-wrap
+
+button
+  animation-name: myAnimation;
+  animation-delay: 1s;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: both;
+  animation-play-state: running;
+  animation-timing-function: ease
+
+button
+  animation: myAnimation 1s ease;
+
+button
+  appearance: none;
+
+section
+  column-count: 2;
+  column-rule: 1px solid #bbb;
+  column-gap: 2em;
+
+section
+  column-count: 2;
+  column-rule-width: 1px;
+  column-rule-style: solid;
+  column-rule-color: #bbb;
+  column-width: 200px;
+
+section
+  column-count: 2;
+  column-rule-width: 1px;
+  column-rule-style: solid;
+  column-rule-color: #bbb;
+  column-gap: 2em;
+
+prepend(vendor-prefixes, o)
+
+button
+  background-origin: border-box, padding-box;
+  background-clip: border-box, padding-box;
+
+button
+  transition: all 0.1s ease-in-out 1s
+  backface-visibility: hidden
+
+button
+  transition-property: all
+  transition-duration: 0.1s
+  transition-timing-function: ease-in-out
+  transition-delay: 1s
+
+button
+  transform: rotateY(45deg)
+
+button
+  transform: perspective(500px)
+
+button
+  perspective: 500
+
+section
+  border-image: url("image.png") 20% stretch stretch;
+
+section
+  border-image: url("image.png") 20% fill stretch stretch;
+
+p
+  hyphens: auto
+
+section
+  overflow-scrolling: touch

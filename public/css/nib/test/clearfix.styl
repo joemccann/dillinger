@@ -1,0 +1,19 @@
+@import 'nib/clearfix'
+
+support-for-ie = true
+
+#clearfix-left-only,
+#clearfix-left-right
+  clearfix()
+  background: blue
+  div
+    background: green
+    margin: 10px
+    width: 47%
+  div.left
+    float: left
+  div.right
+    float: right
+
+#clearfix-left-right
+  margin-top: 10px

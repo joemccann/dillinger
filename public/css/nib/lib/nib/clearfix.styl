@@ -22,8 +22,8 @@
 clearfix()
   &:before
   &:after
-    display: table
     content: ""
+    display: table
   &:after
     clear: both
-  *zoom: 1 if support-for-ie
+  zoom: 1 if support-for-ie

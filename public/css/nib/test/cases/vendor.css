@@ -1,0 +1,167 @@
+button {
+  -webkit-box-shadow: 1px 1px 5px #eee;
+  box-shadow: 1px 1px 5px #eee;
+}
+button {
+  opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+}
+button {
+  opacity: 0.75;
+  white-space: nowrap;
+}
+button {
+  -webkit-animation-name: myAnimation;
+  -moz-animation-name: myAnimation;
+  animation-name: myAnimation;
+  -webkit-animation-delay: 1s;
+  -moz-animation-delay: 1s;
+  animation-delay: 1s;
+  -webkit-animation-duration: 10s;
+  -moz-animation-duration: 10s;
+  animation-duration: 10s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+  -moz-animation-direction: alternate;
+  animation-direction: alternate;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-play-state: running;
+  -moz-animation-play-state: running;
+  animation-play-state: running;
+  -webkit-animation-timing-function: ease;
+  -moz-animation-timing-function: ease;
+  animation-timing-function: ease;
+}
+button {
+  -webkit-animation: myAnimation 1s ease;
+  -moz-animation: myAnimation 1s ease;
+  animation: myAnimation 1s ease;
+}
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+section {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-column-rule: 1px solid #bbb;
+  -moz-column-rule: 1px solid #bbb;
+  column-rule: 1px solid #bbb;
+  -webkit-column-gap: 2em;
+  -moz-column-gap: 2em;
+  column-gap: 2em;
+}
+section {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-column-rule-width: 1px;
+  -moz-column-rule-width: 1px;
+  column-rule-width: 1px;
+  -webkit-column-rule-style: solid;
+  -moz-column-rule-style: solid;
+  column-rule-style: solid;
+  -webkit-column-rule-color: #bbb;
+  -moz-column-rule-color: #bbb;
+  column-rule-color: #bbb;
+  -webkit-column-width: 200px;
+  -moz-column-width: 200px;
+  column-width: 200px;
+}
+section {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-column-rule-width: 1px;
+  -moz-column-rule-width: 1px;
+  column-rule-width: 1px;
+  -webkit-column-rule-style: solid;
+  -moz-column-rule-style: solid;
+  column-rule-style: solid;
+  -webkit-column-rule-color: #bbb;
+  -moz-column-rule-color: #bbb;
+  column-rule-color: #bbb;
+  -webkit-column-gap: 2em;
+  -moz-column-gap: 2em;
+  column-gap: 2em;
+}
+button {
+  -webkit-background-origin: border, padding;
+  -moz-background-origin: border, padding;
+  background-origin: border-box, padding-box;
+  -webkit-background-clip: border, padding;
+  -moz-background-clip: border, padding;
+  background-clip: border-box, padding-box;
+}
+button {
+  -o-transition: all 0.1s ease-in-out 1s;
+  -webkit-transition: all 0.1s ease-in-out 1s;
+  -moz-transition: all 0.1s ease-in-out 1s;
+  transition: all 0.1s ease-in-out 1s;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+button {
+  -o-transition-property: all;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  transition-property: all;
+  -o-transition-duration: 0.1s;
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+  -o-transition-timing-function: ease-in-out;
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -o-transition-delay: 1s;
+  -webkit-transition-delay: 1s;
+  -moz-transition-delay: 1s;
+  transition-delay: 1s;
+}
+button {
+  -o-transform: rotateY(45deg);
+  -webkit-transform: rotateY(45deg);
+  -moz-transform: rotateY(45deg);
+  transform: rotateY(45deg);
+}
+button {
+  -o-transform: perspective(500px);
+  -webkit-transform: perspective(500px);
+  -moz-transform: perspective(500px);
+  transform: perspective(500px);
+}
+button {
+  -webkit-perspective: 500;
+  -moz-perspective: 500;
+  perspective: 500;
+}
+section {
+  -o-border-image: url("image.png") 20% stretch stretch;
+  -webkit-border-image: url("image.png") 20% stretch stretch;
+  -moz-border-image: url("image.png") 20% stretch stretch;
+  border-image: url("image.png") 20% stretch stretch;
+}
+section {
+  -o-border-image: url("image.png") 20% stretch stretch;
+  -webkit-border-image: url("image.png") 20% stretch stretch;
+  -moz-border-image: url("image.png") 20% stretch stretch;
+  border-image: url("image.png") 20% fill stretch stretch;
+}
+p {
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+section {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}

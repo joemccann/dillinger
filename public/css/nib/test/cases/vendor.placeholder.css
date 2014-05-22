@@ -1,0 +1,76 @@
+body::-webkit-input-placeholder {
+  color: #333;
+  font-weight: normal;
+  font-family: Helvetica, arial, sans-serif;
+}
+body:-moz-placeholder {
+  color: #333;
+  font-weight: normal;
+  font-family: Helvetica, arial, sans-serif;
+}
+body::-moz-placeholder {
+  color: #333;
+  font-weight: normal;
+  font-family: Helvetica, arial, sans-serif;
+}
+body:-ms-input-placeholder {
+  color: #333;
+  font-weight: normal;
+  font-family: Helvetica, arial, sans-serif;
+}
+.placeholder-red::-webkit-input-placeholder {
+  color: #f00;
+}
+.placeholder-red:-moz-placeholder {
+  color: #f00;
+}
+.placeholder-red::-moz-placeholder {
+  color: #f00;
+}
+.placeholder-red:-ms-input-placeholder {
+  color: #f00;
+}
+.placeholder-green::-webkit-input-placeholder {
+  color: #008000;
+}
+.placeholder-green:-moz-placeholder {
+  color: #008000;
+}
+.placeholder-green::-moz-placeholder {
+  color: #008000;
+}
+.placeholder-green:-ms-input-placeholder {
+  color: #008000;
+}
+.input-placeholder-gray::-webkit-input-placeholder {
+  color: #808080;
+}
+.input-placeholder-gray:-moz-placeholder {
+  color: #808080;
+}
+.input-placeholder-gray::-moz-placeholder {
+  color: #808080;
+}
+.input-placeholder-gray:-ms-input-placeholder {
+  color: #808080;
+}
+textarea::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: bold;
+  padding: 4px 10px;
+}
+textarea:-moz-placeholder {
+  font-style: italic;
+  font-weight: bold;
+  padding: 4px 10px;
+}
+textarea::-moz-placeholder {
+  font-style: italic;
+  font-weight: bold;
+  padding: 4px 10px;
+}
+textarea:-ms-input-placeholder {
+  font-style: italic;
+  font-weight: bold;
+  padding: 4px 10px;
+}

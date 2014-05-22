@@ -1,0 +1,56 @@
+
+@import 'nib/gradients'
+
+#gradients tr
+  height: 50px
+  color: white
+  td
+    padding: 0
+    width: 150px
+    &:first-child
+      border-right: 1px solid #fff
+
+#gradients
+  tr:nth-child(1)
+    td:first-child
+      background: linear-gradient(top, yellow, blue)
+    td:last-child
+      background: linear-gradient-image(50px, yellow, blue)
+  tr:nth-child(2)
+    td:first-child
+      background: linear-gradient(top, red, green, yellow, blue)
+    td:last-child
+      background: linear-gradient-image(50px, red, green, yellow, blue)
+  tr:nth-child(3)
+    td:first-child
+      background: linear-gradient(top, red, green 10%, 90% yellow, blue)
+    td:last-child
+      background: linear-gradient-image(50px, red, green 10%, 90% yellow, blue)
+  tr:nth-child(4)
+    td:first-child
+      background: linear-gradient(top, red 15, green 80%, white, 90% yellow, blue)
+    td:last-child
+      background: linear-gradient-image(50px, red 15, green 80%, white, 90% yellow, blue)
+  tr:nth-child(5)
+    td:first-child
+      background: linear-gradient(bottom, #fff, #000)
+    td:last-child
+      background: linear-gradient-image(50px bottom, #fff, #000)
+  tr:nth-child(6)
+    td:first-child
+      background: linear-gradient(left, #fff, #000)
+    td:last-child
+      background: linear-gradient-image(150px left, #fff, #000)
+  tr:nth-child(7)
+    td:first-child
+      background: linear-gradient(right, #008AB4, #E9FAFF, 2% #90E4FD, #1FCBFF, 80% #008AB4)
+    td:last-child
+      background: linear-gradient-image(150px right, #008AB4, #E9FAFF, 2% #90E4FD, #1FCBFF, 80% #008AB4)
+  tr:nth-child(8)
+    td:first-child
+      background: linear-gradient(top, red, 50% green, blue)
+    td:last-child
+      background: linear-gradient-image(50px top, red, 50% green, blue)
+  tr:nth-child(9)
+    td:first-child
+      background: linear-gradient(50px top, red, green, yellow, blue)
