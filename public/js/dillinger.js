@@ -1430,12 +1430,12 @@ window.onload = function() {
   var $loading = $('#loading')
 
   if ($.support.transition) {
-    $loading
-      .bind($.support.transitionEnd, function() {
+    $('body')
+      .on($.support.transition.end, '#loading', function() {
         $('#main').removeClass('bye')
         $loading.remove()
       })
-      .addClass('fade_slow');
+      .find('#loading').addClass('fade_slow');
   } else {
     $('#main').removeClass('bye')
     $loading.remove()
