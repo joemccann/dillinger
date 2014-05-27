@@ -339,7 +339,7 @@ $(function() {
       autoSave()
 
       initWordCount()
-      
+
       refreshWordCount()
 
     }
@@ -808,7 +808,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
-                            +'<li><a href="#" id="reset">Reset Profile</a></li>'
+                            +'<li><a href="#" id="reset_pref">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
 
@@ -976,7 +976,7 @@ $(function() {
         togglePaper()
         return false
       })
-      .on('click', '#reset', function() {
+      .on('click', '#reset_pref', function() {
         resetProfile();
         return false;
       })
