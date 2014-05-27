@@ -4,7 +4,6 @@ var fs = require('fs')
   , dbox = require('dbox')
   , qs = require('querystring')
   , url = require('url')
-  , _ = require('lodash')
 
 var dropbox_config_file = path.resolve(__dirname, 'dropbox-config.json')
   , dropbox_config = {}
