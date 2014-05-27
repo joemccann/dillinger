@@ -40,7 +40,6 @@
     "ejs": ">=0.8.1",
     "request": ">=2.9.203",
     "colors": ">=0.6.0-1",
-    "lodash": ">=0.6.1",
     "dbox": "0.6.3",
     "googleapis": "0.2.12-alpha",
     "marked": "^0.3.2",
