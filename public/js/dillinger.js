@@ -8,7 +8,7 @@ $(function() {
     , profile = {
         theme: 'ace/theme/idle_fingers'
       , showPaper: false
-      , currentMd: ''
+      , currentFile: ''
       , autosave: {
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
@@ -22,8 +22,13 @@ $(function() {
       , dropbox: {
           filepath: '/Dillinger/'
         }
-      , local_files: { "Untitiled Document": "" }
+      , local_files: { "Untitled Document": "" }
+      , editing: 'markdown-gfm'
+      , editors: {
+        'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
       }
+    }
 
   // Feature detect ish
   var dillinger = 'dillinger'
@@ -69,9 +74,20 @@ $(function() {
   , 'vibrant_ink': '#363636'
   }
 
+  function editorType() {
+    return profile.editors[profile.editing]
+  }
+
+  function arrayToRegExp(arr) {
+    return new RegExp('(' + arr.map(function(e) { return e.replace('.','\\.') }).join('|') + ')$', 'i')
+  }
+
+  // Test for file extension
+  function _isFileExt(file) {
+    return arrayToRegExp(editorType().fileExts).test(file)
+  }
 
   /// UTILS =================
-
 
   /**
    * Utility method to async load a JavaScript file.
@@ -127,7 +143,6 @@ $(function() {
 
     profile = p
 
-    // console.dir(profile)
   }
 
   /**
@@ -291,6 +306,8 @@ $(function() {
 
       initAce()
 
+      initEditorType()
+
       initUi()
 
       marked.setOptions({
@@ -306,8 +323,6 @@ $(function() {
         }
       })
 
-      converter = marked
-
       bindPreview()
 
       bindNav()
@@ -322,8 +337,9 @@ $(function() {
 
       autoSave()
 
-      initWordCount();
-      refreshWordCount();
+      initWordCount()
+      
+      refreshWordCount()
 
     }
 
@@ -340,6 +356,50 @@ $(function() {
 
   } // end initAce
 
+  function initEditorType() {
+    if ($('#editor-dropdown li').length === 0) {
+      var list = ""
+        , eds = Object.keys(profile.editors)
+
+      eds.forEach(function(type) {
+        var editor = profile.editors[type]
+        list += '<li><a href="#" data-value="' + type + '">' + editor.name + '</a></li>'
+      })
+
+      $('#editor-dropdown').find('li').remove().end().append(list)
+    }
+    if (editorType().type.substring(0, 8) == "markdown") {
+      marked.setOptions({
+        gfm: (editorType().type === "markdown-gfm" ? true : false)
+      , tables: true
+      , pedantic: false
+      , sanitize: true
+      , smartLists: true
+      , smartypants: false
+      , langPrefix: 'lang-'
+      , highlight: function (code) {
+          return hljs.highlightAuto(code).value;
+        }
+      })
+      converter = marked
+      editor.getSession().setMode('ace/mode/markdown')
+    }
+    else { // html
+      converter = function(input) {
+        var htmlEle = document.createElement("div")
+
+        htmlEle.innerHTML = input;
+
+        return htmlEle.innerHTML.replace(/(?:^\s*|\s*$)/g, '');
+      }
+      editor.getSession().setMode('ace/mode/html')
+    }
+
+    $("#editor-selector a.dropdown-toggle")
+      .text(editorType().name)
+      .append("<b class='caret'></b>")
+
+  }
   /**
    * Initialize various UI elements based on userprofile data.
    *
@@ -354,9 +414,7 @@ $(function() {
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
 
-      editor.getSession().setMode('ace/mode/markdown')
-
-      editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
+      editor.getSession().setValue(profile.currentFile || editor.getSession().getValue())
 
       // Immediately populate the preview <div>
       previewMd()
@@ -409,7 +467,7 @@ $(function() {
    */
   function saveFile(eventType) {
 
-    updateUserProfile({ currentMd: editor.getSession().getValue() })
+    updateUserProfile({ currentFile: editor.getSession().getValue() })
 
     if((typeof eventType === 'object') && eventType.manual === true) {
       Notifier.showMessage(Notifier.messages.docSavedLocal)
@@ -523,9 +581,15 @@ $(function() {
     var unmd = editor.getSession().getValue()
       , md = converter(unmd)
 
-    $preview
-      .html('') // unnecessary?
-      .html(md)
+    if (editorType().type === 'html') {
+      $preview.html('')
+      $('<iframe>').appendTo($preview).contents().find('body').html(md)
+    }
+    else {
+      $preview
+        .html('') // unnecessary?
+        .html(md)
+    }
 
     refreshWordCount();
   }
@@ -743,6 +807,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
+                            +'<li><a href="#" id="html-editing">Toggle HTML Editing</a></li>'
                             +'<li><a href="#" id="reset">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
@@ -773,6 +838,18 @@ $(function() {
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
+  }
+
+  function toggleHTML() {
+    if (profile.editors && profile.editors.html) {
+      delete profile.editors.html
+    }
+    else {
+      profile.editors.html = { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
+    }
+    Notifier.showMessage((profile.editors.html ? "Enabled" : "Disabled") + " HTML Editing")
+    $('#editor-dropdown li').remove()
+    initEditorType()
   }
 
   /**
@@ -906,10 +983,19 @@ $(function() {
 
       })
 
-    $(".modal-body").delegate("#paper", "click", function() {
-      togglePaper()
-      return false
-    })
+    $('.modal-body')
+      .on('click', '#paper', function() {
+        togglePaper()
+        return false
+      })
+      .on('click', '#html-editing', function() {
+        toggleHTML();
+        return false;
+      })
+      .on('click', '#reset', function() {
+        resetProfile();
+        return false;
+      })
 
     $("#autosave")
       .on('click', function() {
@@ -922,12 +1008,6 @@ $(function() {
         toggleWordCount()
         return false
     })
-
-    $('#reset')
-      .on('click', function() {
-        resetProfile()
-        return false
-      })
 
     $import_github
       .on('click', function() {
@@ -1014,6 +1094,19 @@ $(function() {
         return false;
       })
 
+    $('#editor-dropdown')// > li > a')
+      .on('click', 'li > a', function() {
+        var pickEditor = $(this).attr("data-value")
+        if (!profile.editors[pickEditor]) {
+          Notifier.showMessage("Sorry, " + pickEditor + " isn't supported")
+        }
+        else {
+          profile.editing = pickEditor
+          initEditorType()
+          previewMd()
+        }
+      })
+
   } // end bindNav()
 
   /**
@@ -1035,23 +1128,23 @@ $(function() {
     })
 
     var saveCommand = {
-       name: "save",
-       bindKey: {
-                mac: "Command-S",
-                win: "Ctrl-S"
-              },
-       exec: function() {
-         saveFile()
-         LocalFiles.saveFile()
-       }
+      name: "save",
+      bindKey: {
+        mac: "Command-S",
+        win: "Ctrl-S"
+      },
+      exec: function() {
+        saveFile()
+        LocalFiles.saveFile()
+      }
     }
     var fileForUrlNamer = {
-       name: "filenamer",
-       bindKey: {
-                mac: "Command-Shift-M",
-                win: "Ctrl-Shift-M"
-              },
-       exec: function() {
+      name: "filenamer",
+      bindKey: {
+        mac: "Command-Shift-M",
+        win: "Ctrl-Shift-M"
+      },
+      exec: function() {
         var profile = JSON.parse(localStorage.profile);
         alert(profile.current_filename.replace(/\s/g, '-').toLowerCase())
       }
@@ -1148,7 +1241,7 @@ $(function() {
 
         var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
+        profile.current_filename = dboxFilePath.split('/').pop().replace(arrayToRegExp(editorType().fileExts), '')
 
         Dropbox.setFilePath(dboxFilePath)
 
@@ -1201,7 +1294,7 @@ $(function() {
             do {
               file = files[i++]
             } while (file && file.type.substr(0, 4) !== 'text'
-              && file.name.substr(file.name.length - 3) !== '.md')
+              && !_isFileExt(file.name))
 
             if (!file) return
 
@@ -1249,7 +1342,7 @@ $(function() {
               .slideUp(250)
           })
 
-        } // end showMesssage
+        } // end showMessage
     } // end return obj
   })() // end IIFE
 
@@ -1265,12 +1358,7 @@ $(function() {
       else { return m-n }
     }
 
-    // Test for md file extension
-    function _isMdFile(file) {
-      return (/(\.md)|(\.markdown)/i).test(file)
-    }
-
-    // Returns an array of only md files from a tree
+    // Returns an array of only files from a tree that matches editor file extension
     function _extractMdFiles(repo, treefiles) {
       /*
       mode: "100644"
@@ -1290,7 +1378,7 @@ $(function() {
 
       treefiles.forEach(function(el) {
 
-        if (_isMdFile(el.path)) {
+        if (_isFileExt(el.path)) {
 
           var fullpath
             , ghArr
@@ -1560,9 +1648,8 @@ $(function() {
           a = b = null
           response = JSON.parse(response.responseText)
 
-          if(!response.length) {
+          if (!response.length) {
             Notifier.showMessage('No branches available!')
-            $('#modal-generic').modal('hide')
           }
           else {
             _listBranches(repo, response)
@@ -1599,7 +1686,6 @@ $(function() {
           // console.dir(response)
           if (!response.tree.length) {
             Notifier.showMessage('No tree files available!')
-            $('#modal-generic').modal('hide')
           }
           else {
             _listTreeFiles(repo, branch, sha, response.tree)
@@ -1613,7 +1699,7 @@ $(function() {
         var config = {
           type: 'POST'
         , dataType: 'json'
-        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha
+        , data: 'owner=' + owner + '&repo=' + repo + '&branch=' + branch + '&sha=' + sha + '&fileExts=' + editorType().fileExts.join('|')
         , url: '/import/github/tree_files'
         , beforeSend: _beforeSendHandler
         , error: _failHandler
@@ -1630,10 +1716,7 @@ $(function() {
           response = JSON.parse(response.responseText)
           // console.dir(response)
           if (response.error) {
-
             Notifier.showMessage('No markdown for you!')
-            $('#modal-generic').modal('hide')
-
           }
           else {
 
@@ -1793,7 +1876,7 @@ $(function() {
           dataType: 'json',
           url: '/import/googledrive',
           beforeSend: function() {
-            Notifier.showMessage('Searching for .md files')
+            Notifier.showMessage('Searching for .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files')
           },
           error: _errorHandler,
           success: renderSearchResults
@@ -1811,10 +1894,10 @@ $(function() {
         var content = encodeURIComponent(editor.getSession().getValue());
         // https://github.com/joemccann/dillinger/issues/90
         // If filename contains .md or .markdown as extension...
-        var hasMdExtension = /(.md|.markdown)$/.test(profile.current_filename)
+        var hasExtension = _isFileExt(profile.current_filename)
 
         var postData = 'title=' + encodeURIComponent(profile.current_filename)
-          + (hasMdExtension ? '' : '.md')
+          + (hasExtension ? '' : editorType().fileExts[0])
           + '&content='
           + content
 
@@ -1954,7 +2037,7 @@ $(function() {
       searchDropbox: function() {
 
         function _beforeSendHandler() {
-          Notifier.showMessage('Searching for .md Files')
+          Notifier.showMessage('Searching for  .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files')
         }
 
         function _doneHandler(a, b, response) {
@@ -1978,7 +2061,7 @@ $(function() {
           }
 
           if(!resp.length) {
-            Notifier.showMessage('No .md files found!')
+            Notifier.showMessage('No .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files found!')
           }
           else{
             // console.dir(resp)
@@ -1990,14 +2073,16 @@ $(function() {
           alert(resp.responseText || "Roh-roh. Something went wrong. :(")
         }
 
+        // when passing file extensions, use pipe as it is not a valid filename character
         var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/import/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
+          type: 'POST',
+          dataType: 'json',
+          data: 'fileExts=' + editorType().fileExts.join('|'),
+          url: '/import/dropbox',
+          beforeSend: _beforeSendHandler,
+          error: _failHandler,
+          success: _doneHandler
+        }
 
         $.ajax(config)
 
@@ -2082,9 +2167,14 @@ $(function() {
           alert("Roh-roh. Something went wrong. :(")
         }
 
-        var md = encodeURIComponent( editor.getSession().getValue() )
+        var content = encodeURIComponent(editor.getSession().getValue())
 
-        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
+        var hasExtension = _isFileExt(profile.current_filename)
+
+        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename)
+          + (hasExtension ? '' : editorType().fileExts[0])
+          + '&fileContents='
+          + content
 
         var config = {
           type: 'POST'

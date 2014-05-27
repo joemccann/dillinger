@@ -78,6 +78,28 @@ https://github.com/joemccann/dillinger/issues/126
   z-index: 0
   boxSizing()
 
+#editor-selector-container
+  font-size 16px /* match with filename/wordcount input */
+  position absolute
+  right 10px
+  top 5px
+  left 50%
+  margin-left 5px
+  boxSizing()
+
+#editor-selector-container .dropdown
+  background #ffffff
+
+#editor-selector-container .nav-pills > li > a
+  margin 0px
+  color #444
+
+#editor-selector
+  display block
+  float left
+  margin 0px
+  height 30px
+
 /* Have to scope because someone could type "## filename" */
 #filename-counter-container > #filename
   width 100%
@@ -142,7 +164,6 @@ https://github.com/joemccann/dillinger/issues/126
   -o-transition opacity mainTransitionTime linear
   -ms-transition opacity mainTransitionTime linear
 
-
 #main.bye
   opacity 0
 
@@ -201,6 +222,11 @@ https://github.com/joemccann/dillinger/issues/126
   padding 0 0 18px 25px
   overflow auto
 
+#preview iframe
+  border 0px
+  width 100%
+  height 100%
+
 /*
   Adding in bootstrap ~3.0 pager.disabled css.
   if upgrading bootstrap, check that this is still needed
@@ -215,6 +241,12 @@ https://github.com/joemccann/dillinger/issues/126
 
 .private_repo .tree_file
   padding-left 20px
+
+/* fix for lock being hidden by hover */
+.private_repo a:hover
+  background #f6f6f6
+  padding-left 0px
+  margin-left 20px
 
 .topbar div ul
   float none
@@ -253,7 +285,6 @@ https://github.com/joemccann/dillinger/issues/126
 
 .icon_vendor.dropbox
   margin 6px 0 0 9px
-
 
 .slide_out
   margin-top -60px
