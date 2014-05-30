@@ -3,11 +3,11 @@
 <% if(isDropboxAuth) {
  var icon = 'icon-minus'
  var copy = 'Unlink'
- var href = '/unlink/dropbox'
+ var href = '/unlink/dropbox?docid=' + docid;
 }else{
   var icon = 'icon-plus'
   var copy = 'Link'
-  var href = '/redirect/dropbox'
+  var href = '/redirect/dropbox?docid=' + docid;
 }
 %>
 <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Dropbox <b class="caret"></b></a>

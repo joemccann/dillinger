@@ -9,6 +9,7 @@ var config = require('./config')()
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
+  , sharejs = require('share').server
   , app = express();
 
 app.configure(function(){
@@ -25,6 +26,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
+  sharejs.attach(app, {db: {type: 'none'}})
 
   // Setup local variables to be available in the views.
   app.locals.title = config.title || "Dillinger.";
@@ -42,7 +44,9 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
+app.get('/', routes.generate_hash)
+
+app.get('/doc/:docid', routes.index)
 
 app.get('/not-implemented', routes.not_implemented);
 
@@ -131,7 +135,8 @@ app.get('/files/pdf/:pdf', routes.download_pdf);
 /* End Dillinger Actions */
 
 
+// https.createServer(cert_options, app).listen(app.get('port'), function(){
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-  console.log("\nhttp://localhost:" + app.get('port') + "\n");
-});
+  console.log("Express server listening on port " + app.get('port'))
+  console.log("\nhttp://localhost:" + app.get('port') + "\n")
+})

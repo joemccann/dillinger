@@ -1,6 +1,6 @@
 <% if(env === 'production') { %>
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
   <script src="/js/dependencies-<%- app_version %>.min.js" type="text/javascript"></script>
   <script src="/js/dillinger-<%- app_version %>.min.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -17,7 +17,7 @@
 
   </script>
 <% } else { %>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/highlight.pack.js" type="text/javascript"></script>
   <script src="/js/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -25,4 +25,7 @@
   <script src="/js/marked.js" type="text/javascript"></script>
   <script src="/js/keymaster.js" type="text/javascript"></script>
   <script src="/js/dillinger.js" type="text/javascript"></script>
+  <script src="/share/bcsocket.js"></script>
+  <script src="/share/share.js"></script>
+  <script src="/share/ace.js"></script>
 <% }%>

@@ -308,6 +308,8 @@ $(function() {
 
       initEditorType()
 
+      initShareJS()
+
       initUi()
 
       marked.setOptions({
@@ -338,7 +340,7 @@ $(function() {
       autoSave()
 
       initWordCount()
-      
+
       refreshWordCount()
 
     }
@@ -355,6 +357,48 @@ $(function() {
     editor = ace.edit("editor")
 
   } // end initAce
+
+  function initShareJS() {
+      // Grab the docid from the URL and connect to ShareJS
+      var path = document.location.pathname;
+      var m = path.match(/doc\/(\w+)/);
+      if (m.length == 2) {
+          docid = m[1];
+      } else {
+          console.warn("Crazy url has no identifiable docid: ", path);
+          return;
+      }
+
+      var btn = $('#collaborate-btn');
+
+      // Prevent clients from making edits that will be destroyed
+      editor.setReadOnly(true);
+
+      // Make the red loading peace sign ☮ :)
+      // FIXME: This should be done in proper CSS.
+      btn.button('loading');
+      $('#loading-icon').css({
+          fontSize: '130%',
+          verticalAlign: 'center',
+          color: 'red',
+      });
+
+
+      ShareJS.open(docid, function () {
+        // Change back to normal from loading state
+        btn.button('reset');
+
+        // Wire up the button with sharing instructions
+        btn.click(function () {
+            alert("This should be a pretty modal that says to share the url");
+        });
+
+        // Ready to go, allow editing again
+        editor.setReadOnly(false);
+      });
+
+      $(window).on('unload', ShareJS.close);
+  }
 
   function initEditorType() {
     if ($('#editor-dropdown li').length === 0) {
@@ -400,6 +444,7 @@ $(function() {
       .append("<b class='caret'></b>")
 
   }
+
   /**
    * Initialize various UI elements based on userprofile data.
    *
@@ -415,6 +460,8 @@ $(function() {
       editor.setShowPrintMargin(false)
 
       editor.getSession().setValue(profile.currentFile || editor.getSession().getValue())
+
+      editor.focus()
 
       // Immediately populate the preview <div>
       previewMd()
@@ -1822,6 +1869,63 @@ $(function() {
     } // end return obj
 
   })() // end IIFE
+
+  var ShareJS = {
+    // The currently opened document
+    doc: null,
+
+    /*
+    * Attach ShareJS to the editor and sync it.
+    *
+    * @return {sharejs doc}
+    */
+    open: function (title, callback) {
+      if (!title) {
+        console.warn("No title specified for ShareJS. Aborting.");
+        return;
+      }
+
+      // self is this ShareJS object
+      self = this;
+
+      sharejs.open(title, 'text', function(error, doc) {
+        if (error) {
+          console.log('ShareJS error:', error);
+        }
+
+        // Save a reference to the document at ShareJS.doc
+        self.doc = doc;
+
+        // If an empty document is found, insert the default text,
+        // otherwise leave the contents alone when attaching
+        var unmd = profile.currentMd || editor.getSession().getValue()
+        if (!doc.getText()) {
+            doc.insert(0, unmd);
+        }
+
+        // Hookup ShareJS and put the cursor back at the top of the text entry
+        doc.attach_ace(editor);
+        editor.gotoLine(0, 0);
+
+        // Update the preview now and then whenever we receive remote updates
+        // from ShareJS
+        previewMd();
+        doc.on('remoteop', previewMd);
+        if (callback) callback();
+      });
+    },
+
+    /*
+    * Detach ShareJS from the editor.
+    *
+    * @return {Void}
+    */
+    close: function (doc) {
+      console.log(doc);
+      doc.detach_ace();
+      this.doc = null;
+    }
+  };
 
   var GoogleDrive = (function() {
     function _errorHandler(a, b, res) {

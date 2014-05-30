@@ -1,0 +1,1 @@
+../../node_modules/share/node_modules/browserchannel/dist/bcsocket.js
