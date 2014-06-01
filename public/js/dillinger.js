@@ -27,6 +27,7 @@ $(function() {
       , editors: {
         'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
       , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'html': { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
       }
     }
 
@@ -338,7 +339,7 @@ $(function() {
       autoSave()
 
       initWordCount()
-      
+
       refreshWordCount()
 
     }
@@ -807,8 +808,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
-                            +'<li><a href="#" id="html-editing">Toggle HTML Editing</a></li>'
-                            +'<li><a href="#" id="reset">Reset Profile</a></li>'
+                            +'<li><a href="#" id="reset_pref">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
 
@@ -838,18 +838,6 @@ $(function() {
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
-  }
-
-  function toggleHTML() {
-    if (profile.editors && profile.editors.html) {
-      delete profile.editors.html
-    }
-    else {
-      profile.editors.html = { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
-    }
-    Notifier.showMessage((profile.editors.html ? "Enabled" : "Disabled") + " HTML Editing")
-    $('#editor-dropdown li').remove()
-    initEditorType()
   }
 
   /**
@@ -988,11 +976,13 @@ $(function() {
         togglePaper()
         return false
       })
-      .on('click', '#html-editing', function() {
-        toggleHTML();
+      .on('click', '#reset_pref', function() {
+        resetProfile();
         return false;
       })
-      .on('click', '#reset', function() {
+
+    $("#reset")
+      .on('click', function() {
         resetProfile();
         return false;
       })
@@ -1094,7 +1084,7 @@ $(function() {
         return false;
       })
 
-    $('#editor-dropdown')// > li > a')
+    $('#editor-dropdown')
       .on('click', 'li > a', function() {
         var pickEditor = $(this).attr("data-value")
         if (!profile.editors[pickEditor]) {
