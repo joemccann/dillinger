@@ -1911,10 +1911,13 @@ $(function() {
         // Save a reference to the document at ShareJS.doc
         self.doc = doc;
 
-        // If an empty document is found, insert the default text,
-        // otherwise leave the contents alone when attaching
-        var unmd = profile.currentMd || editor.getSession().getValue()
-        if (!doc.getText()) {
+        // If an empty document is found, insert the current text,
+        // otherwise overwrite the current text with the document
+        var unmd = profile.currentFile || editor.getSession().getValue()
+        var docText = doc.getText();
+        if (docText) {
+            editor.getSession().setValue(docText);
+        } else {
             doc.insert(0, unmd);
         }
 
