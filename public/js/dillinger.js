@@ -358,46 +358,61 @@ $(function() {
 
   } // end initAce
 
-  function initShareJS() {
-      // Grab the docid from the URL and connect to ShareJS
-      var path = document.location.pathname;
-      var m = path.match(/doc\/(\w+)/);
-      if (m.length == 2) {
-          docid = m[1];
-      } else {
-          console.warn("Crazy url has no identifiable docid: ", path);
-          return;
-      }
-
-      var btn = $('#collaborate-btn');
-
+  function toggleShareJS(callback) {
       // Prevent clients from making edits that will be destroyed
       editor.setReadOnly(true);
 
-      // Make the red loading peace sign ☮ :)
-      // FIXME: This should be done in proper CSS.
-      btn.button('loading');
-      $('#loading-icon').css({
-          fontSize: '130%',
-          verticalAlign: 'center',
-          color: 'red',
-      });
+      if (!ShareJS.doc) {
 
+        // Grab the docid from the URL and connect to ShareJS
+        var path = document.location.pathname;
+        var m = path.match(/doc\/(\w+)/);
+        if (m.length == 2) {
+            docid = m[1];
+        } else {
+            console.warn("Crazy url has no identifiable docid: ", path);
+            editor.setReadOnly(true);
+            return;
+        }
+        ShareJS.open(docid, callback);
+      } else {
+        ShareJS.close(callback);
+      }
+  }
 
-      ShareJS.open(docid, function () {
-        // Change back to normal from loading state
-        btn.button('reset');
+  function initShareJS() {
 
-        // Wire up the button with sharing instructions
-        btn.click(function () {
-            alert("This should be a pretty modal that says to share the url");
+    var btn = $('#collaborate-btn');
+
+    function toggleHeart() {
+      console.log("Toggling!")
+      // Change back to normal from loading state
+      // This call also resets 'icon-white' below, so we
+      // have to test to determine what to do with it.
+      btn.button('reset')
+
+      if (ShareJS.doc) {
+        // Toggle color
+        $('#collaborate-icon').addClass('icon-white');
+      }
+      // Ready to go, allow editing again
+      editor.setReadOnly(false);
+    }
+
+    // Wire up the button with sharing instructions
+    btn.click(function() {
+        btn.button('loading');
+        // Make the red loading peace sign ☮ :)
+        // FIXME: This should be done in proper CSS.
+        $('#loading-icon').css({
+            fontSize: '130%',
+            verticalAlign: 'center',
+            color: 'red',
         });
+        toggleShareJS(toggleHeart);
+    });
 
-        // Ready to go, allow editing again
-        editor.setReadOnly(false);
-      });
-
-      $(window).on('unload', ShareJS.close);
+    $(window).on('unload', ShareJS.close);
   }
 
   function initEditorType() {
@@ -1920,10 +1935,13 @@ $(function() {
     *
     * @return {Void}
     */
-    close: function (doc) {
-      console.log(doc);
-      doc.detach_ace();
-      this.doc = null;
+    close: function(callback) {
+      doc = this.doc;
+      if (doc) {
+          doc.detach_ace();
+          doc.close(callback);
+          this.doc = null;
+      }
     }
   };
 
