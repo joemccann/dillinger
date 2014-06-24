@@ -378,8 +378,11 @@ $(function() {
       , smartLists: true
       , smartypants: false
       , langPrefix: 'lang-'
-      , highlight: function (code) {
-          return hljs.highlightAuto(code).value;
+      , highlight: function (code, lang, etc) {
+          if (hljs.getLanguage(lang)) {
+            code = hljs.highlight(lang, code).value;
+          }
+          return code;
         }
       })
       converter = marked
