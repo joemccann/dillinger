@@ -5,25 +5,32 @@ var fs = require('fs')
   , markdown = require('marked')
   , phantomjs = require('phantomjs')
   , child = require('child_process')
+  , hljs = require('highlight.js');
 
 markdown.setOptions({
   gfm: true,
   tables: true,
-  breaks: false,
   pedantic: false,
-  sanitize: false,
+  sanitize: true,
   smartLists: true,
   smartypants: false,
-  highlighter: function(code) {
-    return require('highlight.js').highlightAuto(code).value;
+  langPrefix: 'lang-',
+  highlight: function (code, lang, etc) {
+    if (hljs.getLanguage(lang)) {
+      code = hljs.highlight(lang, code).value;
+    }
+    return code;
   }
 })
 
 
 exports.Core = (function(){
 
-  function _getFullHtml(name, str){
-    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + name + '</title></head><body>\n' + markdown(str) + '\n</body></html>'
+  function _getFullHtml(name, str, style){
+    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' 
+      + name + '</title><style>' 
+      + ( ( style ) ? style : '' ) + '</style></head><body>\n' 
+      + markdown(str) + '\n</body></html>';
   }
   
   function _getHtml(str){
@@ -94,7 +101,14 @@ exports.Core = (function(){
         , error: false
         }
 
-      var html = _getFullHtml(req.body.name, unmd)
+      var format = req.body.formatting;
+      if ( ! format ) {
+        format = "";
+      } else {
+        format = fs.readFileSync( './public/css/style.css' ).toString('utf-8');
+      }
+
+      var html = _getFullHtml(req.body.name, unmd, format);
 
       var name = req.body.name.trim() + '.html'
 

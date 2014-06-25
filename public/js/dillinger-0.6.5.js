@@ -594,7 +594,7 @@ $(function() {
    *
    * @return {Void}
    */
-  function fetchHtmlFile() {
+  function fetchHtmlFile( formatting ) {
 
     // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
 
@@ -612,7 +612,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: "unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -935,6 +935,13 @@ $(function() {
     $('#export_html')
       .on('click', function() {
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#export_html_formatted')
+      .on('click', function() {
+        fetchHtmlFile( true )
         $('.dropdown').removeClass('open')
         return false
       })

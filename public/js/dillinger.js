@@ -666,7 +666,7 @@ $(function() {
    *
    * @return {Void}
    */
-  function fetchHtmlFile() {
+  function fetchHtmlFile( formatting ) {
 
     var unmd = editor.getSession().getValue()
 
@@ -682,7 +682,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -1030,6 +1030,13 @@ $(function() {
     $('#export_html')
       .on('click', function() {
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#export_html_formatted')
+      .on('click', function() {
+        fetchHtmlFile( true )
         $('.dropdown').removeClass('open')
         return false
       })
