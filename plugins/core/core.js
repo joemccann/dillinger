@@ -105,7 +105,7 @@ exports.Core = (function(){
       if ( ! format ) {
         format = "";
       } else {
-        format = fs.readFileSync( './public/css/style.css' ).toString('utf-8');
+        format = fs.readFileSync( path.resolve(__dirname, '../../public/css/style.css') ).toString('utf-8');
       }
 
       var html = _getFullHtml(req.body.name, unmd, format);
