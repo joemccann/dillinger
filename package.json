@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": {
     "name": "Joe McCann",
     "email": "joe@subprint.com"
@@ -33,7 +33,7 @@
   "engines": {
     "node": "0.10.x"
   },
-  "dependencies": {
+"dependencies": {
     "express": ">=3.0.0rc3 <4.0.0",
     "rc": "0.3.0",
     "stylus": ">=0.28.2",
@@ -42,20 +42,15 @@
     "colors": ">=0.6.0-1",
     "dbox": "0.6.3",
     "googleapis": "0.2.12-alpha",
-    "marked": "^0.3.2",
+    "marked": "0.3.2",
     "phantomjs": "~1.9.0-6",
     "highlight.js": "~8.0.0"
   },
   "devDependencies": {
     "smoosh": ">=0.3.2",
     "walkdir": ">=0.0.5",
-    "grunt": "^0.4.4",
-    "grunt-jslint": "^1.1.11"
-  },
-  "subdomain": "dill",
-  "domains": [
-    "dillinger.io",
-    "www.dillinger.io"
-  ]
+    "grunt": "0.4.4",
+    "grunt-jslint": "1.1.11"
+  }
 }
 
