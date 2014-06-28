@@ -374,7 +374,7 @@ $(function() {
         gfm: (editorType().type === "markdown-gfm" ? true : false)
       , tables: true
       , pedantic: false
-      , sanitize: true
+      , sanitize: false
       , smartLists: true
       , smartypants: false
       , langPrefix: 'lang-'
