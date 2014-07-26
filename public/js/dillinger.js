@@ -27,6 +27,7 @@ $(function() {
       , editors: {
         'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
       , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'html': { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
       }
     }
 
@@ -432,12 +433,15 @@ $(function() {
         gfm: (editorType().type === "markdown-gfm" ? true : false)
       , tables: true
       , pedantic: false
-      , sanitize: true
+      , sanitize: false
       , smartLists: true
       , smartypants: false
       , langPrefix: 'lang-'
-      , highlight: function (code) {
-          return hljs.highlightAuto(code).value;
+      , highlight: function (code, lang, etc) {
+          if (hljs.getLanguage(lang)) {
+            code = hljs.highlight(lang, code).value;
+          }
+          return code;
         }
       })
       converter = marked
@@ -724,7 +728,7 @@ $(function() {
    *
    * @return {Void}
    */
-  function fetchHtmlFile() {
+  function fetchHtmlFile( formatting ) {
 
     var unmd = editor.getSession().getValue()
 
@@ -740,7 +744,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -869,8 +873,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
-                            +'<li><a href="#" id="html-editing">Toggle HTML Editing</a></li>'
-                            +'<li><a href="#" id="reset">Reset Profile</a></li>'
+                            +'<li><a href="#" id="reset_pref">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
 
@@ -900,18 +903,6 @@ $(function() {
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
-  }
-
-  function toggleHTML() {
-    if (profile.editors && profile.editors.html) {
-      delete profile.editors.html
-    }
-    else {
-      profile.editors.html = { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
-    }
-    Notifier.showMessage((profile.editors.html ? "Enabled" : "Disabled") + " HTML Editing")
-    $('#editor-dropdown li').remove()
-    initEditorType()
   }
 
   /**
@@ -1050,11 +1041,13 @@ $(function() {
         togglePaper()
         return false
       })
-      .on('click', '#html-editing', function() {
-        toggleHTML();
+      .on('click', '#reset_pref', function() {
+        resetProfile();
         return false;
       })
-      .on('click', '#reset', function() {
+
+    $("#reset")
+      .on('click', function() {
         resetProfile();
         return false;
       })
@@ -1099,6 +1092,13 @@ $(function() {
     $('#export_html')
       .on('click', function() {
         fetchHtmlFile()
+        $('.dropdown').removeClass('open')
+        return false
+      })
+
+    $('#export_html_formatted')
+      .on('click', function() {
+        fetchHtmlFile( true )
         $('.dropdown').removeClass('open')
         return false
       })
@@ -1156,7 +1156,7 @@ $(function() {
         return false;
       })
 
-    $('#editor-dropdown')// > li > a')
+    $('#editor-dropdown')
       .on('click', 'li > a', function() {
         var pickEditor = $(this).attr("data-value")
         if (!profile.editors[pickEditor]) {
