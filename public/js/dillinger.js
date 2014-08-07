@@ -1,4 +1,3 @@
-$(function() {
 
   var editor
     , converter
@@ -513,7 +512,7 @@ $(function() {
     ; delete localStorage.profile
     // Now reload the page to start fresh
     window.location.reload()
-//    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
+    // Notifier.showMessage(Notifier.messages.profileCleared, 1400)
   }
 
   /**
@@ -2291,8 +2290,6 @@ $(function() {
   init()
 
   // TODO:  add window.resize() handlers.
-
-})
 
 /**
  * Get scrollHeight of preview div
