@@ -59,31 +59,32 @@ var GoogleDrive = {
         config.client_id, config.client_secret, config.redirect_uri);
       oauth2Client.credentials = tokens;
       client
-          .drive.files.list({ q: 'mimeType = "text/x-markdown" and trashed = false' })
-          .withAuthClient(oauth2Client).execute(function(err, results) {
-        // TODO: handle pagination
-        callback && callback(err, results);
+        .drive.files.list({ q: 'mimeType = "text/x-markdown" and trashed = false' })
+        .withAuthClient(oauth2Client).execute(function(err, results) {
+          // TODO: handle pagination
+          callback && callback(err, results);
+        });
       });
-    });
   },
   get: function(tokens, fileId, callback) {
     var that = this;
     this._loadDriveIfRequired(function() {
       var oauth2Client = new googleapis.auth.OAuth2Client(
         config.client_id, config.client_secret, config.redirect_uri);
+
       oauth2Client.credentials = tokens;
       client
-          .drive.files.get({ fileId: fileId })
-          .withAuthClient(oauth2Client).execute(function(err, result) {
-        if (err) {
-          callback(err, null);
-        } else {
-          that._getContents(tokens, result.downloadUrl, function(err, data) {
-            callback(err, { title: result.title, content: data });
-          });
-        }
+        .drive.files.get({ fileId: fileId })
+        .withAuthClient(oauth2Client).execute(function(err, result) {
+          if (err) {
+            callback(err, null);
+          } else {
+            that._getContents(tokens, result.downloadUrl, function(err, data) {
+              callback(err, { title: result.title, content: data });
+            });
+          }
+        });
       });
-    });
   },
   save: function(tokens, fileId, title, content, callback) {
     // TODO: remove native call when googleapis support media uploads
