@@ -41,7 +41,6 @@
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $wordcount = $('#wordcount')
-    , $import_github = $('#import_github')
     , $wordcounter = $('#wordcounter')
     , $filename = $('#filename')
 
@@ -947,32 +946,6 @@
         return false
       })
 
-    $("#save_github")
-      .on('click', function() {
-        Github.save()
-        saveFile()
-
-        return false
-    })
-
-    $("#save_dropbox")
-      .on('click', function() {
-        profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
-
-        Dropbox.putMarkdownFile()
-        saveFile()
-
-        return false
-    })
-
-    $("#save_googledrive")
-      .on('click', function() {
-        //profile.current_filename = profile.current_filename || generateRandomFilename('md')
-        GoogleDrive.save()
-        saveFile()
-
-      })
-
     $('.modal-body')
       .on('click', '#paper', function() {
         togglePaper()
@@ -1000,24 +973,6 @@
         toggleWordCount()
         return false
     })
-
-    $import_github
-      .on('click', function() {
-        Github.fetchOrgs()
-        return false
-      })
-
-    $('#import_dropbox')
-      .on('click', function() {
-        Dropbox.searchDropbox()
-        return false
-      })
-
-    $('#import_googledrive')
-      .on('click', function() {
-        GoogleDrive.search()
-        return false
-      })
 
     $('#export_md')
       .on('click', function() {
@@ -1105,6 +1060,12 @@
           previewMd()
         }
       })
+
+    Plugins.forEach(function(plugin) {
+      if (plugin.bindNav)
+        plugin.bindNav();
+    })
+
 
   } // end bindNav()
 

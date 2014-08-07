@@ -264,7 +264,26 @@ var Dropbox = (function() {
 
       $.ajax(config)
 
+    },
+    bindNav: function() {
+      $("#save_dropbox")
+        .on('click', function() {
+          profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
+
+          Dropbox.putMarkdownFile()
+          saveFile()
+
+          return false
+        })
+
+      $('#import_dropbox')
+        .on('click', function() {
+          Dropbox.searchDropbox()
+          return false
+        })
+
     }
   } // end return obj
 })() // end IIFE
 
+Plugins.register(Dropbox)

@@ -469,8 +469,25 @@ var Github = (function() {
       }
 
       $.ajax(config)
-    } // end save
+    }, // end save
+    bindNav: function() {
+      $('#import_github')
+        .on('click', function() {
+          Github.fetchOrgs()
+          return false
+        })
+
+      $("#save_github")
+        .on('click', function() {
+          Github.save()
+          saveFile()
+          return false
+        })
+
+    }
+
   } // end return obj
 
 })() // end IIFE
 
+Plugins.register(Github)

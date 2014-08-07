@@ -94,7 +94,24 @@ var GoogleDrive = (function() {
           }
         }
       });
+    },
+    bindNav: function() {
+      $('#import_googledrive')
+        .on('click', function() {
+          GoogleDrive.search()
+          return false
+        })
+
+      $("#save_googledrive")
+        .on('click', function() {
+          //profile.current_filename = profile.current_filename || generateRandomFilename('md')
+          GoogleDrive.save()
+          saveFile()
+
+        })
+
     }
   }
 })();
 
+Plugins.register(GoogleDrive)
