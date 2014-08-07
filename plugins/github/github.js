@@ -71,7 +71,7 @@ exports.Github = (function() {
       , uri: uri
       }
 
-      console.log('getting username from github: ' + uri)
+      console.log('getting username from github')
 
       request(options, function(e, r, d) {
         if (e) {
@@ -272,8 +272,6 @@ exports.Github = (function() {
         headers: headers
       , uri: uri
       }
-
-//      console.dir(options)
 
       request(options, function(e, r, d) {
         if (e) {

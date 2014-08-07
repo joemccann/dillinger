@@ -9,7 +9,8 @@ var config = require('./config')()
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , app = express();
+  , app = express()
+  , github = require('./plugins/github/server.js')
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8080);
@@ -65,30 +66,6 @@ app.post('/save/dropbox', routes.save_dropbox);
 
 /* End Dropbox */
 
-/* Begin Github */
-
-app.get('/redirect/github', routes.oauth_github_redirect);
-
-app.get('/oauth/github', routes.oauth_github);
-
-app.get('/unlink/github', routes.unlink_github);
-
-// app.get('/account/github', routes.account_info_github)
-
-app.post('/import/github/orgs', routes.import_github_orgs);
-
-app.post('/import/github/repos', routes.import_github_repos);
-
-app.post('/import/github/branches', routes.import_github_branches);
-
-app.post('/import/github/tree_files', routes.import_tree_files);
-
-app.post('/import/github/file', routes.import_github_file);
-
-app.post('/save/github', routes.save_github);
-
-/* End Github */
-
 /* Begin Google Drive */
 
 app.get('/redirect/googledrive', routes.oauth_googledrive_redirect);
@@ -105,6 +82,7 @@ app.post('/save/googledrive', routes.save_googledrive);
 
 /* End Google Drive */
 
+app.use(github);
 
 /* Dillinger Actions */
 

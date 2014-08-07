@@ -46,7 +46,6 @@ exports.download_pdf = Core.downloadPdf
 
 /* End Core stuff */
 
-
 /* Dropbox Stuff */
 
 exports.oauth_dropbox_redirect = function(req, res) {
@@ -148,121 +147,6 @@ exports.save_dropbox = function(req, res) {
 }
 
 /* End Dropbox stuff */
-
-
-/* Github stuff */
-
-exports.oauth_github_redirect = function(req, res) {
-
-  // Create GitHub session object and stash for later.
-  var uri;
-  req.session.github = {};
-  if (Github.githubConfig.access_token !== undefined) {
-    req.session.github.oauth = Github.githubConfig.access_token;
-    req.session.isGithubSynced = true;
-    console.log('/')
-    Github.getUsername(req, res,function() {
-      res.redirect('/')
-    });
-  } else {
-    req.session.github.oauth = {
-      request_token: null,
-      request_token_secret: null,
-      access_token_secret: null,
-      access_token: null
-    }
-    uri = Github.generateAuthUrl()
-    console.log(uri)
-    res.redirect(uri)
-  }
-}
-
-exports.oauth_github = function(req, res, cb) {
-  if (!req.query.code) {
-    cb();
-  } else {
-    req.session.oauth = {}
-
-    var code = req.query.code
-      , client_id = Github.githubConfig.client_id
-      , redirect_uri = Github.githubConfig.redirect_uri
-      , client_secret = Github.githubConfig.client_secret
-
-    var params = '?code='+code
-                  +'&client_id='+client_id
-                  +'&redirect_url='+redirect_uri
-                  +'&client_secret='+client_secret
-
-    var uri = 'https://github.com/login/oauth/access_token'+params
-
-    request.post(uri, function(err, resp, body) {
-      // TODO: MAKE THIS MORE GRACEFUL
-      if (err) res.send(err.message)
-      else {
-        // access_token=519e3f859210aa34265a52acb6b88290087f8996&token_type=bearer
-        if (!req.session.github) {
-          req.session.github = {
-            oauth: null
-          }
-        }
-        req.session.github.oauth = (qs.parse(body)).access_token
-        req.session.isGithubSynced = true
-        console.log('about')
-        Github.getUsername(req, res,function() {
-          res.redirect('/')
-        })
-
-      }
-    })
-
-  } // end else
-}
-
-exports.unlink_github = function(req, res) {
-  // Essentially remove the session for dropbox...
-  delete req.session.github
-  req.session.isGithubSynced = false
-  res.redirect('/')
-}
-
-exports.import_github_orgs = function(req, res) {
-
-  Github.fetchOrgs(req, res)
-
-}
-
-exports.import_github_repos = function(req, res) {
-
-  Github.fetchRepos(req, res)
-
-}
-
-exports.import_github_branches = function(req, res) {
-
-  Github.fetchBranches(req, res)
-
-}
-
-exports.import_tree_files = function(req, res) {
-
-  Github.fetchTreeFiles(req, res)
-
-}
-
-exports.import_github_file = function(req, res) {
-
-  Github.fetchFile(req, res)
-
-}
-
-exports.save_github = function(req, res) {
-
-  Github.saveToGithub(req, res)
-
-}
-
-/* End Github stuff */
-
 
 /* Google Drive stuff */
 
