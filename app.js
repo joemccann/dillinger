@@ -10,6 +10,7 @@ var config = require('./config')()
   , path = require('path')
   , fs = require('fs')
   , app = express()
+  , dropbox = require('./plugins/dropbox/server.js')
   , github = require('./plugins/github/server.js')
 
 app.configure(function(){
@@ -47,25 +48,6 @@ app.get('/', routes.index);
 
 app.get('/not-implemented', routes.not_implemented);
 
-/* Begin Dropbox */
-
-app.get('/redirect/dropbox', routes.oauth_dropbox_redirect);
-
-app.get('/oauth/dropbox', routes.oauth_dropbox);
-
-app.get('/unlink/dropbox', routes.unlink_dropbox);
-
-app.post('/import/dropbox', routes.import_dropbox);
-
-// app.get('/account/dropbox', routes.account_info_dropbox)
-
-app.post('/fetch/dropbox', routes.fetch_dropbox_file);
-
-app.post('/save/dropbox', routes.save_dropbox);
-
-
-/* End Dropbox */
-
 /* Begin Google Drive */
 
 app.get('/redirect/googledrive', routes.oauth_googledrive_redirect);
@@ -82,6 +64,7 @@ app.post('/save/googledrive', routes.save_googledrive);
 
 /* End Google Drive */
 
+app.use(dropbox);
 app.use(github);
 
 /* Dillinger Actions */
