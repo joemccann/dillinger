@@ -273,7 +273,7 @@ exports.Github = (function() {
       , uri: uri
       }
 
-      console.dir(options)
+//      console.dir(options)
 
       request(options, function(e, r, d) {
         if (e) {
