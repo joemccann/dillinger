@@ -11,11 +11,11 @@ var walkdir = require('walkdir')
   Some helpers for deployment, cleaning up...
 **/
 
-// Pass in a path of a directory to walk and a 
+// Pass in a path of a directory to walk and a
 // regex to match against.  The file(s) matching
 // the patter will be deleted.
 function walkAndUnlink(dirPath, regex){
-  
+
   var emitter = walkdir(dirPath)
 
   emitter.on('file',function(filename,stat){
@@ -24,7 +24,7 @@ function walkAndUnlink(dirPath, regex){
       fs.unlinkSync( path.resolve( dirPath, filename) )
     }
   })
-  
+
 }
 
 // Removes old css/js files.
@@ -65,8 +65,16 @@ function buildCss(stylusFilePath, writeToPath) {
 }
 
 // Concats, minifies js and css for production
-function smoosher(){
+function smoosher() {
+  var pluginDir = path.join(__dirname, 'plugins')
+    , pluginDirs = fs.readdirSync(pluginDir)
+    , pluginFiles = []
 
+  pluginDirs.forEach(function(dir) {
+    if (fs.existsSync(pluginDir + "/" + dir + "/client.js")) {
+      pluginFiles.push({ "src": pluginDir + "/" + dir + "/client.js", "jshint": false })
+    }
+  })
   // Compress/concat files for deploy env...
   // Need to run this locally BEFORE deploying
   // to nodejitsu
@@ -74,23 +82,26 @@ function smoosher(){
     "VERSION": require('./package.json').version,
     "JSHINT_OPTS": {
       "browser": true,
-      "evil":true, 
-      "boss":true, 
-      "asi": true, 
-      "laxcomma": true, 
-      "expr": true, 
-      "lastsemic": true, 
+      "evil":true,
+      "boss":true,
+      "asi": true,
+      "laxcomma": true,
+      "expr": true,
+      "lastsemic": true,
       "laxbreak":true,
       "regexdash": true,
     },
     "JAVASCRIPT": {
       "DIST_DIR": "./public/js",
-      "dependencies": [ { "src": "./public/js/bootstrap.js", "jshint": false}, 
-                        { "src": "./public/js/ace.js", "jshint": false}, 
-                        { "src": "./public/js/mode-markdown.js", "jshint": false}, 
+      "dependencies": [ { "src": "./public/js/bootstrap.js", "jshint": false},
+                        { "src": "./public/js/ace.js", "jshint": false},
+                        { "src": "./public/js/mode-markdown.js", "jshint": false},
                         { "src": "./public/js/marked.js", "jshint": false},
                         { "src": "./public/js/highlight.pack.js", "jshint": false},
-                        { "src": "./public/js/keymaster.js", "jshint": false}],
+                        { "src": "./public/js/keymaster.js", "jshint": false},
+                        { "src": "./public/js/notifier.js", "jshint": false},
+                        { "src": "./public/js/plugins.js", "jshint": false}].concat(pluginFiles),
+
       "dillinger": [ "./public/js/dillinger.js" ]
     },
     "CSS": {
@@ -101,7 +112,7 @@ function smoosher(){
   .done(function(){
     console.log('\nSmoosh all finished...\n')
   })
-  
+
 }
 
 cleaner()

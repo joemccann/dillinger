@@ -811,8 +811,8 @@ scroll
 .hljs-chunk {
   color: #aaa;
 }
-pre,
-code {
+code,
+pre {
   font-family: Consolas, "Liberation Mono", Courier, monospace !important;
 }
 form {
@@ -4672,16 +4672,30 @@ noscript p {
   color: #00f;
 }
 #github-button {
-  margin: 1% -9px 0 0;
+  margin: 1% -3px 0 0;
   float: right;
 }
 #filename-counter-container {
   position: absolute;
   left: 10px;
   top: 5px;
-  padding-right: 15px;
-  width: 50%;
+  right: 50%;
+  margin-right: 5px;
   z-index: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#right-top-pane {
+  font-size: 16px;
+/* match with filename/wordcount input */
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  left: 50%;
+  margin-left: 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -4693,16 +4707,19 @@ noscript p {
 }
 #filename-counter-container > #wordcounter {
   width: 18.5%;
+  float: right;
 }
 #filename-counter-container > #filename > span,
 #wordcounter {
+  overflow: hidden;
   font-size: 16px;
   font-style: normal;
   background: #f1eeee;
   height: 30px;
   line-height: 30px;
   padding: 0 6px;
-  display: inline-block;
+  display: block;
+  float: left;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -4717,8 +4734,8 @@ noscript p {
 }
 #filename-counter-container > #filename.show-word-count-filename-adjust {
   width: 80%;
-  display: inline-block;
-  margin: 0 1% 0 0;
+  display: block;
+  margin: 0 0 0 0;
 }
 #notify_container {
   -webkit-user-select: none;
@@ -4734,7 +4751,7 @@ noscript p {
 #notify {
   -webkit-user-select: none;
   -moz-user-select: none;
-  width: 160px;
+  width: 300px;
   margin: 0 auto;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cfc), color-stop(1, #6c6));
   background-image: -webkit-linear-gradient(top, #cfc 0%, #6c6 100%);
@@ -4880,11 +4897,29 @@ noscript p {
   padding: 0 0 18px 25px;
   overflow: auto;
 }
+#preview iframe {
+  border: 0px;
+  width: 100%;
+  height: 100%;
+}
+.pager .disabled>a,
+.pager .disabled>a:hover,
+.pager .disabled>a:focus,
+.pager .disabled>span {
+  color: #999;
+  background-color: #fff;
+  cursor: not-allowed;
+}
 .private_repo {
   background: transparent url("/img/icon_lock_16x16.png") no-repeat scroll top left;
 }
 .private_repo .tree_file {
   padding-left: 20px;
+}
+.private_repo a:hover {
+  background: #f6f6f6;
+  padding-left: 0px;
+  margin-left: 20px;
 }
 .topbar div ul {
   float: none;

@@ -9,13 +9,16 @@ var config = require('./config')()
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , app = express();
+  , app = express()
+  , dropbox = require('./plugins/dropbox/server.js')
+  , github = require('./plugins/github/server.js')
+  , googledrive = require('./plugins/googledrive/server.js')
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8080);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
-  app.use(express.favicon());
+  app.use(express.favicon(path.join(__dirname, 'public/ico/favicon.ico')))
   app.use(express.logger('dev'));
   app.use(express.compress());
   app.use(express.bodyParser());
@@ -46,65 +49,9 @@ app.get('/', routes.index);
 
 app.get('/not-implemented', routes.not_implemented);
 
-/* Begin Dropbox */
-
-app.get('/redirect/dropbox', routes.oauth_dropbox_redirect);
-
-app.get('/oauth/dropbox', routes.oauth_dropbox);
-
-app.get('/unlink/dropbox', routes.unlink_dropbox);
-
-app.post('/import/dropbox', routes.import_dropbox);
-
-// app.get('/account/dropbox', routes.account_info_dropbox)
-
-app.post('/fetch/dropbox', routes.fetch_dropbox_file);
-
-app.post('/save/dropbox', routes.save_dropbox);
-
-
-/* End Dropbox */
-
-/* Begin Github */
-
-app.get('/redirect/github', routes.oauth_github_redirect);
-
-app.get('/oauth/github', routes.oauth_github);
-
-app.get('/unlink/github', routes.unlink_github);
-
-// app.get('/account/github', routes.account_info_github)
-
-app.post('/import/github/orgs', routes.import_github_orgs);
-
-app.post('/import/github/repos', routes.import_github_repos);
-
-app.post('/import/github/branches', routes.import_github_branches);
-
-app.post('/import/github/tree_files', routes.import_tree_files);
-
-app.post('/import/github/file', routes.import_github_file);
-
-app.post('/save/github', routes.save_github);
-
-/* End Github */
-
-/* Begin Google Drive */
-
-app.get('/redirect/googledrive', routes.oauth_googledrive_redirect);
-
-app.get('/oauth/googledrive', routes.oauth_googledrive);
-
-app.get('/unlink/googledrive', routes.unlink_googledrive);
-
-app.get('/import/googledrive', routes.import_googledrive);
-
-app.get('/fetch/googledrive', routes.fetch_googledrive_file);
-
-app.post('/save/googledrive', routes.save_googledrive);
-
-/* End Google Drive */
-
+app.use(dropbox);
+app.use(github);
+app.use(googledrive);
 
 /* Dillinger Actions */
 

@@ -1,4 +1,3 @@
-$(function() {
 
   var editor
     , converter
@@ -8,21 +7,28 @@ $(function() {
     , profile = {
         theme: 'ace/theme/idle_fingers'
       , showPaper: false
-      , currentMd: ''
-      , autosave:
-        {
+      , currentFile: ''
+      , autosave: {
           enabled: true
         , interval: 3000 // might be too aggressive; don't want to block UI for large saves.
         }
       , wordcount: true
       , current_filename: 'Untitled Document'
       , github: {
+          current_uri: ''
+        , opts: {}
         }
       , dropbox: {
           filepath: '/Dillinger/'
         }
-      , local_files: { "Untitiled Document": "" }
+      , local_files: { "Untitled Document": "" }
+      , editing: 'markdown-gfm'
+      , editors: {
+        'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
+      , 'html': { type: 'html', name: 'HTML', fileExts: ['.html', '.htm'] }
       }
+    }
 
   // Feature detect ish
   var dillinger = 'dillinger'
@@ -35,7 +41,6 @@ $(function() {
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $wordcount = $('#wordcount')
-    , $import_github = $('#import_github')
     , $wordcounter = $('#wordcounter')
     , $filename = $('#filename')
 
@@ -68,9 +73,20 @@ $(function() {
   , 'vibrant_ink': '#363636'
   }
 
+  function editorType() {
+    return profile.editors[profile.editing]
+  }
+
+  function arrayToRegExp(arr) {
+    return new RegExp('(' + arr.map(function(e) { return e.replace('.','\\.') }).join('|') + ')$', 'i')
+  }
+
+  // Test for file extension
+  function _isFileExt(file) {
+    return arrayToRegExp(editorType().fileExts).test(file)
+  }
 
   /// UTILS =================
-
 
   /**
    * Utility method to async load a JavaScript file.
@@ -79,21 +95,21 @@ $(function() {
    * @param {Function} Optional callback to be executed after the script loads.
    * @return {void}
    */
-  function asyncLoad(filename,cb) {
-    (function(d,t) {
+  function asyncLoad(filename, cb) {
+    (function(d, t) {
 
       var leScript = d.createElement(t)
         , scripts = d.getElementsByTagName(t)[0]
 
       leScript.async = 1
       leScript.src = filename
-      scripts.parentNode.insertBefore(leScript,scripts)
+      scripts.parentNode.insertBefore(leScript, scripts)
 
       leScript.onload = function() {
         cb && cb()
       }
 
-    }(document,'script'))
+    }(document, 'script'))
   }
 
   /**
@@ -126,7 +142,6 @@ $(function() {
 
     profile = p
 
-    // console.dir(profile)
   }
 
   /**
@@ -212,7 +227,7 @@ $(function() {
    * @return {String}
    */
   function generateRandomFilename(ext) {
-    return 'dillinger_' +(new Date()).toISOString().replace(/[\.:-]/g, "_")+ '.' + ext
+    return 'dillinger_' + (new Date()).toISOString().replace(/[\.:-]/g, "_") + '.' + ext
   }
 
 
@@ -290,22 +305,22 @@ $(function() {
 
       initAce()
 
+      initEditorType()
+
       initUi()
 
       marked.setOptions({
         gfm: true
       , tables: true
       , pedantic: false
-      , sanitize: false
+      , sanitize: true
       , smartLists: true
       , smartypants: false
       , langPrefix: 'lang-'
       , highlight: function (code) {
-        return hljs.highlightAuto(code).value;
-      }
+          return hljs.highlightAuto(code).value;
+        }
       })
-
-      converter = marked
 
       bindPreview()
 
@@ -321,8 +336,9 @@ $(function() {
 
       autoSave()
 
-      initWordCount();
-      refreshWordCount();
+      initWordCount()
+
+      refreshWordCount()
 
     }
 
@@ -339,6 +355,53 @@ $(function() {
 
   } // end initAce
 
+  function initEditorType() {
+    if ($('#editor-dropdown li').length === 0) {
+      var list = ""
+        , eds = Object.keys(profile.editors)
+
+      eds.forEach(function(type) {
+        var editor = profile.editors[type]
+        list += '<li><a href="#" data-value="' + type + '">' + editor.name + '</a></li>'
+      })
+
+      $('#editor-dropdown').find('li').remove().end().append(list)
+    }
+    if (editorType().type.substring(0, 8) == "markdown") {
+      marked.setOptions({
+        gfm: (editorType().type === "markdown-gfm" ? true : false)
+      , tables: true
+      , pedantic: false
+      , sanitize: false
+      , smartLists: true
+      , smartypants: false
+      , langPrefix: 'lang-'
+      , highlight: function (code, lang, etc) {
+          if (hljs.getLanguage(lang)) {
+            code = hljs.highlight(lang, code).value;
+          }
+          return code;
+        }
+      })
+      converter = marked
+      editor.getSession().setMode('ace/mode/markdown')
+    }
+    else { // html
+      converter = function(input) {
+        var htmlEle = document.createElement("div")
+
+        htmlEle.innerHTML = input;
+
+        return htmlEle.innerHTML.replace(/(?:^\s*|\s*$)/g, '');
+      }
+      editor.getSession().setMode('ace/mode/html')
+    }
+
+    $("#editor-selector a.dropdown-toggle")
+      .text(editorType().name)
+      .append("<b class='caret'></b>")
+
+  }
   /**
    * Initialize various UI elements based on userprofile data.
    *
@@ -353,9 +416,7 @@ $(function() {
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
 
-      editor.getSession().setMode('ace/mode/markdown')
-
-      editor.getSession().setValue( profile.currentMd || editor.getSession().getValue())
+      editor.getSession().setValue(profile.currentFile || editor.getSession().getValue())
 
       // Immediately populate the preview <div>
       previewMd()
@@ -367,11 +428,11 @@ $(function() {
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
 
     // Set text for dis/enable autosave / word counter
-    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave')
-    $wordcount.html(!profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count')
+    $autosave.html(profile.autosave.enabled ? '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' : '<i class="icon-remove"></i>&nbsp;Autosave is Disabled')
+    $wordcount.html(profile.wordcount ? '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' : '<i class="icon-remove"></i>&nbsp;Word Count is Disabled')
 
     // Check for logged in Github user and notifiy
-    githubUser = $import_github.attr('data-github-username')
+    githubUser = $('#import_github').attr('data-github-username')
 
     githubUser && Notifier.showMessage("What's Up " + githubUser, 1000)
 
@@ -401,17 +462,18 @@ $(function() {
 
   // TODO: WEBSOCKET MESSAGE?
   /**
-   * Save the markdown via localStorage - isManual is from a click or key event.
+   * Save the markdown via localStorage - eventType.manual is from a click or key event.
    *
-   * @param {Boolean}
+   * @param {Object}
    * @return {Void}
    */
-  function saveFile(isManual) {
+  function saveFile(eventType) {
 
-    updateUserProfile({currentMd: editor.getSession().getValue()})
+    updateUserProfile({ currentFile: editor.getSession().getValue() })
 
-    isManual && Notifier.showMessage(Notifier.messages.docSavedLocal)
-
+    if((typeof eventType === 'object') && eventType.manual === true) {
+      Notifier.showMessage(Notifier.messages.docSavedLocal)
+    }
   }
 
   /**
@@ -421,15 +483,16 @@ $(function() {
    */
   function autoSave() {
 
-    if(profile.autosave.enabled) {
-      autoInterval = setInterval( function() {
+    if (profile.autosave.enabled) {
+      autoInterval = setInterval(function() {
         // firefox barfs if I don't pass in anon func to setTimeout.
         saveFile()
+        LocalFiles.saveFile({ show: false })
       }, profile.autosave.interval)
 
     }
-    else{
-      clearInterval( autoInterval )
+    else {
+      clearInterval(autoInterval)
     }
 
   }
@@ -448,7 +511,7 @@ $(function() {
     ; delete localStorage.profile
     // Now reload the page to start fresh
     window.location.reload()
-//    Notifier.showMessage(Notifier.messages.profileCleared, 1400)
+    // Notifier.showMessage(Notifier.messages.profileCleared, 1400)
   }
 
   /**
@@ -459,19 +522,21 @@ $(function() {
    function changeTheme(e) {
      // check for same theme
      var $target = $(e.target)
-     if( $target.attr('data-value') === profile.theme) { return }
-     else{
-       // add/remove class
-       $theme.find('li > a.selected').removeClass('selected')
-       $target.addClass('selected')
-       // grabnew theme
-       var newTheme = $target.attr('data-value')
-       $(e.target).blur()
-       fetchTheme(newTheme, function() {
-         Notifier.showMessage(Notifier.messages.profileUpdated)
-       })
-      }
-   }
+     if ($target.attr('data-value') === profile.theme) { return }
+     else {
+      // add/remove class
+      $theme.find('li > a.selected').removeClass('selected')
+      $target.addClass('selected')
+      // grabnew theme
+      var newTheme = $target.attr('data-value')
+
+      $(e.target).blur()
+
+      fetchTheme(newTheme, function() {
+        Notifier.showMessage(Notifier.messages.profileUpdated)
+      })
+    }
+  }
 
   // TODO: Maybe we just load them all once and stash in appcache?
   /**
@@ -518,9 +583,15 @@ $(function() {
     var unmd = editor.getSession().getValue()
       , md = converter(unmd)
 
-    $preview
-      .html('') // unnecessary?
-      .html(md)
+    if (editorType().type === 'html') {
+      $preview.html('')
+      $('<iframe>').appendTo($preview).contents().find('body').html(md)
+    }
+    else {
+      $preview
+        .html('') // unnecessary?
+        .html(md)
+    }
 
     refreshWordCount();
   }
@@ -544,13 +615,13 @@ $(function() {
   function updateFilename(str) {
     // Check for string because it may be keyup event object
     var f
-    if(typeof str === 'string') {
+    if (typeof str === 'string') {
       f = str
-    }else
-    {
+    }
+    else {
       f = getCurrentFilenameFromField()
     }
-    updateUserProfile( {current_filename: f })
+    updateUserProfile({ current_filename: f })
   }
 
   /**
@@ -561,7 +632,6 @@ $(function() {
    */
   function fetchMarkdownFile() {
 
-    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
     var unmd = editor.getSession().getValue()
 
     function _doneHandler(a, b, response) {
@@ -572,17 +642,17 @@ $(function() {
     }
 
     function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
+      alert("Roh-roh. Something went wrong. :(")
     }
 
     var mdConfig = {
-                      type: 'POST',
-                      data: "unmd=" + encodeURIComponent(unmd),
-                      dataType: 'json',
-                      url: '/factory/fetch_markdown',
-                      error: _failHandler,
-                      success: _doneHandler
-                    }
+      type: 'POST'
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_markdown'
+    , error: _failHandler
+    , success: _doneHandler
+    }
 
     $.ajax(mdConfig)
 
@@ -595,8 +665,6 @@ $(function() {
    * @return {Void}
    */
   function fetchHtmlFile( formatting ) {
-
-    // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
 
     var unmd = editor.getSession().getValue()
 
@@ -612,7 +680,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -638,7 +706,7 @@ $(function() {
 
     var config = {
       type: 'POST'
-    , data: "unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_pdf'
     , error: _failHandler
@@ -649,36 +717,49 @@ $(function() {
 
   }
 
-    function showHtml() {
+  function showHtml() {
 
-      // TODO: UPDATE TO SUPPORT FILENAME NOT JUST A RANDOM FILENAME
-      var unmd = editor.getSession().getValue()
+    var unmd = editor.getSession().getValue()
 
-      function _doneHandler(jqXHR, data, response) {
-        var resp = JSON.parse(response.responseText)
-        var textarea = $('#modalBodyText')
-        $(textarea).val(resp.data)
-        $('#myModal').on('shown.bs.modal', function (e) {
-          $(textarea).focus().select()
-        }).modal()
-      }
+    function _doneHandler(jqXHR, data, response) {
+      var resp = JSON.parse(response.responseText)
+      //var textarea = $('#modalBodyText')
+      //$(textarea).val(resp.data)
+      //$('#myModal').on('shown.bs.modal', function (e) {
+      //  $(textarea).focus().select()
+      //}).modal()
 
-      function _failHandler() {
-        alert("Roh-roh. Something went wrong. :(")
-      }
+      $textarea = '<textarea id="modalBodyText">' + resp.data + '</textarea>'
+      $('.modal-header h3').text('Show HTML: ' + getCurrentFilenameFromField())
+      $('.modal-body').css('height', '80%').html($textarea)
+      $('#modal-generic').on('shown.bs.modal', function(e) {
+        $('#modalBodyText').focus().select()
+      }).modal({
+        keyboard: true
+        , backdrop: true
+        , show: true
+      })
 
-      var config = {
-        type: 'POST'
-      , data: "unmd=" + encodeURIComponent(unmd)
-      , dataType: 'json'
-      , url: '/factory/fetch_html_direct'
-      , error: _failHandler
-      , success: _doneHandler
-      }
-
-      $.ajax(config)
-
+      return false
     }
+
+    function _failHandler() {
+      alert("Roh-roh. Something went wrong. :(")
+    }
+
+    var config = {
+      type: 'POST'
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
+    , dataType: 'json'
+    , url: '/factory/fetch_html_direct'
+    , error: _failHandler
+    , success: _doneHandler
+    }
+
+    $.ajax(config)
+
+  }
+
   /**
    * Show a sad panda because they are using a shitty browser.
    *
@@ -728,7 +809,7 @@ $(function() {
     var prefContent =  '<div>'
                           +'<ul>'
                             +'<li><a href="#" id="paper">Toggle Paper</a></li>'
-                            +'<li><a href="#" id="reset">Reset Profile</a></li>'
+                            +'<li><a href="#" id="reset_pref">Reset Profile</a></li>'
                           +'</ul>'
                         +'</div>'
 
@@ -752,9 +833,9 @@ $(function() {
    */
   function togglePaper() {
 
-    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")'  )
+    $preview.css('backgroundImage', !profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")')
 
-    updateUserProfile({showPaper: !profile.showPaper})
+    updateUserProfile({ showPaper: !profile.showPaper })
 
     Notifier.showMessage(Notifier.messages.profileUpdated)
 
@@ -767,9 +848,9 @@ $(function() {
    */
   function toggleAutoSave() {
 
-    $autosave.html( profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Disable Autosave' : '<i class="icon-ok"></i>&nbsp;Enable Autosave' )
+    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled')
 
-    updateUserProfile({autosave: {enabled: !profile.autosave.enabled }})
+    updateUserProfile({ autosave: { enabled: !profile.autosave.enabled } })
 
     autoSave()
 
@@ -793,9 +874,9 @@ $(function() {
    * @return {Void}
    */
   function toggleWordCount() {
-    $wordcount.html( profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Disabled Word Count' : '<i class="icon-ok"></i>&nbsp;Enabled Word Count' )
+    $wordcount.html(profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled')
 
-    updateUserProfile({wordcount: !profile.wordcount })
+    updateUserProfile({ wordcount: !profile.wordcount })
 
     initWordCount();
 
@@ -865,29 +946,21 @@ $(function() {
         return false
       })
 
-    $("#save_dropbox")
-      .on('click', function() {
-        profile.current_filename = profile.current_filename || '/Dillinger/' + generateRandomFilename('md')
-
-        Dropbox.putMarkdownFile()
-
-        saveFile()
-
+    $('.modal-body')
+      .on('click', '#paper', function() {
+        togglePaper()
         return false
-    })
-
-    $("#save_googledrive")
-      .on('click', function() {
-        //profile.current_filename = profile.current_filename || generateRandomFilename('md')
-        GoogleDrive.save()
-        saveFile()
-
+      })
+      .on('click', '#reset_pref', function() {
+        resetProfile();
+        return false;
       })
 
-    $(".modal-body").delegate("#paper", "click", function() {
-      togglePaper()
-      return false
-    })
+    $("#reset")
+      .on('click', function() {
+        resetProfile();
+        return false;
+      })
 
     $("#autosave")
       .on('click', function() {
@@ -900,30 +973,6 @@ $(function() {
         toggleWordCount()
         return false
     })
-
-    $('#reset')
-      .on('click', function() {
-        resetProfile()
-        return false
-      })
-
-    $import_github
-      .on('click', function() {
-        Github.fetchRepos()
-        return false
-      })
-
-    $('#import_dropbox')
-      .on('click', function() {
-        Dropbox.searchDropbox()
-        return false
-      })
-
-    $('#import_googledrive')
-      .on('click', function() {
-        GoogleDrive.search()
-        return false
-      })
 
     $('#export_md')
       .on('click', function() {
@@ -960,44 +1009,63 @@ $(function() {
         return false
       })
 
-    $('#preferences').
-      on('click', function() {
+    $('#preferences')
+      .on('click', function() {
         showPreferences()
         return false
       })
 
-    $('#about').
-      on('click', function() {
+    $('#about')
+      .on('click', function() {
         showAboutInfo()
         return false
       })
 
-    $('#cheat').
-      on('click', function() {
+    $('#cheat')
+      .on('click', function() {
         window.open("https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet", "_blank")
         return false
       })
 
-    $('#new_local_file').
-      on('click', function() {
+    $('#new_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.newFile();
         return false;
       })
 
-    $('#import_local_file').
-      on('click', function() {
+    $('#import_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.search();
         return false;
       })
 
-    $('#save_local_file').
-      on('click', function() {
+    $('#save_local_file')
+      .on('click', function() {
         $('.dropdown').removeClass('open')
         LocalFiles.saveFile();
         return false;
       })
+
+    $('#editor-dropdown')
+      .on('click', 'li > a', function() {
+        var pickEditor = $(this).attr("data-value")
+        if (!profile.editors[pickEditor]) {
+          Notifier.showMessage("Sorry, " + pickEditor + " isn't supported")
+        }
+        else {
+          profile.editing = pickEditor
+          initEditorType()
+          previewMd()
+        }
+      })
+
+    Plugins.forEach(function(plugin) {
+      if (plugin.bindNav)
+        plugin.bindNav();
+    })
+
 
   } // end bindNav()
 
@@ -1009,7 +1077,7 @@ $(function() {
   function bindKeyboard() {
     // CMD+s TO SAVE DOC
     key('command+s, ctrl+s', function(e) {
-      saveFile(true);
+      saveFile({ manual: true });
       e.preventDefault(); // so we don't save the webpage - native browser functionality
     })
 
@@ -1020,24 +1088,25 @@ $(function() {
     })
 
     var saveCommand = {
-       name: "save",
-       bindKey: {
-                mac: "Command-S",
-                win: "Ctrl-S"
-              },
-       exec: function() {
-         saveFile(true)
-       }
+      name: "save",
+      bindKey: {
+        mac: "Command-S",
+        win: "Ctrl-S"
+      },
+      exec: function() {
+        saveFile()
+        LocalFiles.saveFile()
+      }
     }
     var fileForUrlNamer = {
-       name: "filenamer",
-       bindKey: {
-                mac: "Command-Shift-M",
-                win: "Ctrl-Shift-M"
-              },
-       exec: function() {
+      name: "filenamer",
+      bindKey: {
+        mac: "Command-Shift-M",
+        win: "Ctrl-Shift-M"
+      },
+      exec: function() {
         var profile = JSON.parse(localStorage.profile);
-        alert( profile.current_filename.replace(/\s/g, '-').toLowerCase())
+        alert(profile.current_filename.replace(/\s/g, '-').toLowerCase())
       }
     }
 
@@ -1052,34 +1121,79 @@ $(function() {
    */
   function bindDelegation() {
     $(document)
+      .on('click', '.org', function() {
+        var owner = $(this).parent('li').attr('data-org-name')
+
+        // reset currentPage to 1 if the org/user is not the same as the last selected one
+        if (owner !== Github.currentOwner) {
+           Github.currentPage = 1
+        }
+        else {
+          Github.currentPage = (Github.currentPage || 1)
+        }
+        Github.currentOwner = owner
+        Github.fetchRepos(Github.currentOwner)
+        return false
+      })
+      .on('click', '.repos.pager .next', function() {
+        Github.fetchRepos(Github.currentOwner, 'next')
+        return false
+      })
+      .on('click', '.repos.pager .previous', function() {
+        if (Github.currentPage <= 1) {
+          return false
+        }
+        Github.fetchRepos(Github.currentOwner, 'prev')
+        return false
+      })
       .on('click', '.repo', function() {
-        var repoName = $(this).parent('li').attr('data-repo-name')
+        var owner = Github.currentOwner
+          , repo = $(this).parent('li').attr('data-repo-name')
 
         Github.isRepoPrivate = $(this).parent('li').attr('data-repo-private') === 'true' ? true : false
-        Github.fetchBranches(repoName)
+        Github.fetchBranches(owner, repo)
         return false
       })
       .on('click', '.branch', function() {
 
-        var repo = $(this).parent('li').attr('data-repo-name')
+        var owner = Github.currentOwner
+          , repo = $(this).parent('li').attr('data-repo-name')
           , sha = $(this).parent('li').attr('data-commit-sha')
+          , branch = $(this).text()
 
-        Github.currentBranch = $(this).text()
-
-        Github.fetchTreeFiles(repo, sha)
+        Github.currentBranch = branch
+        Github.fetchTreeFiles(owner, repo, branch, sha)
         return false
       })
       .on('click', '.tree_file', function() {
 
-        var file = $(this).parent('li').attr('data-tree-file')
+        var url = $(this).parent('li').attr('data-tree-file')
+          , name = $(this).parent('li').attr('data-name')
+          , sha = $(this).parent('li').attr('data-tree-file-sha')
+          , owner = $(this).parent('li').attr('data-owner')
+          , branch = $(this).parent('li').attr('data-branch')
+          , repo = $(this).parent('li').attr('data-repo')
 
-        Github.fetchMarkdownFile(file)
+        Github.fetchMarkdownFile(url, {
+          name: name
+        , sha: sha
+        , branch: branch
+        , owner: owner
+        , repo: repo
+        })
 
         return false
       })
-      .on('click', '.github_user', function() {
-        Github.fetchRepos()
+
+      .on('click', '.github_org', function() { // Back to organizations link
+        delete Github.currentPage
+        Github.fetchOrgs()
       })
+
+      .on('click', '.github_repo', function() { // Back to repos link
+        Github.fetchRepos(Github.currentOwner)
+      })
+
       .on('click', '.dropbox_file', function() {
 
         // We stash the current filename in the local profile only; not in localStorage.
@@ -1087,11 +1201,11 @@ $(function() {
 
         var dboxFilePath = $(this).parent('li').attr('data-file-path')
 
-        profile.current_filename = dboxFilePath.split('/').pop().replace('.md', '')
+        profile.current_filename = dboxFilePath.split('/').pop().replace(arrayToRegExp(editorType().fileExts), '')
 
-        Dropbox.setFilePath( dboxFilePath )
+        Dropbox.setFilePath(dboxFilePath)
 
-        Dropbox.fetchMarkdownFile( dboxFilePath )
+        Dropbox.fetchMarkdownFile(dboxFilePath)
 
         return false
 
@@ -1140,7 +1254,7 @@ $(function() {
             do {
               file = files[i++]
             } while (file && file.type.substr(0, 4) !== 'text'
-              && file.name.substr(file.name.length - 3) !== '.md')
+              && !_isFileExt(file.name))
 
             if (!file) return
 
@@ -1157,697 +1271,6 @@ $(function() {
 
   /// MODULES =================
 
-
-  // Notification Module
-  var Notifier = (function() {
-
-    var _el = $('#notify')
-
-    return {
-      messages: {
-        profileUpdated: "Profile updated"
-        , profileCleared: "Profile cleared"
-        , docSavedLocal: "Document saved locally"
-        , docDeletedLocal: "Document deleted from local storage"
-        , docSavedServer: "Document saved on our server"
-        , docSavedDropbox: "Document saved on dropbox"
-        , dropboxImportNeeded: "Please import a file from dropbox first."
-      },
-      showMessage: function(msg,delay) {
-
-        // TODO: FIX ANIMATION QUEUE PROBLEM - .stop() doesn't work.
-
-        _el
-          .text('')
-          .stop()
-          .text(msg)
-          .slideDown(250, function() {
-            _el
-              .delay(delay || 1000)
-              .slideUp(250)
-          })
-
-        } // end showMesssage
-    } // end return obj
-  })() // end IIFE
-
-  // Github API Module
-  var Github = (function() {
-
-    // Sorting regardless of upper/lowercase
-    function _alphaNumSort(m,n) {
-      var a = m.url.toLowerCase()
-      var b = n.url.toLowerCase()
-      if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1) }
-      else { return m-n }
-    }
-
-    // Test for md file extension
-    function _isMdFile(file) {
-      return (/(\.md)|(\.markdown)/i).test(file)
-    }
-
-    // Returns an array of only md files from a tree
-    function _extractMdFiles(repoName, treefiles) {
-      /*
-      mode: "100644"
-      path: ".gitignore"
-      sha: "7a1aeb2497018aeb0c44e220d4b84f2d245e3033"
-      size: 110
-      type: "blob"
-      url: "https://api.github.com/repos/joemccann/express/git/blobs/7a1aeb2497018aeb0c44e220d4b84f2d245e3033"
-      */
-      // https://raw.github.com/joemccann/express/master/History.md
-
-      var sorted = []
-        , raw = 'https://raw.github.com'
-        , slash = '/'
-
-      treefiles.forEach(function(el) {
-
-        if (_isMdFile(el.path)) {
-
-          var fullpath
-
-          if (Github.isRepoPrivate) {
-            fullpath = el.url
-          }
-          else {
-            // we go straight to raw as it's faster (don't need to base64 decode the sha as in the private case)
-            fullpath = raw + slash + githubUser + slash + repoName + slash + Github.currentBranch + slash + el.path
-          }
-
-          var item = {
-            link: fullpath
-          , path: el.path
-          , sha: el.sha
-          }
-
-          sorted.push(item)
-        }
-
-      }) // end forEach()
-
-      return sorted
-
-    }
-
-    // Show a list of repos
-    function _listRepos(repos) {
-
-      var list = '<ul>'
-
-      // Sort alpha
-      repos.sort(_alphaNumSort)
-
-      repos.forEach(function(item) {
-        list += '<li data-repo-name="' + item.name + '" data-repo-private="' + item.private + '"><a class="repo" href="#">' + item.name + '</a></li>'
-      })
-
-      list += '</ul>'
-
-      $('.modal-header h3').text('Your Github Repos')
-
-      $('.modal-body').html(list)
-
-      $('#modal-generic').modal({
-        keyboard: true
-      , backdrop: true
-      , show: true
-      })
-
-      return false
-
-    }
-
-    // Show a list of branches
-    function _listBranches(repoName, branches) {
-
-      var list = '<li class="github_user"><a href="#">Back to repositories...</a></li>'
-
-      branches.forEach(function(item) {
-        var name = item.name
-          , commit = item.commit.sha
-        list += '<li data-repo-name="' + repoName + '" data-commit-sha="' + commit + '"><a class="branch" href="#">' + name + '</a></li>'
-      })
-
-      $('.modal-header h3').text(repoName)
-
-      $('.modal-body')
-        .find('ul')
-          .find('li')
-          .remove()
-          .end()
-        .append(list)
-    }
-
-    // Show a list of tree files
-    function _listTreeFiles(repoName, commitSha, treefiles) {
-
-      var mdFiles = _extractMdFiles(repoName, treefiles)
-        , list = '<li class="refresh_branches" data-repo-name="' + repoName + '"><a class="repo" href="#">Back to branches in ' + repoName + '...</a></li>'
-
-      if (mdFiles.length === 0) {
-        list += '<li class="no_files">No Markdown files in this branch</li>'
-      }
-      else {
-        mdFiles.forEach(function(item) {
-          // add class to <li> if private
-          list += Github.isRepoPrivate
-                  ? '<li data-tree-file-sha="' + item.sha + '" data-tree-file="' + item.link + '" class="private_repo"><a class="tree_file" href="#">' + item.path + '</a></li>'
-                  : '<li data-tree-file="' + item.link + '"><a class="tree_file" href="#">' + item.path + '</a></li>'
-
-        });
-      }
-
-      $('.modal-header h3').text(repoName + " > " + Github.currentBranch)
-
-      $('.modal-body')
-        .find('ul')
-          .find('li')
-          .remove()
-          .end()
-        .append(list)
-    }
-
-    return {
-      currentBranch: '',
-      isRepoPrivate: false,
-      fetchRepos: function() {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Repos...')
-        }
-
-        function _doneHandler(a, b, response) {
-          a = b = null
-          response = JSON.parse(response.responseText)
-          // console.dir(response)
-          if (!response.length) { Notifier.showMessage('No repos available!') }
-          else {
-            _listRepos(response)
-          } // end else
-        } // end done handler
-
-        function _failHandler(resp,err) {
-          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-          type: 'POST'
-        , dataType: 'text'
-        , url: '/import/github/repos'
-        , beforeSend: _beforeSendHandler
-        , error: _failHandler
-        , success: _doneHandler
-        }
-
-        $.ajax(config)
-
-      }, // end fetchRepos
-      fetchBranches: function(repoName) {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Branches for Repo ' + repoName)
-        }
-
-        function _doneHandler(a, b, response) {
-          a = b = null
-          response = JSON.parse(response.responseText)
-          //console.dir(response)
-          if(!response.length) {
-            Notifier.showMessage('No branches available!')
-            $('#modal-generic').modal('hide')
-          }
-          else {
-            _listBranches(repoName, response)
-          } // end else
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-          type: 'POST'
-        , dataType: 'json'
-        , data: 'repo=' + repoName
-        , url: '/import/github/branches'
-        , beforeSend: _beforeSendHandler
-        , error: _failHandler
-        , success: _doneHandler
-        }
-
-        $.ajax(config)
-
-      }, // end fetchBranches()
-      fetchTreeFiles: function(repoName, sha) {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Tree for Repo ' + repoName)
-        }
-
-        function _doneHandler(a, b, response) {
-          a = b = null
-          response = JSON.parse(response.responseText)
-          // console.log('\nFetch Tree Files...')
-          // console.dir(response)
-          if(!response.tree.length) {
-            Notifier.showMessage('No tree files available!')
-            $('#modal-generic').modal('hide')
-          }
-          else {
-            _listTreeFiles(repoName, sha, response.tree)
-          } // end else
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-          type: 'POST'
-        , dataType: 'json'
-        , data: 'repo=' + repoName + '&sha=' + sha
-        , url: '/import/github/tree_files'
-        , beforeSend: _beforeSendHandler
-        , error: _failHandler
-        , success: _doneHandler
-        }
-
-        $.ajax(config)
-
-      }, // end fetchTreeFiles()
-      fetchMarkdownFile: function(filename) {
-
-        function _doneHandler(a, b, response) {
-          a = b = null
-          response = JSON.parse(response.responseText)
-          // console.dir(response)
-          if( response.error ) {
-
-            Notifier.showMessage('No markdown for you!')
-            $('#modal-generic').modal('hide')
-
-          }
-          else{
-
-            $('#modal-generic').modal('hide')
-
-            editor.getSession().setValue( response.data )
-
-            // Update it in localStorage
-            var name = filename.split('/').pop()
-            updateFilename(name)
-            // Show it in the field
-            setCurrentFilenameField(name)
-
-            previewMd()
-
-          } // end else
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        function _alwaysHandler() {
-          $('.dropdown').removeClass('open')
-        }
-
-        var config = {
-          type: 'POST'
-        , dataType: 'json'
-        , data: 'mdFile=' + filename
-        , url: '/import/github/file'
-        , error: _failHandler
-        , success: _doneHandler
-        , complete: _alwaysHandler
-        }
-
-        $.ajax(config)
-
-      } // end fetchMarkdownFile()
-
-    } // end return obj
-
-  })() // end IIFE
-
-  var GoogleDrive = (function() {
-    function _errorHandler(a, b, res) {
-      Notifier.showMessage(res.responseText );
-    }
-
-    function renderSearchResults(a, b, res) {
-
-
-      var result = JSON.parse(res.responseText)
-        , list = '<ul>'
-
-      // Handle empty array case.
-      if(!Array.isArray(result.items)) return _errorHandler(null, null, {responseText: "No Markdown files found!"} )
-
-      result.items.forEach(function(item) {
-        list += '<li data-file-id="'
-              + item.id + '"><a class="googledrive_file" href="#">'
-              + item.title + '</a></li>'
-      })
-
-      list += '</ul>'
-      $('.modal-header h3').text('Your Google Drive Files')
-      $('.modal-body').html(list)
-      $('#modal-generic').modal({
-        keyboard: true
-      , backdrop: true
-      , show: true
-      })
-    }
-
-    function renderFile(a, b, res) {
-      var result = JSON.parse(res.responseText);
-      $('#modal-generic').modal('hide')
-      editor.getSession().setValue(result.content)
-      previewMd()
-    }
-
-    // TODO: what to do if access token expires?
-    return {
-      fileId: null,
-      search: function() {
-        $.ajax({
-          dataType: 'json',
-          url: '/import/googledrive',
-          beforeSend: function() {
-            Notifier.showMessage('Searching for .md files')
-          },
-          error: _errorHandler,
-          success: renderSearchResults
-        });
-      },
-      get: function() {
-        $.ajax({
-          dataType: 'json',
-          url: '/fetch/googledrive?fileId=' + this.fileId,
-          error: _errorHandler,
-          success: renderFile
-        });
-      },
-      save: function() {
-        var content = encodeURIComponent(editor.getSession().getValue());
-        // https://github.com/joemccann/dillinger/issues/90
-        // If filename contains .md or .markdown as extension...
-        var hasMdExtension = /(.md|.markdown)$/.test(profile.current_filename)
-
-        var postData = 'title=' + encodeURIComponent(profile.current_filename)
-          + (hasMdExtension ? '' : '.md')
-          + '&content='
-          + content
-
-        $.ajax({
-          dataType: 'json',
-          type: 'post',
-          data: postData,
-          url: '/save/googledrive?fileId=' + (GoogleDrive.fileId || ''),
-          error: _errorHandler,
-          success: function(a, b, res) {
-            var response = JSON.parse(res.responseText);
-            if (response.id) {
-              GoogleDrive.fileId = response.id
-              Notifier.showMessage('Document saved on Google Drive')
-            } else {
-              Notifier.showMessage('An error occurred!')
-            }
-          }
-        });
-      }
-    }
-  })();
-
-  // Dropbox Module
-  var Dropbox = (function() {
-
-    // Sorting regardless of upper/lowercase
-    // TODO: Let's be DRY and merge this with the
-    // sort method in Github module.
-    function _alphaNumSort(m,n) {
-      var a = m.path.toLowerCase()
-      var b = n.path.toLowerCase()
-      if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
-    }
-
-    function _listMdFiles(files) {
-
-      var list = '<ul>'
-
-      // Sort alpha
-      files.sort(_alphaNumSort)
-
-      files.forEach(function(item) {
-        // var name = item.path.split('/').pop()
-        list += '<li data-file-path="'
-              + item.path + '"><a class="dropbox_file" href="#">'
-              + item.path + '</a></li>'
-      })
-
-      list += '</ul>'
-
-      $('.modal-header h3').text('Your Dropbox Files')
-
-      $('.modal-body').html(list)
-
-      $('#modal-generic').modal({
-        keyboard: true,
-        backdrop: true,
-        show: true
-      })
-
-      return false
-
-    }
-
-    function _encodeFilename(path) {
-      return encodeURIComponent( path.split('/').pop() )
-    }
-
-    function _removeFilenameFromPath(path) {
-      // capture the name
-      var name = path.split('/').pop()
-      // then just replace with nothing on the path. boom.
-      return path.replace(name, '')
-    }
-
-    return {
-      fetchAccountInfo: function() {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Fetching User Info from Dropbox')
-        }
-
-        function _doneHandler(a, b, response) {
-          var resp = JSON.parse(response.responseText)
-          // console.log('\nFetch User Info...')
-          // console.dir(resp)
-          Notifier
-            .showMessage('Sup '+ resp.display_name)
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/account/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
-
-        $.ajax(config)
-
-      }, // end fetchAccuntInfo()
-      fetchMetadata: function() {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Fetching Metadata')
-        }
-
-        function _doneHandler(a, b, response) {
-          var resp = JSON.parse(response.responseText)
-          window.console && window.console.log && console.dir(resp)
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/dropbox/metadata',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
-
-        $.ajax(config)
-
-      }, // end fetchMetadata()
-      searchDropbox: function() {
-
-        function _beforeSendHandler() {
-          Notifier.showMessage('Searching for .md Files')
-        }
-
-        function _doneHandler(a, b, response) {
-
-          a = b = null
-
-          var resp = JSON.parse(response.responseText)
-
-          if(resp.hasOwnProperty('statusCode') && resp.statusCode === 401) {
-            // {"statusCode":401,"data":"{\"error\": \"Access token is disabled.\"}"}
-
-            var respData = JSON.parse(resp.data)
-
-            Notifier.showMessage('Error! ' + respData.error, 1000)
-
-            return setTimeout(function() {
-              Notifier.showMessage('Reloading!')
-              window.location.reload()
-            }, 1250)
-
-          }
-
-          if(!resp.length) {
-            Notifier.showMessage('No .md files found!')
-          }
-          else{
-            // console.dir(resp)
-            _listMdFiles(resp)
-          }
-        } // end done handler
-
-        function _failHandler(resp,err) {
-          alert(resp.responseText || "Roh-roh. Something went wrong. :(")
-        }
-
-        var config = {
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/import/dropbox',
-                        beforeSend: _beforeSendHandler,
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
-
-        $.ajax(config)
-
-      }, // end searchDropbox()
-      fetchMarkdownFile: function(filename) {
-
-        function _doneHandler(a, b, response) {
-          response = JSON.parse(response.responseText)
-          // console.dir(response)
-          if( response.statusCode === 404 ) {
-
-            var msg = JSON.parse( response.data )
-
-            Notifier.showMessage(msg.error)
-
-          }
-          else{
-
-            $('#modal-generic').modal('hide')
-
-            // Update it in localStorage
-            updateFilename(profile.current_filename)
-            // Show it in the field
-            setCurrentFilenameField()
-
-            editor.getSession().setValue( response.data )
-            previewMd()
-
-          } // end else
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        // Weird encoding mumbo jumbo columbo
-        var enc = _encodeFilename(filename)
-        var path = _removeFilenameFromPath(filename)
-
-        filename = path + enc
-
-        var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: 'mdFile=' + filename,
-                        url: '/fetch/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
-
-        $.ajax(config)
-
-      }, // end fetchMarkdownFile()
-      setFilePath: function(path) {
-        path = _removeFilenameFromPath(path)
-        updateUserProfile({dropbox: {filepath: path }})
-      },
-      putMarkdownFile: function() {
-
-        function _doneHandler(a, b, response) {
-          a = b = null
-          response = JSON.parse(response.responseText)
-          // console.dir(response)
-          if( response.statusCode >= 204 ) {
-
-            var msg = JSON.parse( response.data )
-
-            Notifier.showMessage(msg.error, 5000)
-
-          }
-          else{
-
-            $('#modal-generic').modal('hide')
-
-            // console.dir(JSON.parse(response.data))
-
-            Notifier.showMessage( Notifier.messages.docSavedDropbox )
-
-          } // end else
-        } // end done handler
-
-        function _failHandler() {
-          alert("Roh-roh. Something went wrong. :(")
-        }
-
-        var md = encodeURIComponent( editor.getSession().getValue() )
-
-        var postData = 'pathToMdFile=' + profile.dropbox.filepath + encodeURIComponent(profile.current_filename) + '.md' + '&fileContents=' + md
-
-        var config = {
-                        type: 'POST',
-                        dataType: 'json',
-                        data: postData,
-                        url: '/save/dropbox',
-                        error: _failHandler,
-                        success: _doneHandler
-                      }
-
-        $.ajax(config)
-
-      } // end fetchMarkdownFile()
-    } // end return obj
-  })() // end IIFE
-
   // LocalFiles Module
   var LocalFiles = (function() {
 
@@ -1858,8 +1281,8 @@ $(function() {
       var a = m.toLowerCase()
       var b = n.toLowerCase()
       if (a === b) { return 0 }
-      if (isNaN(m) || isNaN(n)) { return ( a > b ? 1 : -1)}
-      else {return m-n}
+      if (isNaN(m) || isNaN(n)) { return (a > b ? 1 : -1) }
+      else { return m-n }
     }
 
     function _listMdFiles(files) {
@@ -1912,15 +1335,28 @@ $(function() {
         setCurrentFilenameField()
         editor.getSession().setValue(profile.local_files[fileName])
         previewMd()
+
+        // TODO:
+        // Allow Github to unload it's current file if another file
+        // gets loaded without touching these Dropbox/GoogleDrive objects.
+
+        // This is to prevent a file not loaded from Github
+        // from overwriting your file.
+        Github.clear()
+
       },
-      saveFile: function() {
+      saveFile: function(showNotice) {
         var fileName = getCurrentFilenameFromField()
         var md = editor.getSession().getValue()
         var saveObj = { local_files: { } }
         saveObj.local_files[fileName] = md
 
         updateUserProfile(saveObj)
-        Notifier.showMessage(Notifier.messages.docSavedLocal)
+
+        if((typeof showNotice !== 'object') || showNotice.show !== false) {
+          Notifier.showMessage(Notifier.messages.docSavedLocal)
+        }
+
       },
       deleteFile: function(fileName) {
         var files = profile.local_files;
@@ -1935,8 +1371,6 @@ $(function() {
   init()
 
   // TODO:  add window.resize() handlers.
-
-})
 
 /**
  * Get scrollHeight of preview div
