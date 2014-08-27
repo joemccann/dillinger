@@ -1409,7 +1409,7 @@ function syncPreview() {
 
   // Find how far along the editor is (0 means it is scrolled to the top, 1
   // means it is at the bottom).
-  var scrollFactor = $ed.getFirstVisibleRow() / editorScrollRange;
+  var scrollFactor = ($ed.getSession().getScrollTop() / 3) / $('#editor').height();
 
   // Set the scroll position of the preview pane to match.  jQuery will
   // gracefully handle out-of-bounds values.
