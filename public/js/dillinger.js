@@ -6,6 +6,7 @@
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = {
         theme: 'ace/theme/idle_fingers'
+      , themePreview: 'preview/theme/default'
       , showPaper: false
       , currentFile: ''
       , autosave: {
@@ -38,6 +39,7 @@
 
   // Cache some shit
   var $theme = $('#theme-list')
+    , $themePreview = $('#preview-theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $wordcount = $('#wordcount')
@@ -409,9 +411,14 @@
    */
   function initUi() {
 
+    updatePreviewTheme(profile.themePreview, function() {
+      $themePreview.find('li > a[data-value="'+profile.themePreview+'"]').addClass('selected')
+    })
+
     // Set proper theme value in theme dropdown
     fetchTheme(profile.theme, function() {
       $theme.find('li > a[data-value="'+profile.theme+'"]').addClass('selected')
+
 
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
@@ -538,6 +545,32 @@
     }
   }
 
+  /**
+   * Dropbown nav handler to update the current preview theme.
+   *
+   * @return {Void}
+   */
+   function changePreviewTheme(e) {
+     // check for same theme
+     var $target = $(e.target)
+     if ($target.attr('data-value') === profile.theme) { return }
+     else {
+      // add/remove class
+      $themePreview.find('li > a.selected').removeClass('selected')
+      $target.addClass('selected')
+      // grabnew theme
+      var newTheme = $target.attr('data-value')
+
+      $(e.target).blur()
+
+      updatePreviewTheme(newTheme, function() {
+        Notifier.showMessage(Notifier.messages.profileUpdated)
+      })
+    }
+  }
+
+
+
   // TODO: Maybe we just load them all once and stash in appcache?
   /**
    * Dynamically appends a script tag with the proper theme and then applies that theme.
@@ -562,6 +595,20 @@
     }) // end asyncLoad
 
   } // end fetchTheme(t)
+
+  // TODO: Maybe we just load them all once and stash in appcache?
+  /**
+   * Dynamically updates the theme preview link
+   *
+   * @param {String}  The preview theme name
+   * @param {Function}   Optional callback
+   * @return {Void}
+   */
+  function updatePreviewTheme(th, cb) {
+    var name = th.split('/').pop()
+     $("#preview_theme").attr("href", "/css/preview_themes/"+ name +".css");
+      updateUserProfile({themePreview: th})
+  } // end updatePreviewTheme(t)
 
   /**
    * Change the body background color based on theme.
@@ -937,6 +984,13 @@
       .find('li > a')
       .bind('click', function(e) {
         changeTheme(e)
+        return false
+      })
+
+    $themePreview
+      .find('li > a')
+      .bind('click', function(e) {
+        changePreviewTheme(e)
         return false
       })
 
