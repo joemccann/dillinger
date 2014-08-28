@@ -727,7 +727,7 @@
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField())  + "&theme="+profile.themePreview.split('/').pop() + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -1436,6 +1436,8 @@
 function getScrollHeight($prevFrame) {
     // Different browsers attach the scrollHeight of a document to different
     // elements, so handle that here.
+    
+    console.log($prevFrame);
     if ($prevFrame[0].scrollHeight !== undefined) {
         return $prevFrame[0].scrollHeight;
     } else if ($prevFrame.find('html')[0].scrollHeight !== undefined &&
@@ -1463,13 +1465,56 @@ function syncPreview() {
 
   // Find how far along the editor is (0 means it is scrolled to the top, 1
   // means it is at the bottom).
-  var scrollFactor = ($ed.getSession().getScrollTop() / 3) / $('#editor').height();
+  // 
+  
 
+  var visibleLine = calculateVisibleLine($ed)
+  var scrollFactor = (visibleLine*$ed.renderer.lineHeight)/(editorScrollRange*$ed.renderer.lineHeight)
+  console.log(scrollFactor);
   // Set the scroll position of the preview pane to match.  jQuery will
   // gracefully handle out-of-bounds values.
   $prev.scrollTop(scrollFactor * previewScrollRange);
 }
 
+/**
+ * Calculate from which line we should use to calulate the scroll factor
+ * The effect is create a bubble arround the mid way point to allow for the preview to catach up to the editor
+ * this means when we hit the bottom of the document we should still be able to see the bottom of it in the preview
+ * 
+ *
+ * @return {number}
+ */
+
+function calculateVisibleLine($ed) {
+
+  var midPoint = $ed.getSession().getLength()/2;
+  var topLine = $ed.getFirstVisibleRow();
+  var bottomLine = $ed.getLastVisibleRow();
+  var visibleRowCountMidPoint = topLine + $ed.$getVisibleRowCount()/2
+
+
+  console.log("visibleRowCountMidPoint, %s", visibleRowCountMidPoint);
+
+
+  if (topLine < midPoint && bottomLine <midPoint) {
+    //when view above halfway use topline as line refrence point
+    console.log("returning topLine: %s", topLine);
+    return topLine;
+  } else if (topLine > midPoint && bottomLine > midPoint) {
+    //when view below halfway use bottom as line refrence point
+     console.log("returning bottomLine: %s", bottomLine);
+    return visibleRowCountMidPoint;
+  } else if (topLine < midPoint && visibleRowCountMidPoint <= midPoint) {
+    //when majority of view above halfway use adjust top line to take into account how much of bottom view is below mid way
+    console.log("returning topLine + (bottomLine-midPoint): %s", topLine + (bottomLine-midPoint));
+    return topLine + (bottomLine-midPoint);
+
+  } else {
+     //when majority of view below halfway use adjust bottom line to take into account how much of top view is above mid way
+    console.log("returning bottomLine - (midPoint-topLine): %s", bottomLine - (midPoint-topLine));
+    return bottomLine - (midPoint-topLine);
+  }
+}
 window.onload = function() {
   var $loading = $('#loading')
 
