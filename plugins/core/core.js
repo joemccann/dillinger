@@ -26,11 +26,12 @@ markdown.setOptions({
 
 exports.Core = (function(){
 
-  function _getFullHtml(name, str, style){
+  function _getFullHtml(name, str, style, gfm){
+    console.log("_getFullHtml gfm: %s",gfm);
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' 
       + name + '</title><style>' 
       + ( ( style ) ? style : '' ) + '</style></head><body><div id="preview">\n' 
-      + markdown(str) + '\n</div></body></html>';
+      + markdown(str,{gfm:gfm}) + '\n</div></body></html>';
   }
   
   function _getHtml(str){
@@ -100,7 +101,7 @@ exports.Core = (function(){
           data: ''
         , error: false
         }
-        
+
       var format = req.body.formatting;
       var theme = req.body.theme;
       if ( ! format ) {
@@ -109,8 +110,9 @@ exports.Core = (function(){
 
         format = fs.readFileSync( path.resolve(__dirname, '../../public/css/preview_themes/'+theme+'.css') ).toString('utf-8');
       }
+      console.log("gfm %s",req.body.gfm)
 
-      var html = _getFullHtml(req.body.name, unmd, format);
+      var html = _getFullHtml(req.body.name, unmd, format, req.body.gfm);
 
       var name = req.body.name.trim() + '.html'
 
@@ -180,7 +182,7 @@ exports.Core = (function(){
       , error: false
       }
 
-      var html = _getFullHtml(req.body.name, unmd)
+      var html = _getFullHtml(req.body.name, unmd, false, req.body.gfm)
       var temp = path.resolve(__dirname, '../../public/files/pdf/temp.html')
 
       fs.writeFile( temp, html, 'utf8', function(err, data){
