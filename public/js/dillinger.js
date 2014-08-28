@@ -727,7 +727,7 @@
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField())  + "&theme="+profile.themePreview.split('/').pop() + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -1464,11 +1464,12 @@ function syncPreview() {
   // Find how far along the editor is (0 means it is scrolled to the top, 1
   // means it is at the bottom).
   var scrollFactor = ($ed.getSession().getScrollTop() / 3) / $('#editor').height();
-
+  
   // Set the scroll position of the preview pane to match.  jQuery will
   // gracefully handle out-of-bounds values.
   $prev.scrollTop(scrollFactor * previewScrollRange);
 }
+
 
 window.onload = function() {
   var $loading = $('#loading')
