@@ -1458,17 +1458,47 @@ function syncPreview() {
   var $ed = window.ace.edit('editor');
   var $prev = $('#preview');
 
-  var editorScrollRange = ($ed.getSession().getLength());
+  var editorScrollRange = ($ed.getSession().getLength()*$ed.renderer.lineHeight);
 
   var previewScrollRange = (getScrollHeight($prev));
 
   // Find how far along the editor is (0 means it is scrolled to the top, 1
   // means it is at the bottom).
-  
-  var scrollFactor = ($ed.getSession().getScrollTop() / 3) / $('#editor').height();
+  var scrollFactor = (calculateVisibleLine($ed)*$ed.renderer.lineHeight)/editorScrollRange
   // Set the scroll position of the preview pane to match.  jQuery will
   // gracefully handle out-of-bounds values.
   $prev.scrollTop(scrollFactor * previewScrollRange);
+}
+
+/**
+ * Calculate from which line we should use to calulate the scroll factor
+ * The effect is create a bubble arround the mid way point to allow for the preview to catach up to the editor
+ * this means when we hit the bottom of the document we should still be able to see the bottom of it in the preview
+ * 
+ *
+ * @return {number}
+ */
+
+function calculateVisibleLine($ed) {
+
+  var midPoint = $ed.getSession().getLength()/2
+  var topLine = $ed.getFirstVisibleRow()
+  var bottomLine = $ed.getLastVisibleRow()
+  var visibleRowCountMidPoint = topLine + $ed.$getVisibleRowCount()/2
+
+  if (topLine < midPoint && bottomLine <midPoint) {
+    //when view above halfway use topline as line refrence point
+    return topLine
+  } else if (topLine > midPoint && bottomLine > midPoint) {
+    //when view below halfway use mid point of visble rows as line refrence point
+    return visibleRowCountMidPoint
+  } else if (topLine < midPoint && visibleRowCountMidPoint <= midPoint) {
+    //when majority of view above halfway use adjust top line to take into account how much of bottom view is below mid way
+    return topLine + (visibleRowCountMidPoint-midPoint)
+  } else {
+     //when majority of view below halfway use adjust mid point of visble rows line to take into account how much of top view is above mid way
+    return visibleRowCountMidPoint - (midPoint-topLine)
+  }
 }
 
 window.onload = function() {
