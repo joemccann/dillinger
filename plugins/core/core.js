@@ -27,7 +27,6 @@ markdown.setOptions({
 exports.Core = (function(){
 
   function _getFullHtml(name, str, style, gfm){
-    console.log("_getFullHtml gfm: %s",gfm);
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' 
       + name + '</title><style>' 
       + ( ( style ) ? style : '' ) + '</style></head><body><div id="preview">\n' 
