@@ -109,7 +109,6 @@ exports.Core = (function(){
 
         format = fs.readFileSync( path.resolve(__dirname, '../../public/css/preview_themes/'+theme+'.css') ).toString('utf-8');
       }
-      console.log("gfm %s",req.body.gfm)
 
       var html = _getFullHtml(req.body.name, unmd, format, req.body.gfm);
 
