@@ -39,6 +39,7 @@ app.configure(function(){
   app.locals.app_version = require('./package.json').version;
   app.locals.env = process.env.NODE_ENV;
   app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8');
+  app.locals.preview_themes =  fs.readdirSync(path.resolve(__dirname, 'public/css/preview_themes'));
 });
 
 app.configure('development', function(){
