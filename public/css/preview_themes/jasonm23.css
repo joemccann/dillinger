@@ -1,0 +1,248 @@
+/**
+ * jasonm23-markdown from https://github.com/mixu/markdown-styles/blob/master/layouts/jasonm23-markdown/assets/style.css
+ */
+
+
+#preview {
+    color: #444;
+    font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    padding: 1em;
+    max-width: 960px;
+  margin: 0 auto;
+    background: #fefefe;
+}
+#preview a {
+    color: #0645ad;
+    text-decoration: none;
+}
+#preview a:visited {
+    color: #0b0080;
+}
+#preview a:hover {
+    color: #06e;
+}
+#preview a:active {
+    color: #faa700;
+}
+#preview a:focus {
+    outline: thin dotted;
+}
+#preview a:hover,
+#preview a:active {
+    outline: 0;
+}
+::-moz-selection {
+    background: rgba(255, 255, 0, 0.3);
+    color: #000
+}
+::selection {
+    background: rgba(255, 255, 0, 0.3);
+    color: #000
+}
+#preview a::-moz-selection {
+    background: rgba(255, 255, 0, 0.3);
+    color: #0645ad
+}
+#preview a::selection {
+    background: rgba(255, 255, 0, 0.3);
+    color: #0645ad
+}
+#preview p {
+    margin: 1em 0;
+    font-family: inherit;
+font-size: inherit;
+line-height: inherit;
+}
+#preview img {
+    max-width: 100%;
+}
+#preview h1,
+#preview h2,
+#preview h3,
+#preview h4,
+#preview h5,
+#preview h6 {
+    font-weight: normal;
+    color: #111;
+    line-height: 1em;
+}
+#preview h4,
+#preview h5,
+#preview h6 {
+    font-weight: bold;
+}
+#preview h1 {
+    font-size: 2.5em;
+}
+#preview h2 {
+    font-size: 2em;
+}
+#preview h3 {
+    font-size: 1.5em;
+}
+#preview h4 {
+    font-size: 1.2em;
+}
+#preview h5 {
+    font-size: 1em;
+}
+#preview h6 {
+    font-size: 0.9em;
+}
+#preview blockquote {
+    color: #666666;
+    margin: 0;
+    padding-left: 3em;
+    border-left: 0.5em #EEE solid;
+}
+#preview hr {
+    display: block;
+    height: 2px;
+    border: 0;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #eee;
+    margin: 1em 0;
+    padding: 0;
+}
+#preview pre,
+#preview code,
+#preview kbd,
+#preview samp {
+    color: #000;
+    font-family: monospace, monospace;
+    _font-family: 'courier new', monospace;
+    font-size: 0.98em;
+}
+#preview pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 12px;
+}
+#preview b,
+#preview strong {
+    font-weight: bold;
+}
+#preview dfn {
+    font-style: italic;
+}
+#preview ins {
+    background: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+#preview mark {
+    background: #ff0;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+#preview sub,
+#preview sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+#preview sup {
+    top: -0.5em;
+}
+#preview sub {
+    bottom: -0.25em;
+}
+#preview ul,
+#preview ol {
+    margin: 1em 0;
+    padding: 0 0 0 2em;
+}
+#preview li p:last-child {
+    margin: 0
+}
+#preview dd {
+    margin: 0 0 0 2em;
+}
+#preview img {
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+#preview table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+#preview td {
+    vertical-align: top;
+}
+@media only screen and (min-width: 480px) {
+    #preview {
+        font-size: 14px;
+    }
+}
+@media only screen and (min-width: 768px) {
+    #preview {
+        font-size: 16px;
+    }
+}
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+    #preview {
+        font-size: 12pt;
+        max-width: 100%;
+    }
+    #preview a,
+    #preview a:visited {
+        text-decoration: underline;
+    }
+    #preview hr {
+        height: 1px;
+        border: 0;
+        border-bottom: 1px solid black;
+    }
+    #preview a[href]:after {
+        content: " (" attr(href)")";
+    }
+    #preview abbr[title]:after {
+        content: " (" attr(title)")";
+    }
+    #preview .ir a:after,
+    #preview a[href^="javascript:"]:after,
+    #preview a[href^="#"]:after {
+        content: "";
+    }
+    #preview pre,
+    #preview blockquote {
+        border: 1px solid #999;
+        padding-right: 1em;
+        page-break-inside: avoid;
+    }
+    #preview tr,
+    #previewimg {
+        page-break-inside: avoid;
+    }
+    #preview img {
+        max-width: 100% !important;
+    }
+    @page :left {
+        margin: 15mm 20mm 15mm 10mm;
+    }
+    @page :right {
+        margin: 15mm 10mm 15mm 20mm;
+    }
+    #previewp,
+    #preview h2,
+    #preview h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    #preview h2,
+    #preview h3 {
+        page-break-after: avoid;
+    }
+}

@@ -268,3 +268,8 @@
   background-color: transparent;
   border: 0;
 }
+
+#preview a {
+text-decoration: underline;
+color: #00f;
+}
