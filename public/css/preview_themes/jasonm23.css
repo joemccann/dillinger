@@ -1,7 +1,78 @@
 /**
  * jasonm23-markdown from https://github.com/mixu/markdown-styles/blob/master/layouts/jasonm23-markdown/assets/style.css
  */
+/** preview css reset
 
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+#preview ,#preview div,#preview span,#preview applet,#preview object,#preview iframe,#preview
+h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6,#preview p,#preview blockquote,#preview pre,#preview
+a,#preview abbr,#preview acronym,#preview address,#preview big,#preview cite,#preview code,#preview
+del,#preview dfn,#preview em,#preview img,#preview ins,#preview kbd,#preview q,#preview s,#preview samp,#preview
+small,#preview strike,#preview strong,#preview sub,#preview sup,#preview tt,#preview var,#preview
+b,#preview u,#preview i,#preview center,#preview
+dl,#preview dt,#preview dd,#preview ol,#preview ul,#preview li,#preview
+fieldset,#preview form,#preview label,#preview legend,#preview
+table,#preview caption,#preview tbody,#preview tfoot,#preview thead,#preview tr,#preview th,#preview td,#preview
+article,#preview aside,#preview canvas,#preview details,#preview embed,#preview 
+figure,#preview figcaption,#preview footer,#preview header,#preview hgroup,#preview 
+menu,#preview nav,#preview output,#preview ruby,#preview section,#preview summary,#preview
+time,#preview mark,#preview audio,#preview video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+#preview article,#preview aside,#preview details,#preview figcaption,#preview figure,#preview 
+footer,#preview header,#preview hgroup,#preview menu,#preview nav,#preview section {
+  display: block;
+}
+#preview {
+  line-height: 1;
+}
+#preview ol,#preview ul {
+  list-style: none;
+}
+#preview blockquote,#preview q {
+  quotes: none;
+}
+#preview blockquote:before,#preview blockquote:after,#preview
+q:before,#preview q:after {
+  content: '';
+  content: none;
+}
+#preview table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+#preview {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+#preview>*:first-child {
+  margin-top: 0 !important;
+}
+
+#preview>*:last-child {
+  margin-bottom: 0 !important;
+}
 
 #preview {
     color: #444;
@@ -10,7 +81,7 @@
     line-height: 1.5em;
     padding: 1em;
     max-width: 960px;
-  margin: 0 auto;
+    margin: 0 auto;
     background: #fefefe;
 }
 #preview a {
@@ -52,8 +123,8 @@
 #preview p {
     margin: 1em 0;
     font-family: inherit;
-font-size: inherit;
-line-height: inherit;
+    font-size: inherit;
+    line-height: inherit;
 }
 #preview img {
     max-width: 100%;
@@ -120,6 +191,7 @@ line-height: inherit;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-size: 12px;
+    margin: 0.6em 0 0.6em;
 }
 #preview b,
 #preview strong {

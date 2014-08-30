@@ -5,6 +5,60 @@
 /* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
 /* Source: https://github.com/nicolahery/markdownpad-github */
 
+
+
+
+/** preview css reset
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+#preview ,#preview div,#preview span,#preview applet,#preview object,#preview iframe,#preview
+h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6,#preview p,#preview blockquote,#preview pre,#preview
+a,#preview abbr,#preview acronym,#preview address,#preview big,#preview cite,#preview code,#preview
+del,#preview dfn,#preview em,#preview img,#preview ins,#preview kbd,#preview q,#preview s,#preview samp,#preview
+small,#preview strike,#preview strong,#preview sub,#preview sup,#preview tt,#preview var,#preview
+b,#preview u,#preview i,#preview center,#preview
+dl,#preview dt,#preview dd,#preview ol,#preview ul,#preview li,#preview
+fieldset,#preview form,#preview label,#preview legend,#preview
+table,#preview caption,#preview tbody,#preview tfoot,#preview thead,#preview tr,#preview th,#preview td,#preview
+article,#preview aside,#preview canvas,#preview details,#preview embed,#preview 
+figure,#preview figcaption,#preview footer,#preview header,#preview hgroup,#preview 
+menu,#preview nav,#preview output,#preview ruby,#preview section,#preview summary,#preview
+time,#preview mark,#preview audio,#preview video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+#preview article,#preview aside,#preview details,#preview figcaption,#preview figure,#preview 
+footer,#preview header,#preview hgroup,#preview menu,#preview nav,#preview section {
+  display: block;
+}
+#preview {
+  line-height: 1;
+}
+#preview ol,#preview ul {
+  list-style: none;
+}
+#preview blockquote,#preview q {
+  quotes: none;
+}
+#preview blockquote:before,#preview blockquote:after,#preview
+q:before,#preview q:after {
+  content: '';
+  content: none;
+}
+#preview table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 /* BODY
 =============================================================================*/
 
@@ -32,6 +86,9 @@
 
 #preview p,#preview blockquote,#preview ul,#preview ol,#preview dl,#preview table,#preview pre {
   margin: 15px 0;
+  font-family: inherit;
+font-size: inherit;
+line-height: inherit;
 }
 
 /* HEADERS
@@ -274,4 +331,11 @@
 
 #preview img {
   max-width: 100%
+}
+
+/* weight
+=============================================================================*/
+
+#preview strong{
+  font-weight: bold;
 }
