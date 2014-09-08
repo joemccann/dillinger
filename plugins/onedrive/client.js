@@ -5,25 +5,25 @@ var OneDrive = (function() {
 
   function renderSearchResults(a, b, res) {
     var result = JSON.parse(res.responseText)
-      , list = '<ul>'
+      , list = '<ul>';
 
     // Handle empty array case.
-    if (!Array.isArray(result.data)) return _errorHandler(null, null, { responseText: "No Markdown files found!" })
+    if (!Array.isArray(result.data)) return _errorHandler(null, null, { responseText: "No Markdown files found!" });
 
     result.data.forEach(function(item) {
       list += '<li data-file-id="'
             + item.id + '"><a class="onedrive_file" href="#">'
-            + item.name + '</a></li>'
-    })
+            + item.name + '</a></li>';
+    });
 
-    list += '</ul>'
-    $('.modal-header h3').text('Your OneDrive Files')
-    $('.modal-body').html(list)
+    list += '</ul>';
+    $('.modal-header h3').text('Your OneDrive Files');
+    $('.modal-body').html(list);
     $('#modal-generic').modal({
       keyboard: true
     , backdrop: true
     , show: true
-    })
+    });
   }
 
   function renderFile(a, b, res) {
@@ -50,7 +50,7 @@ var OneDrive = (function() {
         dataType: 'json',
         url: '/import/onedrive',
         beforeSend: function() {
-          console.log(Notifier)
+          console.log(Notifier);
           Notifier.showMessage('Searching for .' + editorType().name + ' (' + editorType().fileExts.join(', ') + ') files')
         },
         error: _errorHandler,
@@ -72,23 +72,23 @@ var OneDrive = (function() {
       var content = encodeURIComponent(editor.getSession().getValue());
       // https://github.com/joemccann/dillinger/issues/90
       // If filename contains .md or .markdown as extension...
-      var hasExtension = _isFileExt(profile.current_filename)
+      var hasExtension = _isFileExt(profile.current_filename);
 
       var postData = 'title=' + encodeURIComponent(profile.current_filename)
         + (hasExtension ? '' : editorType().fileExts[0])
         + '&content='
-        + content
+        + content;
 
       $.ajax({
         dataType: 'json',
         type: 'post',
         data: postData,
-        url: '/save/onedrive?fileId=' + (GoogleDrive.fileId || ''),
+        url: '/save/onedrive?fileId=' + (OneDrive.fileId || ''),
         error: _errorHandler,
         success: function(a, b, res) {
           var response = JSON.parse(res.responseText);
           if (response.id) {
-            GoogleDrive.fileId = response.id
+            OneDrive.fileId = response.id;
             Notifier.showMessage('Document saved on OneDrive')
           } else {
             Notifier.showMessage('An error occurred!')
@@ -101,16 +101,16 @@ var OneDrive = (function() {
         .on('click', function() {
           OneDrive.search();
           return false;
-        })
+        });
 
       $("#save_onedrive")
         .on('click', function() {
           //profile.current_filename = profile.current_filename || generateRandomFilename('md')
           OneDrive.save();
           saveFile();
-        })
+        });
     }
   }
 })();
 
-Plugins.register(OneDrive)
+Plugins.register(OneDrive);

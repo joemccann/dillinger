@@ -76,39 +76,20 @@ var OneDrive = {
     });
   },
   save: function(tokens, fileId, title, content, callback) {
-    // TODO: remove native call when googleapis support media uploads
     content = content || '';
     title = title || 'Untitled.md';
 
-    var boundaryTag = 'a_unique_boundary_tag';
-    var body = '--' + boundaryTag + '\n' +
-               'Content-Type: application/json; charset=UTF-8\n\n' +
-               JSON.stringify({ title: title }) + '\n\n' +
-               '--' + boundaryTag + '\n' +
-               'Content-Type: text/x-markdown\n\n' +
-               content + '\n\n' +
-               '--' + boundaryTag + '--';
-
-    var uploadUrl = 'https://www.googleapis.com/upload/drive/v2/files'
-      , method = 'post';
-
-    if (fileId) {
-      uploadUrl += '/' + fileId;
-      method = 'put';
-    }
-
+    var uploadUrl = 'https://apis.live.net/v5.0/me/skydrive/files/' + title;
     request({
-      uri: uploadUrl + '?uploadType=multipart',
-      body: body,
-      method: method,
-      headers: {
-        'Authorization': 'Bearer ' + tokens.access_token,
-        'Content-type': 'multipart/related; boundary="' + boundaryTag + '"'
-      }
+      uri: uploadUrl,
+      qs: {
+        'access_token': tokens.access_token
+      },
+      body: content,
+      method: "put"
     }, function(err, res, body) {
       callback(err, body);
     });
-
   }
 };
 
