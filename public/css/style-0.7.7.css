@@ -5023,6 +5023,11 @@ noscript p {
   margin: 2% auto;
   max-width: 660px;
 }
+ul#theme-list {
+  height: auto;
+  max-height: 300px;
+  overflow-x: hidden;
+}
 .ir {
   display: block;
   border: 0;
