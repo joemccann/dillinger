@@ -429,8 +429,8 @@
     $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
 
     // Set text for dis/enable autosave / word counter
-    $autosave.html(profile.autosave.enabled ? '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' : '<i class="icon-remove"></i>&nbsp;Autosave is Disabled')
-    $wordcount.html(profile.wordcount ? '<i class="icon-ok"></i>&nbsp;Word Count is Enabled' : '<i class="icon-remove"></i>&nbsp;Word Count is Disabled')
+    $autosave.html(profile.autosave.enabled ? '<i class="glyphicon glyphicon-ok"></i>&nbsp;Autosave is Enabled' : '<i class="glyphicon glyphicon-remove"></i>&nbsp;Autosave is Disabled')
+    $wordcount.html(profile.wordcount ? '<i class="glyphicon glyphicon-ok"></i>&nbsp;Word Count is Enabled' : '<i class="glyphicon glyphicon-remove"></i>&nbsp;Word Count is Disabled')
 
     // Check for logged in Github user and notifiy
     githubUser = $('#import_github').attr('data-github-username')
@@ -849,7 +849,7 @@
    */
   function toggleAutoSave() {
 
-    $autosave.html(profile.autosave.enabled ? '<i class="icon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="icon-ok"></i>&nbsp;Autosave is Enabled')
+    $autosave.html(profile.autosave.enabled ? '<i class="glyphicon glyphicon-remove"></i>&nbsp;Autosave is Disabled' : '<i class="glyphicon glyphicon-ok"></i>&nbsp;Autosave is Enabled')
 
     updateUserProfile({ autosave: { enabled: !profile.autosave.enabled } })
 
@@ -875,7 +875,7 @@
    * @return {Void}
    */
   function toggleWordCount() {
-    $wordcount.html(profile.wordcount ? '<i class="icon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="icon-ok"></i>&nbsp;Word Count is Enabled')
+    $wordcount.html(profile.wordcount ? '<i class="glyphicon glyphicon-remove"></i>&nbsp;Word Count is Disabled' : '<i class="glyphicon glyphicon-ok"></i>&nbsp;Word Count is Enabled')
 
     updateUserProfile({ wordcount: !profile.wordcount })
 
@@ -1305,7 +1305,7 @@
       files.forEach(function(item) {
         // var name = item.path.split('/').pop()
         list += '<li data-file-name="'
-              + item + '"><a class="delete_local_file"><i class="icon-remove"></i></a><a class="local_file" href="#">'
+              + item + '"><a class="delete_local_file"><i class="glyphicon glyphicon-remove"></i></a><a class="local_file" href="#">'
               + item + '</a></li>'
       })
 
@@ -1430,12 +1430,12 @@ window.onload = function() {
   var $loading = $('#loading')
 
   if ($.support.transition) {
-    $loading
-      .bind($.support.transitionEnd, function() {
+    $('body')
+      .on($.support.transition.end, '#loading', function() {
         $('#main').removeClass('bye')
         $loading.remove()
       })
-      .addClass('fade_slow');
+      .find('#loading').addClass('fade_slow');
   } else {
     $('#main').removeClass('bye')
     $loading.remove()

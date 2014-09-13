@@ -1,5 +1,5 @@
 //
-// Responsive: Utility classes
+// Responsive Utility classes
 // --------------------------------------------------
 
 
@@ -13,82 +13,146 @@
 //
 // For more information, see the following:
 //
-// Issue: https://github.com/twbs/bootstrap/issues/10497
-// Docs: http://getbootstrap.com/getting-started/#browsers
-// Source: http://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/
+// Issue https://github.com/twbs/bootstrap/issues/10497
+// Docs http://getbootstrap.com/getting-started/#support-ie10-width
+// Source http://timkadlec.com/2013/01/windows-phone-8-and-device-width/
+// Source http://timkadlec.com/2012/10/ie10-snap-mode-and-responsive-design/
 
-@css {
-  @-ms-viewport {
-    width: device-width;
-  }
-}
-
+@-ms-viewport
+  width device-width
 
 // Visibility utilities
+// Note Deprecated .visible-xs, .visible-sm, .visible-md, and .visible-lg as of v3.2.0
 .visible-xs,
 .visible-sm,
 .visible-md,
-.visible-lg {
-  responsive-invisibility();
-}
+.visible-lg
+  responsive-invisibility()
 
-.visible-xs {
-  @media $media-max-phone {
-    responsive-visibility();
-  }
-}
-.visible-sm {
-  @media $media-tablet {
-    responsive-visibility();
-  }
-}
-.visible-md {
-  @media $media-desktop {
-    responsive-visibility();
-  }
-}
-.visible-lg {
-  @media $media-min-lg-desktop {
-    responsive-visibility();
-  }
-}
+.visible-xs-block,
+.visible-xs-inline,
+.visible-xs-inline-block,
+.visible-sm-block,
+.visible-sm-inline,
+.visible-sm-inline-block,
+.visible-md-block,
+.visible-md-inline,
+.visible-md-inline-block,
+.visible-lg-block,
+.visible-lg-inline,
+.visible-lg-inline-block
+  display none !important
 
-.hidden-xs {
-  @media $media-max-phone {
-    responsive-invisibility();
-  }
-}
-.hidden-sm {
-  @media $media-tablet {
-    responsive-invisibility();
-  }
-}
-.hidden-md {
-  @media $media-desktop {
-    responsive-invisibility();
-  }
-}
-.hidden-lg {
-  @media $media-min-lg-desktop {
-    responsive-invisibility();
-  }
-}
+.visible-xs
+  @media (max-width $screen-xs-max)
+    responsive-visibility()
+
+.visible-xs-block
+  @media (max-width $screen-xs-max)
+    display block !important
+
+.visible-xs-inline
+  @media (max-width $screen-xs-max)
+    display inline !important
+
+.visible-xs-inline-block
+  @media (max-width $screen-xs-max)
+    display inline-block !important
+
+.visible-sm
+  @media (min-width $screen-sm-min) and (max-width $screen-sm-max)
+    responsive-visibility()
+
+.visible-sm-block
+  @media (min-width $screen-sm-min) and (max-width $screen-sm-max)
+    display block !important
+
+.visible-sm-inline
+  @media (min-width $screen-sm-min) and (max-width $screen-sm-max)
+    display inline !important
+
+.visible-sm-inline-block
+  @media (min-width $screen-sm-min) and (max-width $screen-sm-max)
+    display inline-block !important
+
+.visible-md
+  @media (min-width $screen-md-min) and (max-width $screen-md-max)
+    responsive-visibility()
+
+.visible-md-block
+  @media (min-width $screen-md-min) and (max-width $screen-md-max)
+    display block !important
+
+.visible-md-inline
+  @media (min-width $screen-md-min) and (max-width $screen-md-max)
+    display inline !important
+
+.visible-md-inline-block
+  @media (min-width $screen-md-min) and (max-width $screen-md-max)
+    display inline-block !important
+
+.visible-lg
+  @media (min-width $screen-lg-min)
+    responsive-visibility()
+
+.visible-lg-block
+  @media (min-width $screen-lg-min)
+    display block !important
+
+.visible-lg-inline
+  @media (min-width $screen-lg-min)
+    display inline !important
+
+.visible-lg-inline-block
+  @media (min-width $screen-lg-min)
+    display inline-block !important
+
+.hidden-xs
+  @media (max-width $screen-xs-max)
+    responsive-invisibility()
+
+.hidden-sm
+  @media (min-width $screen-sm-min) and (max-width $screen-sm-max)
+    responsive-invisibility()
+
+.hidden-md
+  @media (min-width $screen-md-min) and (max-width $screen-md-max)
+    responsive-invisibility()
+
+.hidden-lg
+  @media (min-width $screen-lg-min)
+    responsive-invisibility()
 
 
 // Print utilities
 //
 // Media queries are placed on the inside to be mixin-friendly.
 
-.visible-print {
-  responsive-invisibility();
+// Note Deprecated .visible-print as of v3.2.0
+.visible-print
+  responsive-invisibility()
 
-  @media print {
-    responsive-visibility();
-  }
-}
+  @media print
+    responsive-visibility()
 
-.hidden-print {
-  @media print {
-    responsive-invisibility();
-  }
-}
+.visible-print-block
+  display none !important
+
+  @media print
+    display block !important
+
+.visible-print-inline
+  display none !important
+
+  @media print
+    display inline !important
+
+.visible-print-inline-block
+  display none !important
+
+  @media print
+    display inline-block !important
+
+.hidden-print
+  @media print
+    responsive-invisibility()

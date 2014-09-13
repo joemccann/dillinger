@@ -3,53 +3,44 @@
 // --------------------------------------------------
 
 
-.pager {
-  padding-left: 0;
-  margin: $line-height-computed 0;
-  list-style: none;
-  text-align: center;
+.pager
+  padding-left 0
+  margin $line-height-computed 0
+  list-style none
+  text-align center
   @extend .clearfix
-  li {
-    display: inline;
+
+  li
+    display inline
     > a,
-    > span {
-      display: inline-block;
-      padding: 5px 14px;
-      background-color: $pager-bg;
-      border: 1px solid $pager-border;
-      border-radius: $pager-border-radius;
-    }
+    > span
+      display inline-block
+      padding 5px 14px
+      background-color $pager-bg
+      border 1px solid $pager-border
+      border-radius $pager-border-radius
 
     > a:hover,
-    > a:focus {
-      text-decoration: none;
-      background-color: $pager-hover-bg;
-    }
-  }
+    > a:focus
+      text-decoration none
+      background-color $pager-hover-bg
 
-  .next {
+  .next
     > a,
-    > span {
-      float: right;
-    }
-  }
+    > span
+      float right
 
-  .previous {
+  .previous
     > a,
-    > span {
-      float: left;
-    }
-  }
+    > span
+      float left
 
-  .disabled {
+  .disabled
     > a,
     > a:hover,
     > a:focus,
-    > span {
-      color: $pager-disabled-color;
-      background-color: $pager-bg;
-      cursor: not-allowed;
-    }
-  }
+    > span
+      color $pager-disabled-color
+      background-color $pager-bg
+      cursor not-allowed
 
-}
