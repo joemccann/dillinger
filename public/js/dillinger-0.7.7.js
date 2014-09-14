@@ -385,6 +385,7 @@
       })
       converter = marked
       editor.getSession().setMode('ace/mode/markdown')
+
     }
     else { // html
       converter = function(input) {
