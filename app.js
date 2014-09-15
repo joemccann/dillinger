@@ -13,6 +13,7 @@ var config = require('./config')()
   , dropbox = require('./plugins/dropbox/server.js')
   , github = require('./plugins/github/server.js')
   , googledrive = require('./plugins/googledrive/server.js')
+  , onedrive = require('./plugins/onedrive/server.js')
 
 app.configure(function(){
   app.set('port', process.env.PORT || 8080);
@@ -52,6 +53,7 @@ app.get('/not-implemented', routes.not_implemented);
 app.use(dropbox);
 app.use(github);
 app.use(googledrive);
+app.use(onedrive);
 
 /* Dillinger Actions */
 

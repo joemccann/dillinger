@@ -1218,6 +1218,15 @@
         GoogleDrive.get()
         return false
       })
+      .on('click', '.onedrive_file', function() {
+        var fileId = $(this).parent('li').attr('data-file-id')
+        profile.current_filename = $(this).html()
+        OneDrive.fileId = fileId
+        OneDrive.get(function () {
+          setCurrentFilenameField();
+        });
+        return false
+      })
       .on('click', '.local_file', function() {
         var fileName = $(this).parent('li').attr('data-file-name')
         profile.current_filename = $(this).html()
