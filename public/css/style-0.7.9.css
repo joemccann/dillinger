@@ -1024,7 +1024,7 @@ html {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Arvo", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333;
@@ -6496,7 +6496,7 @@ noscript p {
 #app_wrap > #preview {
   position: absolute;
   margin-left: 5px;
-  padding: 20px;
+  padding: 0px 20px;
   left: 50%;
   bottom: 10px;
   right: 10px;
