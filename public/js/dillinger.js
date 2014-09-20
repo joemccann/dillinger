@@ -6,6 +6,7 @@
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = {
         theme: 'ace/theme/idle_fingers'
+      , themePreview: 'preview/theme/default'
       , showPaper: false
       , currentFile: ''
       , autosave: {
@@ -38,6 +39,7 @@
 
   // Cache some shit
   var $theme = $('#theme-list')
+    , $themePreview = $('#preview-theme-list')
     , $preview = $('#preview')
     , $autosave = $('#autosave')
     , $wordcount = $('#wordcount')
@@ -410,9 +412,14 @@
    */
   function initUi() {
 
+    updatePreviewTheme(profile.themePreview, function() {
+      $themePreview.find('li > a[data-value="'+profile.themePreview+'"]').addClass('selected')
+    })
+
     // Set proper theme value in theme dropdown
     fetchTheme(profile.theme, function() {
       $theme.find('li > a[data-value="'+profile.theme+'"]').addClass('selected')
+
 
       editor.getSession().setUseWrapMode(true)
       editor.setShowPrintMargin(false)
@@ -539,6 +546,32 @@
     }
   }
 
+  /**
+   * Dropbown nav handler to update the current preview theme.
+   *
+   * @return {Void}
+   */
+   function changePreviewTheme(e) {
+     // check for same theme
+     var $target = $(e.target)
+     if ($target.attr('data-value') === profile.theme) { return }
+     else {
+      // add/remove class
+      $themePreview.find('li > a.selected').removeClass('selected')
+      $target.addClass('selected')
+      // grabnew theme
+      var newTheme = $target.attr('data-value')
+
+      $(e.target).blur()
+
+      updatePreviewTheme(newTheme, function() {
+        Notifier.showMessage(Notifier.messages.profileUpdated)
+      })
+    }
+  }
+
+
+
   // TODO: Maybe we just load them all once and stash in appcache?
   /**
    * Dynamically appends a script tag with the proper theme and then applies that theme.
@@ -563,6 +596,20 @@
     }) // end asyncLoad
 
   } // end fetchTheme(t)
+
+  // TODO: Maybe we just load them all once and stash in appcache?
+  /**
+   * Dynamically updates the theme preview link
+   *
+   * @param {String}  The preview theme name
+   * @param {Function}   Optional callback
+   * @return {Void}
+   */
+  function updatePreviewTheme(th, cb) {
+    var name = th.split('/').pop()
+     $("#preview_theme").attr("href", "/css/preview_themes/"+ name +".css");
+      updateUserProfile({themePreview: th})
+  } // end updatePreviewTheme(t)
 
   /**
    * Change the body background color based on theme.
@@ -681,7 +728,7 @@
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) +  "&gfm=" + (editorType().type === "markdown-gfm" ? true : false)  + "&theme="+profile.themePreview.split('/').pop() + "&unmd=" + encodeURIComponent(unmd) + ( ( formatting ) ? "&formatting=true" : "" )
     , dataType: 'json'
     , url: '/factory/fetch_html'
     , error: _failHandler
@@ -707,7 +754,7 @@
 
     var config = {
       type: 'POST'
-    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&unmd=" + encodeURIComponent(unmd)
+    , data: 'name=' + encodeURIComponent(getCurrentFilenameFromField()) + "&gfm=" + (editorType().type === "markdown-gfm" ? true : false) + "&unmd=" + encodeURIComponent(unmd)
     , dataType: 'json'
     , url: '/factory/fetch_pdf'
     , error: _failHandler
@@ -938,6 +985,13 @@
       .find('li > a')
       .bind('click', function(e) {
         changeTheme(e)
+        return false
+      })
+
+    $themePreview
+      .find('li > a')
+      .bind('click', function(e) {
+        changePreviewTheme(e)
         return false
       })
 
@@ -1392,6 +1446,7 @@
 function getScrollHeight($prevFrame) {
     // Different browsers attach the scrollHeight of a document to different
     // elements, so handle that here.
+    
     if ($prevFrame[0].scrollHeight !== undefined) {
         return $prevFrame[0].scrollHeight;
     } else if ($prevFrame.find('html')[0].scrollHeight !== undefined &&
@@ -1413,17 +1468,47 @@ function syncPreview() {
   var $ed = window.ace.edit('editor');
   var $prev = $('#preview');
 
-  var editorScrollRange = ($ed.getSession().getLength());
+  var editorScrollRange = ($ed.getSession().getLength()*$ed.renderer.lineHeight);
 
   var previewScrollRange = (getScrollHeight($prev));
 
   // Find how far along the editor is (0 means it is scrolled to the top, 1
   // means it is at the bottom).
-  var scrollFactor = $ed.getFirstVisibleRow() / editorScrollRange;
-
+  var scrollFactor = (calculateVisibleLine($ed)*$ed.renderer.lineHeight)/editorScrollRange
   // Set the scroll position of the preview pane to match.  jQuery will
   // gracefully handle out-of-bounds values.
   $prev.scrollTop(scrollFactor * previewScrollRange);
+}
+
+/**
+ * Calculate from which line we should use to calulate the scroll factor
+ * The effect is create a bubble arround the mid way point to allow for the preview to catach up to the editor
+ * this means when we hit the bottom of the document we should still be able to see the bottom of it in the preview
+ * 
+ *
+ * @return {number}
+ */
+
+function calculateVisibleLine($ed) {
+
+  var midPoint = $ed.getSession().getLength()/2
+  var topLine = $ed.getFirstVisibleRow()
+  var bottomLine = $ed.getLastVisibleRow()
+  var visibleRowCountMidPoint = topLine + $ed.$getVisibleRowCount()/2
+
+  if (topLine < midPoint && bottomLine <midPoint) {
+    //when view above halfway use topline as line refrence point
+    return topLine
+  } else if (topLine > midPoint && bottomLine > midPoint) {
+    //when view below halfway use mid point of visble rows as line refrence point
+    return visibleRowCountMidPoint
+  } else if (topLine < midPoint && visibleRowCountMidPoint <= midPoint) {
+    //when majority of view above halfway use adjust top line to take into account how much of bottom view is below mid way
+    return topLine + (visibleRowCountMidPoint-midPoint)
+  } else {
+     //when majority of view below halfway use adjust mid point of visble rows line to take into account how much of top view is above mid way
+    return visibleRowCountMidPoint - (midPoint-topLine)
+  }
 }
 
 window.onload = function() {
