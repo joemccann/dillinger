@@ -1,38 +1,53 @@
-// LABELS
-// ------
+//
+// Labels
+// --------------------------------------------------
 
 .label
-  padding: 2px 4px 3px
-  font-size: $baseFontSize * .85
-  font-weight: bold
-  color: $white
-  text-shadow: 0 -1px 0 rgba(0,0,0,.25)
-  background-color: $grayLight
-  border-radius(3px)
+  display inline
+  padding .2em .6em .3em
+  font-size 75%
+  font-weight bold
+  line-height 1
+  color $label-color
+  text-align center
+  white-space nowrap
+  vertical-align baseline
+  border-radius .25em
 
-// Hover state
-.label:hover
-  color: $white
-  text-decoration: none
+  // Add hover effects, but only for links
+  a&
+    &:hover,
+    &:focus
+      color $label-link-hover-color
+      text-decoration none
+      cursor pointer
+
+  // Empty labels collapse automatically (not available in IE8)
+  &:empty
+    display none
+
+  // Quick fix for labels in buttons
+  .btn &
+    position relative
+    top -1px
 
 // Colors
-.label-important
-	background-color: $errorText
-.label-important:hover
-  background-color: darken($errorText, 10%)
-.label-warning
-	background-color: $orange
-.label-warning:hover
-  background-color: darken($orange, 10%)
+// Contextual variations (linked labels get darker on :hover)
+
+.label-default
+  label-variant($label-default-bg)
+
+.label-primary
+  label-variant($label-primary-bg)
+
 .label-success
-	background-color: $successText
-.label-success:hover
-  background-color: darken($successText, 10%)
+  label-variant($label-success-bg)
+
 .label-info
-	background-color: $infoText
-.label-info:hover
-  background-color: darken($infoText, 10%)
-.label-inverse
-  background-color: $grayDark
-.label-inverse:hover
-  background-color: darken($grayDark, 10%)
+  label-variant($label-info-bg)
+
+.label-warning
+  label-variant($label-warning-bg)
+
+.label-danger
+  label-variant($label-danger-bg)

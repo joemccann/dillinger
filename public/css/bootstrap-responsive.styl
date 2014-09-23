@@ -47,7 +47,7 @@
   // Block level the page header small tag for readability
   .page-header h1 small
     display: block
-    line-height: $baseLineHeight
+    line-height: $line-height-base
 
 
   // Make span* classes full width
@@ -182,9 +182,9 @@
   // Unfix the navbar
   .navbar-fixed-top
     position: static
-    margin-bottom: $baseLineHeight
+    margin-bottom: $line-height-base
 
-  .navbar-fixed-top .navbar-inner
+  .navbar-fixed-top .container
     padding: 5px
 
   .navbar .container
@@ -192,7 +192,7 @@
     padding: 0
 
   // Account for brand name
-  .navbar .brand
+  .navbar .navbar-brand
     padding-left: 10px
     padding-right: 10px
     margin: 0 0 0 -5px
@@ -204,7 +204,7 @@
   // Block-level the nav
   .navbar .nav
     float: none
-    margin: 0 0 ($baseLineHeight / 2)
+    margin: 0 0 ($line-height-base / 2)
 
   .navbar .nav > li
     float: none
@@ -260,8 +260,8 @@
   .navbar-form,
   .navbar-search
     float: none
-    padding: ($baseLineHeight / 2) 15px
-    margin: ($baseLineHeight / 2) 0
+    padding: ($line-height-base / 2) 15px
+    margin: ($line-height-base / 2) 0
     border-top: 1px solid $navbarBackground
     border-bottom: 1px solid $navbarBackground
     $shadow = inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.1)
@@ -273,7 +273,7 @@
     margin-left: 0
 
   // Static navbar
-  .navbar-static .navbar-inner
+  .navbar-static .container
     padding-left:  10px
     padding-right: 10px
 

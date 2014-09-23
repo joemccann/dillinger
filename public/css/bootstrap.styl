@@ -1,82 +1,56 @@
 /*!
- * Bootstrap v2.0.1
- *
- * Copyright 2012 Twitter, Inc
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * Bootstrap v3.2.0 (http://getbootstrap.com)
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-
-/*
- * Ported to Stylus from Less (Twitter Bootstrap)
- * by @flowonyx
- *
- * Any changes are released to the Public Domain.
- *
- */
-
-// Used from within responsive.styl if they are used together.
-$bootstrap = true
-
-@import "less-compat"
 
 // Core variables and mixins
-@import "variables" // Modify this for custom colors, font-sizes, etc
+@import "variables"
 @import "mixins"
 
-@import "nib"
+// Reset and dependencies
+@import "normalize"
+@import "print"
+@import "glyphicons"
 
-// CSS Reset
-@import "reset"
-
-// Grid system and page structure
+// Core CSS
 @import "scaffolding"
-@import "grid"
-@import "layouts"
-
-// Base CSS
+@import "utilities"
 @import "type"
 @import "code"
-@import "forms"
+@import "grid"
 @import "tables"
-
-// Components: common
-@import "sprites"
-@import "dropdowns"
-@import "wells"
-@import "component-animations"
-@import "close"
-
-// Components: Buttons & Alerts
+@import "forms"
 @import "buttons"
-@import "button-groups"
-@import "alerts" // Note: alerts share common CSS with buttons and thus have styles in buttons
 
-// Components: Nav
+// Components
+@import "component-animations"
+@import "dropdowns"
+@import "button-groups"
+@import "input-groups"
 @import "navs"
 @import "navbar"
 @import "breadcrumbs"
 @import "pagination"
 @import "pager"
+@import "labels"
+@import "badges"
+@import "jumbotron"
+@import "thumbnails"
+@import "alerts"
+@import "progress-bars"
+@import "media"
+@import "list-group"
+@import "panels"
+@import "responsive-embed"
+@import "wells"
+@import "close"
 
-// Components: Popovers
+// Components w/ JavaScript
 @import "modals"
 @import "tooltip"
 @import "popovers"
-
-// Components: Misc
-@import "thumbnails"
-@import "labels"
-@import "badges"
-@import "progress-bars"
-@import "accordion"
 @import "carousel"
-@import "hero-unit"
-
-// Custom
-@import "custom" unless $h5bp == true
-@import "custom-responsive" unless $h5bp == true
 
 // Utility classes
-@import "utilities" // Has to be last to override when necessary
+@import "responsive-utilities"
