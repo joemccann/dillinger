@@ -1,0 +1,176 @@
+// list helper functions
+// 0.9.3 -- "list()" now deprecated in favor of "zip()".
+// 0.9.5 -- "zip()" now deprecated as well: single-pair lists are handled automatically
+
+@function list($args...) {
+  $output: ();
+  @each $arg in $args { $output: append($output, $arg, 'comma'); }
+  @return $output;
+}
+@function slice($list, $start: 1, $end: length($list), $sep: 'comma') {
+  $output: ();
+  @for $i from $start through $end {
+    $output: append($output, nth($list, $i), $sep); }
+  @return $output;
+}
+@function set-nth($list, $index, $value, $sep: 'comma') {
+  $length: length($list); $output: ();
+  @if $index > $length or $index <= 0 { @return $list; }
+  @if $index > 1 { @for $i from 1 through $index - 1 { $output: append($output, nth($list, $i), $sep); } }
+  $output: append($output, $value, $sep);
+  @if $length > 1 { @for $i from $index + 1 through $length { $output: append($output, nth($list, $i), $sep); } }
+  @return $output;
+}
+
+// list-map helper functions
+// 0.9.3 -- key() and value() tentatively added as alternatives to 'tuple-' named funcs
+// 0.9.6 -- added better error handling; aliased to single version of each
+
+@function tuple-key($tuple) { @if length($tuple) < 1 { @return null; } @else { @return nth($tuple, 1); } }
+@function tuple-value($tuple) { @if length($tuple) < 2 { @return null; } @else { @return nth($tuple, 2); } }
+@function key($tuple) { @return tuple-key($tuple); }
+@function value($tuple) { @return tuple-value($tuple); }
+
+// 0.9.5 -- added list-map-check()
+
+@function list-map-check($list) { @if length($list) == 2 and length(nth($list, 1)) == 1 { @return append((), $list, 'comma'); } @return $list; }
+
+// list-map versions of list-map-keys(), -values() and -has-key() functions
+// 0.9.5 -- now all handle single- or double-wrapped list-maps (single-pair case) automatically
+// 0.9.5 -- added map-prev-key() and map-next-key() functions
+
+@function map-keys($list...) {
+  @if length($list) == 1 { $list: list-map-check($list...); }
+  @else { $list: list-map-check($list); } $output: ();
+  @each $tuple in $list { $output: append($output, tuple-key($tuple), 'comma'); }
+  @return $output;
+}
+@function map-values($list...) {
+  @if length($list) == 1 { $list: list-map-check($list...); }
+  @else { $list: list-map-check($list); } $output: ();
+  @each $tuple in $list { $output: append($output, tuple-value($tuple), 'comma'); }
+  @return $output;
+}
+@function map-has-key($list, $key) {
+  $list: list-map-check($list);
+  @each $tuple in $list { @if tuple-key($tuple) == $key { @return true; } }
+  @return false;
+}
+@function map-prev-key($list, $key) {
+  $list: list-map-check($list); $keys: map-keys($list);
+  @return nth($keys, index($keys, $key) - 1);
+}
+@function map-next-key($list, $key) {
+  $list: list-map-check($list); $keys: map-keys($list);
+  @return nth($keys, index($keys, $key) + 1);
+}
+
+// list-map versions of list-map-get(), -merge() and -remove()
+// 0.9.5 -- list-map-check() has been integrated to handle single-pair inputs, and give correct outputs
+
+@function map-get($list, $key, $check: true) {
+  @if $check { $list: list-map-check($list); } @each $tuple in $list {
+    @if tuple-key($tuple) == $key { @return list-map-check(tuple-value($tuple)); } }
+   // @if tuple-key($tuple) == $key { @return list-map-check($tuple); } }
+  @return null;
+}
+@function map-merge($list1, $list2, $check: true) {
+  @if $check { $list1: list-map-check($list1); $list2: list-map-check($list2); }
+  $keys1: map-keys($list1);
+  @each $tuple in $list2 {
+    $index: index($keys1, tuple-key($tuple));
+    @if $index { $list1: set-nth($list1, $index, $tuple); }
+    @else { $list1: append($list1, $tuple, 'comma'); } }
+  @return $list1;
+}
+@function map-remove($list, $key) {
+  $list: list-map-check($list);
+  $keys: map-keys($list); $output: ();
+  @for $n from 1 through length($list) {
+    @if nth($keys, $n) != $key { $output: append($output, nth($list, $n), 'comma'); } }
+  @return $output;
+}
+
+// deep/nested map functions: list-map-get-z() and list-map-merge-z()
+// 0.9.5 -- list-map-check() has been integrated, implicitly or explicitly
+
+@function map-get-z($list, $keys...) {
+  @if $list == null { @return null; }
+  $length: length($keys);
+  $list: map-get($list, nth($keys, 1));
+  @if $length > 1 {
+    @for $n from 2 through $length {
+      @if $list == null { @return null; }
+      $list: map-get($list, nth($keys, $n), false); }
+    @return $list; }
+  @else { @return $list; }
+}
+@function map-merge-z($list, $keys-and-value...) {
+  $arg-length: length($keys-and-value);
+  $value: nth($keys-and-value, $arg-length);
+  $key-length: $arg-length - 1;
+  $list: list-map-check($list);
+  @if $key-length == 0 {
+    $value: if(type-of($value) == 'list', map-merge($list, list-map-check($value), false), map-merge($list, append((), $value (), 'comma'), false)); }
+  @else { $start: 1; @if type-of($value) == 'list' { $start: 0; $value: list-map-check($value); }
+    @for $i from $start through $key-length {
+      $new-list: (); $old-list: ();
+      @if $i == 0 { $new-list: $value; } @else { $new-list: append((), nth($keys-and-value, $key-length + 1 - $i) $value, 'comma'); }
+      @if $i == $key-length { $old-list: $list; } @else { $old-list: map-get-z($list, slice($keys-and-value, 1, $key-length - $i)...) or (); }
+      $value: map-merge($old-list, $new-list); } }
+  @return $value;
+}
+
+// aliases added as of 0.9.2: unify and replace map-*() and map-*-z() variants
+
+@function get($args...) { @return map-get-z($args...); }
+@function merge($args...) { @return map-merge-z($args...); }
+@function set($args...) { @return map-merge-z($args...); }
+
+// new as of 0.9.5: map-inspect()
+
+@function map-inspect($list...) {
+  @if length($list) == 1 { $list: list-map-check($list...); }
+  @else { $list: list-map-check($list); }
+  $output: '('; $i: 1;
+  @each $tuple in $list {
+    @if length($tuple) != 2 {
+      $output: $output + '#{$tuple}'; }
+    @else {
+      $key: nth($tuple, 1);
+      $value: nth($tuple, 2);
+      @if type-of($value) == 'list' { $output: $output + '#{$key} #{map-inspect($value)}'; }
+      @else { $output: $output + '#{$key} #{$value}'; } }
+    @if $i < length(map-keys($list)) { $output: $output + ', '; }
+    $i: $i + 1;
+  }
+  @return $output + ')';
+}
+
+// new as of 0.9.9: map-pretty()
+$cr: '
+';
+$tab: '  ';
+@function map-pretty($list, $level: 1) {
+  @if length($list) == 1 { $list: list-map-check($list...); }
+  @else { $list: list-map-check($list); }
+  $indent: $tab; $outdent: $tab;
+  @for $n from 1 through $level { $indent: $indent + $tab; }
+  @for $n from 1 through $level - 1 { $outdent: $outdent + $tab; }
+  $output: '(' + $cr + $indent; $i: 1;
+  @each $tuple in $list {
+    @if length($tuple) != 2 {
+      $output: $output + '#{$tuple}'; }
+    @else {
+      $key: nth($tuple, 1); $value: nth($tuple, 2);
+      @if type-of($value) == 'list' { $output: $output + '#{$key} #{map-pretty($value, $level+1)}'; }
+      @else { $output: $output + '#{$key} #{$value}'; } }
+    @if $i < length(map-keys($list)) { $output: $output + ',' + $cr + $indent; }
+    $i: $i + 1;
+  }
+  // @return unquote($output + $cr + $outdent + ')'); // replace last line with this one for unquoted output in libsass
+  @return $output + $cr + $outdent + ')';
+}
+// aliases of above
+@function map-inspect-pretty($list...) { @return map-pretty($list...); }
+@function map-inspect-p($list...) { @return map-pretty($list...); }

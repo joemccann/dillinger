@@ -1,0 +1,176 @@
+// *************************************
+//
+//   Config
+//   -> Fonts, Variables
+//
+// *************************************
+
+$debug: true;
+
+// -------------------------------------
+//   @font-face
+// -------------------------------------
+
+// ----- Open Sans ----- //
+
+// +font-face('OpenSans', 'OpenSans')
+// +font-face('OpenSans', 'OpenSansBold', bold)
+// +font-face('OpenSans', 'OpenSansItalic', normal, italic)
+
+// -------------------------------------
+//   Colors
+// -------------------------------------
+
+// ----- Palette ----- //
+
+$plum: #4e4e5b;
+
+// ----- Base ----- //
+
+$c-background: #fafafa;
+$c-background-invert: invert($c-background);
+$c-border: lighten($plum, 30%);
+$c-highlight: $plum;
+$c-subdue: lighten($plum, 40%);
+$c-text-invert: white;
+$c-text: #444444;
+
+// ----- Components ----- //
+
+// ...
+
+// ----- Structures ----- //
+
+// ...
+
+// -------------------------------------
+//   Base
+// -------------------------------------
+
+// ----- Typography ----- //
+
+$base-font-family:         Cambria, Georgia, serif;
+$base-font-family-heading: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$base-font-family-serif:   Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+
+$base-font-size:    16px;
+$base-line-height:  25px;
+// $base-font-unit: rem;
+
+$bodytype: (
+  font-family $base-font-family,
+  regular 400,
+  bold 600,
+  italic italic,
+  cap-height .68
+);
+
+$headingtype: (
+  font-family $base-font-family-heading,
+  regular 400,
+  bold 600,
+  cap-height .70
+);
+
+$monospacetype: (
+  font-family $base-font-family-serif,
+  regular 400,
+  cap-height .68
+);
+
+
+// Root font-sizes for each breakpoint. Set to half desired line-height of body text.
+// ! Make sure to have as many sizes as breakpoints above.
+$rootsizes: (
+  rootsize-0 14,    // 24px line-height body text
+  rootsize-1 14,    // 28px line-height body text
+  rootsize-2 14,    // 30px line-height body text
+  rootsize-3 14,    // 32px line-height body text
+  rootsize-4 14    // 36px line-height body text
+);
+
+// Here are some cap-height sizes to get you started:
+// Georgia: 0.66, Times / Times New Roman: 0.65, Palatino: 0.52
+// Lucida Grande: 0.72, Helvetica: 0.65, Verdana: 0.76, Tahoma: 0.76
+
+// Modular scale
+// ---------------------------------------
+
+// Setting responsive modular-scales. Use appropriate scales for viewport sizes.
+$modular-scale: (
+  // Major Third http://modularscale.com/scale/?px1=16&px2=28&ra1=1.25&ra2=0
+  scale-0 scale-range(14, 1.414, 32, -3, -2),
+  // Major Third http://modularscale.com/scale/?px1=17&px2=30&ra1=1.25&ra2=0
+  scale-1 scale-range(14, 1.414, 32, -3, -2),
+  // Major Third http://modularscale.com/scale/?px1=18&px2=32&ra1=1.25&ra2=0
+  scale-2 scale-range(14, 1.414, 32, -3, -2),
+  // Perfect Fourth http://modularscale.com/scale/?px1=16&px2=32&ra1=1.333&ra2=0
+  scale-3 scale-range(14, 1.414, 32, -3, -2),
+  // Aug. Fourth http://modularscale.com/scale/?px1=22&px2=50&ra1=1.414&ra2=0
+  scale-4 scale-range(14, 1.414, 32, -3, -2)
+);
+
+
+// ----- Borders & Box Shadow ----- //
+
+$base-border-radius: 3px;
+$base-border-style:  solid;
+$base-border-width:  2px;
+$base-border:        $base-border-width $base-border-style $c-border;
+$base-box-shadow:    0 2px 0 rgba($c-text, .25);
+
+// -------------------------------------
+//   Components
+// -------------------------------------
+
+// ----- Grid ----- //
+
+$grid-palm:    300px;
+$grid-mobile:  400px;
+$grid-tablet:  660px;
+$grid-desktop: 960px;
+
+$grid-gutter:         20px;
+$grid-gutter-mobile:  $grid-gutter;
+$grid-gutter-tablet:  20px;
+$grid-gutter-desktop: 24px;
+// $g-xl:             1440px;
+
+// ----- Breakpoints ----- //
+
+// Provide pixel values
+$mobile:     440px;
+$tablet:     740px;
+$desktop:    1000px;
+$widescreen: 1400px;
+
+// Breakpoint sizes in ems. Add more values here to add more breakpoints.
+// Change names if you prefer, it wont break the mixin as long as they are strings not just numbers.
+// Do not change the ordner though, and always add a breakpoint
+// Note: not relative to root font-size.
+
+$breakpoints: (
+  break-zero 0px,     // 0px       Mobile first
+  mobile     $mobile,   // 440px   ~ Small Tablet or Landscape Mobile
+  tablet     $tablet,   // 700px   ~ Tablet
+  desktop    $desktop,  // 1000px  ~ Desktop
+  widescreen $widescreen   // 1400px  ~ Large desktop up
+);
+
+
+// Control the line-length with max-width values for the container.
+// Aim for 75–100 characters a line when possible, at smaller sizes type size is more important.
+// ! Make sure to have as many widths as breakpoints above.
+$maxwidths: (
+  maxwidth-0 500,  // 500px wide
+  maxwidth-1 550,  // 550px wide
+  maxwidth-2 600,  // 600px wide
+  maxwidth-3 680,  // 680px wide
+  maxwidth-4 750   // 750px wide
+);
+
+// -------------------------------------
+//   Structures
+// -------------------------------------
+
+// ...

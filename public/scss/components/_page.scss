@@ -1,0 +1,56 @@
+// *************************************
+//
+//   Page
+//   -> Page Specific
+//      * http://jsfiddle.net/necolas/rZvEF/
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .page[.page--flag]
+//   .page-media
+//     / ...
+//   .page-content
+//     / ...
+//
+// *************************************
+
+.page {
+  margin: 0 auto;
+  max-width: 90%;
+
+  @include from('mobile') {
+    max-width: $grid-mobile;
+  }
+
+  @include from('tablet') {
+    max-width: $grid-tablet;
+  }
+
+  @include from('desktop') {
+    max-width: $grid-desktop;
+  }
+}
+
+
+#app_wrap > #editor {
+  position: absolute;
+  margin-right: 5px;
+  top: 50px;
+  left: 10px;
+  bottom: 10px;
+  right: 50%;
+}
+
+#app_wrap > #preview {
+  position: absolute;
+  margin-left: 5px;
+  padding: 20px;
+  left: 50%;
+  bottom: 10px;
+  right: 10px;
+  top: 50px;
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.9);
+}

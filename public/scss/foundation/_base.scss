@@ -1,0 +1,136 @@
+// *************************************
+//
+//   Base
+//   -> Tag-level settings
+//
+// *************************************
+
+html {
+  @include rootsize;
+  background: $c-background;
+  color: $c-text;
+  font-family: $base-font-family;
+}
+
+body {
+  @include fontsize(zeta, all);
+  font-family: unquote(map-get($bodytype, font-family));
+  font-weight: map-get($bodytype, regular);
+  line-height: 2rem;
+
+  @if $debug == true {
+    background: linear-gradient(
+      to bottom,
+      rgba(50, 50, 50, .1) 0,
+      rgba(50, 50, 50, .2) 1px,
+      rgba(255, 255, 255, 0) 1px,
+      rgba(255, 255, 255, 0) 2px
+    );
+    background-size: 100% 1rem;
+  }
+}
+
+// -------------------------------------
+//   Block Content
+// -------------------------------------
+
+ul,
+ol {
+  @include baseline(zeta, $bodytype, 2, 2, all);
+}
+
+li {
+  font-feature-settings: 'kern' 1, 'onum' 1, 'liga' 1;
+  margin-left: 2rem;
+}
+
+li > ul,
+li > ol {
+  margin-bottom: 0;
+}
+
+p {
+  @include baseline($fontsize: zeta, $font: $bodytype, $lineheight: 2, $below: 2, $breakpoint: all);
+  font-feature-settings: 'kern' 1, 'onum' 1, 'liga' 1;
+  margin-top: 0;
+}
+
+blockquote {
+  margin: 0;
+
+  p {
+    @include sp(delta, $bodytype, 3, 3, all);
+    font-style: map-get($bodytype, italic);
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+th,
+td {
+  padding: $base-line-height / 2;
+}
+
+// ----- Headings ----- //
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: unquote(map-get($headingtype, font-family));
+  font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
+  font-style: normal;
+  font-weight: map-get($headingtype, bold);
+  margin-top: 0;
+}
+
+h1 {
+  @include sp($fontsize: alpha, $font: $headingtype, $lineheight: 3, $below: 1, $breakpoint: all);
+}
+
+h2 {
+  @include sp(beta, $headingtype, 3, 1, all);
+}
+
+h3 {
+  @include sp(gamma, $headingtype, 3, 1, all);
+}
+
+h4 {
+  @include sp(delta, $headingtype, 2, 1, all);
+}
+
+h5 {
+  @include sp(epsilon, $headingtype, 2, 0, all);
+}
+
+h6 {
+  @include sp(zeta, $headingtype, 2, 0, all);
+}
+
+// -------------------------------------
+//   Inline Content
+// -------------------------------------
+
+// ----- Links ----- //
+
+a {
+  border-bottom: $base-border;
+  color: $c-highlight;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    border-bottom-color: $c-highlight;
+    color: $c-subdue;
+  }
+}
+
+// ----- Images ----- //
+
+img {
+  height: auto;
+  max-width: 100%;
+}
