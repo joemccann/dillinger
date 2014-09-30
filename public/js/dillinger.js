@@ -5,7 +5,7 @@
     , githubUser
     , paperImgPath = '/img/notebook_paper_200x200.gif'
     , profile = {
-        theme: 'ace/theme/idle_fingers'
+        theme: 'ace/theme/monokai'
       , showPaper: false
       , currentFile: ''
       , autosave: {
