@@ -22,7 +22,7 @@
           filepath: '/Dillinger/'
         }
       , local_files: { "Untitled Document": "" }
-      , editing: 'markdown-gfm'
+      , editing: 'markdown'
       , editors: {
         'markdown-gfm': { type: 'markdown-gfm', name: 'Github Markdown', fileExts: ['.md', '.markdown', '.mdown'] }
       , 'markdown': { type: 'markdown', name: 'Markdown', fileExts: ['.md', '.markdown', '.mdown'] }

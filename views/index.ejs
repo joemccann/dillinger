@@ -1,13 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include head %>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title><%= title %></title>
+
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <meta name="author" content="<%= author %>">
+  <!--
+
+  Powered by:
+
+  '||''''|
+   ||  .   ... ...... ...... ..   ....  ....  ....
+   ||''|    '|..'  ||'  ||||' ''.|...||||. ' ||. '
+   ||        .|.   ||    |||    ||     . '|... '|..
+  .||.....|.|  ||. ||...'.||.    '|...'|'..|'|'..|'
+                   ||
+                   ||
+
+  using node.js version <%= node_version %>
+
+  -->
+
+  <!-- Spiders must use meta description -->
+  <meta name="robots" content="noodp, noydir">
+
+  <!-- Google Verfication -->
+  <meta name="google-site-verification" content="<%= googleWebmasterMeta %>" />
+
+  <!-- Viewport and mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="MobileOptimized" content="320">
+  <meta http-equiv="cleartype" content="on">
+
+
+  <!-- iOS web app -->
+  <!-- Note: more options here: https://gist.github.com/tfausak/2222823 -->
+
+  <!--
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="<%= title %>">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  -->
+
+  <!-- Icons -->
+  <!-- Note: One touch icon works but is a tad heavier (http://mathiasbynens.be/notes/touch-icons) -->
+
+  <!--
+  <link rel="apple-touch-iconprecomposed" sizes="152x152" href="assets/images/icons/apple-touch-icon-152x152.png">
+  <link rel="icon" href="assets/images/icons/favicon.png">
+  <meta name="msapplication-TileImage" content="assets/images/icons/wp-tile-icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  -->
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link href="/css/app.css" rel="stylesheet">
+
+</head>
 <body>
-  <noscript>
-    <p>Oooooo, sorry that's the wrong answer. You actually need JavaScript to use Dillinger.</p>
-    <p>See, Dillinger is an application, not a web<em>site</em>. JavaScript is a requirement.</p>
-    <p>Be sure and come back when you have JavaScript enabled - It's 2014!!!!!!!!!!</p>
-  </noscript>
-<%- include body %>
-<%- include scripts %>
+
+  <%- include splashscreen %>
+  <%- include navbar %>
+  <%- include notification %>
+  <%- include editor %>
+  <%- include preview %>
+  <%- include scripts %>
+
 </body>
 </html>
