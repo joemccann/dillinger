@@ -35,6 +35,7 @@ app.configure(function() {
   app.locals.description = config.description || "Dillinger, the last Markdown Editor, ever.";
   if (config.googleWebmasterMeta) app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
   if (config.keywords) app.locals.keywords = config.keywords;
+  if (config.author) app.locals.author = config.author;
   app.locals.node_version = process.version.replace('v', '');
   app.locals.app_version = require('./package.json').version;
   app.locals.env = process.env.NODE_ENV;
