@@ -45,7 +45,7 @@
     backface-visibility: hidden;
   }
 
-  &.on,
+  .open-menu &,
   &:hover {
     span {
       background-color: transparent;

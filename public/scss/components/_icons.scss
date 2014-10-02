@@ -16,7 +16,6 @@
   margin: 0 auto;
   width: 36px;
   height: 36px;
-  background-color: $c-background-navbar;
   border-radius: 3px;
   text-align: center;
 
@@ -27,6 +26,7 @@
   }
 
   &-preview {
+    background-color: $c-background-navbar;
     line-height: 40px;
     svg  {
       width: 19px;
@@ -35,11 +35,20 @@
   }
 
   &-settings {
+    background-color: $c-background-navbar;
     line-height: 44px;
     svg {
       width: 18px;
       height: 18px;
     }
+  }
+
+  &-link {
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+    margin-right: 24px;
+    text-align: right;
   }
 }
 

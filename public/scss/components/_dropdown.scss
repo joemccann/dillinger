@@ -30,11 +30,25 @@
 
   a {
     text-transform: none;
+    display: block;
     color: $c-dropdown-link;
+    @include clearfix;
+  }
+
+  span {
+    float: left;
+  }
+
+  .icon {
+    float: right;
   }
 
   .open & {
     display: block;
+  }
+
+  .unlinked .icon {
+    opacity: .3;
   }
 }
 

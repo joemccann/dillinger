@@ -42,6 +42,12 @@ $c-background-sidebar: #2B2F36;
 
 // ----- Components ----- //
 
+$z-index: (
+  sidebar 1,
+  page 2,
+  navbar 3
+);
+
 // ...
 
 // ----- Structures ----- //
@@ -178,5 +184,9 @@ $maxwidths: (
 // -------------------------------------
 //   Structures
 // -------------------------------------
+
+$transitions: (
+  menu #{all .25s ease-in-out}
+);
 
 // ...

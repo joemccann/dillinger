@@ -23,7 +23,7 @@
     color: $c-links;
     text-transform: uppercase;
     font-family: $base-font-family-heading;
-
+    outline: none;
     &:hover {
       color: $c-highlight;
     }
@@ -135,7 +135,7 @@
     }
   }
 
-  @include to('tablet') {
+  @include from('mobile') {
     .menu-item {
       display: block;
     }

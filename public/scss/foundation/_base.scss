@@ -10,6 +10,7 @@ html {
   background: $c-background;
   color: $c-text;
   font-family: $base-font-family;
+  height: 100%;
 }
 
 body {
@@ -17,6 +18,7 @@ body {
   font-family: unquote(map-get($bodytype, font-family));
   font-weight: map-get($bodytype, regular);
   line-height: 2rem;
+  height: 100%;
 
   @if $debug == true {
     background: linear-gradient(

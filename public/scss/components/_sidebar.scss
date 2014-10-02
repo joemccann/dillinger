@@ -13,9 +13,10 @@
 
 .sidebar {
   overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+  // -webkit-overflow-scrolling: touch;
   width: 285px;
   height: 100%;
+  padding-right: 15px;
 
   &-wrapper {
     width: 270px;
@@ -25,6 +26,7 @@
     left: 0;
     top: 0;
     overflow: hidden;
+    z-index: map-get($z-index, sidebar);
   }
 
   &-branding {

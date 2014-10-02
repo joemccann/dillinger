@@ -14,13 +14,19 @@
 // *************************************
 
 .navbar {
+  @include clearfix;
   background-color: $c-background-navbar;
   height: 51px;
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  @include clearfix;
+  z-index: map-get($z-index, navbar);
+  transition: map-get($transitions, menu);
+
+  .open-menu & {
+    transform: translateX(270px);
+  }
 
   &-brand {
     float: left;

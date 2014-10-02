@@ -1,0 +1,1 @@
+(function(){$(function(){return $(".menu-sidebar").on("click",".menu-item",function(){var n;return n=$(this),n.toggleClass("open")}),$(".toggle").on("click",function(){return $("body").toggleClass("open-menu")})})}).call(this);
