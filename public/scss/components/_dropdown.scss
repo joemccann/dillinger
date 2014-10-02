@@ -1,0 +1,43 @@
+// *************************************
+//
+//   Dropdown
+//   -> Navigation Dropdown
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .dropdown[.open]
+//
+// *************************************
+
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 51px;
+  list-style: none;
+  background-color: $c-background-highlight;
+  width: 188px;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin: 32px 0 32px;
+    padding: 0 0 0 32px;
+    line-height: 1;
+  }
+
+  a {
+    text-transform: none;
+    color: $c-dropdown-link;
+  }
+
+  .open & {
+    display: block;
+  }
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------

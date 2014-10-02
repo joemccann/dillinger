@@ -1,0 +1,35 @@
+// *************************************
+//
+//   Sidebar
+//   -> Sidebar
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .sidebar
+//
+// *************************************
+
+.sidebar {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  width: 285px;
+  height: 100%;
+
+  &-wrapper {
+    width: 270px;
+    background-color: $c-background-sidebar;
+    min-height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+  }
+
+  &-branding {
+    width: 160px;
+    padding: 0;
+    margin: 16px auto;
+  }
+}

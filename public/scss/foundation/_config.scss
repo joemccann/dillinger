@@ -23,17 +23,22 @@ $debug: true;
 
 // ----- Palette ----- //
 
-$plum: #4e4e5b;
+$plum: #35D7BB;
 
 // ----- Base ----- //
 
 $c-background: #fafafa;
-$c-background-invert: invert($c-background);
 $c-border: lighten($plum, 30%);
-$c-highlight: $plum;
+$c-highlight: #35D7BB;
 $c-subdue: lighten($plum, 40%);
 $c-text-invert: white;
-$c-text: #444444;
+$c-text: #373D49;
+$c-links: #A0AABF;
+$c-icon: #D3DAEA;
+$c-dropdown-link: #D0D6E2;
+$c-background-highlight: #1D212A;
+$c-background-navbar: $c-text;
+$c-background-sidebar: #2B2F36;
 
 // ----- Components ----- //
 
@@ -49,9 +54,10 @@ $c-text: #444444;
 
 // ----- Typography ----- //
 
-$base-font-family:         Cambria, Georgia, serif;
+$base-font-family:         Georgia, Cambria, serif;
 $base-font-family-heading: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $base-font-family-serif:   Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+$base-font-family-monospace:   "Ubuntu Mono", Monaco;
 
 $base-font-size:    16px;
 $base-line-height:  25px;
@@ -73,7 +79,7 @@ $headingtype: (
 );
 
 $monospacetype: (
-  font-family $base-font-family-serif,
+  font-family $base-font-family-monospace,
   regular 400,
   cap-height .68
 );

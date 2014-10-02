@@ -40,6 +40,22 @@
 //   Mixins
 // -------------------------------------
 
+@mixin clearfix {
+  &:after {
+    content:"";
+    display:table;
+    clear:both;
+  }
+}
+
+@mixin sr-only {
+  visibility: hidden;
+  text-overflow: 110%;
+  overflow: hidden;
+  top: -100px;
+  position: absolute;
+}
+
 
 // -------------------------------------
 //   Extends
@@ -73,6 +89,7 @@
     width: 0;
   }
 }
+
 
 // -------------------------------------
 //   Animations

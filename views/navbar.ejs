@@ -1,33 +1,39 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Dillinger</a>
-    </div>
+<div class="navbar">
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <%- include menu/local_files %>
-        </li>
-        <li class="dropdown">
-          <%- include menu/one_drive %>
-        </li>
-        <li class="dropdown">
-          <%- include menu/github %>
-        </li>
-        <li class="dropdown">
-          <%- include menu/google_drive %>
-        </li>
-        <li class="dropdown">
-          <%- include menu/dropbox %>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+  <a href="#sidebar" class="toggle">
+    <span></span>
+  </a>
+
+  <h1 class="navbar-brand">
+    <a class="brand" href="/"><%- include icons/branding %></a>
+  </h1>
+
+  <nav class="nav nav-right">
+    <ul class="menu menu-utilities">
+      <li class="menu-item has-dropdown">
+        <a href="#" data-toggle="dropdown">Export as <span class="caret"></span></a>
+        <%- include dropdowns/export_as %>
+      </li>
+      <li class="menu-item has-dropdown">
+        <a href="#" data-toggle="dropdown">Save to <span class="caret"></span></a>
+        <%- include dropdowns/save_to %>
+      </li>
+      <li class="menu-item has-dropdown">
+        <a href="#" data-toggle="dropdown">Import from <span class="caret"></span></a>
+        <%- include dropdowns/import_from %>
+      </li>
+      <li class="menu-item menu-item-icon menu-item-preview">
+        <a class="menu-link menu-link-preview" href="#preview">
+          <i class="icon icon-preview"><%- include icons/preview %></i>
+          <span>Preview</span>
+        </a>
+      </li>
+      <li class="menu-item menu-item-icon menu-item-settings">
+        <a class="menu-link menu-link-settings" href="#settings">
+          <i class="icon icon-settings"><%- include icons/settings %></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

@@ -13,6 +13,13 @@
 @import 'vendor/bourbon/functions/modular-scale';
 
 // -------------------------------------
+//   Vendor
+// -------------------------------------
+
+// Third-party style imports, if needed
+@import 'vendor/bootstrap-sass-3.2.0/assets/stylesheets/bootstrap';
+
+// -------------------------------------
 //   Foundation
 // -------------------------------------
 
@@ -30,6 +37,15 @@
 
 @import 'components/grid';
 @import 'components/page';
+@import 'components/icons';
+@import 'components/navbar';
+@import 'components/nav';
+@import 'components/menu';
+@import 'components/dropdown';
+@import 'components/brand';
+@import 'components/toggle';
+@import 'components/caret';
+@import 'components/sidebar';
 // @import 'components/bucket';
 // @import 'components/card';
 // @import 'components/cell';
@@ -41,12 +57,6 @@
 // -------------------------------------
 
 // @import 'structures/example';
-
-// -------------------------------------
-//   Vendor
-// -------------------------------------
-
-// Third-party style imports, if needed
 
 // -------------------------------------
 //   Foundation - Tools
