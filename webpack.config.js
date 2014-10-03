@@ -17,6 +17,7 @@ module.exports = {
     loaders: [
       // required to write "require('./style.css')"
       // { test: /\.css$/,    loader: "style-loader!css-loader" },
+      { test: /\.handlebars$/,    loader: "handlebars-loader" },
       { test: /\.coffee$/,    loader: "coffee-loader" }
 
       // required for bootstrap icons
@@ -27,6 +28,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ["", ".webpack.js", ".web.js", ".coffee", ".ejs", ".js"]
+    extensions: ["", ".webpack.js", ".web.js", ".coffee", ".handlebars", ".js"]
   }
 };
