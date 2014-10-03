@@ -27,6 +27,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ["", ".webpack.js", ".web.js", ".coffee", ".js"]
+    extensions: ["", ".webpack.js", ".web.js", ".coffee", ".ejs", ".js"]
   }
 };
