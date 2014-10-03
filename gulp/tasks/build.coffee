@@ -2,8 +2,15 @@
 gulp     = require("gulp")
 sequence = require("run-sequence")
 
-tasks = [
-  "webpack"
+devTasks = [
+  "webpack:dev"
+  "sass"
+  # "images"
+  # "copy"
+]
+
+buildTasks = [
+  "webpack:build"
   "sass"
   # "images"
   # "copy"
@@ -11,7 +18,7 @@ tasks = [
 
 if global.isProduction
   gulp.task "build", ->
-    sequence tasks, "uncss", "htmlminify", "cssminify"
+    sequence buildTasks #, "uncss", "htmlminify", "cssminify"
 else
   # tasks.push "html"
-  gulp.task "build", tasks
+  gulp.task "build", devTasks

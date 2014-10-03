@@ -29,5 +29,6 @@ module.exports = {
   },
   resolve: {
     extensions: ["", ".webpack.js", ".web.js", ".coffee", ".handlebars", ".js"]
-  }
+  },
+  plugins: []
 };
