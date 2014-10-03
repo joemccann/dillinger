@@ -1,0 +1,47 @@
+// *************************************
+//
+//   Ace Editor
+//   -> Styling of the Ace Editor
+//
+//
+// *************************************
+
+#editor {
+  @include fontsize(zeta, all);
+  font-family: unquote(map-get($monospacetype, font-family));
+  font-weight: map-get($monospacetype, regular);
+  line-height: 2rem;
+
+  // position: absolute;
+  // top: 56px;
+  // left: 0;
+  // bottom: 100px;
+  // right: 0;
+  width: 100%;
+  height: calc(100vh - 188px);
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .structure--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .structure.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-structure
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .structure-scaffolding
+
+}

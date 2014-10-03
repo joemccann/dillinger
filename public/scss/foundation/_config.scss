@@ -5,7 +5,7 @@
 //
 // *************************************
 
-$debug: true;
+$debug: false;
 
 // -------------------------------------
 //   @font-face
@@ -28,7 +28,7 @@ $plum: #35D7BB;
 // ----- Base ----- //
 
 $c-background: #fafafa;
-$c-border: lighten($plum, 30%);
+$c-border: #E8E8E8;
 $c-highlight: #35D7BB;
 $c-subdue: lighten($plum, 40%);
 $c-text-invert: white;
@@ -66,8 +66,8 @@ $base-font-family-heading: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial
 $base-font-family-serif:   Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
 $base-font-family-monospace:   "Ubuntu Mono", Monaco;
 
-$base-font-size:    16px;
-$base-line-height:  25px;
+$base-font-size:    14px;
+$base-line-height:  24px;
 // $base-font-unit: rem;
 
 $bodytype: (
@@ -81,6 +81,7 @@ $bodytype: (
 $headingtype: (
   font-family $base-font-family-heading,
   regular 400,
+  semibold 500,
   bold 600,
   cap-height .70
 );
@@ -88,7 +89,7 @@ $headingtype: (
 $monospacetype: (
   font-family $base-font-family-monospace,
   regular 400,
-  cap-height .68
+  cap-height .64
 );
 
 
@@ -112,15 +113,15 @@ $rootsizes: (
 // Setting responsive modular-scales. Use appropriate scales for viewport sizes.
 $modular-scale: (
   // Major Third http://modularscale.com/scale/?px1=16&px2=28&ra1=1.25&ra2=0
-  scale-0 scale-range(14, 1.414, 32, -3, -2),
+  scale-0 scale-range(14, 1.25, 36, -3, -2),
   // Major Third http://modularscale.com/scale/?px1=17&px2=30&ra1=1.25&ra2=0
-  scale-1 scale-range(14, 1.414, 32, -3, -2),
-  // Major Third http://modularscale.com/scale/?px1=18&px2=32&ra1=1.25&ra2=0
-  scale-2 scale-range(14, 1.414, 32, -3, -2),
-  // Perfect Fourth http://modularscale.com/scale/?px1=16&px2=32&ra1=1.333&ra2=0
-  scale-3 scale-range(14, 1.414, 32, -3, -2),
-  // Aug. Fourth http://modularscale.com/scale/?px1=22&px2=50&ra1=1.414&ra2=0
-  scale-4 scale-range(14, 1.414, 32, -3, -2)
+  scale-1 scale-range(14, 1.25, 36, -3, -2),
+  // Major Third http://modularscale.com/scale/?px1=18&px2=36&ra1=1.25&ra2=0
+  scale-2 scale-range(14, 1.25, 36, -3, -2),
+  // Perfect Fourth http://modularscale.com/scale/?px1=16&px2=36&ra1=1.333&ra2=0
+  scale-3 scale-range(14, 1.25, 36, -3, -2),
+  // Aug. Fourth http://modularscale.com/scale/?px1=22&px2=50&ra1=1.25&ra2=0
+  scale-4 scale-range(14, 1.25, 36, -3, -2)
 );
 
 
@@ -143,10 +144,10 @@ $grid-mobile:  400px;
 $grid-tablet:  660px;
 $grid-desktop: 960px;
 
-$grid-gutter:         20px;
+$grid-gutter:         32px;
 $grid-gutter-mobile:  $grid-gutter;
-$grid-gutter-tablet:  20px;
-$grid-gutter-desktop: 24px;
+$grid-gutter-tablet:  32px;
+$grid-gutter-desktop: 32px;
 // $g-xl:             1440px;
 
 // ----- Breakpoints ----- //

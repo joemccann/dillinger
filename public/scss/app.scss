@@ -38,6 +38,7 @@
 @import 'components/grid';
 @import 'components/splashscreen';
 @import 'components/page';
+@import 'components/title';
 @import 'components/icons';
 @import 'components/navbar';
 @import 'components/nav';
@@ -47,6 +48,7 @@
 @import 'components/toggle';
 @import 'components/caret';
 @import 'components/sidebar';
+@import 'components/header';
 // @import 'components/bucket';
 // @import 'components/card';
 // @import 'components/cell';
@@ -58,6 +60,9 @@
 // -------------------------------------
 
 // @import 'structures/example';
+@import 'structures/split';
+@import 'structures/ace_editor';
+@import 'structures/preview';
 
 // -------------------------------------
 //   Foundation - Tools

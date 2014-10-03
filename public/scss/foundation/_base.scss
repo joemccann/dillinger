@@ -20,16 +20,6 @@ body {
   line-height: 2rem;
   height: 100%;
 
-  @if $debug == true {
-    background: linear-gradient(
-      to bottom,
-      rgba(50, 50, 50, .1) 0,
-      rgba(50, 50, 50, .2) 1px,
-      rgba(255, 255, 255, 0) 1px,
-      rgba(255, 255, 255, 0) 2px
-    );
-    background-size: 100% 1rem;
-  }
 }
 
 // -------------------------------------
@@ -38,12 +28,12 @@ body {
 
 ul,
 ol {
-  @include baseline(zeta, $bodytype, 2, 2, all);
+  @include baseline(zeta, $bodytype, 1, 1, all);
 }
 
 li {
   font-feature-settings: 'kern' 1, 'onum' 1, 'liga' 1;
-  margin-left: 2rem;
+  margin-left: 1rem;
 }
 
 li > ul,
@@ -61,10 +51,12 @@ blockquote {
   margin: 0;
 
   p {
-    @include sp(delta, $bodytype, 3, 3, all);
+    @include sp(zeta, $bodytype, 2, 1, all);
     font-style: map-get($bodytype, italic);
     padding-left: 1rem;
     padding-right: 1rem;
+    padding-bottom: 1rem;
+    border-left: 3px solid $c-links;
   }
 }
 

@@ -26,30 +26,20 @@
   z-index: map-get($z-index, page);
   transition: map-get($transitions, menu);
   background-color: #fff;
+  padding-top: 51px;
+
+  @if $debug == true {
+    background: linear-gradient(
+      to bottom,
+      rgba(200, 200, 200, 1) 0,
+      rgba(200, 200, 200, 1) 1px,
+      rgba(255, 255, 255, 1) 1px,
+      rgba(255, 255, 255, 1) 2px
+    );
+    background-size: 100% 1rem;
+  }
 
   .open-menu & {
     transform: translateX(270px);
   }
-}
-
-
-#editor {
-  position: absolute;
-  margin-right: 5px;
-  top: 50px;
-  left: 10px;
-  bottom: 10px;
-  right: 50%;
-}
-
-#preview {
-  position: absolute;
-  margin-left: 5px;
-  padding: 20px;
-  left: 50%;
-  bottom: 10px;
-  right: 10px;
-  top: 50px;
-  overflow: auto;
-  background: rgba(255, 255, 255, 0.9);
 }

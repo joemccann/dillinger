@@ -46,6 +46,41 @@
       letter-spacing: 1px;
     }
 
+    &--settings,
+    &--preview {
+      display: block;
+    }
+
+    &--save-to,
+    &--import-from,
+    &--documents {
+      &.in-sidebar {
+        display: block;
+      }
+    }
+
+    @include from('tablet') {
+      &--save-to,
+      &--import-from {
+        display: block;
+      }
+      &--save-to,
+      &--import-from {
+        &.in-sidebar {
+          display: none;
+        }
+      }
+    }
+
+    @include from('desktop') {
+      &--export-as {
+        display: block;
+      }
+      &--preview {
+        display: none;
+      }
+    }
+
     &.open {
       > a {
         background-color: $c-background-highlight;
@@ -53,7 +88,6 @@
     }
 
     &-icon {
-      display: block;
       span {
         @include sr-only;
       }
@@ -142,15 +176,4 @@
     }
   }
 
-  @include from('mobile') {
-    .menu-item {
-      display: block;
-    }
-  }
-
-/*   @include from('desktop') {
-  .menu-item-preview {
-    display: none;
-  }
-} */
 }
