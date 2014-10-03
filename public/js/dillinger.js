@@ -422,11 +422,7 @@
       // Immediately populate the preview <div>
       previewMd()
 
-    })
-
-    // Set/unset paper background image on preview
-    // TODO: FIX THIS BUG
-    $preview.css('backgroundImage', profile.showPaper ? 'url("'+paperImgPath+'")' : 'url("")' )
+    });
 
     // Set text for dis/enable autosave / word counter
     $autosave.html(profile.autosave.enabled ? '<i class="icon-ok"></i>&nbsp;Autosave is Enabled' : '<i class="icon-remove"></i>&nbsp;Autosave is Disabled')
@@ -1035,12 +1031,7 @@
         return false;
       })
 
-    $('#import_local_file')
-      .on('click', function() {
-        $('.dropdown').removeClass('open')
-        LocalFiles.search();
-        return false;
-      })
+    LocalFiles.search();
 
     $('#save_local_file')
       .on('click', function() {
@@ -1297,7 +1288,7 @@
 
     function _listMdFiles(files) {
 
-      var list = '<ul>'
+      var list = ''
 
       // Sort alpha
       files.sort(_alphaNumSort)
@@ -1309,17 +1300,9 @@
               + item + '</a></li>'
       })
 
-      list += '</ul>'
+      // $('.modal-header h3').text('Your Local Files')
 
-      $('.modal-header h3').text('Your Local Files')
-
-      $('.modal-body').html(list)
-
-      $('#modal-generic').modal({
-        keyboard: true
-        , backdrop: true
-        , show: true
-      })
+      $('.dropdown-documents').html(list)
 
       return false
 
