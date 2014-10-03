@@ -11,12 +11,6 @@
   font-family: unquote(map-get($monospacetype, font-family));
   font-weight: map-get($monospacetype, regular);
   line-height: 2rem;
-
-  // position: absolute;
-  // top: 56px;
-  // left: 0;
-  // bottom: 100px;
-  // right: 0;
   width: 100%;
   height: calc(100vh - 188px);
 

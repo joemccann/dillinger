@@ -45,20 +45,29 @@ do ($, window, document) ->
       Dillinger.initUI()
       Dillinger.addLayoutEvents()
       Dillinger.refreshPreview()
+      Dillinger.bindPreview()
+      return
 
     initEditor: ->
       Dillinger.Editor = ace.edit 'editor'
       Dillinger.Editor.getSession().setMode('ace/mode/markdown')
+      return
 
     initUI: ->
       Dillinger.Editor.getSession().setUseWrapMode(true)
       Dillinger.Editor.setShowPrintMargin(false)
       # Dillinger.Editor.setTheme 'ace/theme/monokai'
+      return
 
     refreshPreview: ->
       unmd = Dillinger.Editor.getSession().getValue()
       md = marked(unmd)
       Dillinger.$preview.html(md)
+      return
+
+    bindPreview: ->
+      Dillinger.$editor.on 'keyup', Dillinger.refreshPreview
+      return
 
     addLayoutEvents: ->
       $('.menu-sidebar').on 'click', '.menu-item', ->
@@ -67,6 +76,8 @@ do ($, window, document) ->
 
       $('.toggle').on 'click', ->
         $('body').toggleClass('open-menu')
+
+      return
 
 
   module.exports = Dillinger

@@ -18,7 +18,7 @@ bundleLogger     = require("../util/bundleLogger")
 handleErrors     = require("../util/handleErrors")
 
 webpackDevConfig         = Object.create(webpackConfig)
-webpackDevConfig.devtool = "source-map"
+webpackDevConfig.devtool = "eval"
 webpackDevConfig.debug   = true
 
 devCompiler = webpack(webpackDevConfig)
