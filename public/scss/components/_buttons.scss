@@ -1,0 +1,63 @@
+// *************************************
+//
+//   Buttons
+//   -> Buttons on Dillinger.io
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .btn[.btn--modifier](.is-state)(.has-context)
+//   .btn-scaffolding
+//
+// *************************************
+
+.btn {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  text-transform: uppercase;
+  font-weight: map-get($headingtype, semibold);
+  font-family: unquote(map-get($headingtype, font-family));
+  font-size: 14px;
+  text-shadow: 0 1px 1px darken($c-highlight, 20%);
+  padding: 16px 24px;
+  background-color: $c-highlight;
+  border-radius: 3px;
+  margin: 0 auto 16px;
+  line-height: 1;
+  color: #fff;
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+  &--new,
+  &--save {
+    display: block;
+    width: 238px;
+  }
+
+  &--save {
+    background-color: $c-button-save;
+    text-shadow: 0 1px 1px darken($c-button-save, 20%);
+  }
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .btn.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-btn
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .btn-scaffolding
+}

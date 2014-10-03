@@ -11,6 +11,7 @@
 
 @import 'vendor/sass-list-maps/sass-list-maps';
 @import 'vendor/bourbon/functions/modular-scale';
+@import 'vendor/highlight.js/solarized-dark';
 
 // -------------------------------------
 //   Vendor
@@ -49,6 +50,7 @@
 @import 'components/caret';
 @import 'components/sidebar';
 @import 'components/header';
+@import 'components/buttons';
 // @import 'components/bucket';
 // @import 'components/card';
 // @import 'components/cell';
