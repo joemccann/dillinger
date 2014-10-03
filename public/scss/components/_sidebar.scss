@@ -12,11 +12,12 @@
 // *************************************
 
 .sidebar {
-  overflow-y: scroll;
+  overflow: scroll;
   // -webkit-overflow-scrolling: touch;
   width: 285px;
   height: 100%;
   padding-right: 15px;
+  padding-bottom: 15px;
 
   &-wrapper {
     width: 270px;

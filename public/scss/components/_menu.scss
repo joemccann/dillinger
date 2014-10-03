@@ -24,6 +24,7 @@
     text-transform: uppercase;
     font-family: $base-font-family-heading;
     outline: none;
+
     &:hover {
       color: $c-highlight;
     }
@@ -45,8 +46,8 @@
       letter-spacing: 1px;
     }
 
-    &.has-dropdown:hover {
-      a {
+    &.open {
+      > a {
         background-color: $c-background-highlight;
       }
     }
@@ -63,7 +64,7 @@
       }
 
       &:hover {
-        a {
+        > a {
           background-color: transparent;
         }
       }
@@ -98,6 +99,12 @@
       width: 100%;
       float: none;
       margin-bottom: 1px;
+
+      &.open {
+        > a {
+          background-color: $c-text;
+        }
+      }
     }
 
     .open {
