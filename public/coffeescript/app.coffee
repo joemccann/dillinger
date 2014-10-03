@@ -1,4 +1,4 @@
-do ($, window, document) ->
+do (window, document) ->
 
   'use strict'
 
