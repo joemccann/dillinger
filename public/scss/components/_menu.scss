@@ -106,7 +106,7 @@
   }
 
   .menu-link {
-    &:hover {
+    &.open {
       i {
         background-color: $c-background-highlight;
       }

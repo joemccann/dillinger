@@ -43,6 +43,11 @@
     text-shadow: 0 1px 1px darken($c-button-save, 20%);
   }
 
+  &--delete {
+    background-color: transparent;
+    font-size: 12px;
+  }
+
 // -------------------------------------
 //   States
 // -------------------------------------

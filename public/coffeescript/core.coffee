@@ -1,10 +1,9 @@
 
-window.jQuery      = require('jquery')
-ace         = require('brace')
-# keymaster = require('keymaster')
-marked      = require('marked')
-localFiles  = require('./localFiles')
-highlight   = require('highlight.js')
+window.jQuery = require('jquery')
+ace           = require('brace')
+# keymaster   = require('keymaster')
+marked        = require('marked')
+# highlight   = require('highlight.js')
 
 require 'brace/mode/markdown'
 require 'brace/theme/monokai'
@@ -22,34 +21,23 @@ do ($ = jQuery, window, document) ->
       Markdown:
         type: 'markdown'
         name: 'Markdown'
-        fileExts: ['.md', '.markdown', '.mdown']
-    Profile:
-      NightMode: false
-      CurrentFile: null
-      CurrentFileName: 'Untitled Document.md'
-      WordCount: true
-      AutoSave:
-        enabled: true
-        interval: 3000
-        fn: undefined
-      Github:
-        current_uri: ''
-        opts: {}
-      Dropbox:
-        filepath: '/Dillinger/'
-      local_files: {}
+        # fileExts: ['.md', '.markdown', '.mdown']
+    User: null
+    FileHandler: null
 
-    $preview:       $('#preview')
-    $editor:        $('#editor')
-    $documentName:  $('.title-document')
-    $documentList:  $('.dropdown.documents')
-    $wordcount:     $('.counter')
-    $saveDocButton: $('.btn--save')
-    $newDocButton:  $('.btn--new')
+    $preview:           $('#preview')
+    $editor:            $('#editor')
+    $documentName:      $('.title-document')
+    $documentList:      $('.dropdown.documents')
+    $wordcount:         $('.counter')
+    $saveDocButton:     $('.btn--save')
+    $newDocButton:      $('.btn--new')
+    $deleteDocButton:   $('.btn--delete')
+    $showPreviewButton: $('.menu-link-preview')
 
     init: ->
 
-      Dillinger.getUserProfile()
+      Dillinger.User.init()
 
       marked.setOptions
         gfm: true
@@ -59,8 +47,8 @@ do ($ = jQuery, window, document) ->
         smartLists: true
         smartypants: false
         langPrefix: 'lang-'
-        highlight: (code) ->
-          return highlight.highlightAuto(code).value
+        # highlight: (code) ->
+        #   return highlight.highlightAuto(code).value
 
       Dillinger.initEditor()
       Dillinger.initUI()
@@ -71,10 +59,12 @@ do ($ = jQuery, window, document) ->
       Dillinger.refreshWordCount()
       Dillinger.bindWordCount()
 
-
+      Dillinger.FileHandler.saveFile()
+      Dillinger.FileHandler.showFilesInSidebar()
+      # Dillinger.FileHandler.showFilesInSidebar()
       # localFiles.load()
-      localFiles.save(Dillinger.$documentName.text(), Dillinger.Editor.getSession().getValue())
-      Dillinger.$documentList.html localFiles.getList()
+      # localFiles.saveFile(Dillinger.$documentName.text(), Dillinger.Editor.getSession().getValue())
+      # Dillinger.$documentList.html localFiles.getFiles()
 
       Dillinger.bindLayoutEvents()
       return
@@ -84,7 +74,7 @@ do ($ = jQuery, window, document) ->
       Dillinger.Editor.getSession().setMode('ace/mode/markdown')
       Dillinger.Editor.getSession().setUseWrapMode(true)
       Dillinger.Editor.setShowPrintMargin(false)
-      Dillinger.Editor.getSession().setValue(Dillinger.Profile.CurrentFile or Dillinger.Editor.getSession().getValue())
+      Dillinger.Editor.getSession().setValue(Dillinger.User.Profile.CurrentFile or Dillinger.Editor.getSession().getValue())
       return
 
     initUI: ->
@@ -101,38 +91,21 @@ do ($ = jQuery, window, document) ->
       Dillinger.$editor.on 'keyup', Dillinger.refreshPreview
       return
 
-    getUserProfile: ->
-      try
-        p = JSON.parse(localStorage.Profile)
-        p = $.extend(true, Dillinger.Profile, p)
-      catch e
-        p = Dillinger.Profile
-      p
-
-    updateUserProfile: (obj) ->
-      localStorage.clear()
-      localStorage.Profile = JSON.stringify($.extend(true, Dillinger.Profile, obj))
-
-    saveFile: ->
-      Dillinger.updateUserProfile
-        CurrentFile: Dillinger.Editor.getSession().getValue()
-
-    autoSave: ->
-      if Dillinger.Profile.AutoSave.enabled is true
-        Dillinger.Profile.AutoSave.fn = setInterval ->
-          Dillinger.saveFile()
-        , Dillinger.Profile.AutoSave.interval
+    initAutoSave: ->
+      if Dillinger.User.Profile.AutoSave.enabled is true
+        Dillinger.User.Profile.AutoSave.fn = setInterval ->
+          Dillinger.FileHandler.saveFile()
+        , Dillinger.User.Profile.AutoSave.interval
       else
         clearInterval Dillinger.Profile.AutoSave.fn
       return
 
-    resetProfile: ->
-      localStorage.clear()
-      Dillinger.Profile.AutoSave.enabled = false
-      # Delete the property altogether --> need ; for JSHint bug.
-      localStorage.profile = null
-      # Now reload the page to start fresh
-      window.location.reload()
+    setCurrentFilenameField: (str) ->
+      Dillinger.$documentName.text(str or Dillinger.User.Profile.CurrentFileName or 'Empty Name')
+      false
+
+    getCurrentFilenameFromField: ->
+      Dillinger.$documentName.text()
 
     getTextInElement: (node) ->
       return node.data if node.nodeType is 3
@@ -144,7 +117,7 @@ do ($ = jQuery, window, document) ->
       txt
 
     refreshWordCount: (selectionCount) ->
-      if Dillinger.Profile.WordCount is true
+      if Dillinger.User.Profile.WordCount is true
         Dillinger.$wordcount.html(Dillinger.countWords(Dillinger.getTextInElement(Dillinger.$preview[0])))
       return
 
@@ -160,29 +133,46 @@ do ($ = jQuery, window, document) ->
       return words and words.length or 0
 
     getWordCount: ->
-      if Dillinger.Profile.WordCount is true
+      if Dillinger.User.Profile.WordCount is true
         Dillinger.$wordcount.text()
 
     bindLayoutEvents: ->
-      $('.menu-sidebar').on 'click', '.menu-item', ->
+      $('.menu-sidebar').on 'click', '.menu-link', ->
         $that = $(@)
-        $that.toggleClass('open')
+        $that.parent().toggleClass('open')
+        false
 
       $('.toggle').on 'click', ->
         $('body').toggleClass('open-menu')
+        false
 
       Dillinger.$saveDocButton.on 'click', (e) ->
         e.preventDefault()
-        Dillinger.saveFile()
-        localFiles.save(Dillinger.$documentName.text(), Dillinger.Editor.getSession().getValue())
-        return
+        Dillinger.FileHandler.saveFile()
+        false
 
       Dillinger.$newDocButton.on 'click', (e) ->
         e.preventDefault()
-        localFiles.createNewDocument(Dillinger.$documentName, Dillinger.Editor)
+        Dillinger.FileHandler.createNewDocument()
         Dillinger.refreshPreview()
         Dillinger.refreshWordCount()
-        return
+        false
+
+      Dillinger.$showPreviewButton.on 'click', (e) ->
+        e.preventDefault()
+        Dillinger.$showPreviewButton.toggleClass('open')
+        $('body').toggleClass('show-preview')
+
+      Dillinger.$documentList.on 'click', 'a', (e) ->
+        e.preventDefault()
+        filename = $(@).data('document-name')
+        Dillinger.FileHandler.loadFile(filename)
+        false
+
+      Dillinger.$deleteDocButton.on 'click', (e) ->
+        e.preventDefault()
+        Dillinger.FileHandler.deleteFile()
+        false
 
       return
 

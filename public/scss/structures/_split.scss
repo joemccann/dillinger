@@ -42,11 +42,40 @@
   &-editor {
     position: relative;
     height: calc(100vh - 136px);
+    padding-left: 0;
+    padding-right: 0;
+    z-index: map-get($z-index, editor);
+
+    .show-preview & {
+      display: none;
+    }
+
+    @include from('tablet') {
+      padding-right: 16px;
+
+      .show-preview & {
+        display: block;
+      }
+    }
   }
 
   &-preview {
-    border-left: 1px solid $c-border;
-    position: relative;
-    height: calc(100vh - 136px);
+    display: none;
+    position: absolute;
+    top: 136px;
+    background-color: #FFF;
+    z-index: map-get($z-index, preview);
+
+    .show-preview & {
+      display: block;
+    }
+
+    @include from('tablet') {
+      height: calc(100vh - 136px);
+      border-left: 1px solid $c-border;
+      top: 0;
+      position: relative;
+      display: block;
+    }
   }
 }
