@@ -40,6 +40,6 @@
   }
 
   .open-menu & {
-    transform: translateX(270px);
+    transform: translateX(map-get($component-widths, sidebar));
   }
 }

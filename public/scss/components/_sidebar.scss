@@ -20,7 +20,7 @@
   padding-bottom: 15px;
 
   &-wrapper {
-    width: 270px;
+    width: map-get($component-widths, sidebar);
     background-color: $c-background-sidebar;
     min-height: 100%;
     position: absolute;

@@ -13,6 +13,7 @@
 // *************************************
 
 .settings {
+  @extend .dropdown;
   position: absolute;
   top: 51px + 16px;
   right: 16px;
@@ -20,6 +21,7 @@
   width: 288px;
   background-color: $c-background-settings;
   padding: 16px;
+  z-index: map-get($z-index, settings);
 
 // -------------------------------------
 //   Modifiers
@@ -33,7 +35,7 @@
 
 // .settings.is-state
 
-  .open & {
+  .show-settings & {
     display: block;
   }
 
@@ -74,10 +76,17 @@
 // .settings-scaffolding
 
   a {
-    @include fontsize(epsilon, all);
     @include clearfix;
+    @include fontsize(epsilon, all);
+    font-family: unquote(map-get($headingtype, font-family));
+    font-weight: map-get($headingtype, regular);
     -webkit-font-smoothing: antialiased;
     line-height: 28px;
+    color: $c-dropdown-link;
+
+    &:hover {
+      color: $c-highlight;
+    }
   }
 
   li {

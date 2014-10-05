@@ -168,8 +168,8 @@ do ($ = jQuery, window, document) ->
 
       Dillinger.$showSettingsButton.on 'click', (e) ->
         e.preventDefault()
-        $that = $(@)
-        $that.parent().toggleClass('open')
+        Dillinger.$showSettingsButton.toggleClass('open')
+        $('body').toggleClass('show-settings')
         false
 
       Dillinger.$documentList.on 'click', 'a', (e) ->
