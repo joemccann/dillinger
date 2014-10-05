@@ -36,7 +36,13 @@ do ($ = jQuery, window, document) ->
     $deleteDocButton:    $('.btn--delete')
     $showPreviewButton:  $('.menu-link-preview')
     $showSettingsButton: $('.menu-link-settings')
-    switches:            Array.prototype.slice.call(document.querySelectorAll('.js-switch'))
+
+    $toggleAutoSave:  $('.toggle-auto-save')
+    $toggleWordCount: $('.toggle-word-count')
+    $toggleNightMode: $('.toggle-night-mode')
+    $toggleWtf:       $('.toggle-wtf')
+    $toggleReset:     $('.toggle-reset')
+    switches:         Array.prototype.slice.call(document.querySelectorAll('.js-switch'))
 
     init: ->
 
@@ -149,38 +155,38 @@ do ($ = jQuery, window, document) ->
         $('body').toggleClass('open-menu')
         false
 
-      Dillinger.$saveDocButton.on 'click', (e) ->
-        e.preventDefault()
+      Dillinger.$saveDocButton.on 'click', ->
         Dillinger.FileHandler.saveFile()
         false
 
-      Dillinger.$newDocButton.on 'click', (e) ->
-        e.preventDefault()
+      Dillinger.$newDocButton.on 'click', ->
         Dillinger.FileHandler.createNewDocument()
         Dillinger.refreshPreview()
         Dillinger.refreshWordCount()
         false
 
-      Dillinger.$showPreviewButton.on 'click', (e) ->
-        e.preventDefault()
+      Dillinger.$showPreviewButton.on 'click', ->
         Dillinger.$showPreviewButton.toggleClass('open')
         $('body').toggleClass('show-preview')
+        false
 
-      Dillinger.$showSettingsButton.on 'click', (e) ->
-        e.preventDefault()
+      Dillinger.$showSettingsButton.on 'click', ->
         Dillinger.$showSettingsButton.toggleClass('open')
         $('body').toggleClass('show-settings')
         false
 
-      Dillinger.$documentList.on 'click', 'a', (e) ->
-        e.preventDefault()
+      Dillinger.$documentList.on 'click', 'a', ->
         filename = $(@).data('document-name')
         Dillinger.FileHandler.loadFile(filename)
         false
 
-      Dillinger.$deleteDocButton.on 'click', (e) ->
-        e.preventDefault()
+      Dillinger.$deleteDocButton.on 'click', ->
         Dillinger.FileHandler.deleteFile()
+        false
+
+      Dillinger.$toggleReset.on 'click', ->
+        localStorage.clear()
+        window.location.reload()
         false
 
       Dillinger.switches.forEach (el) ->

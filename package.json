@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "start": "node app.js",
-    "predeploy": "node build.js"
+    "predeploy": "coffeegulp build"
   },
   "keywords": [
     "dillinger",
@@ -78,7 +78,6 @@
     "jshint-stylish": "^0.4.0",
     "pretty-hrtime": "^0.2.1",
     "run-sequence": "^0.3.6",
-    "smoosh": ">=0.3.2",
     "style-loader": "^0.8.1",
     "walkdir": ">=0.0.5",
     "webpack": "^1.4.4",
