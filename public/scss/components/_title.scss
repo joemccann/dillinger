@@ -7,13 +7,15 @@
 // *************************************
 
 .title {
-  @include sp(eta, $headingtype, 2, 1, all);
+  // alpha beta gamma delta epsilon zeta eta theta iota
+  @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
   font-weight: map-get($headingtype, semibold);
   color: $c-links;
   letter-spacing: 1px;
   text-transform: uppercase;
   padding-left: 16px;
   padding-right: 16px;
+  margin-top: 1rem;
 
 // -------------------------------------
 //   Modifiers
