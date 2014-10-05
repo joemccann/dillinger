@@ -49,7 +49,8 @@
     "marked": "^0.3.2",
     "phantomjs": "~1.9.0-6",
     "rc": "0.3.0",
-    "request": ">=2.9.203"
+    "request": ">=2.9.203",
+    "switchery-browserify": "0.0.1"
   },
   "devDependencies": {
     "browser-sync": "^1.3.6",
@@ -57,6 +58,7 @@
     "coffee-script": "^1.8.0",
     "coffeegulp": "0.0.4",
     "critical": "*",
+    "css-loader": "^0.9.0",
     "gulp": "^3.8.7",
     "gulp-autoprefixer": "^0.0.9",
     "gulp-changed": "^1.0.0",
@@ -77,6 +79,7 @@
     "pretty-hrtime": "^0.2.1",
     "run-sequence": "^0.3.6",
     "smoosh": ">=0.3.2",
+    "style-loader": "^0.8.1",
     "walkdir": ">=0.0.5",
     "webpack": "^1.4.4",
     "webpack-dev-server": "^1.6.5",
