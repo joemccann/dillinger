@@ -29,6 +29,7 @@ $plum: #35D7BB;
 
 $c-background: #fafafa;
 $c-border: #E8E8E8;
+$c-border-settings: #4F535B;
 $c-highlight: #35D7BB;
 $c-subdue: lighten($plum, 40%);
 $c-text-invert: white;
@@ -38,8 +39,11 @@ $c-icon: #D3DAEA;
 $c-dropdown-link: #D0D6E2;
 $c-background-highlight: #1D212A;
 $c-background-navbar: $c-text;
+$c-background-settings: $c-text;
 $c-background-sidebar: #2B2F36;
 $c-button-save: #4A5261;
+$c-switchery: #4B5363;
+$c-box-shadow-switchery: #14171F;
 
 // ----- Components ----- //
 
@@ -83,6 +87,7 @@ $bodytype: (
 
 $headingtype: (
   font-family $base-font-family-heading,
+  light 300,
   regular 400,
   semibold 500,
   bold 600,

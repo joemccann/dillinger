@@ -51,6 +51,10 @@
   margin: 0;
 }
 
+.sr-only {
+  @include sr-only;
+}
+
 // %maxs {
 //   margin: $base-space-xs;
 // }

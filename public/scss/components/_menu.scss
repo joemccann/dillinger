@@ -88,9 +88,6 @@
     }
 
     &-icon {
-      span {
-        @include sr-only;
-      }
 
       > a {
         padding: 0;

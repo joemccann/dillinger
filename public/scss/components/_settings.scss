@@ -1,0 +1,92 @@
+// *************************************
+//
+//   Settings
+//   -> Settings Panel
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .settings[.settings--modifier](.is-state)(.has-context)
+//   .settings-scaffolding
+//
+// *************************************
+
+.settings {
+  position: absolute;
+  top: 51px + 16px;
+  right: 16px;
+  border-radius: 3px;
+  width: 288px;
+  background-color: $c-background-settings;
+  padding: 16px;
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .settings--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .settings.is-state
+
+  .open & {
+    display: block;
+  }
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+  // .has-settings
+
+  .has-checkbox {
+    float: left;
+  }
+
+
+  .switchery {
+    float: right;
+    background-color: $c-background-sidebar;
+    border-color: $c-background-sidebar;
+    box-shadow: inset 0px 0px 2px 0px $c-box-shadow-switchery;
+
+    > small {
+      background-color: $c-switchery;
+      height: 28px;
+    }
+  }
+
+  .js-switch:checked + .switchery {
+    box-shadow: none;
+    small {
+      left: 20px !important;
+    }
+  }
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .settings-scaffolding
+
+  a {
+    @include fontsize(epsilon, all);
+    @include clearfix;
+    -webkit-font-smoothing: antialiased;
+    line-height: 28px;
+  }
+
+  li {
+    border-bottom: 1px solid $c-border-settings;
+    margin: 0;
+    padding: 16px 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

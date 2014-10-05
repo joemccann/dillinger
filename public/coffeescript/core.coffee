@@ -3,6 +3,7 @@ window.jQuery = require('jquery')
 ace           = require('brace')
 # keymaster   = require('keymaster')
 marked        = require('marked')
+Switchery     = require('switchery-browserify')
 # highlight   = require('highlight.js')
 
 require 'brace/mode/markdown'
@@ -25,15 +26,17 @@ do ($ = jQuery, window, document) ->
     User: null
     FileHandler: null
 
-    $preview:           $('#preview')
-    $editor:            $('#editor')
-    $documentName:      $('.title-document')
-    $documentList:      $('.dropdown.documents')
-    $wordcount:         $('.counter')
-    $saveDocButton:     $('.btn--save')
-    $newDocButton:      $('.btn--new')
-    $deleteDocButton:   $('.btn--delete')
-    $showPreviewButton: $('.menu-link-preview')
+    $preview:            $('#preview')
+    $editor:             $('#editor')
+    $documentName:       $('.title-document')
+    $documentList:       $('.dropdown.documents')
+    $wordcount:          $('.counter')
+    $saveDocButton:      $('.btn--save')
+    $newDocButton:       $('.btn--new')
+    $deleteDocButton:    $('.btn--delete')
+    $showPreviewButton:  $('.menu-link-preview')
+    $showSettingsButton: $('.menu-link-settings')
+    switches:            Array.prototype.slice.call(document.querySelectorAll('.js-switch'))
 
     init: ->
 
@@ -163,6 +166,12 @@ do ($ = jQuery, window, document) ->
         Dillinger.$showPreviewButton.toggleClass('open')
         $('body').toggleClass('show-preview')
 
+      Dillinger.$showSettingsButton.on 'click', (e) ->
+        e.preventDefault()
+        $that = $(@)
+        $that.parent().toggleClass('open')
+        false
+
       Dillinger.$documentList.on 'click', 'a', (e) ->
         e.preventDefault()
         filename = $(@).data('document-name')
@@ -173,6 +182,9 @@ do ($ = jQuery, window, document) ->
         e.preventDefault()
         Dillinger.FileHandler.deleteFile()
         false
+
+      Dillinger.switches.forEach (el) ->
+        switchery = new Switchery(el, color: "#35D7BB")
 
       return
 
