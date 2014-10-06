@@ -1,3 +1,21 @@
 .header {
   border-bottom: 1px solid $c-border;
+  position: relative;
+}
+
+.words {
+  font-family: unquote(map-get($monospacetype, font-family));
+  font-weight: map-get($monospacetype, regular);
+  z-index: map-get($z-index, overlay);
+  position: absolute;
+  right: 16px;
+  top: 57px;
+
+  @include from('tablet') {
+    top: 12px;
+  }
+
+  span {
+
+  }
 }
