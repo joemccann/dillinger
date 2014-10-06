@@ -30,9 +30,9 @@ do ($ = jQuery, document, window) ->
       return
 
     saveProfile: ->
-      if localStorage.setItem('Profile', JSON.stringify(@Profile))
-        return true
-      false
+      localStorage.setItem('Profile', JSON.stringify(@Profile))
+      console.log "Successfully Saved Profile."
+      true
 
     updateProfile: (obj) ->
       @Profile.CurrentFile = Dillinger.Editor.getSession().getValue()

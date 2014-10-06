@@ -87,7 +87,22 @@ do ($ = jQuery, window, document) ->
       return
 
     initUI: ->
-      # Dillinger.Editor.setTheme 'ace/theme/monokai'
+
+      if Dillinger.User.Profile.AutoSave.enabled is true
+        Dillinger.$toggleAutoSave[0].checked = true
+      else
+        Dillinger.$toggleAutoSave[0].checked = false
+
+      if Dillinger.User.Profile.WordCount is true
+        Dillinger.$toggleWordCount[0].checked = true
+      else
+        Dillinger.$toggleWordCount[0].checked = false
+
+      if Dillinger.User.Profile.NightMode is true
+        Dillinger.$toggleNightMode[0].checked = true
+      else
+        Dillinger.$toggleNightMode[0].checked = false
+
       return
 
     refreshPreview: ->
@@ -145,6 +160,12 @@ do ($ = jQuery, window, document) ->
       if Dillinger.User.Profile.WordCount is true
         Dillinger.$wordcount.text()
 
+
+    toggleAutoSave: ->
+      console.log Dillinger.$toggleAutoSave[0].checked
+      Dillinger.User.Profile.AutoSave.enabled = Dillinger.$toggleAutoSave[0].checked
+      Dillinger.User.saveProfile()
+
     bindLayoutEvents: ->
       $('.menu-sidebar').on 'click', '.menu-link', ->
         $that = $(@)
@@ -190,7 +211,14 @@ do ($ = jQuery, window, document) ->
         false
 
       Dillinger.switches.forEach (el) ->
-        switchery = new Switchery(el, color: "#35D7BB")
+        switchery = new Switchery( el,
+          color: "#35D7BB"
+          secondaryColor: "#2B2F36"
+        )
+
+      Dillinger.$toggleAutoSave.next().on "click", ->
+        Dillinger.toggleAutoSave()
+        false
 
       return
 
