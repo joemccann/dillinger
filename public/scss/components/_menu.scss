@@ -64,6 +64,11 @@
       &--import-from {
         display: block;
       }
+
+      &--preview {
+        display: none;
+      }
+
       &--save-to,
       &--import-from {
         &.in-sidebar {
