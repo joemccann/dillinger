@@ -14,7 +14,7 @@
 
 .settings {
   @extend .dropdown;
-  position: absolute;
+  position: fixed;
   top: 51px + 16px;
   right: 16px;
   border-radius: 3px;
