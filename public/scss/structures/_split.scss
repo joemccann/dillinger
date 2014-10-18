@@ -41,7 +41,7 @@
 
   &-editor {
     position: relative;
-    height: calc(100vh - 136px);
+    height: calc(100vh - 100px);
     padding-left: 0;
     padding-right: 0;
     z-index: map-get($z-index, editor);
@@ -62,7 +62,7 @@
   &-preview {
     display: none;
     position: absolute;
-    top: 136px;
+    top: 122px;
     background-color: #FFF;
     z-index: map-get($z-index, preview);
 
@@ -71,7 +71,7 @@
     }
 
     @include from('tablet') {
-      height: calc(100vh - 136px);
+      height: calc(100vh - 100px);
       border-left: 1px solid $c-border;
       top: 0;
       position: relative;
