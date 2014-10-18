@@ -103,6 +103,9 @@ do ($ = jQuery, window, document) ->
       else
         Dillinger.$toggleNightMode[0].checked = false
 
+
+      # $(".split-editor, #editor").height($(window).height() - 150)
+
       return
 
     refreshPreview: ->
@@ -218,6 +221,14 @@ do ($ = jQuery, window, document) ->
 
       Dillinger.$toggleAutoSave.next().on "click", ->
         Dillinger.toggleAutoSave()
+        false
+
+      Dillinger.$toggleWordCount.next().on "click", ->
+        # Dillinger.toggleWordCount()
+        false
+
+      Dillinger.$toggleNightMode.next().on "click", ->
+        # Dillinger.toggleNightMode()
         false
 
       return
