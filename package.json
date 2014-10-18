@@ -42,14 +42,13 @@
     "express": ">=3.0.0rc3 <4.0.0",
     "googleapis": "0.2.12-alpha",
     "handlebars": "^1.3.0",
-    "handlebars-loader": "^0.1.7",
     "highlight.js": "^8.0.0",
     "jquery": "^2.1.1",
     "keymaster": "^1.6.2",
     "marked": "^0.3.2",
     "phantomjs": "~1.9.0-6",
     "rc": "0.3.0",
-    "request": ">=2.9.203",
+    "request": "^2.44.0",
     "switchery-browserify": "0.0.1"
   },
   "devDependencies": {
@@ -58,6 +57,7 @@
     "coffee-script": "^1.8.0",
     "coffeegulp": "0.0.4",
     "critical": "*",
+    "handlebars-loader": "^0.1.7",
     "css-loader": "^0.9.0",
     "gulp": "^3.8.7",
     "gulp-autoprefixer": "^0.0.9",
