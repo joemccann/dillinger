@@ -1,2 +1,5 @@
 <ul class="dropdown documents" role="menu">
+  <li ng-repeat="document in documents" ng-class="currentDocument.id === document.id ? 'active' : 'inactive'">
+    <a href="#" ng-click="selectDocument(document)">{{document.title}}</a>
+  </li>
 </ul>
