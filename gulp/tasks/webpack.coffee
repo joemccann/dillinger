@@ -18,6 +18,8 @@ webpackConfig    = require("../../webpack.config")
 bundleLogger     = require("../util/bundleLogger")
 handleErrors     = require("../util/handleErrors")
 
+ngAnnotatePlugin = require('ng-annotate-webpack-plugin')
+
 gulp.task "webpack:dev", (cb) ->
 
   webpackDevConfig         = Object.create(webpackConfig)
@@ -29,6 +31,7 @@ gulp.task "webpack:dev", (cb) ->
   new webpackDevServer(devCompiler,
     contentBase: "http://localhost:8080/"
     publicPath: "http://localhost:8090/assets/"
+    hot: false
     stats:
       colors: true
   ).listen( 8090, "localhost", (err) ->
@@ -48,7 +51,9 @@ gulp.task "webpack:build", (cb) ->
       "process.env":
         "NODE_ENV": JSON.stringify("production")
     ),
-    new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.DedupePlugin()
+    new ngAnnotatePlugin
+      add: true
     new webpack.optimize.UglifyJsPlugin()
   )
 
