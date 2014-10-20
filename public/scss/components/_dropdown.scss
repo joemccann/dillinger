@@ -50,6 +50,12 @@
   .unlinked .icon {
     opacity: .3;
   }
+
+  &.documents {
+    li.active a {
+      color: $c-highlight;
+    }
+  }
 }
 
 // -------------------------------------
