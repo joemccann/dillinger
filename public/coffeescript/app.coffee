@@ -26,10 +26,10 @@ do (window, document) ->
   # require('./user/UserController')
   require('./document/DocumentsController')
 
-
   # Directives
   require('./base/directives/MenuToggle')
   require('./base/directives/Preview')
+  require('./base/directives/Wordcount')
   require('./document/directives/DocumentTitle')
 
   angular.bootstrap document, ['Dillinger']

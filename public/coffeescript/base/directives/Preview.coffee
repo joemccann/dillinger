@@ -8,13 +8,15 @@ preview = Dillinger.directive 'preview',
     directive =
       link: (scope, el, attrs) ->
 
-        refreshPreview = (val) ->
+        scope.refreshPreview = (val) ->
           console.log "preview.refreshPreview"
           el.html(marked($rootScope.editor.getSession().getValue()))
 
-        $rootScope.editor.on 'change', refreshPreview
+        $rootScope.editor.on 'change', scope.refreshPreview
+        scope.$on 'preview.refresh', scope.refreshPreview
 
-        refreshPreview()
+        scope.refreshPreview()
+        scope.$emit 'wordcount.refresh'
 
     return directive
 

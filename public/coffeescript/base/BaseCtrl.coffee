@@ -32,6 +32,7 @@ BaseCtrl = Dillinger.controller 'BaseController',
       console.log "BaseController.updateDocument"
       $scope.currentDocument = DocService.getCurrentDocument()
       $rootScope.editor.getSession().setValue($scope.currentDocument.body)
+      $scope.$emit 'wordcount.refresh'
 
     $scope.updateDocument = updateDocument
 
