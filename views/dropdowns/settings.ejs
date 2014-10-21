@@ -1,20 +1,20 @@
-<ul class="settings" role="menu">
+<ul class="settings" role="menu" ng-controller="UserController">
   <li>
-    <a href="#">
+    <a href="#" ng-click="toggleAutoSave()">
       <span class="has-checkbox">Auto Save</span>
-      <input class="toggle-auto-save js-switch" type="checkbox" checked>
+      <switch class="toggle-auto-save" value="user.AutoSave"></switch>
     </a>
   </li>
   <li>
-    <a href="#">
+    <a href="#" ng-click="toggleWordCount()">
       <span class="has-checkbox">Word Count</span>
-      <input class="toggle-word-count js-switch" type="checkbox" checked>
+      <switch class="toggle-word-count" value="user.WordCount"></switch>
     </a>
   </li>
   <li>
-    <a href="#">
+    <a href="#" ng-click="toggleNightMode()">
       <span>Night Mode</span>
-      <input class="toggle-night-mode js-switch" type="checkbox">
+      <switch class="toggle-night-mode" value="user.NightMode"></switch>
     </a>
   </li>
   <li>
@@ -28,7 +28,7 @@
     </a>
   </li>
   <li>
-    <a class="toggle-reset" href="#">
+    <a class="toggle-reset" href="#" ng-click="resetProfile()">
       <span>Reset Profile</span>
     </a>
   </li>
