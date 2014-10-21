@@ -11,13 +11,6 @@ Doc = Dillinger.factory 'Doc',
         id: new Date().getTime()
         title: "Untitled Document"
         body: require("raw!./defaultText.md")
-
-      getTitle: ->
-        @title
-      getBody: ->
-        @body
-      getId: ->
-        @id
       angular.extend @, data
     return model
 

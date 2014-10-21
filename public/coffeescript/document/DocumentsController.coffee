@@ -8,7 +8,7 @@ Dillinger = require('../dillinger')
 #
 
 DocumentCtrl = Dillinger.controller 'DocumentsController',
-  ($scope, $rootScope, DocService) ->
+  ($scope, $rootScope, UserService, DocService) ->
 
     # 1. Self-reference
     controller = @
@@ -16,6 +16,7 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     # 2. Requirements
 
     # 3. Scope Stuff
+    $scope.user = UserService.user
 
     # 3a. Set up watchers on the scope
     # $scope.$watch 'document.save', saveDocument
@@ -27,34 +28,34 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     $scope.documents = DocService.getItems()
 
     save = ->
-      console.log "DocumentsController.save"
+      # console.log "DocumentsController.save"
       item = DocService.getCurrentDocument()
       item.body = $rootScope.editor.getSession().getValue()
       DocService.save()
 
     selectDocument = (item) ->
-      console.log item
-      console.log "DocumentsController.selectDocument"
-      # console.log "item: #{JSON.stringify(item, null, '\t')}"
+      # console.log "DocumentsController.selectDocument"
       item = DocService.getItem(item)
       DocService.setCurrentDocument(item)
       $rootScope.$emit 'document.refresh'
 
     removeDocument = (item) ->
-      console.log "DocumentsController.removeDocument"
-      # console.log "item: #{JSON.stringify(item, null, '\t')}"
+      # console.log "DocumentsController.removeDocument"
       DocService.removeItem(item)
       next = DocService.getItemByIndex(0)
       DocService.setCurrentDocument(next)
       $rootScope.$emit 'document.refresh'
 
     createDocument = ->
-      console.log "DocumentsController.createDocument"
+      # console.log "DocumentsController.createDocument"
       item = DocService.createItem()
-      # console.log "item: #{JSON.stringify(item, null, '\t')}"
       DocService.addItem(item)
       DocService.setCurrentDocument(item)
       $rootScope.$emit 'document.refresh'
+
+    autoSave = ->
+      if $scope.user.AutoSave
+        save()
 
     # 3c. Listen to events on the scope
 
@@ -71,6 +72,8 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     $scope.createDocument = createDocument
     $scope.removeDocument = removeDocument
     $scope.selectDocument = selectDocument
+
+    $rootScope.editor.on 'change', autoSave
 
     return
 
