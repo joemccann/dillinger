@@ -2,7 +2,6 @@
 Dillinger   = require('../dillinger')
 ace         = require('brace')
 # keymaster = require('keymaster')
-marked      = require('marked')
 # Switchery = require('switchery-browserify')
 # highlight = require('highlight.js')
 
@@ -29,16 +28,14 @@ BaseCtrl = Dillinger.controller 'BaseController',
     $rootScope.editor.setShowPrintMargin(false)
     $rootScope.editor.getSession().setValue($scope.currentDocument.body)
 
-    refreshDocument = ->
-      console.log "BaseController.refreshDocument"
+    updateDocument = ->
+      console.log "BaseController.updateDocument"
       $scope.currentDocument = DocService.getCurrentDocument()
       $rootScope.editor.getSession().setValue($scope.currentDocument.body)
 
-    $scope.updateDocument = ->
-      console.log "BaseController.updateDocument"
-      refreshDocument()
+    $scope.updateDocument = updateDocument
 
-    $rootScope.$on 'document.refresh', refreshDocument
+    $rootScope.$on 'document.refresh', updateDocument
 
     return
 

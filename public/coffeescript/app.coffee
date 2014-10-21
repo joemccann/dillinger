@@ -14,8 +14,10 @@ do (window, document) ->
   # Common Shared Directives/Services/Models
   require('./common/debounce.js')
 
+  # Models
+  require('./document/DocModel')
+
   # Services
-  require('./document/Doc')
   require('./document/DocService')
   require('./user/UserService')
 
@@ -26,7 +28,8 @@ do (window, document) ->
 
 
   # Directives
-  require('./document/directives/MenuToggle')
+  require('./base/directives/MenuToggle')
+  require('./base/directives/Preview')
   require('./document/directives/DocumentTitle')
 
   angular.bootstrap document, ['Dillinger']
