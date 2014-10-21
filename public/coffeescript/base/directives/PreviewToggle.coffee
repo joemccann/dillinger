@@ -14,10 +14,4 @@ module.exports = Dillinger.directive 'previewToggle',
           $body.toggleClass('show-preview')
           false
 
-        $overlay.bind 'click', ->
-          if $body.hasClass 'show-preview'
-            el.toggleClass('open')
-            $body.toggleClass('show-preview')
-          false
-
     return directive
