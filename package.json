@@ -10,6 +10,10 @@
     {
       "name": "Joe McCann",
       "email": "joe@subprint.com"
+    },
+    {
+      "name": "Martin Broder",
+      "email": "hello@martinbroder.com"
     }
   ],
   "scripts": {
@@ -34,7 +38,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
-    "angular-mocks": "^1.3.0",
+    "angular": "^1.3.0",
     "bootstrap": "^3.2.0",
     "brace": "^0.4.0",
     "colors": ">=0.6.0-1",
@@ -42,7 +46,6 @@
     "ejs": ">=0.8.1",
     "express": ">=3.0.0rc3 <4.0.0",
     "googleapis": "0.2.12-alpha",
-    "handlebars": "^1.3.0",
     "highlight.js": "^8.0.0",
     "jquery": "^2.1.1",
     "keymaster": "^1.6.2",
@@ -53,6 +56,7 @@
     "switchery-browserify": "0.0.1"
   },
   "devDependencies": {
+    "angular-mocks": "^1.3.0",
     "browser-sync": "^1.3.6",
     "coffee-loader": "^0.7.2",
     "coffee-script": "^1.8.0",
@@ -85,7 +89,6 @@
     "karma-webpack": "^1.3.1",
     "mocha": "^1.21.5",
     "ng-annotate-webpack-plugin": "^0.1.2",
-    "ngmin": "^0.5.0",
     "pretty-hrtime": "^0.2.1",
     "raw-loader": "^0.5.1",
     "run-sequence": "^0.3.6",
