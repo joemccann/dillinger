@@ -11,9 +11,15 @@ menuToggle = Dillinger.directive 'menuToggle',
       link: (scope, el, attrs) ->
 
         $body = angular.element(document).find('body')
+        $page = angular.element(document).find('.page')
 
         el.bind 'click', ->
           $body.toggleClass('open-menu')
+
+        $page.bind 'click', ->
+          if $body.hasClass 'open-menu'
+            $body.toggleClass('open-menu')
+
 
     return directive
 
