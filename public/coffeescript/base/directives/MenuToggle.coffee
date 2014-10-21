@@ -15,10 +15,12 @@ menuToggle = Dillinger.directive 'menuToggle',
 
         el.bind 'click', ->
           $body.toggleClass('open-menu')
+          false
 
         $page.bind 'click', ->
           if $body.hasClass 'open-menu'
             $body.toggleClass('open-menu')
+          false
 
 
     return directive

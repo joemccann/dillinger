@@ -30,6 +30,7 @@ do (window, document) ->
   # Directives
   require('./base/directives/MenuToggle')
   require('./base/directives/SettingsToggle')
+  require('./base/directives/PreviewToggle')
   require('./base/directives/Switch')
   require('./base/directives/Preview')
   # require('./base/directives/Wordcount')

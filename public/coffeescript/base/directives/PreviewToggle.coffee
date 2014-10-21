@@ -1,24 +1,23 @@
 
 Dillinger = require('../../dillinger')
 
-settingsToggle = Dillinger.directive 'settingsToggle',
+module.exports = Dillinger.directive 'previewToggle',
   () ->
 
     directive =
       link: (scope, el, attrs) ->
 
         $body    = angular.element(document).find('body')
-        $overlay = angular.element(document).find('.overlay')
 
         el.bind 'click', ->
           el.toggleClass('open')
-          $body.toggleClass('show-settings')
+          $body.toggleClass('show-preview')
+          false
 
         $overlay.bind 'click', ->
-          if $body.hasClass 'show-settings'
+          if $body.hasClass 'show-preview'
             el.toggleClass('open')
-            $body.toggleClass('show-settings')
+            $body.toggleClass('show-preview')
+          false
 
     return directive
-
-module.exports = settingsToggle
