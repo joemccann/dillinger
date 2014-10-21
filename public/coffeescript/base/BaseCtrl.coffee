@@ -20,7 +20,6 @@ BaseCtrl = Dillinger.controller 'BaseController',
 
     $scope.user            = UserService.user
     $scope.currentDocument = DocService.getCurrentDocument()
-
     $rootScope.editor = ace.edit 'editor'
     $rootScope.editor.getSession().setMode('ace/mode/markdown')
     $rootScope.editor.setTheme('ace/theme/solarized_dark')
@@ -32,7 +31,6 @@ BaseCtrl = Dillinger.controller 'BaseController',
       console.log "BaseController.updateDocument"
       $scope.currentDocument = DocService.getCurrentDocument()
       $rootScope.editor.getSession().setValue($scope.currentDocument.body)
-      $scope.$emit 'wordcount.refresh'
 
     $scope.updateDocument = updateDocument
 
