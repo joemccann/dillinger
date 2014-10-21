@@ -6,8 +6,8 @@ menuToggle = Dillinger.directive 'menuToggle',
 
     directive =
       restrict: 'E'
-      # replace: true
-      templateUrl: '../coffeescript/document/templates/menu-toggle.html'
+      replace: true
+      templateUrl: '../coffeescript/base/templates/menu-toggle.html'
       link: (scope, el, attrs) ->
 
         $body = angular.element(document).find('body')
