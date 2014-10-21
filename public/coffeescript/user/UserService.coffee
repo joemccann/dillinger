@@ -18,12 +18,10 @@ UserService = Dillinger.factory 'UserService',
     service =
       user: {}
       save: ->
-        sessionStorage.profile =
-          angular.toJson(service.user)
+        sessionStorage.setItem('profile', angular.toJson(service.user))
         return
       restore: ->
-        service.user =
-          angular.fromJson(sessionStorage.profile) or defaults
+        service.user = angular.fromJson(sessionStorage.getItem('profile')) or defaults
         return service.user
 
     service.restore()
