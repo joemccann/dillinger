@@ -1,0 +1,75 @@
+// *************************************
+//
+//   Switch
+//   -> Switch in Settings Panel
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .switch[.settings--modifier](.is-state)(.has-context)
+//
+// *************************************
+
+.switch {
+
+  float: right;
+  line-height: 1;
+
+  input {
+    display: none;
+  }
+
+  small {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0 24px 0 0;
+    transition: all ease 0.2s;
+    border-radius: 30px;
+    box-shadow: inset 0px 0px 2px 0px $c-box-shadow-switchery;
+    background-color: $c-background-sidebar;
+    border-color: $c-background-sidebar;
+
+    &:before {
+      display: block;
+      content: '';
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      background: #fff;
+      box-shadow: inset 0px 0px 2px 0px $c-box-shadow-switchery;
+    }
+  }
+
+  &.checked small {
+    padding-right: 0;
+    padding-left: 24px;
+    background-color: $c-highlight;
+    box-shadow: none;
+  }
+
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .settings--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .settings.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-settings
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .settings-scaffolding

@@ -49,28 +49,6 @@
     float: left;
   }
 
-
-  .switchery {
-    float: right;
-    background-color: $c-background-sidebar !important;
-    border-color: $c-background-sidebar !important;
-    box-shadow: inset 0px 0px 2px 0px $c-box-shadow-switchery;
-
-    > small {
-      background-color: $c-switchery !important;
-      height: 28px !important;
-      left: -2px !important;
-    }
-  }
-
-  .js-switch:checked + .switchery {
-    box-shadow: none !important;
-    background-color: $c-highlight !important;
-    small {
-      left: 20px !important;
-    }
-  }
-
 // -------------------------------------
 //   Scaffolding
 // -------------------------------------
