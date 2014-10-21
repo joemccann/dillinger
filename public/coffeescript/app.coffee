@@ -19,17 +19,20 @@ do (window, document) ->
 
   # Services
   require('./document/DocService')
+  require('./document/WordCountService')
   require('./user/UserService')
 
   # Controllers
   require('./base/BaseCtrl')
-  # require('./user/UserController')
+  require('./user/UserController')
   require('./document/DocumentsController')
 
   # Directives
   require('./base/directives/MenuToggle')
+  require('./base/directives/SettingsToggle')
+  require('./base/directives/Switch')
   require('./base/directives/Preview')
-  require('./base/directives/Wordcount')
+  # require('./base/directives/Wordcount')
   require('./document/directives/DocumentTitle')
 
   angular.bootstrap document, ['Dillinger']
