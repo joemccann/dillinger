@@ -2,5 +2,5 @@
   <h2 class="title">Document Name</h2>
   <document-title></document-title>
 
-  <p class="words">Words: <span class="counter" wordcount></span></p>
+  <p ng-if="user.WordCount" class="words">Words: <span class="counter" ng-bind="words"></span></p>
 </div>
