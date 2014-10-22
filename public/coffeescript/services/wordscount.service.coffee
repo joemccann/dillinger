@@ -1,9 +1,9 @@
 
 'use strict'
 
-Dillinger = require('../dillinger')
+app = require('../dillinger')
 
-module.exports = Dillinger.service 'Wordcounter',
+module.exports = app.service 'wordsCountService',
   ($rootScope) ->
 
     words = 0

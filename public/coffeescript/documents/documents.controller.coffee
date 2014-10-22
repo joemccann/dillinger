@@ -1,22 +1,18 @@
 
 'use strict'
 
-Dillinger = require('../dillinger')
+app = require('../dillinger')
 
-#
-# Write your Controllers like this as ng-annotate does not follow references!
-#
-
-DocumentCtrl = Dillinger.controller 'DocumentsController',
-  ($scope, $rootScope, UserService, DocService) ->
+module.exports = app.controller 'Documents',
+  ($scope, $rootScope, userService, documentsService) ->
 
     # 1. Self-reference
-    controller = @
+    vm = @
 
     # 2. Requirements
 
     # 3. Scope Stuff
-    $scope.user = UserService.user
+    $scope.profile = userService.profile
 
     # 3a. Set up watchers on the scope
     # $scope.$watch 'document.save', saveDocument
@@ -25,36 +21,36 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     # $scope.$watch 'document.select', selectDocument
 
     # 3b. Expose methods or data on the scope
-    $scope.documents = DocService.getItems()
+    $scope.documents = documentsService.getItems()
 
     save = ->
       # console.log "DocumentsController.save"
-      item = DocService.getCurrentDocument()
+      item = documentsService.getCurrentDocument()
       item.body = $rootScope.editor.getSession().getValue()
-      DocService.save()
+      documentsService.save()
 
     selectDocument = (item) ->
       # console.log "DocumentsController.selectDocument"
-      item = DocService.getItem(item)
-      DocService.setCurrentDocument(item)
+      item = documentsService.getItem(item)
+      documentsService.setCurrentDocument(item)
       $rootScope.$emit 'document.refresh'
 
     removeDocument = (item) ->
       # console.log "DocumentsController.removeDocument"
-      DocService.removeItem(item)
-      next = DocService.getItemByIndex(0)
-      DocService.setCurrentDocument(next)
+      documentsService.removeItem(item)
+      next = documentsService.getItemByIndex(0)
+      documentsService.setCurrentDocument(next)
       $rootScope.$emit 'document.refresh'
 
     createDocument = ->
       # console.log "DocumentsController.createDocument"
-      item = DocService.createItem()
-      DocService.addItem(item)
-      DocService.setCurrentDocument(item)
+      item = documentsService.createItem()
+      documentsService.addItem(item)
+      documentsService.setCurrentDocument(item)
       $rootScope.$emit 'document.refresh'
 
-    autoSave = ->
-      if $scope.user.AutoSave
+    doAutoSave = ->
+      if $scope.profile.enableAutoSave
         save()
 
     # 3c. Listen to events on the scope
@@ -64,7 +60,7 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     # 5. Clean up
     $scope.$on '$destroy', ->
       console.log "$destroy"
-      controller = null
+      vm = null
       $scope     = null
 
     # 6. All the actual implementations go here.
@@ -73,8 +69,6 @@ DocumentCtrl = Dillinger.controller 'DocumentsController',
     $scope.removeDocument = removeDocument
     $scope.selectDocument = selectDocument
 
-    $rootScope.editor.on 'change', autoSave
+    $rootScope.editor.on 'change', doAutoSave
 
     return
-
-module.exports = DocumentCtrl

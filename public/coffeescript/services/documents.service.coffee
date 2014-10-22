@@ -1,10 +1,10 @@
 
-Dillinger = require('../dillinger')
+'use strict'
 
-DocService = Dillinger.factory 'DocService',
-  ($rootScope, Doc) ->
+app = require('../dillinger')
 
-    'use strict'
+module.exports = app.factory 'documentsService',
+  ($rootScope, Sheet) ->
 
     currentDocument = {}
     files = []
@@ -19,7 +19,8 @@ DocService = Dillinger.factory 'DocService',
       removeItem: (item) ->
         files.splice(files.indexOf(item), 1)
       createItem: (props) ->
-        new Doc(props)
+        console.log(new Sheet())
+        new Sheet(props)
       size: ->
         files.length
       getItems: ->
@@ -48,4 +49,3 @@ DocService = Dillinger.factory 'DocService',
 
     return service
 
-module.exports = DocService

@@ -1,7 +1,9 @@
 
-Dillinger = require('../../dillinger')
+'use strict'
 
-settingsToggle = Dillinger.directive 'settingsToggle',
+app = require('../dillinger')
+
+module.exports = app.directive 'settingsToggle',
   () ->
 
     directive =
@@ -20,5 +22,3 @@ settingsToggle = Dillinger.directive 'settingsToggle',
             $body.toggleClass('show-settings')
 
     return directive
-
-module.exports = settingsToggle

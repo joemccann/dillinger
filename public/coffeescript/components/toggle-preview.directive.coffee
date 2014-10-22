@@ -1,7 +1,9 @@
 
-Dillinger = require('../../dillinger')
+'use strict'
 
-module.exports = Dillinger.directive 'previewToggle',
+app = require('../dillinger')
+
+module.exports = app.directive 'previewToggle',
   () ->
 
     directive =

@@ -9,36 +9,28 @@ do (window, document) ->
 
   # Angular
   angular = require("exports?angular!angular")
-  App = require('./dillinger')
 
-  # Common Shared Directives/Services/Models
-  require('./common/debounce.js')
+  require('./dillinger')
 
-  # Models
-  require('./document/DocModel')
+  require('./factorys/sheet.factory')
 
-  # Services
-  require('./document/DocService')
-  require('./document/WordCountService')
-  require('./user/UserService')
+  # User
+  require('./services/user.service')
+  require('./user/user.controller')
+
+  require('./services/documents.service')
+  require('./services/wordscount.service')
 
   # Controllers
-  require('./base/BaseCtrl')
-  require('./user/UserController')
-  require('./document/DocumentsController')
+  require('./base/base.controller')
+  require('./documents/documents.controller')
 
   # Directives
-  require('./base/directives/MenuToggle')
-  require('./base/directives/SettingsToggle')
-  require('./base/directives/PreviewToggle')
-  require('./base/directives/Switch')
-  require('./base/directives/Preview')
-  # require('./base/directives/Wordcount')
-  require('./document/directives/DocumentTitle')
+  require('./components/document-title.directive')
+  require('./components/toggle-menu.directive')
+  require('./components/toggle-settings.directive')
+  require('./components/toggle-preview.directive')
+  require('./components/switch.directive')
+  require('./components/preview.directive')
 
   angular.bootstrap document, ['Dillinger']
-
-  # Dillinger             = require './core'
-  # Dillinger.User        = require './user'
-  # Dillinger.FileHandler = require('./fileHandler')
-  # Dillinger.init()

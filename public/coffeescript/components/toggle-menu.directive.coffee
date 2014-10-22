@@ -1,13 +1,15 @@
 
-Dillinger = require('../../dillinger')
+'use strict'
 
-menuToggle = Dillinger.directive 'menuToggle',
+app = require('../dillinger')
+
+module.exports = app.directive 'menuToggle',
   () ->
 
     directive =
       restrict: 'E'
       replace: true
-      templateUrl: '../coffeescript/base/templates/menu-toggle.html'
+      templateUrl: '../coffeescript/components/toggle-menu.directive.html'
       link: (scope, el, attrs) ->
 
         $body = angular.element(document).find('body')
@@ -22,7 +24,4 @@ menuToggle = Dillinger.directive 'menuToggle',
             $body.toggleClass('open-menu')
           false
 
-
     return directive
-
-module.exports = menuToggle

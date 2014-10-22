@@ -12,7 +12,11 @@
   font-weight: map-get($monospacetype, regular);
   line-height: 2rem;
   width: 100%;
-  height: calc(100vh - 100px);
+  height: 100%;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+
 
 // -------------------------------------
 //   Modifiers

@@ -1,8 +1,10 @@
 
-Dillinger = require('../../dillinger')
+'use strict'
+
+app = require('../dillinger')
 marked    = require('marked')
 
-preview = Dillinger.directive 'preview',
+module.exports = app.directive 'preview',
   ($rootScope) ->
 
     directive =
@@ -16,5 +18,3 @@ preview = Dillinger.directive 'preview',
         refreshPreview()
 
     return directive
-
-module.exports = preview
