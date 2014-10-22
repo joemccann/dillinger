@@ -3,9 +3,8 @@
 
 do (window, document) ->
 
-  # jQuery + Bootstrap
+  # jQuery
   window.jQuery = require('jquery')
-  require 'bootstrap/js/dropdown'
 
   # Angular
   angular = require("exports?angular!angular")
@@ -32,5 +31,7 @@ do (window, document) ->
   require('./components/toggle-preview.directive')
   require('./components/switch.directive')
   require('./components/preview.directive')
+
+  require('./vendor/wtfisdillinger-modal.controller')
 
   angular.bootstrap document, ['Dillinger']
