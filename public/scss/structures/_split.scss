@@ -40,11 +40,10 @@
 // .split-scaffolding
 
   &-editor {
-    position: relative;
-    height: calc(100vh - 100px);
+    // position: relative;
+    // height: 100%;
     padding-left: 0;
     padding-right: 0;
-    z-index: map-get($z-index, editor);
 
     .show-preview & {
       display: none;
@@ -52,6 +51,8 @@
 
     @include from('tablet') {
       padding-right: 16px;
+      float: left;
+      width: 50%;
 
       .show-preview & {
         display: block;
@@ -62,7 +63,7 @@
   &-preview {
     display: none;
     position: absolute;
-    top: 122px;
+    top: 129px;
     background-color: #FFF;
     z-index: map-get($z-index, preview);
 
@@ -71,11 +72,12 @@
     }
 
     @include from('tablet') {
-      height: calc(100vh - 100px);
       border-left: 1px solid $c-border;
-      top: 0;
-      position: relative;
+      position: static;
       display: block;
+      float: right;
+      top: 0;
+      width: 50%;
     }
   }
 }

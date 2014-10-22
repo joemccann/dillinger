@@ -23,6 +23,9 @@ module.exports = app.controller 'Base',
     $rootScope.editor.getSession().setUseWrapMode(true)
     $rootScope.editor.setShowPrintMargin(false)
     $rootScope.editor.getSession().setValue($scope.currentDocument.body)
+    $rootScope.editor.setOption('maxLines', 90000)
+
+    window.editor = $rootScope.editor
 
     updateDocument = ->
       $scope.currentDocument = documentsService.getCurrentDocument()
