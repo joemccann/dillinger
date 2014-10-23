@@ -4,7 +4,7 @@
 app = require('../dillinger')
 
 module.exports = app.controller 'User',
-  ($rootScope, $timeout, userService, wordsCountService) ->
+  ($rootScope, $timeout, $modal, userService, wordsCountService) ->
 
     vm = @
 
@@ -33,10 +33,16 @@ module.exports = app.controller 'User',
         $rootScope.$apply()
       , 0
 
+    showAbout = ->
+      modalInstance = $modal.open
+        templateUrl: '../coffeescript/vendor/bootstrap-modal.directive.html'
+        controller: 'WTFisDillingerModalInstance'
+
     vm.toggleAutoSave   = toggleAutoSave
     vm.toggleWordsCount = toggleWordsCount
     vm.toggleNightMode  = toggleNightMode
     vm.resetProfile     = resetProfile
+    vm.showAbout        = showAbout
 
     $rootScope.$on 'preview.updated', updateWords
 
