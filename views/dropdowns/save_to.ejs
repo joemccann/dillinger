@@ -1,24 +1,30 @@
 <ul class="dropdown dropdown-menu" role="menu">
   <li>
-    <a href="#" class="save-to-dropbox unlinked">
+    <a href="#" class="dropbox save-to-dropbox unlinked">
       <span>Dropbox</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
-  <li>
-    <a href="#" class="save-to-github unlinked">
+
+  <% if (isGithubConfigured) { %>
+  <li ng-controller="Github as github">
+    <a href="#"
+       class="save-to-github <% isGithubAuth ? 'linked' : 'unlinked' %>"
+       ng-click="github.saveTo('<%= github_username %>')">
       <span>Github</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
+  <% } %>
+
   <li>
-    <a href="#" class="save-to-google-drive unlinked">
+    <a href="#" class="google-drive save-to-google-drive unlinked">
       <span>Google Drive</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
   <li>
-    <a href="#" class="save-to-one-drive unlinked">
+    <a href="#" class="one-drive save-to-one-drive unlinked">
       <span>One Drive</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>

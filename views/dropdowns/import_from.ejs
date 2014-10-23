@@ -5,12 +5,18 @@
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
-  <li>
-    <a href="#" class="import-github unlinked">
+
+  <% if (isGithubConfigured) { %>
+  <li ng-controller="Github as github">
+    <a href="#"
+       class="import-github <%= isGithubAuth ? 'linked' : 'unlinked' %>"
+       ng-click="github.importFile('<%= github_username %>')">
       <span>Github</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
+  <% } %>
+
   <li>
     <a href="#" class="import-google-drive unlinked">
       <span>Google Drive</span>
