@@ -11,18 +11,14 @@ do (window, document) ->
 
   require('./dillinger')
 
-  require('./factorys/sheet.factory')
-
   # User
   require('./services/user.service')
   require('./user/user.controller')
 
-  require('./services/documents.service')
   require('./services/wordscount.service')
 
   # Controllers
   require('./base/base.controller')
-  require('./documents/documents.controller')
 
   # Directives
   require('./components/document-title.directive')

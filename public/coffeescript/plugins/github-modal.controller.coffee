@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('plugins.github.modal', [])
+  .module('plugins.github.modal', ['plugins.github.service'])
   .controller 'GithubModal',
   ($modalInstance, githubService) ->
 

@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.factory 'documentsService',
+module.exports =
+  angular
+  .module('documents.service', ['documents.sheet'])
+  .factory 'documentsService',
   ($rootScope, Sheet) ->
 
     currentDocument =
@@ -50,6 +51,7 @@ module.exports = app.factory 'documentsService',
       setCurrentDocumentBody: (body) ->
         service.currentDocument.body = body
       getCurrentDocumentBody: ->
+        service.setCurrentDocumentBody($rootScope.editor.getSession().getValue())
         service.currentDocument.body
       save: ->
         sessionStorage.setItem('files', angular.toJson(service.files))

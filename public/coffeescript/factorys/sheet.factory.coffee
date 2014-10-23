@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.factory 'Sheet',
+module.exports =
+  angular
+  .module('documents.sheet', [])
+  .factory 'Sheet',
   () ->
     (sheetData) ->
       angular.extend @,

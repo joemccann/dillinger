@@ -1,14 +1,14 @@
-<ul class="dropdown dropdown-menu" role="menu">
+<ul class="dropdown dropdown-menu" role="menu" ng-controller="DocumentsExport as export">
   <li>
-    <a href="#" class="export-html">HTML</a>
+    <a href="#" ng-click="export.asHTML()" class="export-html">HTML</a>
   </li>
   <li>
-    <a href="#" class="export-styled_html">Styled HTML</a>
+    <a href="#" ng-click="export.asStyledHTML()" class="export-styled_html">Styled HTML</a>
   </li>
   <li>
-    <a href="#" class="export-md">Markdown</a>
+    <a href="#" ng-click="export.asMarkdown()" class="export-md">Markdown</a>
   </li>
   <li>
-    <a href="#" class="export-pdf">PDF</a>
+    <a href="#" ng-click="export.asPDF()" class="export-pdf">PDF</a>
   </li>
 </ul>

@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.controller 'Documents',
+module.exports =
+  angular
+  .module('documents', ['documents.service', 'documents.export'])
+  .controller 'Documents',
   ($scope, $timeout, $rootScope, userService, documentsService) ->
 
     # 1. Self-reference
@@ -15,10 +16,6 @@ module.exports = app.controller 'Documents',
     $scope.profile = userService.profile
 
     # 3a. Set up watchers on the scope
-    # $scope.$watch 'document.save', saveDocument
-    # $scope.$watch 'document.create', createDocument
-    # $scope.$watch 'document.remove', removeDocument
-    # $scope.$watch 'document.select', selectDocument
 
     # 3b. Expose methods or data on the scope
     $rootScope.documents = documentsService.getItems()
@@ -29,8 +26,9 @@ module.exports = app.controller 'Documents',
 
     save = ->
       # console.log "DocumentsController.save"
-      # item = documentsService.getCurrentDocument()
-      # item.body = $rootScope.editor.getSession().getValue()
+      item = documentsService.getCurrentDocument()
+      item.body = $rootScope.editor.getSession().getValue()
+      documentsService.setCurrentDocument(item)
       documentsService.save()
 
     initDocument = ->
