@@ -13,13 +13,13 @@ module.exports = app.directive 'menuToggle',
       link: (scope, el, attrs) ->
 
         $body = angular.element(document).find('body')
-        $page = angular.element(document).find('.page')
+        $editor = angular.element(document).find('#editor')
 
         el.bind 'click', ->
           $body.toggleClass('open-menu')
           false
 
-        $page.bind 'click', ->
+        $editor.bind 'click', ->
           if $body.hasClass 'open-menu'
             $body.toggleClass('open-menu')
           false
