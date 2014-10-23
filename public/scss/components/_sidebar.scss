@@ -23,7 +23,7 @@
     width: map-get($component-widths, sidebar);
     background-color: $c-background-sidebar;
     min-height: 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     overflow: hidden;
