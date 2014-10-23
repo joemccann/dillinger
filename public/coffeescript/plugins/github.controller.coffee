@@ -23,8 +23,10 @@ module.exports =
 
       modalInstance.result.then ->
         documentsService.setCurrentDocumentTitle(githubService.config.current.fileName)
-        $rootScope.editor.getSession().setValue(githubService.config.current.file)
+        documentsService.setCurrentDocumentBody(githubService.config.current.file)
         githubService.save()
+        $rootScope.$emit 'autosave'
+        $rootScope.$emit 'document.refresh'
       , ->
         console.log "Modal dismissed at: #{new Date()}"
 

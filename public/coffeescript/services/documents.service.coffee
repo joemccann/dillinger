@@ -47,6 +47,10 @@ module.exports = app.factory 'documentsService',
         service.currentDocument.title = title
       getCurrentDocumentTitle: ->
         service.currentDocument.title
+      setCurrentDocumentBody: (body) ->
+        service.currentDocument.body = body
+      getCurrentDocumentBody: ->
+        service.currentDocument.body
       save: ->
         sessionStorage.setItem('files', angular.toJson(service.files))
         sessionStorage.setItem('currentDocument', angular.toJson(service.currentDocument))

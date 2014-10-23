@@ -79,6 +79,8 @@ module.exports = app.controller 'Documents',
     $scope.selectDocument = selectDocument
 
     $rootScope.editor.on 'change', doAutoSave
+
+    $rootScope.$on 'autosave', doAutoSave
     initDocument()
 
     return
