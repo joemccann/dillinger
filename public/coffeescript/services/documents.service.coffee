@@ -6,44 +6,58 @@ app = require('../dillinger')
 module.exports = app.factory 'documentsService',
   ($rootScope, Sheet) ->
 
-    currentDocument = {}
+    currentDocument =
+      title: ""
+      body: ""
+      id: null
     files = []
 
     service =
+      currentDocument: {}
+      files: []
       getItem: (item) ->
-        files[files.indexOf(item)]
+        service.files[service.files.indexOf(item)]
       getItemByIndex: (index) ->
-        files[index]
+        service.files[index]
+      getItemById: (id) ->
+        tmp = null
+        angular.forEach service.files, (file) ->
+          if file.id is id
+            tmp = file
+        tmp
       addItem: (item) ->
-        files.push item
+        service.files.push item
       removeItem: (item) ->
-        files.splice(files.indexOf(item), 1)
+        service.files.splice(service.files.indexOf(item), 1)
       createItem: (props) ->
-        console.log(new Sheet())
         new Sheet(props)
       size: ->
-        files.length
+        service.files.length
       getItems: ->
-        files
+        service.files
       removeItems: ->
-        files = []
-        currentDocument = {}
+        service.files = []
+        service.currentDocument = {}
         false
       setCurrentDocument: (item) ->
-        currentDocument = item
+        service.currentDocument = item
       getCurrentDocument: ->
-        currentDocument
+        service.currentDocument
+      setCurrentDocumentTitle: (title) ->
+        service.currentDocument.title = title
+      getCurrentDocumentTitle: ->
+        service.currentDocument.title
       save: ->
-        sessionStorage.setItem('files', angular.toJson(files))
-        sessionStorage.setItem('currentDocument', angular.toJson(currentDocument))
+        sessionStorage.setItem('files', angular.toJson(service.files))
+        sessionStorage.setItem('currentDocument', angular.toJson(service.currentDocument))
       init: ->
-        files           = angular.fromJson(sessionStorage.getItem('files')) or []
-        currentDocument = angular.fromJson(sessionStorage.getItem('currentDocument')) or {}
-        unless files?.length
+        service.files           = angular.fromJson(sessionStorage.getItem('files')) or []
+        service.currentDocument = angular.fromJson(sessionStorage.getItem('currentDocument')) or {}
+        unless service.files?.length
           item = @createItem()
           @addItem(item)
           @setCurrentDocument(item)
-          # @save()
+          @save()
 
     service.init()
 

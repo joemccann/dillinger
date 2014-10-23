@@ -4,7 +4,7 @@
 app = require('../dillinger')
 
 module.exports = app.controller 'Documents',
-  ($scope, $rootScope, userService, documentsService) ->
+  ($scope, $timeout, $rootScope, userService, documentsService) ->
 
     # 1. Self-reference
     vm = @
@@ -21,16 +21,25 @@ module.exports = app.controller 'Documents',
     # $scope.$watch 'document.select', selectDocument
 
     # 3b. Expose methods or data on the scope
-    $scope.documents = documentsService.getItems()
+    $rootScope.documents = documentsService.getItems()
+
+    # Bootstrap Dropdown...
+    $scope.status =
+      isopen: true
 
     save = ->
       # console.log "DocumentsController.save"
-      item = documentsService.getCurrentDocument()
-      item.body = $rootScope.editor.getSession().getValue()
+      # item = documentsService.getCurrentDocument()
+      # item.body = $rootScope.editor.getSession().getValue()
       documentsService.save()
 
+    initDocument = ->
+      item = documentsService.getItemById($rootScope.currentDocument.id)
+      documentsService.setCurrentDocument(item)
+      $rootScope.$emit 'document.refresh'
+
     selectDocument = (item) ->
-      # console.log "DocumentsController.selectDocument"
+      #    console.log "DocumentsController.selectDocument"
       item = documentsService.getItem(item)
       documentsService.setCurrentDocument(item)
       $rootScope.$emit 'document.refresh'
@@ -60,8 +69,8 @@ module.exports = app.controller 'Documents',
     # 5. Clean up
     $scope.$on '$destroy', ->
       console.log "$destroy"
-      vm = null
-      $scope     = null
+      vm     = null
+      $scope = null
 
     # 6. All the actual implementations go here.
     $scope.saveDocument   = save
@@ -70,5 +79,6 @@ module.exports = app.controller 'Documents',
     $scope.selectDocument = selectDocument
 
     $rootScope.editor.on 'change', doAutoSave
+    initDocument()
 
     return
