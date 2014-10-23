@@ -5,15 +5,11 @@ sequence = require("run-sequence")
 devTasks = [
   "webpack:dev"
   "sass"
-  # "images"
-  # "copy"
 ]
 
 buildTasks = [
   "webpack:build"
   "sass"
-  # "images"
-  # "copy"
 ]
 
 if global.isProduction
