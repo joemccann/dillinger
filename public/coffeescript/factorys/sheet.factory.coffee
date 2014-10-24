@@ -10,5 +10,5 @@ module.exports =
       angular.extend @,
         id: new Date().getTime()
         title: 'Untitled Document'
-        body: require('raw!./defaultText.md')
+        body: require('raw!../../../README.md')
       angular.extend @, sheetData
