@@ -37,6 +37,7 @@ module.exports = app.controller 'User',
       modalInstance = $modal.open
         templateUrl: '../coffeescript/vendor/bootstrap-modal.directive.html'
         controller: 'WTFisDillingerModalInstance'
+        windowClass: 'modal--dillinger about'
 
     vm.toggleAutoSave   = toggleAutoSave
     vm.toggleWordsCount = toggleWordsCount
