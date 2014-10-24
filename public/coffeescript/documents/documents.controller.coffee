@@ -15,14 +15,24 @@ module.exports =
     # 3. Scope Stuff
     $scope.profile = userService.profile
 
+    vm.status =
+      import:   true
+      save:     true
+      document: false
+
+    vm.toggled = (open) ->
+      console.log open
+
+    # vm.toggleDropdown = ($event) ->
+    #   console.log $event
+    #   $event.preventDefault()
+    #   $event.stopPropagation()
+    #   vm.status.isopen = !vm.status.isopen
+
     # 3a. Set up watchers on the scope
 
     # 3b. Expose methods or data on the scope
     $rootScope.documents = documentsService.getItems()
-
-    # Bootstrap Dropdown...
-    $scope.status =
-      isopen: true
 
     save = ->
       # console.log "DocumentsController.save"

@@ -14,11 +14,17 @@
       </li>
       <li class="menu-item menu-item--save-to has-dropdown" dropdown>
         <a href="#" class="dropdown-toggle">Save to <span class="caret"></span></a>
-        <%- include dropdowns/save_to %>
+
+        <ul class="dropdown dropdown-menu" role="menu">
+          <%- include dropdowns/save_to %>
+        </ul>
       </li>
       <li class="menu-item menu-item--import-from has-dropdown" dropdown>
         <a href="#" class="dropdown-toggle">Import from <span class="caret"></span></a>
-        <%- include dropdowns/import_from %>
+
+        <ul class="dropdown dropdown-menu" role="menu">
+          <%- include dropdowns/import_from %>
+        </ul>
       </li>
       <li class="menu-item menu-item-icon menu-item--preview">
         <a class="menu-link menu-link-preview" href="#preview" preview-toggle>

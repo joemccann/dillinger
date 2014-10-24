@@ -59,6 +59,10 @@
       }
     }
 
+    &--documents {
+      padding-bottom: 1rem;
+    }
+
     @include from('tablet') {
       &--save-to,
       &--import-from {

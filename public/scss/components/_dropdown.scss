@@ -16,11 +16,15 @@
   position: absolute;
   right: 0;
   top: 51px;
-  list-style: none;
   background-color: $c-background-highlight;
   width: 188px;
+}
+
+.dropdown,
+.sidebar-list {
   padding: 0;
   margin: 0;
+  list-style: none;
 
   li {
     margin: 32px 0 32px;
@@ -45,6 +49,13 @@
 
   .open & {
     display: block;
+
+    &.collapse {
+      display: none;
+    }
+    &.collapse.in {
+      display: block;
+    }
   }
 
   .unlinked .icon {
@@ -52,6 +63,13 @@
   }
 
   &.documents {
+
+    li {
+      &:last-child {
+      margin-bottom: 1rem;
+    }
+
+    }
     li.active a {
       color: $c-highlight;
     }

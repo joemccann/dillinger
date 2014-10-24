@@ -12,21 +12,21 @@
 // *************************************
 
 .sidebar {
-  overflow: scroll;
-  // -webkit-overflow-scrolling: touch;
-  width: 285px;
+  overflow: auto;
   height: 100%;
   padding-right: 15px;
   padding-bottom: 15px;
+  width: map-get($component-widths, sidebar) + 15px;
 
   &-wrapper {
-    width: map-get($component-widths, sidebar);
+    -webkit-overflow-scrolling: touch;
     background-color: $c-background-sidebar;
-    min-height: 100%;
-    position: fixed;
     left: 0;
+    height: 100%;
+    overflow-y: hidden;
+    position: fixed;
     top: 0;
-    overflow: hidden;
+    width: map-get($component-widths, sidebar) + 15px;
     z-index: map-get($z-index, sidebar);
   }
 
