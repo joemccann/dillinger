@@ -20,13 +20,14 @@
   font-weight: map-get($headingtype, semibold);
   font-family: unquote(map-get($headingtype, font-family));
   font-size: 14px;
-  text-shadow: 0 1px 0 darken($c-highlight, 30%);
+  text-shadow: 0 1px 0 darken($c-highlight, 20%);
   padding: 16px 24px;
   background-color: $c-highlight;
   border-radius: 3px;
   margin: 0 auto 16px;
   line-height: 1;
   color: #fff;
+  transition: all .15s linear;
 
 // -------------------------------------
 //   Modifiers
@@ -36,16 +37,43 @@
   &--save {
     display: block;
     width: 238px;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      border-bottom-color: transparent;
+      box-shadow: 0 1px 3px darken($c-highlight, 10%);
+      text-shadow: 0 1px 0 darken($c-highlight, 10%);;
+    }
   }
 
   &--save {
     background-color: $c-button-save;
     text-shadow: 0 1px 1px darken($c-button-save, 20%);
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      border-bottom-color: transparent;
+      box-shadow: 0 1px 5px darken($c-button-save, 30%);
+      text-shadow: none;
+    }
   }
 
   &--delete {
+    display: block;
+    width: 238px;
     background-color: transparent;
     font-size: 12px;
+    text-shadow: none;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      border-bottom-color: transparent;
+      text-shadow: 0 1px 0 darken($c-button-save, 30%);
+      opacity: 0.8;
+    }
   }
 
   &--ok,
