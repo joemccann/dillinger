@@ -20,7 +20,7 @@
   font-weight: map-get($headingtype, semibold);
   font-family: unquote(map-get($headingtype, font-family));
   font-size: 14px;
-  text-shadow: 0 1px 1px darken($c-highlight, 20%);
+  text-shadow: 0 1px 0 darken($c-highlight, 30%);
   padding: 16px 24px;
   background-color: $c-highlight;
   border-radius: 3px;
@@ -46,6 +46,21 @@
   &--delete {
     background-color: transparent;
     font-size: 12px;
+  }
+
+  &--ok,
+  &--close {
+    border-top: 0;
+    background-color: $c-button-save;
+    text-shadow: 0 1px 0 darken($c-button-save, 30%);
+    margin: 0;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background-color: darken($c-button-save, 15%);
+      text-shadow: none;
+    }
   }
 
 // -------------------------------------
