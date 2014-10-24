@@ -1,8 +1,20 @@
 
 'use strict'
 
-app = require('../dillinger')
-marked    = require('marked')
+app    = require('../dillinger')
+marked = require('marked')
+hljs   = require('highlight.js')
+
+marked.setOptions
+  gfm: true
+  tables: true
+  pedantic: false
+  sanitize: true
+  smartLists: true
+  smartypants: false
+  langPrefix: 'lang-'
+  highlight: (code) ->
+    hljs.highlightAuto(code).value
 
 module.exports = app.directive 'preview',
   ($rootScope) ->
