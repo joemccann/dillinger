@@ -13,9 +13,9 @@
 
 .toggle {
   display: block;
-  width: 20px;
-  height: 14px;
-  margin: 24px 16px 0;
+  width: 40px;
+  height: 16px;
+  padding: 27px 16px 24px;
   float: left;
 
   span:after,
@@ -38,7 +38,7 @@
   span,
   span:after,
   span:before {
-    width: 100%;
+    width: 20px;
     height: 2px;
     background-color: $c-icon;
     transition: all .3s;
