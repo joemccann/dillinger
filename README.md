@@ -1,10 +1,11 @@
-Dillinger
-=========
+# Dillinger
 
-Dillinger is a cloud-enabled HTML5 Markdown editor.
+Version: v3.0.0.beta
 
-  - Type some Markdown text in the left window
-  - See the HTML in the right
+Dillinger is a cloud-enabled, mobile-ready, offline-working HTML5 Markdown editor.
+
+  - Type some Markdown on the left
+  - See HTML in the right
   - Magic
 
 Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site] [1]:
@@ -19,13 +20,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
-Version
-----
-
-2.0
-
-Tech
------------
+## Tech
 
 Dillinger uses a number of open source projects to work properly:
 
@@ -37,40 +32,52 @@ Dillinger uses a number of open source projects to work properly:
 * [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh
 
-Installation
---------------
+## Installation
 
 ```sh
 git clone [git-repo-url] dillinger
 cd dillinger
 npm i -d
 mkdir -p public/files/{md,html,pdf}
+node app
 ```
 
-##### Configure Plugins. Instructions in following README.md files
+### Plugins
+
+Dillinger is currently extended with the following plugins
+
+* Dropbox
+* Github
+* Google Drive
+* OneDrive
+
+Readmes, how to use them in your own application can be found here:
 
 * plugins/dropbox/README.md
 * plugins/github/README.md
 * plugins/googledrive/README.md
-
-```sh
-node app
-```
-
+* plugins/onedrive/README.md
 
 ## Development
 
-First Tab:
+Want to contribute? Great!
+
+Dillinger uses Gulp + Webpack for fast developing.
+Make a change in your file and instantanously see your updates!
+
+Open your favorite Terminal and open these Tabs.
+
+First:
 ```sh
 node app
 ```
 
-Second Tab:
+Second:
 ```sh
-cg server
+gulp dev
 ```
 
-Tests:
+(optional) Third:
 ```sh
 karma start
 ```
