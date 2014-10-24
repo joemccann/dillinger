@@ -4,11 +4,9 @@
 app         = require('../dillinger')
 ace         = require('brace')
 # keymaster = require('keymaster')
-# highlight = require('highlight.js')
 
 require 'brace/mode/markdown'
-require 'brace/theme/solarized_dark'
-# require 'brace/theme/solarized_light'
+require '../documents/theme-dillinger'
 
 module.exports = app.controller 'Base',
   ($scope, $rootScope, userService, documentsService) ->
@@ -18,10 +16,11 @@ module.exports = app.controller 'Base',
     $rootScope.editor          = ace.edit 'editor'
 
     $rootScope.editor.getSession().setMode('ace/mode/markdown')
-    $rootScope.editor.setTheme('ace/theme/solarized_dark')
+    $rootScope.editor.setTheme('ace/theme/dillinger')
     $rootScope.editor.getSession().setUseWrapMode(true)
     $rootScope.editor.setShowPrintMargin(false)
     $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
+    $rootScope.editor.setOption('minLines', 37)
     $rootScope.editor.setOption('maxLines', 90000)
 
     updateDocument = ->
