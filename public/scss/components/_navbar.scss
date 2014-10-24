@@ -23,9 +23,11 @@
   left: 0;
   z-index: map-get($z-index, navbar);
   transition: map-get($transitions, menu);
+  will-change: left;
 
   .open-menu & {
-    transform: translateX(map-get($component-widths, sidebar));
+    left: map-get($component-widths, sidebar);
+    // transform: translateX(map-get($component-widths, sidebar));
   }
 
   &-brand {

@@ -27,6 +27,7 @@
   transition: map-get($transitions, menu);
   background-color: #fff;
   padding-top: 51px;
+  will-change: left;
 
   @if $debug == true {
     background: linear-gradient(
@@ -40,6 +41,7 @@
   }
 
   .open-menu & {
-    transform: translateX(map-get($component-widths, sidebar));
+    left: map-get($component-widths, sidebar);
+    // transform: translateX(map-get($component-widths, sidebar));
   }
 }
