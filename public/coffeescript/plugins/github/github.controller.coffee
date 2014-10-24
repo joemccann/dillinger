@@ -15,6 +15,7 @@ module.exports =
       modalInstance = $modal.open
         templateUrl: '../coffeescript/plugins/github/github-modal.directive.html'
         controller: 'GithubModal as modal'
+        windowClass: 'modal--dillinger'
         resolve:
           items: ->
             githubService.config.user.name = username

@@ -15,6 +15,7 @@ module.exports =
       modalInstance = $modal.open
         templateUrl: '../coffeescript/plugins/dropbox/dropbox-modal.directive.html'
         controller: 'DropboxModal as modal'
+        windowClass: 'modal--dillinger'
         resolve:
           items: ->
             dropboxService.fetchFiles()

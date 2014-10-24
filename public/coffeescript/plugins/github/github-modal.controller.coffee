@@ -17,6 +17,9 @@ module.exports =
     setFile = ->
       $modalInstance.close()
 
+    close = ->
+      $modalInstance.dismiss('cancel')
+
     setRepos = ->
       vm.title = "Repositories"
       vm.step  = 2
@@ -55,9 +58,10 @@ module.exports =
         .then(setTreeFiles)
       false
 
-    vm.fetchRepos = fetchRepos
-    vm.fetchBranches = fetchBranches
+    vm.fetchRepos     = fetchRepos
+    vm.fetchBranches  = fetchBranches
     vm.fetchTreeFiles = fetchTreeFiles
-    vm.fetchFile = fetchFile
+    vm.fetchFile      = fetchFile
+    vm.close          = close
 
     return

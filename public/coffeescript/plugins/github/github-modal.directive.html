@@ -1,8 +1,8 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="cancel()">
+  <button type="button" class="close" ng-click="modal.close()">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h4 class="modal-title" ng-bind="modal.title"></h4>
+  <h3 ng-bind="modal.title"></h3>
 </div>
 <div class="modal-body">
 <ul>
@@ -30,5 +30,5 @@
 </ul>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-click="ok()">Ok</button>
+  <button type="button" class="btn btn--ok" ng-click="modal.close()">Close</button>
 </div>

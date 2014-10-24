@@ -40,6 +40,9 @@ module.exports =
       dropboxService.fetchFile(fileName)
         .then(vm.setFile)
 
+    vm.close = ->
+      $modalInstance.dismiss('cancel')
+
     vm.onPageChange()
 
     return
