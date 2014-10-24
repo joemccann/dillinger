@@ -31,10 +31,6 @@
     opacity: 1;
   }
 
-  .open-menu & {
-    left: map-get($component-widths, sidebar);
-  }
-
 // -------------------------------------
 //   Modifiers
 // -------------------------------------
