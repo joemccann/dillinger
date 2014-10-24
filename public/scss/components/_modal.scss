@@ -1,0 +1,101 @@
+// *************************************
+//
+//   Modal
+//
+//   Dillinger Modals
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .modal[.modal--dillinger]
+//   .modal-dialog
+//     .modal-content
+//       .modal-header
+//       .modal-body
+//       .modal-footer
+//
+// *************************************
+
+.modal {
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+  &--dillinger {
+
+    &.about .modal-dialog {
+      @include fontsize(epsilon, all);
+       max-width: 500px;
+    }
+
+    .modal-dialog {
+      max-width: 600px;
+      width: auto;
+      margin: 5rem auto 5rem;
+    }
+
+    .modal-content {
+      background: #373D49;
+      border-radius: 3px;
+      box-shadow: 0px 2px 5px 0px #2C3B59;
+      color: #fff;
+      font-family: unquote(map-get($headingtype, font-family));
+      font-weight: map-get($headingtype, regular);
+      padding: 2rem;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 1rem 0;
+      padding: 0 0 0 1rem;
+    }
+
+    li {
+      padding: 0;
+      margin: 0;
+    }
+
+    .modal-header {
+      border: 0;
+      padding: 0;
+    }
+
+    .modal-body {
+      padding: 0;
+    }
+
+    .modal-footer {
+      border: 0;
+      padding: 0;
+    }
+
+    .close {
+      color: #fff;
+      opacity: 1;
+    }
+
+  }
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .structure.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-structure
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+  &-backdrop {
+    background-color: #373D49;
+  }
+
+}
