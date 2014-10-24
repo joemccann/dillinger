@@ -10,10 +10,6 @@ module.exports = app.factory 'userService',
       enableAutoSave:   true
       enableWordsCount: true
       enableNightMode:  false
-      Dropbox:          {}           # Noch unklar was hier hin muss.
-      OneDrive:         {}          # Noch unklar was hier hin muss.
-      GoogleDrive:      {}       # Noch unklar was hier hin muss.
-      Github:           {}            # Noch unklar was hier hin muss.
 
     service =
       profile: {}
