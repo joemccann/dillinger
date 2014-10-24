@@ -13,7 +13,7 @@ module.exports =
       console.log "importing!"
 
       modalInstance = $modal.open
-        templateUrl: '../coffeescript/plugins/github-modal.directive.html'
+        templateUrl: '../coffeescript/plugins/github/github-modal.directive.html'
         controller: 'GithubModal as modal'
         resolve:
           items: ->
@@ -25,8 +25,8 @@ module.exports =
         documentsService.setCurrentDocumentTitle(githubService.config.current.fileName)
         documentsService.setCurrentDocumentBody(githubService.config.current.file)
         githubService.save()
-        $rootScope.$emit 'autosave'
         $rootScope.$emit 'document.refresh'
+        $rootScope.$emit 'autosave'
       , ->
         console.log "Modal dismissed at: #{new Date()}"
 

@@ -84,7 +84,7 @@ module.exports =
         .error (err) ->
           console.log err
 
-      fetchOrgs: (callback) ->
+      fetchOrgs: ->
         $http.post('import/github/orgs')
         .success (data) ->
           # console.log data

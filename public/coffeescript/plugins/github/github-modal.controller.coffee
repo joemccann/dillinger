@@ -17,21 +17,20 @@ module.exports =
     setFile = ->
       $modalInstance.close()
 
+    setRepos = ->
+      vm.title = "Repositories"
+      vm.step  = 2
+      vm.repos = githubService.config.repos
+
+    fetchRepos = (name) ->
+      githubService.fetchRepos(name)
+        .then(setRepos)
+      false
+
     fetchFile = (url, name) ->
       githubService.config.current.fileName = name.split('/').pop()
       githubService.fetchFile(url)
         .then(setFile)
-      false
-
-    setTreeFiles = ->
-      vm.title = "Files"
-      vm.step  = 4
-      vm.files = githubService.config.current.tree
-
-    fetchTreeFiles = (sha) ->
-      githubService.config.current.sha = sha
-      githubService.fetchTreeFiles(sha)
-        .then(setTreeFiles)
       false
 
     setBranches = ->
@@ -45,14 +44,15 @@ module.exports =
         .then(setBranches)
       false
 
-    setRepos = ->
-      vm.title = "Reporsitories"
-      vm.step  = 2
-      vm.repos = githubService.config.repos
+    setTreeFiles = ->
+      vm.title = "Files"
+      vm.step  = 4
+      vm.files = githubService.config.current.tree
 
-    fetchRepos = (name) ->
-      githubService.fetchRepos(name)
-        .then(setRepos)
+    fetchTreeFiles = (sha) ->
+      githubService.config.current.sha = sha
+      githubService.fetchTreeFiles(sha)
+        .then(setTreeFiles)
       false
 
     vm.fetchRepos = fetchRepos
