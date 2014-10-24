@@ -1,16 +1,25 @@
 <ul class="dropdown dropdown-menu" role="menu">
-  <li>
-    <a href="#" class="import-dropbox unlinked">
+
+  <% if (isDropboxConfigured) { %>
+  <li ng-controller="Dropbox as dropbox">
+    <% if (isDropboxAuth) { %>
+      <a href="#" class="import-dropbox linked" ng-click="dropbox.importFile()">
+    <% } else { %>
+      <a href="/redirect/dropbox" class="import-dropbox unlinked">
+    <% } %>
       <span>Dropbox</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
+  <% } %>
 
   <% if (isGithubConfigured) { %>
   <li ng-controller="Github as github">
-    <a href="#"
-       class="import-github <%= isGithubAuth ? 'linked' : 'unlinked' %>"
-       ng-click="github.importFile('<%= github_username %>')">
+    <% if (isGithubAuth) { %>
+      <a href="#" class="import-github linked" ng-click="github.importFile('<%= github_username %>')">
+    <% } else { %>
+      <a href="/redirect/github"  class="import-github unlinked">
+    <% } %>
       <span>Github</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
