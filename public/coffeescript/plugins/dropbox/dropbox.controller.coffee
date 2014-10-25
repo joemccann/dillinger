@@ -13,7 +13,7 @@ module.exports =
       console.log "importing!"
 
       modalInstance = $modal.open
-        templateUrl: '../coffeescript/plugins/dropbox/dropbox-modal.directive.html'
+        template: require('raw!./dropbox-modal.directive.html')
         controller: 'DropboxModal as modal'
         windowClass: 'modal--dillinger'
         resolve:

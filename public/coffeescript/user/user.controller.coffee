@@ -35,7 +35,7 @@ module.exports = app.controller 'User',
 
     showAbout = ->
       modalInstance = $modal.open
-        templateUrl: '../coffeescript/vendor/bootstrap-modal.directive.html'
+        template: require('raw!../vendor/bootstrap-modal.directive.html')
         controller: 'WTFisDillingerModalInstance'
         windowClass: 'modal--dillinger about'
 

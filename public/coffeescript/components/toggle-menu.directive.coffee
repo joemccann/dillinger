@@ -9,7 +9,7 @@ module.exports = app.directive 'menuToggle',
     directive =
       restrict: 'E'
       replace: true
-      templateUrl: '../coffeescript/components/toggle-menu.directive.html'
+      template: require('raw!./toggle-menu.directive.html')
       link: (scope, el, attrs) ->
 
         $body = angular.element(document).find('body')

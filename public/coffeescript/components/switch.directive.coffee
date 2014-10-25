@@ -11,6 +11,6 @@ module.exports = app.directive 'switch',
       replace: true
       scope:
         toggleValue: '=value'
-      templateUrl: '../coffeescript/components/switch.directive.html'
+      template: require('raw!./switch.directive.html')
 
     return directive
