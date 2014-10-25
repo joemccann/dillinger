@@ -14,8 +14,11 @@ require './plugins/dropbox/dropbox.service'
 require './plugins/dropbox/dropbox-modal.controller'
 require './plugins/dropbox/dropbox.controller'
 
+require './services/notification.service'
+
 module.exports = angular.module('Dillinger', [
   'documents'
+  'notification'
   'plugins.github'
   'plugins.dropbox'
   'ui.bootstrap'

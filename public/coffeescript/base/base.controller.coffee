@@ -9,7 +9,7 @@ require 'brace/mode/markdown'
 require '../documents/theme-dillinger'
 
 module.exports = app.controller 'Base',
-  ($scope, $rootScope, userService, documentsService) ->
+  ($scope, $timeout, $rootScope, userService, documentsService, notificationService) ->
 
     $scope.profile             = userService.profile
     $rootScope.currentDocument = documentsService.getCurrentDocument()
@@ -22,6 +22,13 @@ module.exports = app.controller 'Base',
     $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
     $rootScope.editor.setOption('minLines', 37)
     $rootScope.editor.setOption('maxLines', 90000)
+
+    $timeout ->
+      notificationService('looola!')
+      $timeout ->
+        notificationService('looola!')
+      , 999
+    , 999
 
     updateDocument = ->
       $rootScope.currentDocument = documentsService.getCurrentDocument()
