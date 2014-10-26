@@ -3,75 +3,94 @@
 
 module.exports =
   angular
-  .module('notification', [])
-  .factory 'notificationService',
+  .module('diNotify', [])
+  .factory 'diNotify',
   ($templateCache, $compile, $timeout, $rootScope) ->
 
-    stack = []
+    stack    = []
+    startTop = 100
 
-    class Notification
+    class diNotify
+
+      _doLayout = ->
+        j = 1
+        shadowHeight = 50
+        currentY     = startTop
+
+        for el in stack
+          height = el[0].offsetHeight
+          top = currentY + height + shadowHeight
+          if el.attr('data-closing')
+            top += 0
+          else
+            currentY += height + (20 * j++)
+          el.css(
+            "visibility": "visible"
+            "top":        "#{top}px"
+            "margin-top": "-#{height+shadowHeight}px"
+          ).addClass('fade in')
+
+      onElementClosing = (e) ->
+        if e.propertyName is 'opacity' or e.originalEvent? and e.originalEvent.propertyName is 'opacity'
+          @.$destroy()
+
       constructor: (args) ->
         @defaults =
-          top: 100
-          duration: 3000
+          top:       100
+          duration:  3000
           container: document.body
-          message: 'Notification'
-          template: require 'raw!../base/notification.html'
+          message:   'Notification'
+          template:  require 'raw!../base/diNotify.html'
 
         if angular.isString(args)
-          args =
-            message: args
-        @args               = angular.extend {}, @defaults, args
+          args = message: args
 
-        if @args.scope then @args.scope else @args.scope = $rootScope.$new()
+        @args = angular.extend {}, @defaults, args
 
-        templateElement = $compile(@args.template)(@args.scope)
+        @$scope = if @args.scope then @args.scope else $rootScope.$new()
+        @$el    = undefined
 
-        @args.scope.$message = args.message
+        @$scope.$message = args.message
 
+        @build()
+        @addEvents()
 
-        angular.element(@args.container).append(templateElement)
-        stack.push(templateElement)
+      build: ->
+
+        @$el = $compile(@args.template)(@$scope)
+
+        @$el.bind 'webkitTransitionEnd oTransitionEnd otransitionend transitionend', onElementClosing.bind(@$scope)
+
+        angular.element(@args.container).append(@$el)
+        stack.push(@$el)
+
+      addEvents: ->
+        self = @
+
+        @$scope.$on '$destroy', (e) ->
+          stack.splice(stack.indexOf(self.$el), 1)
+          self.$el.remove()
+          console.log e
 
         $timeout ->
-          templateElement.css(
-            "margin-left": "-#{templateElement[0].offsetWidth / 2}px"
+          self.$el.css(
+            "margin-left": "-#{self.$el[0].offsetWidth / 2}px"
           )#.addClass('fade')
 
-        @args.scope.$close = ->
-          templateElement.attr(
+        @$scope.$close = ->
+          self.$el.attr(
             "data-closing", true
           ).css(
             "opacity": 0
           )#.addClass('out')
-          layoutMessage()
-
-        layoutMessage = =>
-          j = 0
-          currentY = @args.top
-          shadowHeight = 50
-          for el in stack
-            height = el[0].offsetHeight
-            top = currentY + height + shadowHeight
-            if el.attr('data-closing')
-              top += 0
-            else
-              currentY += height
-
-            el.css(
-              "visibility": "visible"
-              "top":        "#{top}px"
-              "margin-top": "-#{height+shadowHeight}px"
-            ).addClass('fade in')
+          _doLayout()
 
         $timeout ->
-          layoutMessage()
+          _doLayout()
 
         if @args.duration > 0
-          $timeout =>
-            @args.scope.$close()
+          $timeout ->
+            self.$scope.$close()
           , @args.duration
 
-
-
-    return (args) -> new Notification(args)
+    return (args) -> new diNotify(args)

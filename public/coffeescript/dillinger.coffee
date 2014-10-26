@@ -18,7 +18,7 @@ require './services/notification.service'
 
 module.exports = angular.module('Dillinger', [
   'documents'
-  'notification'
+  'diNotify'
   'plugins.github'
   'plugins.dropbox'
   'ui.bootstrap'
