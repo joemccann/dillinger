@@ -37,7 +37,7 @@ module.exports =
       constructor: (args) ->
         @defaults =
           top:       100
-          duration:  1000
+          duration:  2000
           container: document.body
           message:   'Notification'
           template:  require 'raw!../base/diNotify.html'
@@ -70,7 +70,6 @@ module.exports =
         @$scope.$on '$destroy', (e) ->
           stack.splice(stack.indexOf(self.$el), 1)
           self.$el.remove()
-          console.log e
 
         # $timeout ->
         #   self.$el.css(
