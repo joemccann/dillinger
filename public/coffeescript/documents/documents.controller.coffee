@@ -34,12 +34,12 @@ module.exports =
     # 3b. Expose methods or data on the scope
     $rootScope.documents = documentsService.getItems()
 
-    save = ->
+    save = (manuel) ->
       # console.log "DocumentsController.save"
       item = documentsService.getCurrentDocument()
       item.body = $rootScope.editor.getSession().getValue()
       documentsService.setCurrentDocument(item)
-      documentsService.save()
+      documentsService.save(manuel)
 
     initDocument = ->
       item = documentsService.getItemById($rootScope.currentDocument.id)

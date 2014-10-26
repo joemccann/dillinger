@@ -10,7 +10,6 @@ module.exports =
     vm = @
 
     importFile = ->
-      console.log "importing!"
 
       modalInstance = $modal.open
         template: require('raw!./dropbox-modal.directive.html')

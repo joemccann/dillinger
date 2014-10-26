@@ -5,7 +5,7 @@ module.exports =
   angular
   .module('plugins.github.service', [])
   .factory 'githubService',
-  ($http) ->
+  ($http, diNotify) ->
 
     defaults =
       orgs:     {}
@@ -31,23 +31,20 @@ module.exports =
       config: {}
 
       registerUserAsOrg: ->
-        console.log "registerUserAsOrg"
         service.config.orgs.push
           name: service.config.user.name
 
       fetchFile: (url) ->
-        console.log "fetchFile"
         $http.post('import/github/file',
           url: url
         )
         .success (data) ->
-          # console.log data
           service.config.current.file = data.data
         .error (err) ->
-          console.log err
+          diNotify(message: "An Error has happened: #{err}")
 
       fetchTreeFiles: (sha, branch, repo, owner, fileExts) ->
-        console.log "fetchTreeFiles"
+        di = diNotify("Fetching Files...")
         $http.post('import/github/tree_files',
           owner:  if owner then owner else service.config.user.name
           repo:   if repo then repo else service.config.current.repo
@@ -56,41 +53,42 @@ module.exports =
           fileExts: if fileExts then fileExts else "md"
         )
         .success (data) ->
-          # console.log data
+          di?.$scope.$close()
           service.config.current.tree = data.tree
         .error (err) ->
-          console.log err
+          diNotify(message: "An Error has happened: #{err}")
 
       fetchBranches: (repo, owner) ->
-        console.log "fetchBranches"
+        di = diNotify("Fetching Branches...")
         $http.post('import/github/branches',
           owner: if owner then owner else service.config.user.name
           repo: if repo then repo else service.config.current.repo
         )
         .success (data) ->
-          # console.log data
+          di?.$scope.$close()
           service.config.branches =  data
         .error (err) ->
-          console.log err
+          diNotify(message: "An Error has happened: #{err}")
 
       fetchRepos: (owner) ->
-        console.log "fetchRepos"
+        di = diNotify("Fetching Repos...")
         $http.post('import/github/repos',
           owner: owner
         )
         .success (data) ->
-          # console.log data
+          di?.$scope.$close()
           service.config.repos =  data
         .error (err) ->
-          console.log err
+          diNotify(message: "An Error has happened: #{err}")
 
       fetchOrgs: ->
+        di = diNotify("Fetching Organizations...")
         $http.post('import/github/orgs')
         .success (data) ->
-          # console.log data
+          di?.$scope.$close()
           service.config.orgs =  data
         .error (err) ->
-          console.log err
+          diNotify(message: "An Error has happened: #{err}")
 
       save: ->
         sessionStorage.setItem('github', angular.toJson(service.config))

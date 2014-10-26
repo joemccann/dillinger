@@ -10,7 +10,6 @@ module.exports =
     vm = @
 
     importFile = (username) ->
-      console.log "importing!"
 
       modalInstance = $modal.open
         template: require('raw!./github-modal.directive.html')

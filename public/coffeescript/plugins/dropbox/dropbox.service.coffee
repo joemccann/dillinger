@@ -5,7 +5,7 @@ module.exports =
   angular
   .module('plugins.dropbox.service', [])
   .factory 'dropboxService',
-  ($http) ->
+  ($http, diNotify) ->
 
     defaults =
       files: []
@@ -21,17 +21,17 @@ module.exports =
         .success (data) ->
           service.fetched.file = data.data
         .error (err) ->
-          console.log err
-          err
+          diNotify(message: "An Error has happened: #{err}")
       fetchFiles: ->
+        di = diNotify(message:"Fetching Markdown related files from Dropbox...", duration: 0)
         $http.post('import/dropbox',
           fileExts: 'md'
         )
         .success (data) ->
+          # di?.$scope.$close()
           service.files = data
         .error (err) ->
-          console.log err
-          err
+          diNotify(message: "An Error has happened: #{err}")
       save: ->
         sessionStorage.setItem('dropbox', angular.toJson(service.fetched))
         return

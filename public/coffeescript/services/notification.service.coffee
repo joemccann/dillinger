@@ -37,7 +37,7 @@ module.exports =
       constructor: (args) ->
         @defaults =
           top:       100
-          duration:  3000
+          duration:  1000
           container: document.body
           message:   'Notification'
           template:  require 'raw!../base/diNotify.html'
@@ -72,10 +72,10 @@ module.exports =
           self.$el.remove()
           console.log e
 
-        $timeout ->
-          self.$el.css(
-            "margin-left": "-#{self.$el[0].offsetWidth / 2}px"
-          )#.addClass('fade')
+        # $timeout ->
+        #   self.$el.css(
+        #     "margin-left": "-#{self.$el[0].offsetWidth / 2}px"
+        #   )#.addClass('fade')
 
         @$scope.$close = ->
           self.$el.attr(

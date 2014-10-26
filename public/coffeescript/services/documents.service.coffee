@@ -5,7 +5,7 @@ module.exports =
   angular
   .module('documents.service', ['documents.sheet'])
   .factory 'documentsService',
-  ($rootScope, Sheet) ->
+  ($rootScope, Sheet, diNotify) ->
 
     currentDocument =
       title: ""
@@ -53,7 +53,9 @@ module.exports =
       getCurrentDocumentBody: ->
         service.setCurrentDocumentBody($rootScope.editor.getSession().getValue())
         service.currentDocument.body
-      save: ->
+      save: (manual = false) ->
+        if manual
+          diNotify('Documents Saved.')
         sessionStorage.setItem('files', angular.toJson(service.files))
         sessionStorage.setItem('currentDocument', angular.toJson(service.currentDocument))
       init: ->
