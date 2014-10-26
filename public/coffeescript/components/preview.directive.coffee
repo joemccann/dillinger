@@ -9,7 +9,7 @@ marked.setOptions
   gfm: true
   tables: true
   pedantic: false
-  sanitize: true
+  sanitize: false
   smartLists: true
   smartypants: false
   langPrefix: 'lang-'
