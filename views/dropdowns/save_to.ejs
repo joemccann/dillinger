@@ -24,12 +24,19 @@
   </li>
   <% } %>
 
-  <li>
-    <a href="#" class="google-drive save-to-google-drive unlinked">
+  <% if (isGoogleDriveConfigured) { %>
+  <li ng-controller="Googledrive as googledrive">
+    <% if (isGoogleDriveAuth) { %>
+      <a href="#" class="save-to-google-drive linked" ng-click="googledrive.saveTo()">
+    <% } else { %>
+      <a href="/redirect/googledrive" class="import-google-drive unlinked">
+    <% } %>
       <span>Google Drive</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
+  <% } %>
+
   <li>
     <a href="#" class="one-drive save-to-one-drive unlinked">
       <span>One Drive</span>

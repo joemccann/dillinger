@@ -14,6 +14,10 @@ require './plugins/dropbox/dropbox.service'
 require './plugins/dropbox/dropbox-modal.controller'
 require './plugins/dropbox/dropbox.controller'
 
+require './plugins/google-drive/google-drive.service'
+require './plugins/google-drive/google-drive-modal.controller'
+require './plugins/google-drive/google-drive.controller'
+
 require './services/notification.service'
 
 module.exports = angular.module('Dillinger', [
@@ -21,5 +25,6 @@ module.exports = angular.module('Dillinger', [
   'diNotify'
   'plugins.github'
   'plugins.dropbox'
+  'plugins.googledrive'
   'ui.bootstrap'
 ])
