@@ -23,12 +23,6 @@ module.exports =
     vm.toggled = (open) ->
       console.log open
 
-    # vm.toggleDropdown = ($event) ->
-    #   console.log $event
-    #   $event.preventDefault()
-    #   $event.stopPropagation()
-    #   vm.status.isopen = !vm.status.isopen
-
     # 3a. Set up watchers on the scope
 
     # 3b. Expose methods or data on the scope

@@ -23,12 +23,12 @@ module.exports =
         .error (err) ->
           diNotify(message: "An Error has happened: #{err}")
       fetchFiles: ->
-        di = diNotify(message:"Fetching Markdown related files from Dropbox...", duration: 0)
+        di = diNotify(message:"Fetching Markdown related files from Dropbox...", duration: 5000)
         $http.post('import/dropbox',
           fileExts: 'md'
         )
         .success (data) ->
-          # di?.$scope.$close()
+          di?.$scope.$close()
           service.files = data
         .error (err) ->
           diNotify(message: "An Error has happened: #{err}")
