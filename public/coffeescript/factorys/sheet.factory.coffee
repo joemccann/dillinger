@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('documents.sheet', [])
+  .module('diDocuments.sheet', [])
   .factory 'Sheet',
   () ->
     (sheetData) ->

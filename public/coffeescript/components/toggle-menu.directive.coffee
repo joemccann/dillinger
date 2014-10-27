@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.directive 'menuToggle',
+module.exports =
+  angular
+  .module('diBase.directives.menuToggle', [])
+  .directive 'menuToggle',
   () ->
 
     directive =

@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('documents.export.service', ['documents.service'])
+  .module('diDocuments.export.service', ['diDocuments.service'])
   .factory 'documentsExportService',
   ($http, documentsService, diNotify) ->
 

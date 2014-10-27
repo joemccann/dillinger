@@ -1,10 +1,11 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.directive 'documentTitle',
-  () ->
+module.exports =
+  angular
+  .module('diBase.directives.documentTitle', [])
+  .directive 'documentTitle',
+  ->
 
     directive =
       restrict: 'E'

@@ -1,7 +1,6 @@
 
 'use strict'
 
-app    = require('../dillinger')
 marked = require('marked')
 hljs   = require('highlight.js')
 
@@ -16,7 +15,10 @@ marked.setOptions
   highlight: (code) ->
     hljs.highlightAuto(code).value
 
-module.exports = app.directive 'preview',
+module.exports =
+  angular
+  .module('diBase.directives.preview', [])
+  .directive 'preview',
   ($rootScope) ->
 
     directive =

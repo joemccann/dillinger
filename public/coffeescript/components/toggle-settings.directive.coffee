@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.directive 'settingsToggle',
+module.exports =
+  angular
+  .module('diBase.directives.settingsToggle', [])
+  .directive 'settingsToggle',
   () ->
 
     directive =

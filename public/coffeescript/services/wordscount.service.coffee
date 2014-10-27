@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.service 'wordsCountService',
+module.exports =
+  angular
+  .module('diDocuments.service.wordcount', [])
+  .service 'wordsCountService',
   ($rootScope) ->
 
     words = 0

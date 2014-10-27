@@ -1,14 +1,23 @@
 
 'use strict'
 
-app         = require('../dillinger')
-ace         = require('brace')
-# keymaster = require('keymaster')
+ace = require('brace')
 
 require 'brace/mode/markdown'
 require '../documents/theme-dillinger'
 
-module.exports = app.controller 'Base',
+module.exports =
+  angular
+  .module('diBase', [
+    'diBase.controllers.about'
+    'diBase.directives.switch'
+    'diBase.directives.documentTitle'
+    'diBase.directives.menuToggle'
+    'diBase.directives.settingsToggle'
+    'diBase.directives.previewToggle'
+    'diBase.directives.preview'
+  ])
+  .controller 'Base',
   ($scope, $timeout, $rootScope, userService, documentsService) ->
 
     $scope.profile             = userService.profile
@@ -20,12 +29,11 @@ module.exports = app.controller 'Base',
     $rootScope.editor.getSession().setUseWrapMode(true)
     $rootScope.editor.setShowPrintMargin(false)
     $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
-    $rootScope.editor.setOption('minLines', 37)
+    $rootScope.editor.setOption('minLines', 50)
     $rootScope.editor.setOption('maxLines', 90000)
 
     updateDocument = ->
       $rootScope.currentDocument = documentsService.getCurrentDocument()
-      # console.log documentsService.getItem($rootScope.currentDocument)
       $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
 
     $scope.updateDocument = updateDocument

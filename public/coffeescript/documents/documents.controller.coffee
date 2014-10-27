@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('documents', ['documents.service', 'documents.export'])
+  .module('diDocuments', ['diDocuments.service', 'diDocuments.export'])
   .controller 'Documents',
   ($scope, $timeout, $rootScope, userService, documentsService) ->
 

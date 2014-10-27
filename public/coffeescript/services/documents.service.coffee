@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('documents.service', ['documents.sheet'])
+  .module('diDocuments.service', ['diDocuments.sheet'])
   .factory 'documentsService',
   ($rootScope, Sheet, diNotify) ->
 

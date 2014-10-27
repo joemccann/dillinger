@@ -3,7 +3,7 @@
 
 module.exports =
   angular
-  .module('diUser', ['diUser.service'])
+  .module('diUser', ['diUser.service', 'diDocuments.service.wordcount'])
   .controller 'User',
   ($rootScope, $timeout, $modal, userService, wordsCountService) ->
 

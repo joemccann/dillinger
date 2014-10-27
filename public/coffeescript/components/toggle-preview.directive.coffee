@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.directive 'previewToggle',
+module.exports =
+  angular
+  .module('diBase.directives.previewToggle', [])
+  .directive 'previewToggle',
   () ->
 
     directive =

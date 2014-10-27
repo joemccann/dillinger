@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.directive 'switch',
+module.exports =
+  angular
+  .module('diBase.directives.switch', [])
+  .directive 'switch',
   () ->
 
     directive =

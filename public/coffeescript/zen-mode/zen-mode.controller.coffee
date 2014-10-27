@@ -24,8 +24,8 @@ module.exports =
         angular.element(document.body).append(el)
 
         scope.$close = ->
-          documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue())
           vm.isZen = !vm.isZen
+          documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue())
           $rootScope.$emit 'document.refresh'
           el.remove()
           scope.$destroy()

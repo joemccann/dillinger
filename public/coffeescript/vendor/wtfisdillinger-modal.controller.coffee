@@ -1,10 +1,12 @@
 
 'use strict'
 
-app    = require('../dillinger')
 marked = require 'marked'
 
-module.exports = app.controller 'WTFisDillingerModalInstance',
+module.exports =
+  angular
+  .module('diBase.controllers.about', [])
+  .controller 'WTFisDillingerModalInstance',
   ($scope, $modalInstance) ->
 
     $scope.ok = ->
