@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.controller 'User',
+module.exports =
+  angular
+  .module('diUser', ['diUser.service'])
+  .controller 'User',
   ($rootScope, $timeout, $modal, userService, wordsCountService) ->
 
     vm = @

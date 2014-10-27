@@ -1,9 +1,10 @@
 
 'use strict'
 
-app = require('../dillinger')
-
-module.exports = app.factory 'userService',
+module.exports =
+  angular
+  .module('diUser.service', [])
+  .factory 'userService',
   ->
 
     defaults =

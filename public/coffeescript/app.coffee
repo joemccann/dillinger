@@ -11,10 +11,6 @@ do (window, document) ->
 
   require('./dillinger')
 
-  # User
-  require('./services/user.service')
-  require('./user/user.controller')
-
   require('./services/wordscount.service')
 
   # Controllers
