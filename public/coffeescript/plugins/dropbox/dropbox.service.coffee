@@ -33,11 +33,11 @@ module.exports =
         .error (err) ->
           diNotify(message: "An Error has happened: #{err}")
       save: ->
-        sessionStorage.setItem('dropbox', angular.toJson(service.fetched))
+        localStorage.setItem('dropbox', angular.toJson(service.fetched))
         return
 
       restore: ->
-        service.fetched = angular.fromJson(sessionStorage.getItem('dropbox')) or defaults
+        service.fetched = angular.fromJson(localStorage.getItem('dropbox')) or defaults
         return service.fetched
 
     service.restore()

@@ -56,11 +56,11 @@ module.exports =
       save: (manual = false) ->
         if manual
           diNotify('Documents Saved.')
-        sessionStorage.setItem('files', angular.toJson(service.files))
-        sessionStorage.setItem('currentDocument', angular.toJson(service.currentDocument))
+        localStorage.setItem('files', angular.toJson(service.files))
+        localStorage.setItem('currentDocument', angular.toJson(service.currentDocument))
       init: ->
-        service.files           = angular.fromJson(sessionStorage.getItem('files')) or []
-        service.currentDocument = angular.fromJson(sessionStorage.getItem('currentDocument')) or {}
+        service.files           = angular.fromJson(localStorage.getItem('files')) or []
+        service.currentDocument = angular.fromJson(localStorage.getItem('currentDocument')) or {}
         unless service.files?.length
           item = @createItem()
           @addItem(item)

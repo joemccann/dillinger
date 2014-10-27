@@ -15,10 +15,10 @@ module.exports =
     service =
       profile: {}
       save: ->
-        sessionStorage.setItem('profile', angular.toJson(service.profile))
+        localStorage.setItem('profile', angular.toJson(service.profile))
         return
       restore: ->
-        service.profile = angular.fromJson(sessionStorage.getItem('profile')) or defaults
+        service.profile = angular.fromJson(localStorage.getItem('profile')) or defaults
         return service.profile
 
     service.restore()

@@ -91,11 +91,11 @@ module.exports =
           diNotify(message: "An Error has happened: #{err}")
 
       save: ->
-        sessionStorage.setItem('github', angular.toJson(service.config))
+        localStorage.setItem('github', angular.toJson(service.config))
         return
 
       restore: ->
-        service.config = angular.fromJson(sessionStorage.getItem('github')) or defaults
+        service.config = angular.fromJson(localStorage.getItem('github')) or defaults
         return service.config
 
     service.restore()

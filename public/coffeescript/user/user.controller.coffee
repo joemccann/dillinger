@@ -24,7 +24,7 @@ module.exports =
       userService.save()
 
     resetProfile = ->
-      sessionStorage.clear()
+      localStorage.clear()
       window.location.reload()
       false
 

@@ -30,11 +30,11 @@ module.exports =
         .error (err) ->
           diNotify(message: "An Error has happened: #{err}")
       save: ->
-        sessionStorage.setItem('googledrive', angular.toJson(service.fetched))
+        localStorage.setItem('googledrive', angular.toJson(service.fetched))
         return
 
       restore: ->
-        service.fetched = angular.fromJson(sessionStorage.getItem('googledrive')) or defaults
+        service.fetched = angular.fromJson(localStorage.getItem('googledrive')) or defaults
         return service.fetched
 
     service.restore()
