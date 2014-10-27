@@ -16,10 +16,40 @@
   height: 100%;
   z-index: 10;
   background-color: #FFF;
-  // display: none;
+  opacity: 0;
+  transition: opacity .25s ease-in-out;
 
   &.on {
-    display: block;
+    opacity: 1;
+  }
+}
+
+.enter-zen-mode {
+  @include hide-text;
+  background-image: url('../img/icons/enter-zen.svg');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  display: block;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+}
+
+.close-zen-mode {
+  @include hide-text;
+  background-image: url('../img/icons/exit-zen.svg');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  display: block;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+
+  @include from('tablet') {
+    right: 3rem;
+    top: 3rem;
   }
 }
 
@@ -40,9 +70,9 @@
   position: relative;
   top: 10%;
 
-  .ace_scroller {
-    padding-top: 2rem;
-  }
+  // .ace_content {
+  //   padding-top: 2rem;
+  // }
 
   @include from('mobile') {
     width: 400px;
@@ -56,24 +86,24 @@
     width: 700px;
   }
 
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    height: 10%;
-    width: 100%;
-    z-index: 12;
-    pointer-events: none;
-  }
+  // &:before,
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   height: 10%;
+  //   width: 100%;
+  //   z-index: 12;
+  //   pointer-events: none;
+  // }
 
-  &:after {
-    background-image: linear-gradient(-180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
-    bottom: 0;
-  }
+  // &:after {
+  //   background-image: linear-gradient(-180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  //   bottom: 0;
+  // }
 
-  &:before {
-    top: 0;
-    background-image: linear-gradient(0deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
-  }
+  // &:before {
+  //   top: 0;
+  //   background-image: linear-gradient(0deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  // }
 
 }

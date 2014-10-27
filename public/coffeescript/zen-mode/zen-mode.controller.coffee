@@ -11,13 +11,10 @@ module.exports =
 
     vm.isZen   = false
     vm.zen     = null
-    vm.doc     = null
-    vm.wrapper = null
 
     template = require 'raw!./zen-mode.directive.html'
 
     vm.toggle = ->
-      console.log "aaa"
       vm.isZen = !vm.isZen
 
       if vm.isZen is true
@@ -26,13 +23,13 @@ module.exports =
         el = $compile(template)(scope)
         angular.element(document.body).append(el)
 
-        scope.$toggle = ->
+        scope.$close = ->
           documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue())
           vm.isZen = !vm.isZen
           $rootScope.$emit 'document.refresh'
           el.remove()
           scope.$destroy()
-          # vm.wrapper.removeClass('on')
+          false
 
         vm.zen = ace.edit 'zen'
         vm.zen.getSession().setMode('ace/mode/markdown')
@@ -41,5 +38,9 @@ module.exports =
         vm.zen.renderer.setShowGutter(false)
         vm.zen.setShowPrintMargin(false)
         vm.zen.getSession().setValue(documentsService.getCurrentDocumentBody())
+
+        el.addClass('on')
+
+      false
 
     return
