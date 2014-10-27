@@ -20,7 +20,6 @@ module.exports =
             googledriveService.fetchFiles()
 
       modalInstance.result.then ->
-        console.log googledriveService.fetched
         documentsService.setCurrentDocumentTitle(googledriveService.fetched.fileName)
         documentsService.setCurrentDocumentBody(googledriveService.fetched.file)
         # googledriveService.save()

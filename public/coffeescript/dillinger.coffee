@@ -18,6 +18,10 @@ require './plugins/google-drive/google-drive.service'
 require './plugins/google-drive/google-drive-modal.controller'
 require './plugins/google-drive/google-drive.controller'
 
+require './plugins/one-drive/one-drive.service'
+require './plugins/one-drive/one-drive-modal.controller'
+require './plugins/one-drive/one-drive.controller'
+
 require './services/notification.service'
 
 module.exports = angular.module('Dillinger', [
@@ -26,5 +30,6 @@ module.exports = angular.module('Dillinger', [
   'plugins.github'
   'plugins.dropbox'
   'plugins.googledrive'
+  'plugins.onedrive'
   'ui.bootstrap'
 ])

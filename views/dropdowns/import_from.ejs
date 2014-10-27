@@ -37,9 +37,15 @@
   </li>
   <% } %>
 
-  <li>
-    <a href="#" class="import-one-drive unlinked">
+  <% if (isOneDriveConfigured) { %>
+  <li ng-controller="Onedrive as onedrive">
+    <% if (isOneDriveAuth) { %>
+      <a href="#" class="import-one-drive linked" ng-click="onedrive.importFile()">
+    <% } else { %>
+      <a href="/redirect/onedrive" class="import-one-drive unlinked">
+    <% } %>
       <span>One Drive</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
     </a>
   </li>
+  <% } %>
