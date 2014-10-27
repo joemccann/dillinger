@@ -22,7 +22,7 @@ module.exports =
         .error (err) ->
           diNotify(message: "An Error has happened: #{err}")
       fetchFiles: ->
-        di = diNotify(message:"Fetching Markdown related files from Googledrive...", duration: 5000)
+        di = diNotify(message:"Fetching Markdown related files from Google Drive...", duration: 5000)
         $http.get('import/googledrive')
         .success (data) ->
           di?.$scope.$close()

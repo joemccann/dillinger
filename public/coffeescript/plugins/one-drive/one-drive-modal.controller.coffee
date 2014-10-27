@@ -15,7 +15,7 @@ module.exports =
 
     vm = @
 
-    vm.title = "Google Drive"
+    vm.title = "One Drive"
 
     vm.allFiles       = onedriveService.files
     vm.allFilesLength = onedriveService.files.length
@@ -29,7 +29,6 @@ module.exports =
     vm.query = undefined
 
     vm.onPageChange = ->
-      console.log vm.query
       vm.paginatedFiles = filterFilter(vm.allFiles, vm.query)
 
     vm.setFile = ->

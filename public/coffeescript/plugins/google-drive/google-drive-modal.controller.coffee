@@ -29,7 +29,6 @@ module.exports =
     vm.query = undefined
 
     vm.onPageChange = ->
-      console.log vm.query
       vm.paginatedFiles = filterFilter(vm.allFiles, vm.query)
 
     vm.setFile = ->
