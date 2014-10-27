@@ -18,7 +18,7 @@ module.exports =
         url: ""
 
       current:
-        tree:     {}
+        tree:     []
         name:     ""
         sha:      ""
         branch:   null
@@ -46,15 +46,20 @@ module.exports =
       fetchTreeFiles: (sha, branch, repo, owner, fileExts) ->
         di = diNotify("Fetching Files...")
         $http.post('import/github/tree_files',
-          owner:  if owner then owner else service.config.user.name
-          repo:   if repo then repo else service.config.current.repo
-          branch: if branch then branch else service.config.current.branch
-          sha: if sha then sha else service.config.current.sha
+          owner:    if owner then owner else service.config.user.name
+          repo:     if repo then repo else service.config.current.repo
+          branch:   if branch then branch else service.config.current.branch
+          sha:      if sha then sha else service.config.current.sha
           fileExts: if fileExts then fileExts else "md"
         )
         .success (data) ->
           di?.$scope.$close()
+          service.config.current.owner  = if owner then owner else service.config.user.name
+          service.config.current.repo   = if repo then repo else service.config.current.repo
+          service.config.current.branch = if branch then branch else service.config.current.branch
+          service.config.current.sha    = if sha then sha else service.config.current.sha
           service.config.current.tree = data.tree
+          console.log service.config
         .error (err) ->
           diNotify(message: "An Error occured: #{err}")
 
@@ -66,6 +71,8 @@ module.exports =
         )
         .success (data) ->
           di?.$scope.$close()
+          service.config.current.owner = owner
+          service.config.current.repo = repo
           service.config.branches =  data
         .error (err) ->
           diNotify(message: "An Error occured: #{err}")
@@ -77,6 +84,7 @@ module.exports =
         )
         .success (data) ->
           di?.$scope.$close()
+          service.config.current.owner = owner
           service.config.repos =  data
         .error (err) ->
           diNotify(message: "An Error occured: #{err}")

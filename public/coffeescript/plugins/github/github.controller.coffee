@@ -5,7 +5,7 @@ module.exports =
   angular
   .module('plugins.github', ['plugins.github.service', 'plugins.github.modal'])
   .controller 'Github',
-  ($rootScope, $modal, githubService, documentsService) ->
+  ($rootScope, $modal, githubService, documentsService, diNotify) ->
 
     vm = @
 
@@ -31,7 +31,7 @@ module.exports =
         console.log "Modal dismissed at: #{new Date()}"
 
     saveTo = (username) ->
-      console.log username
+      diNotify(message: "Saving to Github will be back soon, #{username}!")
 
     vm.importFile = importFile
     vm.saveTo = saveTo
