@@ -29,7 +29,9 @@ module.exports =
         console.log "Modal dismissed at: #{new Date()}"
 
     saveTo = ->
-      console.log "saveTo"
+      title = documentsService.getCurrentDocumentTitle()
+      body = documentsService.getCurrentDocumentBody()
+      onedriveService.saveFile(title, body)
 
     vm.importFile = importFile
     vm.saveTo = saveTo

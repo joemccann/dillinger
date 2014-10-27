@@ -24,7 +24,7 @@ module.exports =
           service.type = 'html'
           service.file = response.data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchPDF: ->
         di = diNotify('Fetching PDF...')
@@ -37,7 +37,7 @@ module.exports =
           service.type = 'pdf'
           service.file = response.data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchMarkdown: ->
         di = diNotify('Fetching Markdown...')
@@ -50,7 +50,7 @@ module.exports =
           service.type = 'md'
           service.file = response.data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
     return service
 

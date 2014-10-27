@@ -41,7 +41,7 @@ module.exports =
         .success (data) ->
           service.config.current.file = data.data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchTreeFiles: (sha, branch, repo, owner, fileExts) ->
         di = diNotify("Fetching Files...")
@@ -56,7 +56,7 @@ module.exports =
           di?.$scope.$close()
           service.config.current.tree = data.tree
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchBranches: (repo, owner) ->
         di = diNotify("Fetching Branches...")
@@ -68,7 +68,7 @@ module.exports =
           di?.$scope.$close()
           service.config.branches =  data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchRepos: (owner) ->
         di = diNotify("Fetching Repos...")
@@ -79,7 +79,7 @@ module.exports =
           di?.$scope.$close()
           service.config.repos =  data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       fetchOrgs: ->
         di = diNotify("Fetching Organizations...")
@@ -88,7 +88,7 @@ module.exports =
           di?.$scope.$close()
           service.config.orgs =  data
         .error (err) ->
-          diNotify(message: "An Error has happened: #{err}")
+          diNotify(message: "An Error occured: #{err}")
 
       save: ->
         localStorage.setItem('github', angular.toJson(service.config))
