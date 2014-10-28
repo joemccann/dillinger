@@ -61,6 +61,14 @@
   &.documents {
 
     li {
+      background-image: url('../img/icons/file.svg');
+      background-repeat: no-repeat;
+      background-position: 240px center;
+      background-size: 14px 16px;
+      padding: 3px 32px 3px;
+    }
+
+    li {
       &:last-child {
       margin-bottom: 1rem;
     }
