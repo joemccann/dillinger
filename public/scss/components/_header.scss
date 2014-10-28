@@ -4,18 +4,18 @@
 }
 
 .words {
-  font-family: unquote(map-get($monospacetype, font-family));
-  font-weight: map-get($monospacetype, regular);
+  @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
+  font-weight: map-get($headingtype, semibold);
+  font-family: unquote(map-get($headingtype, font-family));
+  color: $c-links;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   z-index: map-get($z-index, overlay);
   position: absolute;
   right: 16px;
-  top: 57px;
-
-  @include from('tablet') {
-    top: 12px;
-  }
+  top: 0;
 
   span {
-
+    color: #000;
   }
 }
