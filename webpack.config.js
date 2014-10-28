@@ -8,9 +8,6 @@ module.exports = {
   entry: "./public/js/app.js",
   output: {
     path: path.join(__dirname, "public/js")
-    // publicPath: "public/",
-    // filename: "[name].js",
-    // chunkFilename: "[chunkhash].js"
   },
   module: {
     noParse: [
