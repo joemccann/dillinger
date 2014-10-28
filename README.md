@@ -1,8 +1,6 @@
 # Dillinger
 
-Version: v3.0.0.beta
-
-Dillinger is a cloud-enabled, mobile-ready, offline-working HTML5 Markdown editor.
+Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered HTML5 Markdown editor.
 
   - Type some Markdown on the left
   - See HTML in the right
@@ -20,26 +18,32 @@ Markdown is a lightweight markup language based on the formatting conventions th
 
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
-## Tech
+### Version
+3.0.0
+
+### Tech
 
 Dillinger uses a number of open source projects to work properly:
 
+* [AngularJS] - HTML enhanced for web apps!
 * [Ace Editor] - awesome web-based text editor
 * [Marked] - a super fast port of Markdown to JavaScript
 * [Twitter Bootstrap] - great UI boilerplate for modern web apps
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
+* [Gulp] - the streaming build system
 * [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh
 
-## Installation
+### Installation
 
 ```sh
-git clone [git-repo-url] dillinger
-cd dillinger
-npm i -d
-mkdir -p public/files/{md,html,pdf}
-node app
+$ git clone [git-repo-url] dillinger
+$ cd dillinger
+$ npm i -d
+$ mkdir -p public/files/{md,html,pdf}
+$ gulp build --prod
+$ NODE_ENV=production node app
 ```
 
 ### Plugins
@@ -58,29 +62,36 @@ Readmes, how to use them in your own application can be found here:
 * plugins/googledrive/README.md
 * plugins/onedrive/README.md
 
-## Development
+### Development
 
 Want to contribute? Great!
 
 Dillinger uses Gulp + Webpack for fast developing.
 Make a change in your file and instantanously see your updates!
 
-Open your favorite Terminal and open these Tabs.
+Open your favorite Terminal and run these commands.
 
-First:
+First Tab:
 ```sh
-node app
+$ node app
 ```
 
-Second:
+Second Tab:
 ```sh
-gulp dev
+$ gulp watch
 ```
 
 (optional) Third:
 ```sh
-karma start
+$ karma start
 ```
+
+### Todo's
+
+ - Write Tests
+ - Rethink Github Save
+ - Add Code Comments
+ - Add Night Mode
 
 License
 ----
@@ -101,3 +112,5 @@ MIT
 [jQuery]:http://jquery.com
 [@tjholowaychuk]:http://twitter.com/tjholowaychuk
 [express]:http://expressjs.com
+[AngularJS]:http://angularjs.org
+[Gulp]:http://gulpjs.com
