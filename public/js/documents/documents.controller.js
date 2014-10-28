@@ -1,65 +1,78 @@
 
 'use strict';
-module.exports = angular.module('diDocuments', ['diDocuments.service', 'diDocuments.export']).controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService) {
-  var createDocument, doAutoSave, initDocument, removeDocument, save, selectDocument, vm;
-  vm = this;
-  $scope.profile = userService.profile;
+module.exports =
+  angular
+  .module('diDocuments', ['diDocuments.service', 'diDocuments.export'])
+  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService) {
+
+  var vm = this;
+
   vm.status = {
     "import": true,
     save: true,
     document: false
   };
-  vm.toggled = function(open) {
-    return console.log(open);
-  };
+
+  $scope.profile        = userService.profile;
+  $scope.saveDocument   = save;
+  $scope.createDocument = createDocument;
+  $scope.removeDocument = removeDocument;
+  $scope.selectDocument = selectDocument;
+
   $rootScope.documents = documentsService.getItems();
-  save = function(manuel) {
+
+  $rootScope.editor.on('change', doAutoSave);
+  $rootScope.$on('autosave', doAutoSave);
+
+  function save(manuel) {
     var item;
     item = documentsService.getCurrentDocument();
     item.body = $rootScope.editor.getSession().getValue();
     documentsService.setCurrentDocument(item);
     return documentsService.save(manuel);
   };
-  initDocument = function() {
+
+  function initDocument() {
     var item;
     item = documentsService.getItemById($rootScope.currentDocument.id);
     documentsService.setCurrentDocument(item);
     return $rootScope.$emit('document.refresh');
   };
-  selectDocument = function(item) {
+
+  function selectDocument(item) {
     item = documentsService.getItem(item);
     documentsService.setCurrentDocument(item);
     return $rootScope.$emit('document.refresh');
   };
-  removeDocument = function(item) {
+
+  function removeDocument(item) {
     var next;
     documentsService.removeItem(item);
     next = documentsService.getItemByIndex(0);
     documentsService.setCurrentDocument(next);
     return $rootScope.$emit('document.refresh');
   };
-  createDocument = function() {
+
+  function createDocument() {
     var item;
     item = documentsService.createItem();
     documentsService.addItem(item);
     documentsService.setCurrentDocument(item);
     return $rootScope.$emit('document.refresh');
   };
-  doAutoSave = function() {
+
+  function doAutoSave() {
     if ($scope.profile.enableAutoSave) {
       return save();
     }
   };
+
   $scope.$on('$destroy', function() {
-    console.log("$destroy");
-    vm = null;
-    return $scope = null;
+    vm     = null;
+    $scope = null;
+    return;
   });
-  $scope.saveDocument = save;
-  $scope.createDocument = createDocument;
-  $scope.removeDocument = removeDocument;
-  $scope.selectDocument = selectDocument;
-  $rootScope.editor.on('change', doAutoSave);
-  $rootScope.$on('autosave', doAutoSave);
+
   initDocument();
+
 });

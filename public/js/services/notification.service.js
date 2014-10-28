@@ -1,9 +1,15 @@
 
 'use strict';
-module.exports = angular.module('diNotify', []).factory('diNotify', function($templateCache, $compile, $timeout, $rootScope) {
+module.exports =
+  angular
+  .module('diNotify', [])
+  .factory('diNotify', function($templateCache, $compile, $timeout, $rootScope) {
+
   var diNotify, stack, startTop;
+
   stack = [];
   startTop = 100;
+
   diNotify = (function() {
     var onElementClosing, _doLayout;
 
@@ -38,6 +44,7 @@ module.exports = angular.module('diNotify', []).factory('diNotify', function($te
     };
 
     function diNotify(args) {
+
       this.defaults = {
         top: 100,
         duration: 2000,
@@ -45,15 +52,19 @@ module.exports = angular.module('diNotify', []).factory('diNotify', function($te
         message: 'Notification',
         template: require('raw!../base/diNotify.html')
       };
+
       if (angular.isString(args)) {
         args = {
           message: args
         };
       }
+
       this.args = angular.extend({}, this.defaults, args);
       this.$scope = this.args.scope ? this.args.scope : $rootScope.$new();
+
       this.$el = void 0;
       this.$scope.$message = args.message;
+
       this.build();
       this.addEvents();
     }
@@ -68,19 +79,23 @@ module.exports = angular.module('diNotify', []).factory('diNotify', function($te
     diNotify.prototype.addEvents = function() {
       var self;
       self = this;
+
       this.$scope.$on('$destroy', function(e) {
         stack.splice(stack.indexOf(self.$el), 1);
         return self.$el.remove();
       });
+
       this.$scope.$close = function() {
         self.$el.attr("data-closing", true).css({
           "opacity": 0
         });
         return _doLayout();
       };
+
       $timeout(function() {
         return _doLayout();
       });
+
       if (this.args.duration > 0) {
         return $timeout(function() {
           return self.$scope.$close();
@@ -91,6 +106,7 @@ module.exports = angular.module('diNotify', []).factory('diNotify', function($te
     return diNotify;
 
   })();
+
   return function(args) {
     return new diNotify(args);
   };

@@ -1,13 +1,16 @@
 
 'use strict';
-module.exports = angular.module('diDocuments.export.service', ['diDocuments.service']).factory('documentsExportService', function($http, documentsService, diNotify) {
-  var service;
-  service = {
+module.exports =
+  angular
+  .module('diDocuments.export.service', ['diDocuments.service'])
+  .factory('documentsExportService', function($http, documentsService, diNotify) {
+
+  var service = {
     type: null,
     file: null,
+
     fetchHTML: function(styled) {
-      var di;
-      di = diNotify('Fetching HTML...');
+      var di = diNotify('Fetching HTML...');
       return $http.post('factory/fetch_html', {
         name: documentsService.getCurrentDocumentTitle(),
         unmd: documentsService.getCurrentDocumentBody(),
@@ -24,9 +27,10 @@ module.exports = angular.module('diDocuments.export.service', ['diDocuments.serv
         });
       });
     },
+
     fetchPDF: function() {
-      var di;
-      di = diNotify('Fetching PDF...');
+      var di = diNotify('Fetching PDF...');
+
       return $http.post('factory/fetch_pdf', {
         name: documentsService.getCurrentDocumentTitle(),
         unmd: documentsService.getCurrentDocumentBody()
@@ -42,9 +46,9 @@ module.exports = angular.module('diDocuments.export.service', ['diDocuments.serv
         });
       });
     },
+
     fetchMarkdown: function() {
-      var di;
-      di = diNotify('Fetching Markdown...');
+      var di = diNotify('Fetching Markdown...');
       return $http.post('factory/fetch_markdown', {
         name: documentsService.getCurrentDocumentTitle(),
         unmd: documentsService.getCurrentDocumentBody()
@@ -61,5 +65,6 @@ module.exports = angular.module('diDocuments.export.service', ['diDocuments.serv
       });
     }
   };
+
   return service;
 });

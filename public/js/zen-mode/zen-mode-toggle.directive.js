@@ -1,7 +1,13 @@
 
 'use strict';
-module.exports = angular.module('diZenMode.directives', []).directive('toggleZenMode', function() {
+
+module.exports =
+  angular
+  .module('diZenMode.directives', [])
+  .directive('toggleZenMode', function() {
+
   var directive;
+
   directive = {
     restrict: 'E',
     replace: true,
@@ -9,5 +15,6 @@ module.exports = angular.module('diZenMode.directives', []).directive('toggleZen
     controllerAs: 'zenmode',
     template: require('raw!./zen-mode-toggle.directive.html')
   };
+
   return directive;
 });

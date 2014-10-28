@@ -1,10 +1,8 @@
 
 'use strict';
-var hljs, marked;
-
-marked = require('marked');
-
-hljs = require('highlight.js');
+var
+  marked = require('marked'),
+  hljs = require('highlight.js');
 
 marked.setOptions({
   gfm: true,
@@ -19,9 +17,12 @@ marked.setOptions({
   }
 });
 
-module.exports = angular.module('diBase.directives.preview', []).directive('preview', function($rootScope) {
-  var directive;
-  directive = {
+module.exports =
+  angular
+  .module('diBase.directives.preview', [])
+  .directive('preview', function($rootScope) {
+
+  var directive = {
     link: function(scope, el, attrs) {
       var refreshPreview;
       refreshPreview = function(val) {
@@ -32,5 +33,6 @@ module.exports = angular.module('diBase.directives.preview', []).directive('prev
       return refreshPreview();
     }
   };
+
   return directive;
 });

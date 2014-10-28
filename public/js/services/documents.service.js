@@ -1,22 +1,29 @@
 
 'use strict';
-module.exports = angular.module('diDocuments.service', ['diDocuments.sheet']).factory('documentsService', function($rootScope, Sheet, diNotify) {
-  var currentDocument, files, service;
-  currentDocument = {
+module.exports =
+  angular
+  .module('diDocuments.service', ['diDocuments.sheet'])
+  .factory('documentsService', function($rootScope, Sheet, diNotify) {
+
+  var currentDocument = {
     title: "",
     body: "",
     id: null
-  };
+  },
   files = [];
-  service = {
+
+  var service = {
     currentDocument: {},
     files: [],
+
     getItem: function(item) {
       return service.files[service.files.indexOf(item)];
     },
+
     getItemByIndex: function(index) {
       return service.files[index];
     },
+
     getItemById: function(id) {
       var tmp;
       tmp = null;
@@ -27,45 +34,58 @@ module.exports = angular.module('diDocuments.service', ['diDocuments.sheet']).fa
       });
       return tmp;
     },
+
     addItem: function(item) {
       return service.files.push(item);
     },
+
     removeItem: function(item) {
       return service.files.splice(service.files.indexOf(item), 1);
     },
+
     createItem: function(props) {
       return new Sheet(props);
     },
+
     size: function() {
       return service.files.length;
     },
+
     getItems: function() {
       return service.files;
     },
+
     removeItems: function() {
       service.files = [];
       service.currentDocument = {};
       return false;
     },
+
     setCurrentDocument: function(item) {
       return service.currentDocument = item;
     },
+
     getCurrentDocument: function() {
       return service.currentDocument;
     },
+
     setCurrentDocumentTitle: function(title) {
       return service.currentDocument.title = title;
     },
+
     getCurrentDocumentTitle: function() {
       return service.currentDocument.title;
     },
+
     setCurrentDocumentBody: function(body) {
       return service.currentDocument.body = body;
     },
+
     getCurrentDocumentBody: function() {
       service.setCurrentDocumentBody($rootScope.editor.getSession().getValue());
       return service.currentDocument.body;
     },
+
     save: function(manual) {
       if (manual == null) {
         manual = false;
@@ -76,6 +96,7 @@ module.exports = angular.module('diDocuments.service', ['diDocuments.sheet']).fa
       localStorage.setItem('files', angular.toJson(service.files));
       return localStorage.setItem('currentDocument', angular.toJson(service.currentDocument));
     },
+
     init: function() {
       var item, _ref;
       service.files = angular.fromJson(localStorage.getItem('files')) || [];
@@ -88,6 +109,8 @@ module.exports = angular.module('diDocuments.service', ['diDocuments.sheet']).fa
       }
     }
   };
+
   service.init();
+
   return service;
 });

@@ -1,13 +1,17 @@
 
 'use strict';
-module.exports = angular.module('diUser.service', []).factory('userService', function() {
-  var defaults, service;
-  defaults = {
+module.exports =
+  angular
+  .module('diUser.service', [])
+  .factory('userService', function() {
+
+  var defaults = {
     enableAutoSave: true,
     enableWordsCount: true,
     enableNightMode: false
   };
-  service = {
+
+  var service = {
     profile: {},
     save: function() {
       localStorage.setItem('profile', angular.toJson(service.profile));
@@ -17,6 +21,8 @@ module.exports = angular.module('diUser.service', []).factory('userService', fun
       return service.profile;
     }
   };
+
   service.restore();
+
   return service;
 });
