@@ -1,12 +1,11 @@
 
-var browserSync, gulp;
+var
+  browserSync = require("browser-sync"),
+  gulp        = require("gulp");
 
-browserSync = require("browser-sync");
-
-gulp = require("gulp");
-
-gulp.task("browserSync", ["build"], function() {
-  browserSync.init(["views/**", "public/css/**", "public/img/**"], {
+gulp.task("browserSync", function() {
+  browserSync({
+    proxy: "localhost:8080",
     notify: false
   });
 });
