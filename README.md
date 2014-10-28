@@ -37,6 +37,12 @@ Dillinger uses a number of open source projects to work properly:
 
 ### Installation
 
+You need Gulp installed globally:
+
+```sh
+$ npm i -g gulp
+```
+
 ```sh
 $ git clone [git-repo-url] dillinger
 $ cd dillinger
