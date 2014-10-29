@@ -1,4 +1,6 @@
 
-var gulp = require("gulp");
+'use strict';
 
-gulp.task("default", ["build"]);
+var gulp = require('gulp');
+
+gulp.task('default', ['build']);
