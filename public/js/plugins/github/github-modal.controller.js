@@ -1,54 +1,84 @@
 
 'use strict';
-module.exports = angular.module('plugins.github.modal', ['plugins.github.service']).controller('GithubModal', function($modalInstance, githubService) {
-  var close, fetchBranches, fetchFile, fetchRepos, fetchTreeFiles, setBranches, setFile, setRepos, setTreeFiles, vm;
-  vm = this;
-  vm.title = "Organizations";
-  vm.orgs = githubService.config.orgs;
-  vm.step = 1;
-  setFile = function() {
+
+module.exports =
+  angular
+  .module('plugins.github.modal', [
+    'plugins.github.service'
+  ])
+  .controller('GithubModal', function($modalInstance, githubService) {
+
+  var vm = this;
+
+  vm.title = 'Organizations';
+  vm.orgs  = githubService.config.orgs;
+  vm.step  = 1;
+
+  vm.fetchRepos     = fetchRepos;
+  vm.fetchBranches  = fetchBranches;
+  vm.fetchTreeFiles = fetchTreeFiles;
+  vm.fetchFile      = fetchFile;
+  vm.close          = closeModal;
+
+  //////////////////////////////
+
+  function setFile() {
     return $modalInstance.close();
-  };
-  close = function() {
+  }
+
+  function closeModal() {
     return $modalInstance.dismiss('cancel');
-  };
-  setRepos = function() {
-    vm.title = "Repositories";
-    vm.step = 2;
-    return vm.repos = githubService.config.repos;
-  };
-  fetchRepos = function(name) {
+  }
+
+  function setRepos() {
+    vm.title = 'Repositories';
+    vm.step  = 2;
+    vm.repos = githubService.config.repos;
+
+    return vm.repos;
+  }
+
+  function fetchRepos(name) {
     githubService.fetchRepos(name).then(setRepos);
+
     return false;
-  };
-  fetchFile = function(url, name) {
+  }
+
+  function fetchFile(url, name) {
     githubService.config.current.fileName = name.split('/').pop();
     githubService.fetchFile(url).then(setFile);
+
     return false;
-  };
-  setBranches = function() {
-    vm.title = "Branches";
+  }
+
+  function setBranches() {
+    vm.title = 'Branches';
     vm.step = 3;
-    return vm.branches = githubService.config.branches;
-  };
-  fetchBranches = function(name) {
+    vm.branches = githubService.config.branches;
+
+    return vm.branches;
+  }
+
+  function fetchBranches(name) {
     githubService.config.current.repo = name;
     githubService.fetchBranches(name).then(setBranches);
+
     return false;
-  };
-  setTreeFiles = function() {
-    vm.title = "Files";
-    vm.step = 4;
-    return vm.files = githubService.config.current.tree;
-  };
-  fetchTreeFiles = function(sha) {
+  }
+
+  function setTreeFiles() {
+    vm.title = 'Files';
+    vm.step  = 4;
+    vm.files = githubService.config.current.tree;
+
+    return vm.files;
+  }
+
+  function fetchTreeFiles(sha) {
     githubService.config.current.sha = sha;
     githubService.fetchTreeFiles(sha).then(setTreeFiles);
+
     return false;
-  };
-  vm.fetchRepos = fetchRepos;
-  vm.fetchBranches = fetchBranches;
-  vm.fetchTreeFiles = fetchTreeFiles;
-  vm.fetchFile = fetchFile;
-  vm.close = close;
+  }
+
 });
