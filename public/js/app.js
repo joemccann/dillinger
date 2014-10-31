@@ -22,7 +22,8 @@
   require('./components/toggle-preview.directive');
   require('./components/switch.directive');
   require('./components/preview.directive');
-  require('./vendor/wtfisdillinger-modal.controller');
+
+  require('./components/wtfisdillinger-modal.controller');
 
   // User
   require('./user/user.controller');
@@ -74,7 +75,8 @@
     'plugins.dropbox',
     'plugins.googledrive',
     'plugins.onedrive',
-    'ui.bootstrap']);
+    'ui.bootstrap'
+  ]);
 
   // Run!
   angular.bootstrap(document, ['Dillinger']);
