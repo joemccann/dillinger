@@ -1,7 +1,8 @@
-/*jslint stupid: true */
 /**
  * Module dependencies.
  */
+
+'use strict';
 
 var config = require('./config')(),
   express = require('express'),
@@ -31,11 +32,21 @@ app.configure(function() {
   app.use(express.static(path.join(__dirname, 'public')));
 
   // Setup local variables to be available in the views.
-  app.locals.title = config.title || "Dillinger.";
-  app.locals.description = config.description || "Dillinger, the last Markdown Editor, ever.";
-  if (config.googleWebmasterMeta) app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
-  if (config.keywords) app.locals.keywords = config.keywords;
-  if (config.author) app.locals.author = config.author;
+  app.locals.title = config.title || 'Dillinger.';
+  app.locals.description = config.description || 'Dillinger, the last Markdown Editor, ever.';
+
+  if (config.googleWebmasterMeta) {
+    app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
+  }
+
+  if (config.keywords) {
+    app.locals.keywords = config.keywords;
+  }
+
+  if (config.author) {
+    app.locals.author = config.author;
+  }
+
   app.locals.node_version = process.version.replace('v', '');
   app.locals.app_version = require('./package.json').version;
   app.locals.env = process.env.NODE_ENV;
@@ -81,6 +92,6 @@ app.get('/files/pdf/:pdf', routes.download_pdf);
 
 
 http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
-  console.log("\nhttp://localhost:" + app.get('port') + "\n");
+  console.log('Express server listening on port ' + app.get('port'));
+  console.log('\nhttp://localhost:' + app.get('port') + '\n');
 });
