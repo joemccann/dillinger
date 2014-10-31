@@ -1,8 +1,6 @@
 
 'use strict';
 
-var marked = require('marked');
-
 module.exports =
   angular
   .module('diBase.controllers.about', [])
