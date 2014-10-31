@@ -1,32 +1,39 @@
 
-var fullWebpackConfig, webpackConfig;
+'use strict';
 
-fullWebpackConfig = require('./webpack.config.js');
+var fullWebpackConfig = require('./webpack.config.js');
 
-webpackConfig = {
-  module: fullWebpackConfig.module,
-  resolve: fullWebpackConfig.resolve,
-  plugins: fullWebpackConfig.plugins,
-  devtool: 'eval',
-  cache: true
-};
+fullWebpackConfig.devtool = 'eval';
+fullWebpackConfig.cache = true;
 
 module.exports = function(config) {
   return config.set({
-    basePath: '',
+    basePath:   '',
     frameworks: ['jasmine'],
-    files: ['public/js/**/*.spec.js'],
+    files:      [
+      'public/js/app.js',
+      'public/js/**/*.spec.js'
+    ],
     exclude: [],
     preprocessors: {
-      '**/*.js': ['webpack']
+      'public/js/app.js': ['webpack'],
+      'public/js/**/*.spec.js': ['webpack']
     },
-    webpack: webpackConfig,
+    webpack:       fullWebpackConfig,
+    webpackServer: {
+      noInfo: true
+    },
     reporters: ['progress'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
+    port:      9876,
+    colors:    true,
+    logLevel:  config.LOG_INFO,
     autoWatch: true,
-    browsers: ['PhantomJS'],
+    browsers:  ['PhantomJS'],
+    plugins: [
+      'karma-phantomjs-launcher',
+      'karma-jasmine',
+      'karma-webpack'
+    ],
     singleRun: false
   });
 };
