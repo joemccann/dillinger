@@ -28,7 +28,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.handlebars', '.js']
+    extensions: ['', '.webpack.js', '.web.js', '.js']
   },
   resolveLoader: {
       root: nodeModulesPath
