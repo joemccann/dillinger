@@ -17,29 +17,32 @@ module.exports =
   vm.asPDF        = asPDF;
 
   function initDownload() {
-    return $downloader.src = "/files/" + documentsExportService.type + "/" + documentsExportService.file;
-  };
+    $downloader.src = '/files/' + documentsExportService.type + '/' + documentsExportService.file;
+    
+    return false;
+  }
 
   function asHTML(styled) {
     return documentsExportService.fetchHTML(styled).then(initDownload);
-  };
+  }
 
   function asStyledHTML() {
     return asHTML(true);
-  };
+  }
 
   function asMarkdown() {
     return documentsExportService.fetchMarkdown().then(initDownload);
-  };
+  }
 
   function asPDF() {
     return documentsExportService.fetchPDF().then(initDownload);
-  };
+  }
 
   $scope.$on('$destroy', function() {
-    vm = null;
+    vm     = null;
     $scope = null;
-    return;
+
+    return false;
   });
 
 });
