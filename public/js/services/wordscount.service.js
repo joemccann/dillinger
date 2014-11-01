@@ -3,41 +3,45 @@
 module.exports =
   angular
   .module('diDocuments.service.wordcount', [])
-  .service('wordsCountService', function($rootScope) {
+  .factory('wordsCountService', function($rootScope) {
 
-  var $preview, countWords, getTextInElement, service, words;
+  var
+    words    = 0,
+    $preview = angular.element(document).find('#preview'),
 
-  words = 0;
-  $preview = angular.element(document).find('#preview');
+    service = {
+      count: function() {
+        words = countWords(getTextInElement($preview[0]));
+        return words;
+      }
+    };
 
-  countWords = function(str) {
+  //////////////////////////////
+
+  function countWords(str) {
     var wrds;
     wrds = str.replace(/W+/g, ' ').match(/\S+/g);
     return wrds && wrds.length || 0;
-  };
+  }
 
-  getTextInElement = function(node) {
+  function getTextInElement(node) {
     var txt;
     if (node.nodeType === 3) {
       return node.data;
     }
-    txt = "";
-    if (node = node.firstChild) {
+    txt = '';
+    if (node.firstChild) {
+      node = node.firstChild;
       while (true) {
         txt += getTextInElement(node);
-        if (!(node = node.nextSibling)) {
+        if (!(node.nextSibling)) {
           break;
         }
+        node = node.nextSibling;
       }
     }
     return txt;
-  };
-
-  service = {
-    count: function() {
-      return words = countWords(getTextInElement($preview[0]));
-    }
-  };
+  }
 
   return service;
 });

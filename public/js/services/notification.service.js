@@ -1,84 +1,106 @@
 
 'use strict';
+
 module.exports =
+
   angular
   .module('diNotify', [])
   .factory('diNotify', function($templateCache, $compile, $timeout, $rootScope) {
 
-  var diNotify, stack, startTop;
+  var DiNotify, stack, startTop;
 
-  stack = [];
+  stack    = [];
   startTop = 100;
 
-  diNotify = (function() {
-    var onElementClosing, _doLayout;
+  DiNotify = (function() {
 
-    _doLayout = function() {
-      var currentY, el, height, j, shadowHeight, top, _i, _len, _results;
-      j = 1;
-      shadowHeight = 50;
-      currentY = startTop;
-      _results = [];
+
+    var _doLayout = function() {
+
+      var
+        j        = 1,     // multiplier for stack
+        distance = 50,    // distance between notifications
+        currentY = startTop,
+        _results = [],
+
+        // vars in for loop
+        el, height, top, _i, _len;
+
       for (_i = 0, _len = stack.length; _i < _len; _i++) {
-        el = stack[_i];
+
+        el     = stack[_i];
         height = el[0].offsetHeight;
-        top = currentY + height + shadowHeight;
+        top    = currentY + height + distance;
+
+        // If the element is going to be destroyed
         if (el.attr('data-closing')) {
           top += 0;
         } else {
           currentY += height + (20 * j++);
         }
+
         _results.push(el.css({
-          "visibility": "visible",
-          "top": "" + top + "px",
-          "margin-top": "-" + (height + shadowHeight) + "px"
+          'visibility': 'visible',
+          'top': '' + top + 'px',
+          'margin-top': '-' + (height + distance) + 'px'
         }).addClass('fade in'));
       }
+
       return _results;
-    };
+    },
 
     onElementClosing = function(e) {
+      // note: "this" refers to the DiNotify constructor here
       if (e.propertyName === 'opacity' || (e.originalEvent != null) && e.originalEvent.propertyName === 'opacity') {
+        // call destory on element
         return this.$destroy();
       }
     };
 
-    function diNotify(args) {
+    function DiNotify(args) {
 
       this.defaults = {
-        top: 100,
-        duration: 2000,
+        top:       100,
+        duration:  2000,
         container: document.body,
-        message: 'Notification',
-        template: require('raw!../base/diNotify.html')
+        message:   'Notification',
+        template:  require('raw!../base/diNotify.html') // inline template
       };
 
+      // DiNotify has been called with a string, let's make it an object
       if (angular.isString(args)) {
         args = {
           message: args
         };
       }
 
-      this.args = angular.extend({}, this.defaults, args);
+      this.args   = angular.extend({}, this.defaults, args);
       this.$scope = this.args.scope ? this.args.scope : $rootScope.$new();
 
-      this.$el = void 0;
+      this.$el             = null;
       this.$scope.$message = args.message;
 
       this.build();
       this.addEvents();
     }
 
-    diNotify.prototype.build = function() {
+    DiNotify.prototype.build = function() {
+
       this.$el = $compile(this.args.template)(this.$scope);
-      this.$el.bind('webkitTransitionEnd oTransitionEnd otransitionend transitionend', onElementClosing.bind(this.$scope));
+
+      this.$el.bind(
+        'webkitTransitionEnd oTransitionEnd otransitionend transitionend',
+        onElementClosing.bind(this.$scope)
+      );
+
       angular.element(this.args.container).append(this.$el);
+
       return stack.push(this.$el);
     };
 
-    diNotify.prototype.addEvents = function() {
-      var self;
-      self = this;
+    DiNotify.prototype.addEvents = function() {
+
+      var self = this;
 
       this.$scope.$on('$destroy', function(e) {
         stack.splice(stack.indexOf(self.$el), 1);
@@ -86,8 +108,8 @@ module.exports =
       });
 
       this.$scope.$close = function() {
-        self.$el.attr("data-closing", true).css({
-          "opacity": 0
+        self.$el.attr('data-closing', true).css({
+          'opacity': 0
         });
         return _doLayout();
       };
@@ -103,11 +125,12 @@ module.exports =
       }
     };
 
-    return diNotify;
+    return DiNotify;
 
   })();
 
   return function(args) {
-    return new diNotify(args);
+    return new DiNotify(args);
   };
+
 });
