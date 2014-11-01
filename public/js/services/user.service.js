@@ -5,24 +5,31 @@ module.exports =
   .module('diUser.service', [])
   .factory('userService', function() {
 
-  var defaults = {
-    enableAutoSave: true,
-    enableWordsCount: true,
-    enableNightMode: false
-  };
-
-  var service = {
-    profile: {},
-    save: function() {
-      localStorage.setItem('profile', angular.toJson(service.profile));
+  var
+    defaults = {
+      enableAutoSave:   true,
+      enableWordsCount: true,
+      enableNightMode:  false
     },
-    restore: function() {
-      service.profile = angular.fromJson(localStorage.getItem('profile')) || defaults;
-      return service.profile;
-    }
-  };
+    service = {
+      profile: {},
+      save:    save,
+      restore: restore
+    };
 
   service.restore();
 
   return service;
+
+  //////////////////////////////
+  
+  function save() {
+    localStorage.setItem('profile', angular.toJson(service.profile));
+  }
+
+  function restore() {
+    service.profile = angular.fromJson(localStorage.getItem('profile')) || defaults;
+    return service.profile;
+  }
+
 });

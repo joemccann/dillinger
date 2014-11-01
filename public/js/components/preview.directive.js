@@ -1,5 +1,6 @@
 
 'use strict';
+
 var
   marked = require('marked'),
   hljs = require('highlight.js');
@@ -24,12 +25,14 @@ module.exports =
 
   var directive = {
     link: function(scope, el, attrs) {
-      var refreshPreview;
-      refreshPreview = function(val) {
+
+      var refreshPreview = function(val) {
         el.html(marked($rootScope.editor.getSession().getValue()));
         return $rootScope.$emit('preview.updated');
       };
+
       $rootScope.editor.on('change', refreshPreview);
+
       return refreshPreview();
     }
   };

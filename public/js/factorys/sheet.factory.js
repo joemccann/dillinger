@@ -1,5 +1,6 @@
 
 'use strict';
+
 module.exports =
   angular
   .module('diDocuments.sheet', [])
