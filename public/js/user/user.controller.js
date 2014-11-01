@@ -49,7 +49,7 @@ module.exports =
   function showAbout() {
 
     var modalInstance = $modal.open({
-      template: require('raw!../vendor/bootstrap-modal.directive.html'),
+      template: require('raw!../components/wtfisdillinger-modal.directive.html'),
       controller: 'WTFisDillingerModalInstance',
       windowClass: 'modal--dillinger about'
     });
