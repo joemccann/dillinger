@@ -8,8 +8,8 @@ module.exports =
   var vm = this;
 
   vm.status = {
-    "import": true,
-    save: true,
+    import:   true,
+    save:     true,
     document: false
   };
 
@@ -26,51 +26,66 @@ module.exports =
 
   function save(manuel) {
     var item;
-    item = documentsService.getCurrentDocument();
+
+    item      = documentsService.getCurrentDocument();
     item.body = $rootScope.editor.getSession().getValue();
+
     documentsService.setCurrentDocument(item);
+
     return documentsService.save(manuel);
-  };
+  }
 
   function initDocument() {
     var item;
+
     item = documentsService.getItemById($rootScope.currentDocument.id);
     documentsService.setCurrentDocument(item);
+
     return $rootScope.$emit('document.refresh');
-  };
+  }
 
   function selectDocument(item) {
     item = documentsService.getItem(item);
     documentsService.setCurrentDocument(item);
+
     return $rootScope.$emit('document.refresh');
-  };
+  }
 
   function removeDocument(item) {
     var next;
+
+    // The order is important here.
     documentsService.removeItem(item);
     next = documentsService.getItemByIndex(0);
     documentsService.setCurrentDocument(next);
+
     return $rootScope.$emit('document.refresh');
-  };
+  }
 
   function createDocument() {
     var item;
+
     item = documentsService.createItem();
+
     documentsService.addItem(item);
     documentsService.setCurrentDocument(item);
+
     return $rootScope.$emit('document.refresh');
-  };
+  }
 
   function doAutoSave() {
     if ($scope.profile.enableAutoSave) {
       return save();
     }
-  };
+
+    return false;
+  }
 
   $scope.$on('$destroy', function() {
     vm     = null;
     $scope = null;
-    return;
+
+    return false;
   });
 
   initDocument();
