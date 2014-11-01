@@ -29,7 +29,7 @@
     width: 260px;
     height: auto;
     display: block;
-    margin: 35% auto 0;
+    margin: 0 auto;
     padding-bottom: 3rem;
 
     @include from('tablet') {
@@ -55,4 +55,10 @@
     color: #FFF;
   }
 
+}
+
+.sp-center {
+  position: relative;
+  transform: translateY(-50%);
+  top: 50%;
 }
