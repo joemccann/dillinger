@@ -54,9 +54,9 @@ module.exports =
       if (angular.isDefined(di.$scope)) {
         di.$scope.$close();
       }
-      if (data.error) {
+      if (data.data.error) {
         return diNotify({
-          message: 'There was an error: ' + data.error,
+          message: 'An Error occured: ' + data.data.error,
           duration: 5000
         });
       } else {
