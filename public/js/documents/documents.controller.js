@@ -8,9 +8,10 @@ module.exports =
   var vm = this;
 
   vm.status = {
-    import:   true,
-    save:     true,
-    document: false
+    import:     true,
+    save:       true,
+    linkUnlink: true,
+    document:   false
   };
 
   $scope.profile        = userService.profile;

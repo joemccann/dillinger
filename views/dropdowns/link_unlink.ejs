@@ -1,0 +1,51 @@
+<% if (isDropboxConfigured) { %>
+<li>
+  <% if (isDropboxAuth) { %>
+    <a href="/unlink/dropbox">Unlink
+  <% } else { %>
+    <a href="/redirect/dropbox" class="import-dropbox unlinked">Link with
+  <% } %>
+    <span>Dropbox</span>
+    <span class="icon icon-link"><%- include ../icons/linked %></span>
+  </a>
+</li>
+<% } %>
+
+<% if (isGithubConfigured) { %>
+<li>
+  <% if (isGithubAuth) { %>
+    <a href="/unlink/github">Unlink
+  <% } else { %>
+    <a href="/redirect/github"  class="import-github unlinked">Link with
+  <% } %>
+    <span>Github</span>
+    <span class="icon icon-link"><%- include ../icons/linked %></span>
+  </a>
+</li>
+<% } %>
+
+<% if (isGoogleDriveConfigured) { %>
+<li>
+  <% if (isGoogleDriveAuth) { %>
+    <a href="/unlink/googledrive">Unlink
+  <% } else { %>
+    <a href="/redirect/googledrive" class="import-google-drive unlinked">Link with
+  <% } %>
+    <span>Google Drive</span>
+    <span class="icon icon-link"><%- include ../icons/linked %></span>
+  </a>
+</li>
+<% } %>
+
+<% if (isOneDriveConfigured) { %>
+<li>
+  <% if (isOneDriveAuth) { %>
+    <a href="/unlink/onedrive">Unlink
+  <% } else { %>
+    <a href="/redirect/onedrive" class="import-one-drive unlinked">Link with
+  <% } %>
+    <span>One Drive</span>
+    <span class="icon icon-link"><%- include ../icons/linked %></span>
+  </a>
+</li>
+<% } %>

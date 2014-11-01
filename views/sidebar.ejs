@@ -6,6 +6,16 @@
 
     <nav class="nav nav-sidebar">
       <ul class="menu menu-sidebar">
+
+        <li class="menu-item menu-item--link-unlink in-sidebar">
+          <a href="#" class="menu-link" ng-click="document.status.linkUnlink = !document.status.linkUnlink">
+          <span>Services</span> <span class="caret"></span></a>
+
+          <ul class="sidebar-list" collapse="document.status.linkUnlink">
+            <%- include dropdowns/link_unlink %>
+          </ul>
+        </li>
+
         <li class="menu-item menu-item--save-to in-sidebar">
           <a href="#" class="menu-link" ng-click="document.status.save = !document.status.save">
           <span>Save to</span> <span class="caret"></span></a>
@@ -22,7 +32,6 @@
             <%- include dropdowns/import_from %>
           </ul>
         </li>
-        <!-- TODO: add bootstrap back again -->
         <li class="menu-item menu-item--documents in-sidebar">
           <a href="#" class="menu-link" ng-click="document.status.document = !document.status.document">
           <span>Documents</span> <span class="caret"></span></a>

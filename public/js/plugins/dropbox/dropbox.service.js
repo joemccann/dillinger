@@ -33,8 +33,8 @@ module.exports =
    *    Save File to Dropbox.
    *    The file will be put into the Dropbox/Dillinger directory.
    *
-   *    @param  {String}  title  Title of the document
-   *    @param  {String}  body   Body of the document
+   *    @param  {String}  title  Title of the document.
+   *    @param  {String}  body   Body of the document.
    *
    *    @examples
    *    var
@@ -75,7 +75,7 @@ module.exports =
   /**
    *    Fetch File from Dropbox.
    *
-   *    @param  {String}  filePath  Path to the file on Dropbox
+   *    @param  {String}  filePath  Path to the file on Dropbox.
    */
   function fetchFile(filePath) {
     return $http.post('fetch/dropbox', {
