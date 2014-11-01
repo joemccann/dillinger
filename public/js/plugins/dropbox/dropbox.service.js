@@ -54,10 +54,17 @@ module.exports =
       if (angular.isDefined(di.$scope)) {
         di.$scope.$close();
       }
-      return diNotify({
-        message: 'Successfully saved to: ' + data.path,
-        duration: 5000
-      });
+      if (data.error) {
+        return diNotify({
+          message: 'There was an error: ' + data.error,
+          duration: 5000
+        });
+      } else {
+        return diNotify({
+          message: 'Successfully saved to: ' + data.path,
+          duration: 5000
+        });
+      }
     }).error(function(err) {
       return diNotify({
         message: 'An Error occured: ' + err
