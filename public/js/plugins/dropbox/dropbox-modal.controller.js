@@ -1,6 +1,10 @@
 
 'use strict';
 
+/**
+ *    Dropbox Modal Controller.
+ */
+
 module.exports =
   angular
   .module('plugins.dropbox.modal', [
@@ -25,12 +29,12 @@ module.exports =
   vm.currentPage    = 1;
   vm.itemsPerPage   = 16;
   vm.maxSize        = 5;
-  vm.query          = void 0;
+  vm.query          = undefined;
 
-  vm.onPageChange   = onPageChange;
-  vm.setFile        = setFile;
-  vm.fetchFile      = fetchFile;
-  vm.close          = closeModal;
+  vm.onPageChange       = onPageChange;
+  vm.assignFileOnEditor = assignFileOnEditor;
+  vm.fetchFile          = fetchFile;
+  vm.close              = closeModal;
 
   // Init the paginatedFiles Array.
   vm.onPageChange();
@@ -39,16 +43,19 @@ module.exports =
 
   function onPageChange() {
     vm.paginatedFiles = filterFilter(vm.allFiles, vm.query);
+
     return vm.paginatedFiles;
   }
 
-  function setFile() {
+  function assignFileOnEditor() {
     return $modalInstance.close();
   }
 
   function fetchFile(fileName) {
+    // Remove path to document, leaving only the name of the file.
     dropboxService.fetched.fileName = fileName.split('/').pop();
-    return dropboxService.fetchFile(fileName).then(vm.setFile);
+
+    return dropboxService.fetchFile(fileName).then(vm.assignFileOnEditor);
   }
 
   function closeModal() {
