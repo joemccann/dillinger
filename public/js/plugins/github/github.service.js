@@ -7,22 +7,24 @@ module.exports =
   .factory('githubService', function($http, diNotify) {
 
   var defaults = {
-    orgs: {},
-    repos: {},
+    orgs:     {},
+    repos:    {},
     branches: {},
-    files: {},
+    files:    {},
     user: {
       name: '',
-      url: ''
+      uri:  ''
     },
     current: {
-      tree: [],
-      name: '',
-      sha: '',
-      branch: null,
-      owner: null,
-      repo: null,
-      file: null,
+      tree:     [],
+      url:      '',
+      name:     '',
+      sha:      '',
+      path:     '',
+      branch:   '',
+      owner:    '',
+      repo:     '',
+      file:     '',
       fileName: ''
     }
   },
@@ -46,12 +48,17 @@ module.exports =
      *
      *    @param    {String}    url    URL to the File
      */
-    fetchFile: function(url) {
+    fetchFile: function(url, path) {
+      console.log(path);
+      service.config.current.url = url;
       return $http.post('import/github/file', {
         url: url
-      }).success(function(data) {
-        service.config.current.file = data.data;
-        return service.config.current.file;
+      }).success(function(result) {
+        console.log(result);
+        service.config.current.file = result.data.content;
+        service.config.current.url  = result.data.url;
+        service.config.current.sha  = result.data.sha;
+        return false;
       }).error(function(err) {
         return diNotify({
           message: 'An Error occured: ' + err
@@ -72,20 +79,20 @@ module.exports =
       var di;
       di = diNotify('Fetching Files...');
       return $http.post('import/github/tree_files', {
-        owner: owner ? owner : service.config.user.name,
-        repo: repo ? repo : service.config.current.repo,
-        branch: branch ? branch : service.config.current.branch,
-        sha: sha ? sha : service.config.current.sha,
+        owner:    owner ? owner : service.config.user.name,
+        repo:     repo ? repo : service.config.current.repo,
+        branch:   branch ? branch : service.config.current.branch,
+        sha:      sha ? sha : service.config.current.sha,
         fileExts: fileExts ? fileExts : 'md'
       }).success(function(data) {
         if (di != null) {
           di.$scope.$close();
         }
-        service.config.current.owner = owner ? owner : service.config.user.name;
-        service.config.current.repo = repo ? repo : service.config.current.repo;
+        service.config.current.owner  = owner ? owner : service.config.user.name;
+        service.config.current.repo   = repo ? repo : service.config.current.repo;
         service.config.current.branch = branch ? branch : service.config.current.branch;
-        service.config.current.sha = sha ? sha : service.config.current.sha;
-        service.config.current.tree = data.tree;
+        service.config.current.sha    = sha ? sha : service.config.current.sha;
+        service.config.current.tree   = data.tree;
         return service.config.current;
       }).error(function(err) {
         return diNotify({
@@ -105,14 +112,14 @@ module.exports =
       di = diNotify('Fetching Branches...');
       return $http.post('import/github/branches', {
         owner: owner ? owner : service.config.user.name,
-        repo: repo ? repo : service.config.current.repo
+        repo:  repo ? repo : service.config.current.repo
       }).success(function(data) {
         if (di != null) {
           di.$scope.$close();
         }
         service.config.current.owner = owner;
-        service.config.current.repo = repo;
-        service.config.branches = data;
+        service.config.current.repo  = repo;
+        service.config.branches      = data;
 
         return service.config.branches;
       }).error(function(err) {
@@ -163,6 +170,54 @@ module.exports =
       }).error(function(err) {
         return diNotify({
           message: 'An Error occured: ' + err
+        });
+      });
+    },
+
+    /**
+     *    Update Document on Github.
+     *
+     *    @param  {Object}  data  Object for POST Request.
+     *
+     *    @examples
+     *    {
+     *    	uri: 'https://api.github.com/repos/pengwynn/octokit/contents/subdir/README.md',
+     *    	data: btoa('DOCUMENT_BODY'),
+     *    	path: 'subdir/README.md',
+     *    	name: 'README.md',
+     *    	sha: '3d21ec53a331a6f037a91c368710b99387d012c1',
+     *    	branch: 'master',
+     *    	repo: 'pengwynn',
+     *    	message: 'Commit message.',
+     *    	owner: 'octokit'
+     *    }
+     */
+    saveToGithub: function(data) {
+      var di;
+      di = diNotify('Saving Document on Github...');
+      return $http.post('save/github', {
+        uri:     data.uri,
+        data:    btoa(data.body),
+        path:    data.path,
+        name:    data.name,
+        sha:     data.sha,
+        branch:  data.branch,
+        repo:    data.repo,
+        message: data.message,
+        owner:   data.owner
+      }).success(function(result) {
+        if (di.$scope != null) {
+          di.$scope.$close();
+        }
+        diNotify({
+          message: 'Successfully commited to Github!',
+          duration: 5000
+        });
+        return result;
+      }).error(function(err) {
+        return diNotify({
+          message: 'An Error occured: ' + err.error,
+          duration: 5000
         });
       });
     },

@@ -19,7 +19,7 @@
 
   <!-- Branches -->
   <li ng-if="modal.step === 3" ng-repeat="branch in modal.branches">
-    <a href="#" ng-bind="branch.name" ng-click="modal.fetchTreeFiles(branch.commit.sha)"></a>
+    <a href="#" ng-bind="branch.name" ng-click="modal.fetchTreeFiles(branch.commit.sha, branch.name)"></a>
   </li>
 
   <!-- Files -->

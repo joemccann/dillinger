@@ -29,6 +29,8 @@ module.exports =
     getCurrentDocumentTitle: getCurrentDocumentTitle,
     setCurrentDocumentBody:  setCurrentDocumentBody,
     getCurrentDocumentBody:  getCurrentDocumentBody,
+    setCurrentDocumentSHA:   setCurrentDocumentSHA,
+    getCurrentDocumentSHA:   getCurrentDocumentSHA,
     save:                    save,
     init:                    init
   };
@@ -179,7 +181,24 @@ module.exports =
     service.setCurrentDocumentBody($rootScope.editor.getSession().getValue());
     return service.currentDocument.body;
   }
-  
+
+/**
+ *    Update the current document SHA.
+ *
+ *    @param  {String}  sha  The document SHA.
+ */
+function setCurrentDocumentSHA(sha) {
+  service.currentDocument.github.sha = sha;
+  return sha;
+}
+
+/**
+ *    Get the current document SHA.
+ */
+function getCurrentDocumentSHA() {
+  return service.currentDocument.github.sha;
+}
+
   function save(manual) {
     if (!angular.isDefined(manual)) {
       manual = false;

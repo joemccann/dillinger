@@ -283,15 +283,14 @@ exports.Github = (function() {
           })
         }
         else if (!e && r.statusCode === 200) {
-
           var jsonResp = {
-            data: d
-          , error: false
+            data: JSON.parse(d),
+            error: false
           }
 
           if (isPrivateRepo) {
             d = JSON.parse(d)
-            jsonResp.data = (new Buffer(d.content, 'base64').toString('ascii'))
+            jsonResp.data.content = (new Buffer(d.content, 'base64').toString('ascii'))
           }
 
           res.json(jsonResp)
@@ -312,26 +311,31 @@ exports.Github = (function() {
       }
       else {
         // uri = "https://api.github.com/repos/:owner/:repo/contents/:path"
-        var options, uri, owner, repo, branch, sha, isPrivateRepo
+        var
+          commit, options, uri, owner,
+          repo,   branch,  sha, message,
+          isPrivateRepo;
 
-        isPrivateRepo = /blob/.test(data.uri)
+        isPrivateRepo = /blob/.test(data.uri);
 
-        branch = data.branch
-        path = data.name
-        sha = data.sha
-        repo = data.repo
-        owner = data.owner
+        branch  = data.branch;
+        path    = data.path;
+        sha     = data.sha;
+        repo    = data.repo;
+        owner   = data.owner;
+        message = data.message;
 
-        uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path
-        uri += '?access_token=' + req.session.github.oauth
+        uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path;
+        uri += '?access_token=' + req.session.github.oauth;
 
         commit = {
-          message: "Modified file using Dillinger" // Better commit messages?
+          message: message // Better commit messages?
         , path: path
         , branch: branch
         , content: data.data
+        , name: data.name
         , sha: sha
-        }
+      };
 
         options = {
           headers: headers

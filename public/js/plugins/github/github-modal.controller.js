@@ -44,8 +44,9 @@ module.exports =
     return false;
   }
 
-  function fetchFile(url, name) {
-    githubService.config.current.fileName = name.split('/').pop();
+  function fetchFile(url, path) {
+    githubService.config.current.fileName = path.split('/').pop();
+    githubService.config.current.path = path;
     githubService.fetchFile(url).then(setFile);
 
     return false;
@@ -74,8 +75,9 @@ module.exports =
     return vm.files;
   }
 
-  function fetchTreeFiles(sha) {
-    githubService.config.current.sha = sha;
+  function fetchTreeFiles(sha, branch) {
+    githubService.config.current.sha    = sha;
+    githubService.config.current.branch = branch;
     githubService.fetchTreeFiles(sha).then(setTreeFiles);
 
     return false;

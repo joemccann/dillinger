@@ -11,8 +11,9 @@ module.exports =
 
   var vm = this;
 
-  vm.importFile = importFile;
-  vm.saveTo     = saveTo;
+  vm.importFile          = importFile;
+  vm.saveTo              = saveTo;
+  vm.updateSHAOnDocument = updateSHAOnDocument;
 
   //////////////////////////////
 
@@ -31,20 +32,61 @@ module.exports =
     });
 
     return modalInstance.result.then(function() {
-      documentsService.setCurrentDocumentTitle(githubService.config.current.fileName);
-      documentsService.setCurrentDocumentBody(githubService.config.current.file);
+      var file = documentsService.createItem({
+        isGithubFile: true,
+        body:         githubService.config.current.file,
+        title:        githubService.config.current.fileName,
+        github: {
+          originalFileName:    githubService.config.current.fileName,
+          originalFileContent: githubService.config.current.file,
+          sha:                 githubService.config.current.sha,
+          branch:              githubService.config.current.branch,
+          owner:               githubService.config.current.owner,
+          repo:                githubService.config.current.repo,
+          url:                 githubService.config.current.url,
+          path:                githubService.config.current.path
+        }
+      });
+
+      documentsService.addItem(file);
+      documentsService.setCurrentDocument(file);
+
       githubService.save();
       $rootScope.$emit('document.refresh');
       return $rootScope.$emit('autosave');
-    }, function() {
-      return console.log('Modal dismissed at: ' + (new Date()));
     });
   }
 
+  function updateSHAOnDocument(result) {
+    console.log('__________________________RESULT');
+    documentsService.setCurrentDocumentSHA(result.data.content.sha);
+    $rootScope.$emit('document.refresh');
+    return $rootScope.$emit('autosave');
+  }
+
   function saveTo(username) {
-    return diNotify({
-      message: 'Saving to Github will be back soon, ' + username + '!'
-    });
+    var file = documentsService.getCurrentDocument();
+
+    // Document must be an importet file from Github to work.
+    if (file.isGithubFile) {
+      var postData = {
+        body:    file.body,
+        name:    file.github.originalFileName,
+        path:    file.github.path,
+        sha:     file.github.sha,
+        branch:  file.github.branch,
+        repo:    file.github.repo,
+        owner:   file.github.owner,
+        uri:     file.github.url,
+        message: 'Updated ' + file.originalFileName + ' with Dillinger.io'
+      };
+
+      return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
+    } else {
+      return diNotify({
+        message: 'Your Document must be an importet file from Github.'
+      });
+    }
   }
 
 });

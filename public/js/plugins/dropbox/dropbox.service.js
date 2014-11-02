@@ -119,7 +119,8 @@ module.exports =
   }
 
   function restore() {
-    dropboxService.fetched = angular.fromJson(localStorage.getItem('dropbox')) || defaults;
+    dropboxService.fetched = angular
+      .fromJson(localStorage.getItem('dropbox')) || defaults;
     return dropboxService.fetched;
   }
 
