@@ -71,14 +71,14 @@ module.exports =
     if (file.isGithubFile) {
       var postData = {
         body:    file.body,
-        name:    file.github.originalFileName,
+        name:    file.title,
         path:    file.github.path,
         sha:     file.github.sha,
         branch:  file.github.branch,
         repo:    file.github.repo,
         owner:   file.github.owner,
         uri:     file.github.url,
-        message: 'Updated ' + file.originalFileName + ' with Dillinger.io'
+        message: 'Updated ' + file.title + ' with Dillinger.io'
       };
 
       return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
