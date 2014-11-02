@@ -58,7 +58,6 @@ module.exports =
   }
 
   function updateSHAOnDocument(result) {
-    console.log('__________________________RESULT');
     documentsService.setCurrentDocumentSHA(result.data.content.sha);
     $rootScope.$emit('document.refresh');
     return $rootScope.$emit('autosave');
@@ -71,14 +70,13 @@ module.exports =
     if (file.isGithubFile) {
       var postData = {
         body:    file.body,
-        name:    file.title,
-        path:    file.github.path,
+        path:    file.github.path.substr(0,file.github.path.lastIndexOf('/')) + '/' + file.title,
         sha:     file.github.sha,
         branch:  file.github.branch,
         repo:    file.github.repo,
         owner:   file.github.owner,
         uri:     file.github.url,
-        message: 'Updated ' + file.title + ' with Dillinger.io'
+        message: 'Saved ' + file.title + ' with Dillinger.io'
       };
 
       return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);

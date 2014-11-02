@@ -333,7 +333,6 @@ exports.Github = (function() {
         , path: path
         , branch: branch
         , content: data.data
-        , name: data.name
         , sha: sha
       };
 
@@ -345,8 +344,9 @@ exports.Github = (function() {
         }
 
         request(options, function(e, r, d) {
-          // console.log(uri, e, r.statusCode, JSON.stringify(commit), d)
-          if (!e && r.statusCode === 200) {
+          // 200 = Updated
+          // 201 = Created
+          if (!e && r.statusCode === 200 || r.statusCode === 201) {
             return res.json(200, JSON.parse(d))
           }
           return res.json(400, { "error": "Unable to save file: " + (e || JSON.parse(d).message) })

@@ -49,12 +49,10 @@ module.exports =
      *    @param    {String}    url    URL to the File
      */
     fetchFile: function(url, path) {
-      console.log(path);
       service.config.current.url = url;
       return $http.post('import/github/file', {
         url: url
       }).success(function(result) {
-        console.log(result);
         service.config.current.file = result.data.content;
         service.config.current.url  = result.data.url;
         service.config.current.sha  = result.data.sha;
@@ -184,7 +182,6 @@ module.exports =
      *    	uri: 'https://api.github.com/repos/pengwynn/octokit/contents/subdir/README.md',
      *    	data: btoa('DOCUMENT_BODY'),
      *    	path: 'subdir/README.md',
-     *    	name: 'README.md',
      *    	sha: '3d21ec53a331a6f037a91c368710b99387d012c1',
      *    	branch: 'master',
      *    	repo: 'pengwynn',
@@ -199,7 +196,6 @@ module.exports =
         uri:     data.uri,
         data:    btoa(data.body),
         path:    data.path,
-        name:    data.name,
         sha:     data.sha,
         branch:  data.branch,
         repo:    data.repo,
@@ -210,7 +206,7 @@ module.exports =
           di.$scope.$close();
         }
         diNotify({
-          message: 'Successfully commited to Github!',
+          message: 'Successfully saved to ' + result.content.path + '!',
           duration: 5000
         });
         return result;
