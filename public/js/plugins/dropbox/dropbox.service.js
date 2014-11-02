@@ -50,18 +50,18 @@ module.exports =
     return $http.post('save/dropbox', {
       pathToMdFile: '/Dillinger/' + title,
       fileContents: body
-    }).success(function(data) {
+    }).success(function(result) {
       if (angular.isDefined(di.$scope)) {
         di.$scope.$close();
       }
-      if (data.data.error) {
+      if (result.data.error) {
         return diNotify({
-          message: 'An Error occured: ' + data.data.error,
+          message: 'An Error occured: ' + result.data.error,
           duration: 5000
         });
       } else {
         return diNotify({
-          message: 'Successfully saved to: ' + data.path,
+          message: 'Successfully saved to: ' + result.data.path,
           duration: 5000
         });
       }
