@@ -22,21 +22,21 @@
 
 .dropdown,
 .sidebar-list {
-  padding: 0;
-  margin: 0;
   list-style: none;
+  margin: 0;
+  padding: 0;
 
   li {
-    margin: 32px 0 32px;
-    padding: 0 0 0 32px;
     line-height: 1;
+    margin: 32px 0;
+    padding: 0 0 0 32px;
   }
 
   a {
-    text-transform: none;
-    display: block;
-    color: $c-dropdown-link;
     @include clearfix;
+    color: $c-dropdown-link;
+    display: block;
+    text-transform: none;
   }
 
   .icon {
@@ -48,9 +48,10 @@
 
     &.collapse {
       display: none;
-    }
-    &.collapse.in {
-      display: block;
+
+      &.in {
+        display: block;
+      }
     }
   }
 
@@ -62,10 +63,16 @@
 
     li {
       background-image: url('../img/icons/file.svg');
-      background-repeat: no-repeat;
       background-position: 240px center;
+      background-repeat: no-repeat;
       background-size: 14px 16px;
-      padding: 3px 32px 3px;
+      padding: 3px 32px;
+
+      &.octocat {
+        background-image: url('../img/icons/octocat.svg');
+        background-position: 234px center;
+        background-size: 24px 24px;
+      }
     }
 
     li {
