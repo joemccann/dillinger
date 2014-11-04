@@ -1,0 +1,64 @@
+// *************************************
+//
+//   Splashscreen
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .splashscreen
+//   #splashscreen-dillinger
+//   p
+//
+// *************************************
+
+.splashscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #373D49;
+  z-index: 22;
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+  &-dillinger {
+    width: 260px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+
+    @include from('tablet') {
+      width: 500px;
+    }
+
+    @include from('desktop') {
+      width: 700px;
+    }
+
+    @include from('widescreen') {
+      width: 800px;
+    }
+  }
+
+  p {
+    @include sp($fontsize: epsilon, $font: $headingtype, $lineheight: 2, $below: 2, $breakpoint: all);
+    font-family: unquote(map-get($headingtype, font-family));
+    font-weight: map-get($headingtype, regular);
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    color: #FFF;
+  }
+
+}
+
+.sp-center {
+  position: relative;
+  transform: translateY(-50%);
+  top: 50%;
+}

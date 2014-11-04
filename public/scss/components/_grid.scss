@@ -1,0 +1,586 @@
+// *************************************
+//
+//   Grid
+//   -> Based on the following:
+//      * https://github.com/necolas/suit-grid
+//      * https://github.com/csswizardry/csswizardry-grids
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .g
+//   .g-b[.g-b--center|1of2|1of3|...]
+//   .g-b[.g-b--center|1of2|1of3|...]
+//   .g-b[.g-b--center|1of2|1of3|...]
+//   .g-b[.g-b--center|1of2|1of3|...]
+//
+// *************************************
+
+// -------------------------------------
+//   Variables
+// -------------------------------------
+
+$g-columns: 12 !default;
+$g-defaults: 'm' 'mobile' $grid-gutter-mobile, 't' 'tablet' $grid-gutter-tablet, 'd' 'desktop' $grid-gutter-desktop !default;
+$g-silent: false !default;
+
+// -------------------------------------
+//   Selector Type
+// -------------------------------------
+
+$g-selector: if($g-silent, unquote('%'), unquote('.'));
+
+// -------------------------------------
+//   Base
+// -------------------------------------
+
+
+#{$g-selector}g {
+  display: block;
+  &:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+}
+
+
+#{$g-selector}g-b {
+  float: left;
+  margin: 0;
+  width: 100%;
+}
+
+
+@mixin grid-type( $gutter ) {
+  #{$g-selector}g {
+    margin-left: -($gutter / 2);
+    margin-right: -($gutter / 2);
+  }
+
+  #{$g-selector}g-b {
+    padding-left: $gutter / 2;
+    padding-right: $gutter / 2;
+  }
+}
+
+@include grid-type($grid-gutter);
+
+@each $device in $g-defaults {
+  @include from(nth($device, 2)) {
+    @include grid-type(nth($device, 3));
+  }
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// ----- Center ----- //
+
+#{$g-selector}g-b--center {
+  display: block;
+  float: none;
+  margin: 0 auto;
+}
+
+#{$g-selector}g-b--right {
+  float: right;
+}
+
+// -------------------------------------
+//   Setup
+// -------------------------------------
+
+@mixin device-type($namespace: '') {
+  // ----- One Part ----- //
+  #{$g-selector}g-b--#{$namespace}1of1 {
+    width: 100%;
+  }
+  // ----- Two Parts ----- //
+  #{$g-selector}g-b--#{$namespace}1of2 {
+    width: 50%;
+  }
+  // ----- Three Parts ----- //
+  @if $g-columns >= 3 {
+    #{$g-selector}g-b--#{$namespace}1of3 {
+      width: 33.333%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of3 {
+      width: 66.666%;
+    }
+  }
+  // ----- Four Parts ----- //
+  @if $g-columns >= 4 {
+    #{$g-selector}g-b--#{$namespace}1of4 {
+      width: 25%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of4 {
+      @extend #{$g-selector}g-b--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--#{$namespace}3of4 {
+      width: 75%;
+    }
+  }
+  // ----- Five Parts ----- //
+  @if $g-columns >= 5 {
+    #{$g-selector}g-b--#{$namespace}1of5 {
+      width: 20%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of5 {
+      width: 40%;
+    }
+    #{$g-selector}g-b--#{$namespace}3of5 {
+      width: 60%;
+    }
+    #{$g-selector}g-b--#{$namespace}4of5 {
+      width: 80%;
+    }
+  }
+  // ----- Six Parts ----- //
+  @if $g-columns >= 6 {
+    #{$g-selector}g-b--#{$namespace}1of6 {
+      width: 16.666%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of6 {
+      @extend #{$g-selector}g-b--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--#{$namespace}3of6 {
+      @extend #{$g-selector}g-b--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--#{$namespace}4of6 {
+      @extend #{$g-selector}g-b--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--#{$namespace}5of6 {
+      width: 83.333%;
+    }
+  }
+  // ----- Eight Parts ----- //
+  @if $g-columns >= 8 {
+    #{$g-selector}g-b--#{$namespace}1of8 {
+      width: 12.5%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of8 {
+      @extend #{$g-selector}g-b--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--#{$namespace}3of8 {
+      width: 37.5%;
+    }
+    #{$g-selector}g-b--#{$namespace}4of8 {
+      @extend #{$g-selector}g-b--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--#{$namespace}5of8 {
+      width: 62.5%;
+    }
+    #{$g-selector}g-b--#{$namespace}6of8 {
+      @extend #{$g-selector}g-b--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--#{$namespace}7of8 {
+      width: 87.5%;
+    }
+  }
+  // ----- Ten Parts ----- //
+  @if $g-columns >= 10 {
+    #{$g-selector}g-b--#{$namespace}1of10 {
+      width: 10%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of10 {
+      @extend #{$g-selector}g-b--#{$namespace}1of5;
+    }
+    #{$g-selector}g-b--#{$namespace}3of10 {
+      width: 30%;
+    }
+    #{$g-selector}g-b--#{$namespace}4of10 {
+      @extend #{$g-selector}g-b--#{$namespace}2of5;
+    }
+    #{$g-selector}g-b--#{$namespace}5of10 {
+      @extend #{$g-selector}g-b--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--#{$namespace}6of10 {
+      @extend #{$g-selector}g-b--#{$namespace}3of5;
+    }
+    #{$g-selector}g-b--#{$namespace}7of10 {
+      width: 70%;
+    }
+    #{$g-selector}g-b--#{$namespace}8of10 {
+      @extend #{$g-selector}g-b--#{$namespace}4of5;
+    }
+    #{$g-selector}g-b--#{$namespace}9of10 {
+      width: 90%;
+    }
+  }
+  // ----- Twelve Parts ----- //
+  @if $g-columns >= 12 {
+    #{$g-selector}g-b--#{$namespace}1of12 {
+      width: 8.333%;
+    }
+    #{$g-selector}g-b--#{$namespace}2of12 {
+      @extend #{$g-selector}g-b--#{$namespace}1of6;
+    }
+    #{$g-selector}g-b--#{$namespace}3of12 {
+      @extend #{$g-selector}g-b--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--#{$namespace}4of12 {
+      @extend #{$g-selector}g-b--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--#{$namespace}5of12 {
+      width: 41.666%;
+    }
+    #{$g-selector}g-b--#{$namespace}6of12 {
+      @extend #{$g-selector}g-b--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--#{$namespace}7of12 {
+      width: 58.333%;
+    }
+    #{$g-selector}g-b--#{$namespace}8of12 {
+      @extend #{$g-selector}g-b--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--#{$namespace}9of12 {
+      @extend #{$g-selector}g-b--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--#{$namespace}10of12 {
+      @extend #{$g-selector}g-b--#{$namespace}5of6;
+    }
+    #{$g-selector}g-b--#{$namespace}11of12 {
+      width: 91.666%;
+    }
+  }
+}
+
+
+// -------------------------------------
+//   Push
+// -------------------------------------
+
+@mixin device-type-push($namespace: '') {
+  // ----- One Part ----- //
+  #{$g-selector}g-b--push--#{$namespace}1of1 {
+    margin-left: 100%;
+  }
+  // ----- Two Parts ----- //
+  #{$g-selector}g-b--push--#{$namespace}1of2 {
+    margin-left: 50%;
+  }
+  // ----- Three Parts ----- //
+  @if $g-columns >= 3 {
+    #{$g-selector}g-b--push--#{$namespace}1of3 {
+      margin-left: 33.333%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of3 {
+      margin-left: 66.666%;
+    }
+  }
+  // ----- Four Parts ----- //
+  @if $g-columns >= 4 {
+    #{$g-selector}g-b--push--#{$namespace}1of4 {
+      margin-left: 25%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of4 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of4 {
+      margin-left: 75%;
+    }
+  }
+  // ----- Five Parts ----- //
+  @if $g-columns >= 5 {
+    #{$g-selector}g-b--push--#{$namespace}1of5 {
+      margin-left: 20%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of5 {
+      margin-left: 40%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of5 {
+      margin-left: 60%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}4of5 {
+      margin-left: 80%;
+    }
+  }
+  // ----- Six Parts ----- //
+  @if $g-columns >= 6 {
+    #{$g-selector}g-b--push--#{$namespace}1of6 {
+      margin-left: 16.666%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of6 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of6 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--push--#{$namespace}4of6 {
+      @extend #{$g-selector}g-b--push--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--push--#{$namespace}5of6 {
+      margin-left: 83.333%;
+    }
+  }
+  // ----- Eight Parts ----- //
+  @if $g-columns >= 8 {
+    #{$g-selector}g-b--push--#{$namespace}1of8 {
+      margin-left: 12.5%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of8 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of8 {
+      margin-left: 37.5%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}4of8 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--push--#{$namespace}5of8 {
+      margin-left: 62.5%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}6of8 {
+      @extend #{$g-selector}g-b--push--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--push--#{$namespace}7of8 {
+      margin-left: 87.5%;
+    }
+  }
+  // ----- Ten Parts ----- //
+  @if $g-columns >= 10 {
+    #{$g-selector}g-b--push--#{$namespace}1of10 {
+      margin-left: 10%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of10 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of5;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of10 {
+      margin-left: 30%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}4of10 {
+      @extend #{$g-selector}g-b--push--#{$namespace}2of5;
+    }
+    #{$g-selector}g-b--push--#{$namespace}5of10 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--push--#{$namespace}6of10 {
+      @extend #{$g-selector}g-b--push--#{$namespace}3of5;
+    }
+    #{$g-selector}g-b--push--#{$namespace}7of10 {
+      margin-left: 70%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}8of10 {
+      @extend #{$g-selector}g-b--push--#{$namespace}4of5;
+    }
+    #{$g-selector}g-b--push--#{$namespace}9of10 {
+      margin-left: 90%;
+    }
+  }
+  // ----- Twelve Parts ----- //
+  @if $g-columns >= 12 {
+    #{$g-selector}g-b--push--#{$namespace}1of12 {
+      margin-left: 8.333%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}2of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of6;
+    }
+    #{$g-selector}g-b--push--#{$namespace}3of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--push--#{$namespace}4of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--push--#{$namespace}5of12 {
+      margin-left: 41.666%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}6of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--push--#{$namespace}7of12 {
+      margin-left: 58.333%;
+    }
+    #{$g-selector}g-b--push--#{$namespace}8of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--push--#{$namespace}9of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--push--#{$namespace}10of12 {
+      @extend #{$g-selector}g-b--push--#{$namespace}5of6;
+    }
+    #{$g-selector}g-b--push--#{$namespace}11of12 {
+      margin-left: 91.666%;
+    }
+  }
+}
+
+
+// -------------------------------------
+//   Pull
+// -------------------------------------
+
+@mixin device-type-pull($namespace: '') {
+  // ----- One Part ----- //
+  #{$g-selector}g-b--pull--#{$namespace}1of1 {
+    margin-right: 100%;
+  }
+  // ----- Two Parts ----- //
+  #{$g-selector}g-b--pull--#{$namespace}1of2 {
+    margin-right: 50%;
+  }
+  // ----- Three Parts ----- //
+  @if $g-columns >= 3 {
+    #{$g-selector}g-b--pull--#{$namespace}1of3 {
+      margin-right: 33.333%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of3 {
+      margin-right: 66.666%;
+    }
+  }
+  // ----- Four Parts ----- //
+  @if $g-columns >= 4 {
+    #{$g-selector}g-b--pull--#{$namespace}1of4 {
+      margin-right: 25%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of4 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of4 {
+      margin-right: 75%;
+    }
+  }
+  // ----- Five Parts ----- //
+  @if $g-columns >= 5 {
+    #{$g-selector}g-b--pull--#{$namespace}1of5 {
+      margin-right: 20%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of5 {
+      margin-right: 40%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of5 {
+      margin-right: 60%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}4of5 {
+      margin-right: 80%;
+    }
+  }
+  // ----- Six Parts ----- //
+  @if $g-columns >= 6 {
+    #{$g-selector}g-b--pull--#{$namespace}1of6 {
+      margin-right: 16.666%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of6 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of6 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}4of6 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}5of6 {
+      margin-right: 83.333%;
+    }
+  }
+  // ----- Eight Parts ----- //
+  @if $g-columns >= 8 {
+    #{$g-selector}g-b--pull--#{$namespace}1of8 {
+      margin-right: 12.5%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of8 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of8 {
+      margin-right: 37.5%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}4of8 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}5of8 {
+      margin-right: 62.5%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}6of8 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}7of8 {
+      margin-right: 87.5%;
+    }
+  }
+  // ----- Ten Parts ----- //
+  @if $g-columns >= 10 {
+    #{$g-selector}g-b--pull--#{$namespace}1of10 {
+      margin-right: 10%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of10 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of5;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of10 {
+      margin-right: 30%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}4of10 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}2of5;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}5of10 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}6of10 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}3of5;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}7of10 {
+      margin-right: 70%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}8of10 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}4of5;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}9of10 {
+      margin-right: 90%;
+    }
+  }
+  // ----- Twelve Parts ----- //
+  @if $g-columns >= 12 {
+    #{$g-selector}g-b--pull--#{$namespace}1of12 {
+      margin-right: 8.333%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}2of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of6;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}3of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of4;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}4of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of3;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}5of12 {
+      margin-right: 41.666%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}6of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}1of2;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}7of12 {
+      margin-right: 58.333%;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}8of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}2of3;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}9of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}3of4;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}10of12 {
+      @extend #{$g-selector}g-b--pull--#{$namespace}5of6;
+    }
+    #{$g-selector}g-b--pull--#{$namespace}11of12 {
+      margin-right: 91.666%;
+    }
+  }
+}
+
+
+// -------------------------------------
+//   Creation
+// -------------------------------------
+
+@include device-type;
+@include device-type-push;
+@include device-type-pull;
+
+@each $device in $g-defaults {
+  @include from(nth($device, 2)) {
+    @include device-type("#{nth($device, 1)}");
+    @include device-type-push("#{nth($device, 1)}");
+    @include device-type-pull("#{nth($device, 1)}");
+  }
+}

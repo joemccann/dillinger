@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="modal.close()">
+    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+  </button>
+  <h3 ng-bind="modal.title"></h3>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <label for="search">Search:</label>
+    <input
+    name        = "search"
+    type        = "text"
+    placeholder = "Search"
+    ng-model    = "modal.query"
+    ng-change   = "modal.onPageChange()"
+    class       = "form-control">
+  </div>
+
+  <!-- Files -->
+  <ul>
+    <li ng-repeat="file in modal.paginatedFiles | startFrom: (modal.currentPage-1) * modal.itemsPerPage | limitTo: modal.itemsPerPage">
+      <a href="#" ng-bind="file.title" ng-click="modal.fetchFile(file.id)"></a>
+    </li>
+  </ul>
+
+  <pagination
+   ng-change      = "modal.onPageChange()"
+   ng-model       = "modal.currentPage"
+   total-items    = "(modal.allFiles | filter: modal.query).length"
+   max-size       = "modal.maxSize"
+   items-per-page = "modal.itemsPerPage"
+   class          = "pagination-m pagination--dillinger"
+   rotate         = "false"
+   previous-text  = "&lsaquo;"
+   next-text      = "&rsaquo;"
+   first-text     = "&laquo;"
+   last-text      = "&raquo;"
+   boundary-links = "true">
+   </pagination>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn--ok" ng-click="modal.close()">Close</button>
+</div>

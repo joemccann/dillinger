@@ -70,6 +70,7 @@ var OneDrive = {
         'access_token': tokens.access_token
       }
     }, function(err, res, body) {
+      // One Drive doesn't respond with a name.
       callback(err, {
         content: body
       });

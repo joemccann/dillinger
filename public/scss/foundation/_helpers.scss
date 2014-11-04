@@ -1,0 +1,98 @@
+// *************************************
+//
+//   Helpers
+//   -> Functions, Mixins, Extends, Animations
+//
+// *************************************
+
+// -------------------------------------
+//   Functions
+// -------------------------------------
+
+// Remove Units from Values
+@function strip-units($val) {
+  @return ($val / ($val * 0 + 1));
+}
+
+// Convert pixel based values to ems
+@function em($pxval, $base: 16px) {
+  @if not unitless($pxval) {
+      $pxval: strip-units($pxval);
+  }
+  @if not unitless($base) {
+      $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1em;
+}
+
+// Convert pixel based values to rems
+@function rem($pxval, $base: 16px) {
+  @if not unitless($pxval) {
+      $pxval: strip-units($pxval);
+  }
+  @if not unitless($base) {
+      $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1rem;
+}
+
+// -------------------------------------
+//   Mixins
+// -------------------------------------
+
+@mixin clearfix {
+  &:after {
+    content:"";
+    display:table;
+    clear:both;
+  }
+}
+
+@mixin sr-only {
+  visibility: hidden;
+  text-overflow: 110%;
+  overflow: hidden;
+  top: -100px;
+  position: absolute;
+}
+
+
+// -------------------------------------
+//   Extends
+// -------------------------------------
+
+// ----- Debug ----- //
+
+.debug {
+  background-color: #ffc0cb !important;
+}
+
+// ----- Ellipsis ----- //
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ----- Image Replacement ----- //
+
+.ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+    height: 150%;
+    width: 0;
+  }
+}
+
+
+// -------------------------------------
+//   Animations
+// -------------------------------------
+
+// ...

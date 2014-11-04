@@ -1,0 +1,81 @@
+// *************************************
+//
+//   Settings
+//   -> Settings Panel
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .settings[.settings--modifier](.is-state)(.has-context)
+//   .settings-scaffolding
+//
+// *************************************
+
+.settings {
+  @extend .dropdown;
+  position: fixed;
+  top: 51px + 16px;
+  right: 16px;
+  border-radius: 3px;
+  width: 288px;
+  background-color: $c-background-settings;
+  padding: 16px;
+  z-index: map-get($z-index, settings);
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .settings--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .settings.is-state
+
+  .show-settings & {
+    display: block;
+  }
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+  // .has-settings
+
+  .has-checkbox {
+    float: left;
+  }
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .settings-scaffolding
+
+  a {
+    @include clearfix;
+    @include fontsize(epsilon, all);
+    font-family: unquote(map-get($headingtype, font-family));
+    font-weight: map-get($headingtype, regular);
+    -webkit-font-smoothing: antialiased;
+    line-height: 28px;
+    color: $c-dropdown-link;
+
+    &:hover {
+      color: $c-highlight;
+    }
+  }
+
+  li {
+    border-bottom: 1px solid $c-border-settings;
+    margin: 0;
+    padding: 16px 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

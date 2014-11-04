@@ -1,0 +1,18 @@
+*.gem
+.sass-cache
+bootstrap.css
+bootstrap-responsive.css
+Gemfile.lock
+*.gemfile.lock
+.rvmrc
+.rbenv-version
+
+# Ignore bundler config
+/.bundle
+/vendor/cache
+/vendor/bundle
+tmp/
+test/screenshots/
+test/dummy_rails/log/*.log
+
+.DS_Store

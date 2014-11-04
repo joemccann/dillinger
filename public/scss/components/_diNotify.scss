@@ -1,0 +1,83 @@
+// *************************************
+//
+//   diNotify
+//   -> Notification Styles
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .diNotify[.diNotify--blue](.is-state)(.has-context)
+//   .diNotify-body
+//     .diNotify-icon
+//     .diNotify-message
+//
+// *************************************
+
+.diNotify {
+
+  position: absolute;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: 0 auto;
+  max-width: 400px;
+  text-align: center;
+  transition: top .5s ease-in-out, opacity .5s ease-in-out;
+  visibility: hidden;
+
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .diNotify--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .diNotify.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-diNotify
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+  &-body {
+    -webkit-font-smoothing: antialiased;
+    background-color:       $c-highlight;
+    background:             #666E7F;
+    border-radius:          3px;
+    // box-shadow:             0px 1px 4px 0px #8C94A3;
+    color:                  #fff;
+    font-family:            unquote(map-get($headingtype, font-family));
+    font-weight:            map-get($headingtype, regular);
+    overflow:               hidden;
+    padding:                1rem 2rem .5rem;
+
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+  }
+
+  &-icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    position: relative;
+    top: 3px;
+  }
+
+  &-message {
+    padding-left: 1rem;
+  }
+
+}
