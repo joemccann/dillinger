@@ -22,13 +22,13 @@ module.exports =
   return service;
 
   //////////////////////////////
-  
+
   function save() {
-    localStorage.setItem('profile', angular.toJson(service.profile));
+    localStorage.setItem('profileV3', angular.toJson(service.profile));
   }
 
   function restore() {
-    service.profile = angular.fromJson(localStorage.getItem('profile')) || defaults;
+    service.profile = angular.fromJson(localStorage.getItem('profileV3')) || defaults;
     return service.profile;
   }
 
