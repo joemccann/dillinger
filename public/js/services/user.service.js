@@ -3,7 +3,7 @@
 module.exports =
   angular
   .module('diUser.service', [])
-  .factory('userService', function() {
+  .factory('userService', function(diNotify) {
 
   var
     defaults = {
