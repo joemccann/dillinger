@@ -48,28 +48,32 @@ module.exports =
   // Implementation
   // ------------------------------
 
-  function toggleAutoSave() {
+  function toggleAutoSave(e) {
+    e.preventDefault();
     vm.profile.enableAutoSave = !vm.profile.enableAutoSave;
     userService.save();
 
     return false;
   }
 
-  function toggleWordsCount() {
+  function toggleWordsCount(e) {
+    e.preventDefault();
     vm.profile.enableWordsCount = !vm.profile.enableWordsCount;
     userService.save();
 
     return false;
   }
 
-  function toggleNightMode() {
+  function toggleNightMode(e) {
+    e.preventDefault();
     vm.profile.enableNightMode = !vm.profile.enableNightMode;
     userService.save();
 
     return false;
   }
 
-  function resetProfile() {
+  function resetProfile(e) {
+    e.preventDefault();
     localStorage.clear();
     window.location.reload();
 
@@ -84,7 +88,8 @@ module.exports =
     }, 0);
   }
 
-  function showAbout() {
+  function showAbout(e) {
+    e.preventDefault();
     $modal.open({
       template: require('raw!../components/wtfisdillinger-modal.directive.html'),
       controller: 'WTFisDillingerModalInstance',

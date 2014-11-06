@@ -1,7 +1,7 @@
   <% if (isDropboxConfigured) { %>
   <li ng-controller="Dropbox as dropbox">
     <% if (isDropboxAuth) { %>
-      <a href="#" class="save-to-dropbox linked" ng-click="dropbox.saveTo()">
+      <a class="save-to-dropbox linked" ng-click="dropbox.saveTo()">
     <% } else { %>
       <a href="/redirect/dropbox"  class="import-dropbox unlinked">
     <% } %>
@@ -14,7 +14,7 @@
   <% if (isGithubConfigured) { %>
   <li ng-controller="Github as github">
     <% if (isGithubAuth) { %>
-      <a href="#" class="save-to-github linked" ng-click="github.saveTo('<%= github_username %>')">
+      <a class="save-to-github linked" ng-click="github.saveTo('<%= github_username %>')">
     <% } else { %>
       <a href="/redirect/github"  class="import-github unlinked">
     <% } %>
@@ -27,7 +27,7 @@
   <% if (isGoogleDriveConfigured) { %>
   <li ng-controller="Googledrive as googledrive">
     <% if (isGoogleDriveAuth) { %>
-      <a href="#" class="save-to-google-drive linked" ng-click="googledrive.saveTo()">
+      <a class="save-to-google-drive linked" ng-click="googledrive.saveTo()">
     <% } else { %>
       <a href="/redirect/googledrive" class="import-google-drive unlinked">
     <% } %>
@@ -40,7 +40,7 @@
   <% if (isOneDriveConfigured) { %>
   <li ng-controller="Onedrive as onedrive">
     <% if (isOneDriveAuth) { %>
-      <a href="#" class="save-to-one-drive linked" ng-click="onedrive.saveTo()">
+      <a class="save-to-one-drive linked" ng-click="onedrive.saveTo()">
     <% } else { %>
       <a href="/redirect/onedrive" class="import-one-drive unlinked">
     <% } %>

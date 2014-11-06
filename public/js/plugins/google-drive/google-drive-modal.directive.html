@@ -19,7 +19,7 @@
   <!-- Files -->
   <ul>
     <li ng-repeat="file in modal.paginatedFiles | startFrom: (modal.currentPage-1) * modal.itemsPerPage | limitTo: modal.itemsPerPage">
-      <a href="#" ng-bind="file.title" ng-click="modal.fetchFile(file.id)"></a>
+      <a ng-bind="file.title" ng-click="modal.fetchFile(file.id)"></a>
     </li>
   </ul>
 
