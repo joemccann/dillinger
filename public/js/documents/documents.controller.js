@@ -2,7 +2,10 @@
 'use strict';
 module.exports =
   angular
-  .module('diDocuments', ['diDocuments.service', 'diDocuments.export'])
+  .module('diDocuments', [
+    'diDocuments.service',
+    'diDocuments.export'
+  ])
   .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService) {
 
   var vm = this;

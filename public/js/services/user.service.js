@@ -3,12 +3,13 @@
 module.exports =
   angular
   .module('diUser.service', [])
-  .factory('userService', function(diNotify) {
+  .factory('userService', function() {
 
   var
     defaults = {
       enableAutoSave:   true,
       enableWordsCount: true,
+      enableScrollSync: false,
       enableNightMode:  false
     },
     service = {
@@ -23,8 +24,8 @@ module.exports =
 
   //////////////////////////////
 
-  function save() {
-    localStorage.setItem('profileV3', angular.toJson(service.profile));
+  function save(obj) {
+    localStorage.setItem('profileV3', angular.toJson(obj || service.profile));
   }
 
   function restore() {
