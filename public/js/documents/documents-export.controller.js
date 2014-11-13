@@ -1,5 +1,6 @@
 
 'use strict';
+
 module.exports =
   angular
   .module('diDocuments.export', [
@@ -18,7 +19,7 @@ module.exports =
 
   function initDownload() {
     $downloader.src = '/files/' + documentsExportService.type + '/' + documentsExportService.file;
-    
+
     return false;
   }
 

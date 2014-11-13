@@ -9,49 +9,45 @@ module.exports =
   ])
   .controller('User', function($rootScope, $timeout, $modal, userService, wordsCountService) {
 
-  // I.
-  // Self-reference
   var vm = this;
 
-  // II.
-  // Requirements
   vm.profile = userService.profile;
 
-  // III.
-  // Scope Stuff
+  var $divs = jQuery('.split-editor, .split-preview');
+  var sync = function(e) {
+    var
+      $other     = $divs.not(this).off('scroll'),
+      other      = $other[0],
+      percentage = this.scrollTop / (this.scrollHeight - this.offsetHeight);
 
-  // III. a)
-  // Watchers
+    other.scrollTop = Math.round(percentage * (other.scrollHeight - other.offsetHeight));
 
-  // III. b)
-  // Scope Methods
+    $timeout(function() {
+      $other.on('scroll', sync);
+    }, 10);
 
-  // III. c)
-  // Listen to Events
+    return false;
+  };
+
   $rootScope.$on('preview.updated', updateWords);
 
-  // IV.
   // Methods on the Controller
   vm.toggleAutoSave   = toggleAutoSave;
   vm.toggleWordsCount = toggleWordsCount;
   vm.toggleNightMode  = toggleNightMode;
+  vm.toggleScrollSync = toggleScrollSync;
   vm.resetProfile     = resetProfile;
   vm.showAbout        = showAbout;
 
-  // IV. a)
-  // Properties on the Controller
+  doSync();
 
-  // V.
-  // Cleanup
-
-  // VI.
-  // Implementation
   // ------------------------------
+
 
   function toggleAutoSave(e) {
     e.preventDefault();
     vm.profile.enableAutoSave = !vm.profile.enableAutoSave;
-    userService.save();
+    userService.save(vm.profile);
 
     return false;
   }
@@ -59,7 +55,16 @@ module.exports =
   function toggleWordsCount(e) {
     e.preventDefault();
     vm.profile.enableWordsCount = !vm.profile.enableWordsCount;
-    userService.save();
+    userService.save(vm.profile);
+
+    return false;
+  }
+
+  function toggleScrollSync(e) {
+    e.preventDefault();
+    vm.profile.enableScrollSync = !vm.profile.enableScrollSync;
+    doSync();
+    userService.save(vm.profile);
 
     return false;
   }
@@ -67,7 +72,7 @@ module.exports =
   function toggleNightMode(e) {
     e.preventDefault();
     vm.profile.enableNightMode = !vm.profile.enableNightMode;
-    userService.save();
+    userService.save(vm.profile);
 
     return false;
   }
@@ -86,6 +91,16 @@ module.exports =
     return $timeout(function() {
       return $rootScope.$apply();
     }, 0);
+  }
+
+  function doSync() {
+    if (vm.profile.enableScrollSync) {
+      $divs.on('scroll', sync);
+    } else {
+      $divs.off('scroll', sync);
+    }
+
+    return false;
   }
 
   function showAbout(e) {
