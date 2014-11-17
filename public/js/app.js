@@ -9,7 +9,7 @@
   window.jQuery = require('jquery');
 
   // AngularJS
-  angular = require("exports?angular!angular");
+  angular = require('exports?angular!angular');
 
   // Angular Bootstrap UI
   require('angular-bootstrap');

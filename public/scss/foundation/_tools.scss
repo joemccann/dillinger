@@ -25,6 +25,10 @@
 //   Display
 // -------------------------------------
 
+.sr-only {
+  @include sr-only;
+}
+
 // %db {
 //   display: block;
 // }
@@ -48,12 +52,7 @@
 // ----- All ----- //
 
 .mnone {
-  margin: 0;
-  // height: 100%;
-}
-
-.sr-only {
-  @include sr-only;
+  margin: 0 !important;
 }
 
 // %maxs {

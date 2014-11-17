@@ -9,6 +9,7 @@ module.exports =
     defaults = {
       enableAutoSave:   true,
       enableWordsCount: true,
+      enableScrollSync: false,
       enableNightMode:  false
     },
     service = {
@@ -22,13 +23,13 @@ module.exports =
   return service;
 
   //////////////////////////////
-  
-  function save() {
-    localStorage.setItem('profile', angular.toJson(service.profile));
+
+  function save(obj) {
+    localStorage.setItem('profileV3', angular.toJson(obj || service.profile));
   }
 
   function restore() {
-    service.profile = angular.fromJson(localStorage.getItem('profile')) || defaults;
+    service.profile = angular.fromJson(localStorage.getItem('profileV3')) || defaults;
     return service.profile;
   }
 

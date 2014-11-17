@@ -13,7 +13,8 @@
 // *************************************
 
 .split {
-  overflow: hidden;
+  overflow: scroll;
+  padding: 0 !important;
 
 // -------------------------------------
 //   Modifiers
@@ -40,10 +41,9 @@
 // .split-scaffolding
 
   &-editor {
-    position: relative;
-    // height: 100%;
     padding-left: 0;
     padding-right: 0;
+    position: relative;
 
     .show-preview & {
       display: none;
@@ -51,8 +51,10 @@
 
     @include from('tablet') {
       border-right: 1px solid $c-border;
-      padding-right: 16px;
       float: left;
+      height: calc(100vh - 130px);
+      -webkit-overflow-scrolling: touch;
+      padding-right: 16px;
       width: 50%;
 
       .show-preview & {
@@ -62,10 +64,10 @@
   }
 
   &-preview {
+    background-color: #fff;
     display: none;
     position: absolute;
     top: 129px;
-    background-color: #FFF;
     z-index: map-get($z-index, preview);
 
     .show-preview & {
@@ -73,10 +75,11 @@
     }
 
     @include from('tablet') {
-      // border-left: 1px solid $c-border;
-      position: static;
       display: block;
       float: right;
+      height: calc(100vh - 130px);
+      -webkit-overflow-scrolling: touch;
+      position: static;
       top: 0;
       width: 50%;
     }

@@ -8,7 +8,7 @@
       <ul class="menu menu-sidebar">
 
         <li class="menu-item menu-item--link-unlink in-sidebar">
-          <a href="#" class="menu-link" ng-click="document.status.linkUnlink = !document.status.linkUnlink">
+          <a class="menu-link" ng-click="document.status.linkUnlink = !document.status.linkUnlink">
           <span>Services</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.linkUnlink">
@@ -17,7 +17,7 @@
         </li>
 
         <li class="menu-item menu-item--save-to in-sidebar">
-          <a href="#" class="menu-link" ng-click="document.status.save = !document.status.save">
+          <a class="menu-link" ng-click="document.status.save = !document.status.save">
           <span>Save to</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.save">
@@ -25,7 +25,7 @@
           </ul>
         </li>
         <li class="menu-item menu-item--import-from in-sidebar">
-          <a href="#" class="menu-link" ng-click="document.status.import = !document.status.import">
+          <a class="menu-link" ng-click="document.status.import = !document.status.import">
           <span>Import from</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.import">
@@ -33,7 +33,7 @@
           </ul>
         </li>
         <li class="menu-item menu-item--documents in-sidebar">
-          <a href="#" class="menu-link" ng-click="document.status.document = !document.status.document">
+          <a class="menu-link" ng-click="document.status.document = !document.status.document">
           <span>Documents</span> <span class="caret"></span></a>
 
           <ul class="documents sidebar-list" collapse="document.status.document" role="menu">
@@ -42,10 +42,9 @@
         </li>
       </ul>
     </nav>
-    <a href="#" class="btn btn--new" ng-click="createDocument()">New Document</a>
-    <a href="#" class="btn btn--save" ng-click="saveDocument(true)">Save Session</a>
-    <a href="#"
-       class="btn btn--delete"
+    <a class="btn btn--new" ng-click="createDocument()">New Document</a>
+    <a class="btn btn--save" ng-click="saveDocument(true)">Save Session</a>
+    <a class="btn btn--delete"
        ng-click="removeDocument(currentDocument)"
        ng-if="documents.length > 1">Delete Document</a>
   </div>

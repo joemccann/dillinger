@@ -1,19 +1,25 @@
 <ul class="settings" role="menu" ng-controller="User as user">
   <li>
-    <a href="#" ng-click="user.toggleAutoSave()">
+    <a ng-click="user.toggleAutoSave($event)">
       <span class="has-checkbox">Auto Save</span>
       <switch class="toggle-auto-save" value="user.profile.enableAutoSave"></switch>
     </a>
   </li>
   <li>
-    <a href="#" ng-click="user.toggleWordsCount()">
+    <a ng-click="user.toggleWordsCount($event)">
       <span class="has-checkbox">Word Count</span>
       <switch class="toggle-word-count" value="user.profile.enableWordsCount"></switch>
     </a>
   </li>
+  <li>
+    <a ng-click="user.toggleScrollSync($event)">
+      <span class="has-checkbox">Scroll Sync</span>
+      <switch class="toggle-scroll-sync" value="user.profile.enableScrollSync"></switch>
+    </a>
+  </li>
   <!--
   <li>
-    <a href="#" ng-click="user.toggleNightMode()">
+    <a ng-click="user.toggleNightMode()">
       <span>Night Mode</span>
       <switch class="toggle-night-mode" value="user.profile.enableNightMode"></switch>
     </a>
@@ -25,12 +31,12 @@
     </a>
   </li>
   <li>
-    <a class="toggle-wtf" href="#" ng-click="user.showAbout()">
+    <a class="toggle-wtf" ng-click="user.showAbout($event)">
       <span>WTF is Dillinger?</span>
     </a>
   </li>
   <li>
-    <a class="toggle-reset" href="#" ng-click="user.resetProfile()">
+    <a class="toggle-reset" ng-click="user.resetProfile($event)">
       <span>Reset Profile</span>
     </a>
   </li>
