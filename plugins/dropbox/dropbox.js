@@ -172,6 +172,8 @@ exports.Dropbox = (function() {
       // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
 
       var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
+      if (!path.extname(pathToMdFile))
+        pathToMdFile += ".md"
       var contents = req.body.fileContents || 'Test Data from Dillinger.'
 
       dboxclient.put(pathToMdFile, contents, function(status, reply){
