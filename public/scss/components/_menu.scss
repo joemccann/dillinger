@@ -15,15 +15,15 @@
 
 .menu {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 
   a {
     border: 0;
     color: $c-links;
-    text-transform: uppercase;
     font-family: $base-font-family-heading;
     outline: none;
+    text-transform: uppercase;
 
     &:hover {
       color: $c-highlight;
@@ -31,19 +31,19 @@
   }
 
   .menu-item {
+    border: 0;
     display: none;
     float: left;
     margin: 0;
-    border: 0;
     position: relative;
 
     > a {
+      display: block;
+      font-size: 12px;
+      height: 51px;
+      letter-spacing: 1px;
       line-height: 51px;
       padding: 0 24px;
-      display: block;
-      height: 51px;
-      font-size: 12px;
-      letter-spacing: 1px;
     }
 
     &--settings,
@@ -101,8 +101,8 @@
     &-icon {
 
       > a {
-        padding: 0;
         height: auto;
+        padding: 0;
       }
 
       &:hover {
@@ -118,6 +118,7 @@
       i {
         background-color: $c-background-highlight;
       }
+
       g {
         fill: $c-highlight;
       }
@@ -138,9 +139,9 @@
     width: 100%;
 
     .menu-item {
-      width: 100%;
       float: none;
       margin-bottom: 1px;
+      width: 100%;
 
       &.open {
         > a {
@@ -156,6 +157,7 @@
     }
 
     > .menu-item:hover {
+
       .dropdown a {
         background-color: transparent;
       }
@@ -171,16 +173,16 @@
       }
 
       > .caret {
-        text-align: right;
         float: right;
+        text-align: right;
         top: 22px;
       }
     }
 
     .dropdown {
-      width: 100%;
       background-color: transparent;
       position: static;
+      width: 100%;
     }
   }
 
