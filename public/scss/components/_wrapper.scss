@@ -1,0 +1,9 @@
+// *************************************
+//
+//   Prevent scrolling inside wrapper while menu is opened
+//
+// *************************************
+
+.open-menu > .wrapper {
+  overflow-x: hidden;
+}
