@@ -68,9 +68,10 @@ module.exports =
 
     // Document must be an importet file from Github to work.
     if (file.isGithubFile) {
+      var filePath = file.github.path.substr(0,file.github.path.lastIndexOf('/'));
       var postData = {
         body:    file.body,
-        path:    file.github.path.substr(0,file.github.path.lastIndexOf('/')) + '/' + file.title,
+        path:    filePath ? filePath + '/' + file.title : file.title,
         sha:     file.github.sha,
         branch:  file.github.branch,
         repo:    file.github.repo,
