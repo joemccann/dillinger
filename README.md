@@ -63,10 +63,10 @@ Dillinger is currently extended with the following plugins
 
 Readmes, how to use them in your own application can be found here:
 
-* plugins/dropbox/README.md
-* plugins/github/README.md
-* plugins/googledrive/README.md
-* plugins/onedrive/README.md
+* [plugins/dropbox/README.md](https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md)
+* [plugins/github/README.md](https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md)
+* [plugins/googledrive/README.md](https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md)
+* [plugins/onedrive/README.md](https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md)
 
 ### Development
 

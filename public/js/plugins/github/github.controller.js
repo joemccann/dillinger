@@ -66,7 +66,7 @@ module.exports =
   function saveTo(username) {
     var file = documentsService.getCurrentDocument();
 
-    // Document must be an importet file from Github to work.
+    // Document must be an imported file from Github to work.
     if (file.isGithubFile) {
       var filePath = file.github.path.substr(0,file.github.path.lastIndexOf('/'));
       var postData = {
@@ -83,7 +83,7 @@ module.exports =
       return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
     } else {
       return diNotify({
-        message: 'Your Document must be an importet file from Github.'
+        message: 'Your Document must be an imported file from Github.'
       });
     }
   }
