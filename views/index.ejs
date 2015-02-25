@@ -1,13 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<%- include head %>
-<body>
-  <noscript>
-    <p>Oooooo, sorry that's the wrong answer. You actually need JavaScript to use Dillinger.</p>
-    <p>See, Dillinger is an application, not a web<em>site</em>. JavaScript is a requirement.</p>
-    <p>Be sure and come back when you have JavaScript enabled - It's 2014!!!!!!!!!!</p>
-  </noscript>
-<%- include body %>
-<%- include scripts %>
+<html lang="en" ng-strict-di>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title><%= title %></title>
+
+  <meta name="description" content="<%= description %>">
+  <meta name="keywords" content="<%= keywords %>">
+  <meta name="author" content="<%= author %>">
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!--
+
+  Powered by:
+
+  '||''''|
+   ||  .   ... ...... ...... ..   ....  ....  ....
+   ||''|    '|..'  ||'  ||||' ''.|...||||. ' ||. '
+   ||        .|.   ||    |||    ||     . '|... '|..
+  .||.....|.|  ||. ||...'.||.    '|...'|'..|'|'..|'
+                   ||
+                   ||
+
+  using node.js version <%= node_version %>
+
+  -->
+
+  <!-- Spiders must use meta description -->
+  <meta name="robots" content="noodp, noydir">
+
+  <!-- Google Verfication -->
+  <meta name="google-site-verification" content="<%= googleWebmasterMeta %>" />
+
+  <!-- Viewport and mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="MobileOptimized" content="320">
+  <meta http-equiv="cleartype" content="on">
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href="/css/app.css" rel="stylesheet">
+
+</head>
+<body ng-controller="Base">
+
+  <iframe id="downloader" class="hide"></iframe>
+
+  <%- include splashscreen %>
+
+  <%- include dropdowns/settings %>
+
+  <div class="wrapper">
+    <%- include sidebar %>
+    <%- include notification %>
+    <div class="page">
+      <%- include navbar %>
+      <%- include overlay %>
+      <%- include title %>
+      <div class="g mnone">
+        <%- include editor %>
+        <%- include preview %>
+      </div>
+    </div>
+  </div>
+
+  <%- include footer %>
 </body>
 </html>

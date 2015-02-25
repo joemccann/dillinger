@@ -1,0 +1,48 @@
+// *************************************
+//
+//   Navbar
+//   -> Navigation
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .navbar[.bucket--flag]
+//   .nav.navbar-nav
+//     / ...
+//
+// *************************************
+
+.navbar {
+  @include clearfix;
+  background-color: $c-background-navbar;
+  height: 51px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: map-get($z-index, navbar);
+  transition: map-get($transitions, menu);
+  will-change: left;
+
+  .open-menu & {
+    left: map-get($component-widths, sidebar);
+    // transform: translateX(map-get($component-widths, sidebar));
+  }
+
+  &-brand {
+    float: left;
+    margin: 0 0 0 24px;
+    padding: 0;
+    line-height: 42px;
+
+    svg {
+      width: 85px;
+      height: 11px;
+    }
+  }
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------

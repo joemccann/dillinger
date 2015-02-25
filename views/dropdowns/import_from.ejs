@@ -1,0 +1,51 @@
+  <% if (isDropboxConfigured) { %>
+  <li ng-controller="Dropbox as dropbox">
+    <% if (isDropboxAuth) { %>
+      <a class="import-dropbox linked" ng-click="dropbox.importFile()">
+    <% } else { %>
+      <a href="/redirect/dropbox" class="import-dropbox unlinked">
+    <% } %>
+      <span>Dropbox</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %>
+
+  <% if (isGithubConfigured) { %>
+  <li ng-controller="Github as github">
+    <% if (isGithubAuth) { %>
+      <a class="import-github linked" ng-click="github.importFile('<%= github_username %>')">
+    <% } else { %>
+      <a href="/redirect/github"  class="import-github unlinked">
+    <% } %>
+      <span>Github</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %>
+
+  <% if (isGoogleDriveConfigured) { %>
+  <li ng-controller="Googledrive as googledrive">
+    <% if (isGoogleDriveAuth) { %>
+      <a class="import-google-drive linked" ng-click="googledrive.importFile()">
+    <% } else { %>
+      <a href="/redirect/googledrive" class="import-google-drive unlinked">
+    <% } %>
+      <span>Google Drive</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %>
+
+  <% if (isOneDriveConfigured) { %>
+  <li ng-controller="Onedrive as onedrive">
+    <% if (isOneDriveAuth) { %>
+      <a class="import-one-drive linked" ng-click="onedrive.importFile()">
+    <% } else { %>
+      <a href="/redirect/onedrive" class="import-one-drive unlinked">
+    <% } %>
+      <span>One Drive</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %>

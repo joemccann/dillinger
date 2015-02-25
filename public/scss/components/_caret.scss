@@ -1,0 +1,29 @@
+// *************************************
+//
+//   Caret
+//   -> Icon
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .caret
+//
+// *************************************
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border-top:   $caret-width-base solid;
+  border-right: $caret-width-base solid transparent;
+  border-left:  $caret-width-base solid transparent;
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------

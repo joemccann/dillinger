@@ -27,20 +27,20 @@ markdown.setOptions({
 exports.Core = (function(){
 
   function _getFullHtml(name, str, style){
-    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' 
-      + name + '</title><style>' 
-      + ( ( style ) ? style : '' ) + '</style></head><body>\n' 
+    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'
+      + name + '</title><style>'
+      + ( ( style ) ? style : '' ) + '</style></head><body>\n'
       + markdown(str) + '\n</body></html>';
   }
-  
+
   function _getHtml(str){
-    return markdown(str) 
+    return markdown(str)
   }
 
   return {
     fetchMd: function(req,res){
       var unmd = req.body.unmd
-        , json_response = 
+        , json_response =
         {
           data: ''
         , error: false
@@ -56,7 +56,7 @@ exports.Core = (function(){
           json_response.error = true
           json_response.data = "Something wrong with the markdown conversion."
           res.send( JSON.stringify( json_response) )
-          console.error(err)     
+          console.error(err)
         }
         else{
           json_response.data = name
@@ -65,7 +65,7 @@ exports.Core = (function(){
       }) // end writeFile
     },
     downloadMd: function(req,res){
-      
+
       var fileId = req.params.mdid
 
       var filePath = path.resolve(__dirname, '../../public/files/md/' + fileId )
@@ -73,7 +73,7 @@ exports.Core = (function(){
       res.download(filePath, fileId, function(err){
         if(err) {
           console.error(err)
-          res.status(err.status).send(err.code) 
+          res.status(err.status).send(err.code)
         }
         else{
 
@@ -91,11 +91,11 @@ exports.Core = (function(){
         } // end else
 
       }) // end res.download
-            
+
     },
     fetchHtml: function(req,res){
       var unmd = req.body.unmd
-        , json_response = 
+        , json_response =
         {
           data: ''
         , error: false
@@ -105,7 +105,7 @@ exports.Core = (function(){
       if ( ! format ) {
         format = "";
       } else {
-        format = fs.readFileSync( path.resolve(__dirname, '../../public/css/style.css') ).toString('utf-8');
+        format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8');
       }
 
       var html = _getFullHtml(req.body.name, unmd, format);
@@ -113,7 +113,7 @@ exports.Core = (function(){
       var name = req.body.name.trim() + '.html'
 
       var filename = path.resolve(__dirname, '../../public/files/html/' + name )
-      
+
       fs.writeFile( filename, html, 'utf8', function(err, data){
 
         if(err){
@@ -130,19 +130,19 @@ exports.Core = (function(){
     },
     fetchHtmlDirect: function(req,res){
       var unmd = req.body.unmd
-        , json_response = 
+        , json_response =
         {
           data: ''
         , error: false
         }
 
-      var html = _getHtml(req.body.unmd)  
+      var html = _getHtml(req.body.unmd)
 
       json_response.data = html
       res.json( json_response )
     },
     downloadHtml: function(req,res){
-      
+
       var fileId = req.params.html
 
       var filePath = path.resolve(__dirname, '../../public/files/html/' + fileId )
@@ -150,7 +150,7 @@ exports.Core = (function(){
       res.download(filePath, fileId, function(err){
         if(err) {
           console.error(err)
-          res.status(err.status).send(err.code) 
+          res.status(err.status).send(err.code)
         }
         else{
 
@@ -168,7 +168,7 @@ exports.Core = (function(){
         } // end else
 
       }) // end res.download
-      
+
     },
     fetchPdf: function(req,res){
       var unmd = req.body.unmd
@@ -236,5 +236,5 @@ exports.Core = (function(){
       })
     } // end
   }
-  
+
 })()

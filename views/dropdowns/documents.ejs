@@ -1,0 +1,9 @@
+<li
+  ng-repeat="document in documents track by document.id"
+  ng-class="{
+    'active': currentDocument.id === document.id,
+    'octocat': document.isGithubFile
+    }"
+  >
+  <a ng-click="selectDocument(document)">{{document.title}}</a>
+</li>

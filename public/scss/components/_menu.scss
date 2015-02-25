@@ -1,0 +1,187 @@
+// *************************************
+//
+//   Menu
+//   -> Menus in Navbar
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .menu
+//   .menu-item[.menu-item-icon]
+//     a
+//
+// *************************************
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  a {
+    border: 0;
+    color: $c-links;
+    text-transform: uppercase;
+    font-family: $base-font-family-heading;
+    outline: none;
+
+    &:hover {
+      color: $c-highlight;
+    }
+  }
+
+  .menu-item {
+    display: none;
+    float: left;
+    margin: 0;
+    border: 0;
+    position: relative;
+
+    > a {
+      line-height: 51px;
+      padding: 0 24px;
+      display: block;
+      height: 51px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    &--settings,
+    &--preview {
+      display: block;
+    }
+
+    &--save-to,
+    &--import-from,
+    &--link-unlink,
+    &--documents {
+      &.in-sidebar {
+        display: block;
+      }
+    }
+
+    &--documents {
+      padding-bottom: 1rem;
+    }
+
+    @include from('tablet') {
+      &--save-to,
+      &--import-from {
+        display: block;
+      }
+
+      &--preview {
+        display: none;
+      }
+
+      &--save-to,
+      &--import-from {
+        &.in-sidebar {
+          display: none;
+        }
+      }
+    }
+
+    @include from('desktop') {
+      &--export-as {
+        display: block;
+      }
+
+      &--preview {
+        display: none;
+      }
+    }
+
+    &.open {
+      > a {
+        background-color: $c-background-highlight;
+      }
+    }
+
+    &-icon {
+
+      > a {
+        padding: 0;
+        height: auto;
+      }
+
+      &:hover {
+        > a {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  .menu-link {
+    &.open {
+      i {
+        background-color: $c-background-highlight;
+      }
+      g {
+        fill: $c-highlight;
+      }
+    }
+
+    &-preview {
+      margin-top: 8px;
+      width: 51px;
+    }
+
+    &-settings {
+      margin-top: 8px;
+      width: 51px;
+    }
+  }
+
+  &-sidebar {
+    width: 100%;
+
+    .menu-item {
+      width: 100%;
+      float: none;
+      margin-bottom: 1px;
+
+      &.open {
+        > a {
+          background-color: $c-text;
+        }
+      }
+    }
+
+    .open {
+      .caret {
+        transform: rotate(180deg);
+      }
+    }
+
+    > .menu-item:hover {
+      .dropdown a {
+        background-color: transparent;
+      }
+    }
+
+    .menu-link {
+      background-color: $c-text;
+      font-weight: 600;
+      @include clearfix;
+
+      > span {
+        float: left;
+      }
+
+      > .caret {
+        text-align: right;
+        float: right;
+        top: 22px;
+      }
+    }
+
+    .dropdown {
+      width: 100%;
+      background-color: transparent;
+      position: static;
+    }
+  }
+
+}

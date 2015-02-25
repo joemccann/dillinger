@@ -1,0 +1,57 @@
+// *************************************
+//
+//   Overlay
+//   -> Settings overlay (or better say... underlay)
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .overlay
+//
+// *************************************
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(#373D49, .8);
+  transition: map-get($transitions, menu);
+  transition-timing-function: ease-out;
+  will-change: left, opacity, visibility;
+  z-index: map-get($z-index, overlay);
+  // pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+
+  .show-settings & {
+    visibility: visible;
+    opacity: 1;
+  }
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .split--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .split.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-split
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .split-scaffolding
+}

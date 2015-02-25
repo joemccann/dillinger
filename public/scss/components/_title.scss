@@ -1,0 +1,59 @@
+// *************************************
+//
+//   Title
+//   -> All Headings from h1-h6
+//
+//
+// *************************************
+
+.title {
+  // alpha beta gamma delta epsilon zeta eta theta iota
+  @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
+  font-weight: map-get($headingtype, semibold);
+  color: $c-links;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 1rem;
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .structure--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .structure.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-structure
+  .split-preview & {
+    padding-left: 0;
+  }
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .structure-scaffolding
+
+  &-document {
+    @include sp(epsilon, $monospacetype, 1, 1, all);
+    font-weight: map-get($monospacetype, regular);
+    font-family: unquote(map-get($monospacetype, font-family));
+    color: $c-text;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 80%;
+    min-width: 300px;
+    outline: 0;
+    border: none;
+  }
+}

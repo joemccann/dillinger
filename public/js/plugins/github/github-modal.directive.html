@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="modal.close()">
+    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+  </button>
+  <h3 ng-bind="modal.title"></h3>
+</div>
+<div class="modal-body">
+<ul>
+
+  <!-- Organizations -->
+  <li ng-if="modal.step === 1" ng-repeat="org in modal.orgs">
+    <a ng-bind="org.name" ng-click="modal.fetchRepos(org.name)"></a>
+  </li>
+
+  <!-- Reporsitories -->
+  <li ng-if="modal.step === 2" ng-repeat="repo in modal.repos">
+    <a ng-bind="repo.name" ng-click="modal.fetchBranches(repo.name)"></a>
+  </li>
+
+  <!-- Branches -->
+  <li ng-if="modal.step === 3" ng-repeat="branch in modal.branches">
+    <a ng-bind="branch.name" ng-click="modal.fetchTreeFiles(branch.commit.sha, branch.name)"></a>
+  </li>
+
+  <!-- Files -->
+  <li ng-if="modal.step === 4" ng-repeat="file in modal.files">
+    <a ng-bind="file.path" ng-click="modal.fetchFile(file.url, file.path)"></a>
+  </li>
+
+</ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn--ok" ng-click="modal.close()">Close</button>
+</div>

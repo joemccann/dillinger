@@ -1,0 +1,57 @@
+// *************************************
+//
+//   Icon
+//   -> Icons
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .icon[.icon__element.icon__modifier]
+//
+// *************************************
+
+.icon {
+  display: block;
+  margin: 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 3px;
+  text-align: center;
+
+  svg {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &-preview {
+    background-color: $c-background-navbar;
+    line-height: 40px;
+    svg  {
+      width: 19px;
+      height: 12px;
+    }
+  }
+
+  &-settings {
+    background-color: $c-background-navbar;
+    line-height: 44px;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &-link {
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+    margin-right: 24px;
+    text-align: right;
+  }
+}
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------

@@ -1,0 +1,183 @@
+// *************************************
+//
+//   Breakpoints
+//   -> Easy to use Media Queries
+//
+//   e.g: @include at('mobile') { @content }
+//   e.g: @include from('tablet') { @content }
+//
+// *************************************
+
+// -------------------------------------
+//   Config
+// -------------------------------------
+
+$breakpoints: (
+  break-zero 0px,     // 0px       Mobile first
+  mobile     440px,   // 440px   ~ Small Tablet or Landscape Mobile
+  tablet     700px,   // 700px   ~ Tablet
+  desktop    1000px,  // 1000px  ~ Desktop
+  widescreen 1400px   // 1400px  ~ Large desktop up
+) !default;
+
+$breakpoints-length:  length( $breakpoints );
+$breakpoints-keys:    map-keys( $breakpoints );
+$breakpoints-values:  map-values( $breakpoints );
+$breakpoints-use-ems: true;
+
+// -------------------------------------
+//   Functions
+// -------------------------------------
+
+@function list-to-string($list, $glue: '', $is-nested: false) {
+  $result: null;
+
+  @for $i from 1 through length($list) {
+    $e: nth($list, $i);
+
+    @if type-of($e) == list {
+      $result: $result#{list-to-string($e, $glue, true)};
+    }
+
+    @else {
+      $result: if($i != length($list) or $is-nested, $result#{$e}#{$glue}, $result#{$e});
+    }
+  }
+
+  @return $result;
+}
+
+@function get-overlap-correction-value($value) {
+  @return map-get($breakpoints, $value) - 1;
+}
+
+@function last-breakpoint-key() {
+  @return nth($breakpoints-keys, $breakpoints-length);
+}
+
+@function first-breakpoint-key() {
+  @return nth($breakpoints-keys, 1);
+}
+
+@function at($query, $overlap-correction: false) {
+
+  $size: map-get($breakpoints, $query);
+
+  @if $overlap-correction == true {
+    $size: get-overlap-correction-value($query);
+  }
+
+  $size: if($breakpoints-use-ems, em($size), $size);
+  $return: '(min-width: ' + $size + ')';
+
+  @return $return;
+}
+
+@function to($query, $overlap-correction: false) {
+
+  $size: map-get($breakpoints, $query);
+  $index: index($breakpoints-keys, $query);
+
+  @if $overlap-correction == true {
+    $size: get-overlap-correction-value($query);
+  }
+
+  $size: if($breakpoints-use-ems, em($size), $size);
+  $return: '(max-width: ' + $size + ')';
+
+  @return $return;
+}
+
+@function next($query, $overlap-correction: false) {
+
+  $index: index($breakpoints-keys, $query);
+
+  @if $query == last-breakpoint-key() {
+    @return;
+  }
+
+  $size: nth($breakpoints-values, $index + 1);
+
+  @if $overlap-correction == true {
+    $key: nth($breakpoints-keys, $index + 1);
+    $size: get-overlap-correction-value($key);
+  }
+
+  $size: if($breakpoints-use-ems, em($size), $size);
+  $return: '(max-width: ' + $size + ')';
+
+  @return $return;
+}
+
+// -------------------------------------
+//   Mixins
+// -------------------------------------
+
+/**
+ * @mixin between($breakpoint-key-left, $breakpoint-key-right)
+ * @param {String} $breakpoint-key-left name of the left media query
+ * @param {String} $breakpoint-key-right name of the right media query
+ */
+@mixin between($breakpoint-key-left, $breakpoint-key-right) {
+
+  $breakpoint-value-left:  map-get($breakpoints, $breakpoint-key-left);
+  $breakpoint-value-right: map-get($breakpoints, $breakpoint-key-right);
+  $context: 'screen';
+
+  // Check for valid keys
+  @if $breakpoint-value-left == null {
+   @warn "'#{$breakpoint-value-left}' is not a valid breakpoint key.";
+  }
+
+  @if $breakpoint-value-right == null {
+   @warn "'#{$breakpoint-value-right}' is not a valid breakpoint key.";
+  }
+
+  // called "at($query)"
+  @if $breakpoint-key-left == $breakpoint-key-right and index($breakpoints-keys, $breakpoint-key-right) != $breakpoints-length {
+    $context: append($context,at($breakpoint-key-left), comma);
+    $context: append($context,next($breakpoint-key-left,$overlap-correction:true),comma);
+  }
+
+  // called from($query)
+  @else if index($breakpoints-keys, $breakpoint-key-right) == $breakpoints-length {
+    $context: append($context, at($breakpoint-key-left), comma);
+  }
+
+  // called to($query)
+  @else if $breakpoint-key-left == first-breakpoint-key() {
+    $context: append($context, to($breakpoint-key-right, $overlap-correction: true), comma);
+  }
+
+  // called between($query, $query)
+  @else {
+    $context: append($context, at($breakpoint-key-left), comma);
+    $context: append($context, to($breakpoint-key-right, $overlap-correction: true), comma);
+  }
+
+  $media-query-string: list-to-string($context, ' and');
+
+  // @debug $return-string;
+
+  @media #{$media-query-string} {
+    @content;
+  }
+}
+
+@mixin to($query) {
+  @include between(first-breakpoint-key(), $query) {
+    @content;
+  }
+}
+
+@mixin at($query) {
+  @include between($query, $query) {
+    @content;
+  }
+}
+
+@mixin from($query) {
+  @include between($query, last-breakpoint-key()) {
+    @content;
+  }
+}

@@ -1,0 +1,114 @@
+// *************************************
+//
+//   Zen Mode
+//   -> Zen Mode related Styles
+//
+//
+// *************************************
+
+.zen-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: #FFF;
+  opacity: 0;
+  transition: opacity .25s ease-in-out;
+
+  &.on {
+    opacity: 1;
+  }
+}
+
+.enter-zen-mode {
+  @include hide-text;
+  background-image: url('../img/icons/enter-zen.svg');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  display: block;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+  display: none;
+
+  @include from('tablet') {
+    display: block;
+  }
+}
+
+.close-zen-mode {
+  @include hide-text;
+  background-image: url('../img/icons/exit-zen.svg');
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  display: block;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+
+  @include from('tablet') {
+    right: 3rem;
+    top: 3rem;
+  }
+}
+
+.zen-page {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  z-index: 11;
+  height: 100%;
+  width: 100%;
+}
+
+#zen {
+  @include fontsize(epsilon, all);
+  width: 300px;
+  height: 80%;
+  margin: 0 auto;
+  position: relative;
+  top: 10%;
+
+  // .ace_content {
+  //   padding-top: 2rem;
+  // }
+
+  @include from('mobile') {
+    width: 400px;
+  }
+
+  @include from('tablet') {
+    width: 500px;
+  }
+
+  @include from('desktop') {
+    width: 700px;
+  }
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    height: 10%;
+    width: 100%;
+    z-index: 12;
+    pointer-events: none;
+  }
+
+  &:after {
+    background-image: linear-gradient(-180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+    bottom: 0;
+  }
+
+  // &:before {
+  //   top: 0;
+  //   background-image: linear-gradient(0deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
+  // }
+
+}

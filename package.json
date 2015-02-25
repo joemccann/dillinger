@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
-  "version": "0.7.7",
+  "version": "3.0.4",
   "author": {
     "name": "Joe McCann",
     "email": "joe@subprint.com"
@@ -10,11 +10,15 @@
     {
       "name": "Joe McCann",
       "email": "joe@subprint.com"
+    },
+    {
+      "name": "Martin Broder",
+      "email": "hello@martinbroder.com"
     }
   ],
   "scripts": {
     "start": "node app.js",
-    "predeploy": "node build.js"
+    "predeploy": "gulp build --prod"
   },
   "keywords": [
     "dillinger",
@@ -34,22 +38,56 @@
     "node": "0.10.x"
   },
   "dependencies": {
-    "express": ">=3.0.0rc3 <4.0.0",
-    "rc": "0.3.0",
-    "stylus": ">=0.28.2",
-    "ejs": ">=0.8.1",
-    "request": ">=2.9.203",
-    "colors": ">=0.6.0-1",
+    "angular": "^1.3.0",
+    "angular-bootstrap": "^0.11.0",
+    "brace": "^0.4.0",
+    "colors": ">=1.0.3",
     "dbox": "0.6.3",
+    "ejs": ">=1.0.0",
+    "express": ">=3.0.0rc3 <4.0.0",
     "googleapis": "0.2.12-alpha",
-    "marked": "0.3.2",
-    "phantomjs": "~1.9.0-6",
-    "highlight.js": "~8.0.0"
+    "highlight.js": "^8.3.0",
+    "jquery": "^2.1.1",
+    "keymaster": "^1.6.2",
+    "marked": "^0.3.2",
+    "rc": "0.3.0",
+    "request": "^2.44.0"
   },
   "devDependencies": {
-    "smoosh": ">=0.3.2",
-    "walkdir": ">=0.0.5",
-    "grunt": "0.4.4",
-    "grunt-jslint": "1.1.11"
+    "angular-mocks": "^1.3.0",
+    "browser-sync": "^1.6.0",
+    "critical": "^0.4.0",
+    "css-loader": "^0.9.0",
+    "exports-loader": "^0.6.2",
+    "glob": "^4.0.6",
+    "gulp": "^3.8.9",
+    "gulp-autoprefixer": "^1.0.1",
+    "gulp-combine-media-queries": "^0.2.0",
+    "gulp-csso": "^0.2.9",
+    "gulp-if": "^1.2.5",
+    "gulp-notify": "^2.0.0",
+    "gulp-open": "^0.3.0",
+    "gulp-rev-mtime": "^0.0.4",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-sass": "1.1.0",
+    "gulp-size": "^1.1.0",
+    "gulp-uncss": "^0.5.1",
+    "gulp-util": "^3.0.1",
+    "jshint-stylish": "^1.0.0",
+    "karma": "^0.12.24",
+    "karma-chrome-launcher": "^0.1.5",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-webpack": "^1.3.1",
+    "ng-annotate-webpack-plugin": "^0.1.2",
+    "phantomjs": "~1.9.12",
+    "pretty-hrtime": "^0.2.2",
+    "raw-loader": "^0.5.1",
+    "run-sequence": "^1.0.1",
+    "style-loader": "^0.8.1",
+    "walkdir": ">=0.0.7",
+    "webpack": "^1.4.9",
+    "webpack-dev-server": "^1.6.5",
+    "yargs": "^1.3.2"
   }
 }

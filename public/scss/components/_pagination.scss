@@ -1,0 +1,101 @@
+// *************************************
+//
+//   Pagination
+//
+//   Dillinger Pagination
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .pagination[.pagination--dillinger]
+//   li
+//     a
+//
+// *************************************
+
+.pagination {
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+  &--dillinger {
+    padding: 0 !important;
+    margin: 1.5rem 0 !important;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+
+    li {
+      display: flex;
+      flex-grow: 1;
+      text-align: center;
+
+      &:first-child > a,
+      &.disabled > a,
+      &.disabled > a:hover,
+      &.disabled > a:focus,
+      > a {
+        background-color: transparent;
+        border-color: $c-border-settings;
+        border-right-color: transparent;
+      }
+
+      &.active > a,
+      &.active > a:hover,
+      &.active > a:focus {
+        border-color: $c-button-save;
+        background-color: $c-button-save;
+        color: #fff;
+      }
+
+      > a {
+        float: none;
+        color: #fff;
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin: 0;
+        border-right-color: transparent;
+        padding: 6px;
+
+        &:hover,
+        &:focus {
+          border-color: $c-highlight;
+          background-color: $c-highlight;
+          color: #fff;
+        }
+      }
+
+      &:last-child a {
+        border-color: $c-border-settings;
+      }
+
+      &:first-child a {
+        border-right-color: transparent;
+      }
+
+    }
+
+  }
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .structure.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-structure
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+}

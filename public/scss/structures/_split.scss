@@ -1,0 +1,86 @@
+// *************************************
+//
+//   Split Pane
+//   -> Splitted Markdown/Preview Panes
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .split[.split-editor]
+// .split[.split-preview]
+//
+// *************************************
+
+.split {
+  overflow: scroll;
+
+// -------------------------------------
+//   Modifiers
+// -------------------------------------
+
+// .split--modifier
+
+// -------------------------------------
+//   States
+// -------------------------------------
+
+// .split.is-state
+
+// -------------------------------------
+//   Context
+// -------------------------------------
+
+// .has-split
+
+// -------------------------------------
+//   Scaffolding
+// -------------------------------------
+
+// .split-scaffolding
+
+  &-editor {
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+
+    .show-preview & {
+      display: none;
+    }
+
+    @include from('tablet') {
+      border-right: 1px solid $c-border;
+      float: left;
+      height: calc(100vh - 130px);
+      -webkit-overflow-scrolling: touch;
+      padding-right: 16px;
+      width: 50%;
+
+      .show-preview & {
+        display: block;
+      }
+    }
+  }
+
+  &-preview {
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    top: 129px;
+    z-index: map-get($z-index, preview);
+
+    .show-preview & {
+      display: block;
+    }
+
+    @include from('tablet') {
+      display: block;
+      float: right;
+      height: calc(100vh - 130px);
+      -webkit-overflow-scrolling: touch;
+      position: static;
+      top: 0;
+      width: 50%;
+    }
+  }
+}
