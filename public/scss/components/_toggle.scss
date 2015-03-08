@@ -13,45 +13,46 @@
 
 .toggle {
   display: block;
-  width: 40px;
+  float: left;
   height: 16px;
   padding: 25px 16px 26px;
-  float: left;
+  width: 40px;
 
   span:after,
   span:before {
     content: '';
-    position: absolute;
     left: 0;
+    position: absolute;
     top: -6px;
   }
 
   span:after {
-    top: 6px
+    top: 6px;
   }
 
   span {
-    position: relative;
     display: block;
+    position: relative;
   }
 
   span,
   span:after,
   span:before {
-    width: 20px;
-    height: 2px;
-    background-color: $c-icon;
-    transition: all .3s;
     backface-visibility: hidden;
+    background-color: $c-icon;
+    height: 2px;
+    transition: all .3s;
+    width: 20px;
   }
 
-  .open-menu &,
-  &:hover {
+  .open-menu & {
     span {
       background-color: transparent;
+      
       &:before {
         transform: rotate(45deg) translate(3px, 3px);
       }
+
       &:after {
         transform: rotate(-45deg) translate(5px, -6px);
       }
