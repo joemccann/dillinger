@@ -46,8 +46,15 @@ RUN command -v node >/dev/null 2>&1 || { ln -s /usr/bin/nodejs /usr/bin/node; }
 RUN npm install -g gulp forever
 
 #
+# install the node dependencies for our node server app
+# using caching suggestions per http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
+#
+ADD ./package.json /tmp/package.json
+RUN cd /tmp && npm install
+
+#
 # application environment variables
-# change the port here and elsehwere
+# change the port here and elsewhere
 #
 ENV PORT=80
 ENV NODE_ENV=production
@@ -55,12 +62,16 @@ ENV NODE_ENV=production
 #
 # install the app
 #
-RUN mkdir -p /opt/install/dillinger && mkdir -p /opt/install/dillinger/public/files/{md,html,pdf}
+RUN mkdir -p \
+    /opt/install/dillinger && \
+    mkdir -p /opt/install/dillinger/public/files/{md,html,pdf} && \
+    mv /tmp/node_modules /opt/install/dillinger/.
 ADD . /opt/install/dillinger
-RUN cd /opt/install/dillinger && gulp build --prod
+RUN gulp build --prod
 
 #
-# port 80 exposed by default, can be overridden with -p machine:container
+# running on port 80
+# change the port here and elsehwere
 #
 expose 80
 
