@@ -3,9 +3,9 @@
 # Installs dillinger on a container
 #
 # VERSION  0.0.0
-from       ubuntu:14.04
-maintainer Nuno Job "nunojobpinto@gmail.com"
-maintainer Casey Bisson "casey.bisson@gmail.com"
+FROM ubuntu:14.04
+MAINTAINER Nuno Job "nunojobpinto@gmail.com"
+MAINTAINER Casey Bisson "casey.bisson@gmail.com"
 
 #
 # update apt
@@ -88,5 +88,8 @@ expose 80
 CMD ["forever", "/opt/install/dillinger/app.js"]
 
 #
+# `docker build` example:
+# sudo docker build -t joemccann/dillinger .
+#
 # `docker run` example:
-# docker run -d -p 80:80 -e 'PORT=80' -e 'NODE_ENV=production' misterbisson/dillinger
+# docker run -d -p 80:80 joemccann/dillinger
