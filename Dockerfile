@@ -46,18 +46,18 @@ RUN command -v node >/dev/null 2>&1 || { ln -s /usr/bin/nodejs /usr/bin/node; }
 RUN npm install -g gulp forever
 
 #
+# application environment variables
+# change the port here and elsehwere
+#
+ENV PORT=80
+ENV NODE_ENV=production
+
+#
 # install the app
 #
 RUN mkdir -p /opt/install/dillinger && mkdir -p /opt/install/dillinger/public/files/{md,html,pdf}
 ADD . /opt/install/dillinger
 RUN cd /opt/install/dillinger && gulp build --prod
-
-#
-# environment variables
-# change the port here and elsehwere
-#
-ENV PORT=80
-ENV NODE_ENV=production
 
 #
 # port 80 exposed by default, can be overridden with -p machine:container
@@ -68,3 +68,7 @@ expose 80
 # light this candle
 #
 CMD ["forever", "/opt/install/dillinger/app.js"]
+
+#
+# `docker run` example:
+# docker run -d -p 80:80 -e 'PORT=80' -e 'NODE_ENV=production' misterbisson/dillinger
