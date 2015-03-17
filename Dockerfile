@@ -69,7 +69,12 @@ RUN mkdir -p \
     mv /tmp/node_modules /opt/install/dillinger/.
 ADD . /opt/install/dillinger
 RUN cd /opt/install/dillinger && \
-    gulp build --prod
+    npm i -d
+
+# The following is disabled because of https://github.com/joemccann/dillinger/issues/309
+# RUN cd /opt/install/dillinger && \
+#    npm i -d && \
+#    gulp build --prod
 
 #
 # running on port 80
