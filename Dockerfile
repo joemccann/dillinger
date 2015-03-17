@@ -50,7 +50,8 @@ RUN npm install -g gulp forever
 # using caching suggestions per http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
 #
 ADD ./package.json /tmp/package.json
-RUN cd /tmp && npm install
+RUN cd /tmp && \
+    npm install
 
 #
 # application environment variables
@@ -67,7 +68,8 @@ RUN mkdir -p \
     mkdir -p /opt/install/dillinger/public/files/{md,html,pdf} && \
     mv /tmp/node_modules /opt/install/dillinger/.
 ADD . /opt/install/dillinger
-RUN gulp build --prod
+RUN cd /opt/install/dillinger && \
+    gulp build --prod
 
 #
 # running on port 80
