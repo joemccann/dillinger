@@ -3,49 +3,68 @@
 # Installs dillinger on a container
 #
 # VERSION  0.0.0
-from       ubuntu
+from       ubuntu:14.04
 maintainer Nuno Job "nunojobpinto@gmail.com"
+maintainer Casey Bisson "casey.bisson@gmail.com"
 
 #
-# update apr
+# update apt
 #
-run echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-
-run apt-get upgrade
-run apt-get update
+RUN apt-get update -q
 
 #
 # base dependencies
 #
-run apt-get install -y build-essential chrpath git-core libssl-dev libfontconfig1-dev curl xvfb gtk2-engines-pixbuf xfonts-100dpi x11-xkb-utils xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic libqt4-dev libqtwebkit-dev qt4-qmake python-qt4
+RUN apt-get install -yq \
+    build-essential \
+    npm \
+    chrpath \
+    git-core \
+    libssl-dev \
+    libfontconfig1-dev \
+    curl \
+    xvfb \
+    gtk2-engines-pixbuf \
+    x11-xkb-utils \
+    xfonts-75dpi \
+    xfonts-100dpi \
+    xfonts-cyrillic \
+    xfonts-scalable \
+    libqt4-dev \
+    libqtwebkit-dev \
+    qt4-qmake \
+    python-qt4
 
 #
-# install node
+# symlink `node` to `nodejs`, so annoying
 #
-run cd /usr/local && curl http://nodejs.org/dist/v0.10.15/node-v0.10.15-linux-x64.tar.gz | tar --strip-components=1 -zxf- && cd
-run npm -g update npm
-run npm install -g forever
+RUN command -v node >/dev/null 2>&1 || { ln -s /usr/bin/nodejs /usr/bin/node; }
 
 #
-# install phantomjs
+# install global node modules
 #
-run apt-get install -y wget
-run mkdir -p /opt/install && cd /opt/install && wget https://phantomjs.googlecode.com/files/phantomjs-1.9.1-linux-x86_64.tar.bz2 && tar xvf phantomjs-1.9.1-linux-x86_64.tar.bz2 && cd phantomjs-*-linux-x86_64 && echo 'export PATH='$(pwd)'/bin:'$PATH >> ~/.profile
-run /bin/bash -c "source ~/.profile"
+RUN npm install -g gulp forever
 
 #
 # install the app
 #
-run mkdir -p /opt/install/dillinger
-add . /opt/install/dillinger
-run cd /opt/install/dillinger && npm install
+RUN mkdir -p /opt/install/dillinger && mkdir -p /opt/install/dillinger/public/files/{md,html,pdf}
+ADD . /opt/install/dillinger
+RUN cd /opt/install/dillinger && gulp build --prod
 
 #
-# port 8080 exposed by default, can be overriden with -p machine:container
+# environment variables
+# change the port here and elsehwere
 #
-expose 8080
+ENV PORT=80
+ENV NODE_ENV=production
 
 #
-# how to do docker run
+# port 80 exposed by default, can be overridden with -p machine:container
 #
-cmd forever /opt/install/dillinger/app.js
+expose 80
+
+#
+# light this candle
+#
+CMD ["forever", "/opt/install/dillinger/app.js"]
