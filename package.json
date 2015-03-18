@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "angular": "^1.3.0",
-    "angular-bootstrap": "^0.11.0",
+    "angular-bootstrap": "^0.12.0",
     "brace": "^0.4.0",
     "colors": ">=1.0.3",
     "dbox": "0.6.3",
