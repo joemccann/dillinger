@@ -18,20 +18,21 @@ module.exports = {
       /angular/
     ],
     loaders: [
-      { test: /\.css$/,         loader: 'style-loader!css-loader' }
-
-      // required for bootstrap icons
-      // { test: /\.woff$/,   loader: 'url-loader?prefix=font/&limit=5000&mimetype=application/font-woff' },
-      // { test: /\.ttf$/,    loader: 'file-loader?prefix=font/' },
-      // { test: /\.eot$/,    loader: 'file-loader?prefix=font/' },
-      // { test: /\.svg$/,    loader: 'file-loader?prefix=font/' },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+        exclude: /node_modules/
+      }
     ]
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js']
+    extensions: ['', '.webpack.js', '.web.js', '.js'],
+    alias: {
+      'angular': 'angular/angular'
+    }
   },
   resolveLoader: {
-      root: nodeModulesPath
+    root: nodeModulesPath
   },
   plugins: [
     new webpack.ProvidePlugin({
