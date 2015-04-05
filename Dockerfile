@@ -69,7 +69,6 @@ RUN mkdir -p \
     mv /tmp/node_modules /opt/install/dillinger/.
 ADD . /opt/install/dillinger
 RUN cd /opt/install/dillinger && \
-    npm i -d && \
     gulp build --prod
 
 #
