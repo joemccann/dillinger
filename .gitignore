@@ -5,7 +5,7 @@ node_modules/*
 logs/*
 public/files/md/*.md
 public/files/html/*.html
-public/css/style.css
+public/css/app.css
 
 *-config.json
 backup/*
