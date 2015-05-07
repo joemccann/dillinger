@@ -4,7 +4,8 @@
 var ace = require('brace');
 
 require('brace/mode/markdown');
-require('../documents/theme-dillinger');
+require('brace/theme/solarized_dark');
+// require('../documents/theme-dillinger');
 
 module.exports =
   angular
@@ -26,8 +27,11 @@ module.exports =
   $rootScope.editor          = ace.edit('editor');
 
   $rootScope.editor.getSession().setMode('ace/mode/markdown');
-  $rootScope.editor.setTheme('ace/theme/dillinger');
+  $rootScope.editor.setTheme('ace/theme/solarized_dark');
   $rootScope.editor.getSession().setUseWrapMode(true);
+  $rootScope.editor.renderer.setShowGutter(false); 
+  // $rootScope.editor.setOption('scrollPastEnd', true);
+  // $rootScope.editor.renderer.setPadding(10); 
   $rootScope.editor.setShowPrintMargin(false);
   $rootScope.editor.getSession().setValue($rootScope.currentDocument.body);
   $rootScope.editor.setOption('minLines', 50);

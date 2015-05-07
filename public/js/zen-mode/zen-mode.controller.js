@@ -38,9 +38,12 @@ module.exports =
       };
 
       require('brace/mode/markdown');
-      require('../documents/theme-dillinger');
+      // require('../documents/theme-dillinger');
+      require('brace/theme/solarized_dark');
 
       vm.zen = ace.edit('zen');
+      vm.zen.getSession().setMode('ace/mode/markdown');
+      vm.zen.setTheme('ace/theme/solarized_dark');
       vm.zen.getSession().setUseWrapMode(true);
       vm.zen.renderer.setShowGutter(false);
       vm.zen.setShowPrintMargin(false);

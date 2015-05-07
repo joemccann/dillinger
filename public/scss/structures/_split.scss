@@ -13,7 +13,7 @@
 // *************************************
 
 .split {
-  overflow: scroll;
+  overflow: auto;
   padding: 0 !important;
 
 // -------------------------------------
@@ -41,6 +41,9 @@
 // .split-scaffolding
 
   &-editor {
+
+    background-color: #002B36;
+
     padding-left: 0;
     padding-right: 0;
     position: relative;

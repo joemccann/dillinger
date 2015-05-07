@@ -13,6 +13,55 @@
 
 #preview {
 
+  @include fontsize(16, all);
+  font-family: unquote(map-get($bodytype, font-family));
+  font-weight: map-get($bodytype, regular);
+  margin: map-get($container-margin, top) map-get($container-margin, left);
+
+  .math.block {
+  	display: block;
+  	text-align: center;
+  }
+
+  blockquote {
+  	border-left: 5px solid rgba(102,128,153,0.075);
+  	border-left-width:10px;
+  	background-color:rgba(102,128,153,0.05);
+  	border-top-right-radius:5px;
+  	border-bottom-right-radius:5px;
+  	margin:0 0 21px;
+  	padding: 1rem;
+
+  	p {
+
+	  	&:last-child {
+			margin-bottom: 0;
+	  	}
+		padding: 0;
+	  	font-weight:300;
+	  	margin-bottom:1.1em;
+	  	font-size: 90%;
+	  	line-height:1.45;
+  	}
+
+
+  	small, .small {
+	  	display:block;
+	  	line-height:1.45;
+	  	color:#999;
+  	}
+
+  	small:before, .small:before {
+  		content:'\2014 \00A0';
+  	}
+  }
+
+  h1:after, h2:after {
+	content: '';
+    display: block;
+    border-bottom: 1px solid rgb(238, 238, 238);
+  }
+
 // -------------------------------------
 //   Modifiers
 // -------------------------------------
@@ -36,8 +85,13 @@
 // -------------------------------------
 
 // .split-scaffolding
+
+
   a {
     color: $c-links;
-    text-decoration: underline;
+    text-decoration: none;
+    &:hover {
+  		background-color:rgba(102,128,153,0.05);
+    }
   }
 }
