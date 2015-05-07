@@ -3,7 +3,7 @@
 # Installs dillinger on a container
 #
 # VERSION  0.0.0
-FROM ubuntu:14.04
+FROM node
 MAINTAINER Nuno Job "nunojobpinto@gmail.com"
 MAINTAINER Casey Bisson "casey.bisson@gmail.com"
 
@@ -16,10 +16,10 @@ RUN apt-get update -q
 # base dependencies
 #
 RUN apt-get install -yq \
-    build-essential \
-    npm \
+    # build-essential \
+    # npm \
     chrpath \
-    git-core \
+    # git-core \
     libssl-dev \
     libfontconfig1-dev \
     curl \
@@ -38,7 +38,7 @@ RUN apt-get install -yq \
 #
 # symlink `node` to `nodejs`, so annoying
 #
-RUN command -v node >/dev/null 2>&1 || { ln -s /usr/bin/nodejs /usr/bin/node; }
+# RUN command -v node >/dev/null 2>&1 || { ln -s /usr/bin/nodejs /usr/bin/node; }
 
 #
 # install global node modules
@@ -68,13 +68,13 @@ RUN mkdir -p \
     mkdir -p /opt/install/dillinger/public/files/{md,html,pdf} && \
     mv /tmp/node_modules /opt/install/dillinger/.
 ADD . /opt/install/dillinger
-RUN cd /opt/install/dillinger && \
-    npm i -d
+# RUN cd /opt/install/dillinger && \
+    # npm i -d
 
 # The following is disabled because of https://github.com/joemccann/dillinger/issues/309
-# RUN cd /opt/install/dillinger && \
-#    npm i -d && \
-#    gulp build --prod
+RUN cd /opt/install/dillinger && \
+   npm i -d && \
+   gulp build --prod
 
 #
 # running on port 80
