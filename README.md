@@ -35,6 +35,8 @@ Dillinger uses a number of open source projects to work properly:
 * [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh
 
+And of course Dillinger itself is open source with a [public repository](https://github.com/joemccann/dillinger) on GitHub.
+
 ### Installation
 
 You need Gulp installed globally:
@@ -92,7 +94,7 @@ $ gulp watch
 $ karma start
 ```
 
-### Todo's
+### Todos
 
  - Write Tests
  - Rethink Github Save
