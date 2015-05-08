@@ -66,6 +66,12 @@ $transitions: (
   menu #{all .25s ease-in-out}
 );
 
+
+$container-margin: (
+  top 5%,
+  left 8%
+);
+
 // ----- Structures ----- //
 
 // ...
@@ -76,10 +82,11 @@ $transitions: (
 
 // ----- Typography ----- //
 
-$base-font-family:         Georgia, Cambria, serif;
-$base-font-family-heading: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$base-font-family:         "Helvetica Neue", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+$base-font-family-heading: "Helvetica Neue", "Source Sans Pro", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", Helvetica, Arial, sans-serif;
 $base-font-family-serif:   Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-$base-font-family-monospace:  "Ubuntu Mono", Monaco;
+$base-font-family-monospace:  "Source Code Pro", "Ubuntu Mono", Monaco;
 
 $base-font-size:    14px;
 $base-line-height:  24px;
@@ -116,7 +123,7 @@ $rootsizes: (
   rootsize-1 14,    // 28px line-height body text
   rootsize-2 14,    // 30px line-height body text
   rootsize-3 14,    // 32px line-height body text
-  rootsize-4 14    // 36px line-height body text
+  rootsize-4 14     // 36px line-height body text
 );
 
 // Here are some cap-height sizes to get you started:

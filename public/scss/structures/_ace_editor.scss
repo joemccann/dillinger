@@ -7,12 +7,17 @@
 // *************************************
 
 #editor {
-  @include fontsize(zeta, all);
+
+  @include fontsize(16, all);
   font-family: unquote(map-get($monospacetype, font-family));
   font-weight: map-get($monospacetype, regular);
   line-height: 2rem;
-  width: 100%;
-  height: 100%;
+  margin: map-get($container-margin, top) map-get($container-margin, left);
+
+
+
+  //width: calc(100% - 10em);
+  //height: calc(100% - 20em);
   // position: absolute;
   // top: 0;
   // left: 0;
@@ -39,6 +44,8 @@
 // -------------------------------------
 //   Scaffolding
 // -------------------------------------
+
+
 
   .ace_gutter {
     -webkit-font-smoothing: antialiased;

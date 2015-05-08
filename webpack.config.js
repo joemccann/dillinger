@@ -22,11 +22,16 @@ module.exports = {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js'],
+    modulesDirectories: ['node_modules'],
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.json'], 
     alias: {
       'angular': 'angular/angular'
     }
