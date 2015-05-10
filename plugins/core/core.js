@@ -2,26 +2,9 @@ var fs = require('fs')
   , path = require('path')
   , request = require('request')
   , qs = require('querystring')
-  , markdown = require('marked')
   , phantomjs = require('phantomjs')
   , child = require('child_process')
-  , hljs = require('highlight.js');
-
-markdown.setOptions({
-  gfm: true,
-  tables: true,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  langPrefix: 'lang-',
-  highlight: function (code, lang, etc) {
-    if (hljs.getLanguage(lang)) {
-      code = hljs.highlight(lang, code).value;
-    }
-    return code;
-  }
-})
+  , md = require('./markdown-it.js').md;
 
 
 exports.Core = (function(){
@@ -29,12 +12,12 @@ exports.Core = (function(){
   function _getFullHtml(name, str, style){
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'
       + name + '</title><style>'
-      + ( ( style ) ? style : '' ) + '</style></head><body>\n'
-      + markdown(str) + '\n</body></html>';
+      + ( ( style ) ? style : '' ) + '</style></head><body id="preview">\n'
+      + md.render(str) + '\n</body></html>';
   }
 
   function _getHtml(str){
-    return markdown(str)
+    return md.render(str)
   }
 
   return {
@@ -178,7 +161,8 @@ exports.Core = (function(){
       , error: false
       }
 
-      var html = _getFullHtml(req.body.name, unmd)
+      var format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8')
+      var html = _getFullHtml(req.body.name, unmd, format)
       var temp = path.resolve(__dirname, '../../public/files/pdf/temp.html')
 
       fs.writeFile( temp, html, 'utf8', function(err, data){
