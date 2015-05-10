@@ -30,10 +30,11 @@ module.exports = {
     ]
   },
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.json'], 
+    modulesDirectories: ['node_modules', 'plugins'],
+    extensions: ['', '.webpack.js', '.web.js', '.js'], 
     alias: {
-      'angular': 'angular/angular'
+      'angular': 'angular/angular',
+      'md': 'core/markdown-it'
     }
   },
   resolveLoader: {
