@@ -47,7 +47,6 @@ p {
 }
 
 pre {
-  // @include fontsize(zeta, all);
   @include sp(zeta, $bodytype, 2, 2, all);
   line-height: 2rem;
   background: linear-gradient(
