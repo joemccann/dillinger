@@ -22,13 +22,19 @@ module.exports = {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js'],
+    modulesDirectories: ['node_modules', 'plugins'],
+    extensions: ['', '.webpack.js', '.web.js', '.js'], 
     alias: {
-      'angular': 'angular/angular'
+      'angular': 'angular/angular',
+      'md': 'core/markdown-it'
     }
   },
   resolveLoader: {

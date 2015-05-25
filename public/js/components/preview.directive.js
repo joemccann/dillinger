@@ -1,22 +1,8 @@
 
 'use strict';
 
-var
-  marked = require('marked'),
-  hljs = require('highlight.js');
+var md = require( 'md' ).md
 
-marked.setOptions({
-  gfm: true,
-  tables: true,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  langPrefix: 'lang-',
-  highlight: function(code) {
-    return hljs.highlightAuto(code).value;
-  }
-});
 
 module.exports =
   angular
@@ -27,7 +13,7 @@ module.exports =
     link: function(scope, el, attrs) {
 
       var refreshPreview = function(val) {
-        el.html(marked($rootScope.editor.getSession().getValue()));
+        el.html(md.render($rootScope.editor.getSession().getValue()));
         return $rootScope.$emit('preview.updated');
       };
 
