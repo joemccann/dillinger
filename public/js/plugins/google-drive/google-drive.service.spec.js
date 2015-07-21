@@ -45,4 +45,21 @@ describe("googledriveService", function() {
     $httpBackend.flush();
   });
 
+  it('should save the current file on googledrive and return success message', function() {
+
+    var markDownDocument = {
+      title:  'TestDocument',
+      body:   '#Dillinger Test'
+    };
+
+    $httpBackend.expectPOST('save/googledrive').respond();
+
+    service.saveFile(markDownDocument.title, markDownDocument.body);
+
+    $httpBackend.flush();
+
+    var diNotifyElements = angular.element(document.getElementsByClassName('diNotify-message'));
+    expect(diNotifyElements.text()).toContain('Successfully saved to Google Drive');
+  });
+
 });
