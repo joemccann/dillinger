@@ -101,11 +101,6 @@
     pointer-events: none;
   }
 
-  &:after {
-    background-image: linear-gradient(-180deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
-    bottom: 0;
-  }
-
   // &:before {
   //   top: 0;
   //   background-image: linear-gradient(0deg, rgba(255,255,255,0) 0%, #FFFFFF 100%);
