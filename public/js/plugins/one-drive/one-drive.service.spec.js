@@ -7,6 +7,8 @@ describe("onedriveService", function() {
     $httpBackend = null,
     diNotify     = null;
 
+
+
   beforeEach(window.angular.mock.module('Dillinger'));
 
   beforeEach( inject(function(_onedriveService_, _$httpBackend_, _diNotify_) {
@@ -52,7 +54,7 @@ describe("onedriveService", function() {
       body:   '#Dillinger Test'
     };
 
-    $httpBackend.expectPOST('save/onedrive').respond({ data: 'test'});
+    $httpBackend.expectPOST('save/onedrive').respond({ content: 'dillinger test'});
 
     service.saveFile(markDownDocument.title, markDownDocument.body);
 
