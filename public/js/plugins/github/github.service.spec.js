@@ -8,7 +8,6 @@ describe("githubService", function() {
       $httpBackend = null,
       diNotify     = null;
 
-
   beforeEach(window.angular.mock.module('Dillinger'));
 
   beforeEach( inject(function(_githubService_, _$httpBackend_, _diNotify_) {
