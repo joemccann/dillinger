@@ -65,7 +65,6 @@ describe("onedriveService", function() {
     for (var i= 0; i < diNotifyElements.length; ++i) {
       diNotifyElementsText = diNotifyElementsText + diNotifyElements[i].innerHTML;
     }
-    //var diNotifyElements = angular.element(document.getElementsByClassName('diNotify-message'));
     expect(diNotifyElementsText).toContain('Successfully saved File to One Drive');
   });
 
