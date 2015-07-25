@@ -58,8 +58,12 @@ describe("googledriveService", function() {
 
     $httpBackend.flush();
 
-    var diNotifyElements = angular.element(document.getElementsByClassName('diNotify-message'));
-    expect(diNotifyElements.text()).toContain('Successfully saved to Google Drive');
+    var diNotifyElements = document.getElementsByClassName('diNotify-message');
+    var diNotifyElementsText = '';
+    for (var i= 0; i < diNotifyElements.length; ++i) {
+      diNotifyElementsText = diNotifyElementsText + diNotifyElements[i].innerHTML;
+    }
+    expect(diNotifyElementsText).toContain('Successfully saved to Google Drive');
   });
 
 });
