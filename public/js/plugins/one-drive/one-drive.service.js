@@ -20,7 +20,6 @@ module.exports = angular.module('plugins.onedrive.service', []).factory('onedriv
         title: title,
         content: body
       }).success(function(data) {
-        console.log(data);
         if (di != null) {
           di.$scope.$close();
         }
