@@ -51,4 +51,26 @@ describe('dropboxService', function() {
     $httpBackend.flush();
   });
 
+  it('should save the current file on dropbox and return success message', function() {
+
+    var markDownDocument = {
+      title:  'DropBoxTestTitle',
+      body:   '#Dillinger Test'
+    };
+
+    $httpBackend.expectPOST('save/dropbox').respond({ data: { path: '/Dillinger/' + markDownDocument.title }});
+
+    service.saveFile(markDownDocument.title, markDownDocument.body);
+
+    $httpBackend.flush();
+
+    var diNotifyElements = document.getElementsByClassName('diNotify-message');
+    var diNotifyElementsText = '';
+    for (var i= 0; i < diNotifyElements.length; ++i) {
+      diNotifyElementsText = diNotifyElementsText + diNotifyElements[i].innerHTML;
+    }
+    expect(diNotifyElementsText).toContain('Successfully saved to: /Dillinger/DropBoxTestTitle');
+  });
+
+
 });
