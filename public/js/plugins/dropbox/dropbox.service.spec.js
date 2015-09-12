@@ -1,8 +1,6 @@
 
 'use strict';
 
-require('angular-mocks');
-
 describe('dropboxService', function() {
 
   var
