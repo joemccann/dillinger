@@ -1,4 +1,9 @@
 # Expects Debian Jessie
+# To use, create an inventory.ini file like so:
+#       dillinger ansible_ssh_user=root ansible_ssh_host=104.236.249.30
+# Where the IP address is the ip of the server to deploy dillinger to.
+# Then run the following command:
+#       ansible-playbook -i inventory.ini deploy.yml
 ---
 - hosts: all
   tasks:
