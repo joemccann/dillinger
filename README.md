@@ -19,7 +19,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
 ### Version
-3.0.2
+3.1.1
 
 ### Tech
 
