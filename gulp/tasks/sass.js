@@ -5,7 +5,7 @@ var
   gulp         = require('gulp'),
   sass         = require('gulp-sass'),
   autoprefixer = require('gulp-autoprefixer'),
-  cmq          = require('gulp-combine-media-queries'),
+  cmq          = require('gulp-group-css-media-queries'),
   csso         = require('gulp-csso'),
   size         = require('gulp-size'),
   gulpif       = require('gulp-if'),
