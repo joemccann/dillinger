@@ -1,0 +1,14 @@
+[Unit]
+Description=The last Markdown editor, ever. http://dillinger.io
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop joemccann/dillinger
+ExecStartPre=-/usr/bin/docker rm joemccann/dillinger
+ExecStart=/usr/bin/docker run -p 80:80 --rm --name %n joemccann/dillinger
+
+[Install]
+WantedBy=multi-user.target
