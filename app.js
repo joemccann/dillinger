@@ -16,46 +16,44 @@ var config = require('./config')(),
   googledrive = require('./plugins/googledrive/server.js'),
   onedrive = require('./plugins/onedrive/server.js');
 
-app.configure(function() {
-  app.set('port', process.env.PORT || 8080);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.favicon(path.join(__dirname, 'public/favicon.ico')));
-  app.use(express.logger('dev'));
-  app.use(express.compress());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('your secret here'));
-  app.use(express.cookieSession());
-  app.use(app.router);
-  // app.use(require('stylus').middleware(__dirname + '/public'));
-  app.use(express.static(path.join(__dirname, 'public')));
+app.set('port', process.env.PORT || 8080);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(express.favicon(path.join(__dirname, 'public/favicon.ico')));
+app.use(express.logger('dev'));
+app.use(express.compress());
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.cookieParser('your secret here'));
+app.use(express.cookieSession());
+app.use(app.router);
+// app.use(require('stylus').middleware(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-  // Setup local variables to be available in the views.
-  app.locals.title = config.title || 'Dillinger.';
-  app.locals.description = config.description || 'Dillinger, the last Markdown Editor, ever.';
+// Setup local variables to be available in the views.
+app.locals.title = config.title || 'Dillinger.';
+app.locals.description = config.description || 'Dillinger, the last Markdown Editor, ever.';
 
-  if (config.googleWebmasterMeta) {
-    app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
-  }
+if (config.googleWebmasterMeta) {
+  app.locals.googleWebmasterMeta = config.googleWebmasterMeta;
+}
 
-  if (config.keywords) {
-    app.locals.keywords = config.keywords;
-  }
+if (config.keywords) {
+  app.locals.keywords = config.keywords;
+}
 
-  if (config.author) {
-    app.locals.author = config.author;
-  }
+if (config.author) {
+  app.locals.author = config.author;
+}
 
-  app.locals.node_version = process.version.replace('v', '');
-  app.locals.app_version = require('./package.json').version;
-  app.locals.env = process.env.NODE_ENV;
-  app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8');
-});
+app.locals.node_version = process.version.replace('v', '');
+app.locals.app_version = require('./package.json').version;
+app.locals.env = process.env.NODE_ENV;
+app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8');
 
-app.configure('development', function() {
+if(app.get('env') === 'development'){
   app.use(express.errorHandler());
-});
+}
 
 app.get('/', routes.index);
 
