@@ -44,18 +44,22 @@ var GoogleDrive = {
     }
   },
   generateAuthUrl: function() {
-    var oauth2Client = new googleapis.auth.OAuth2Client(
+    var OAuth2 = googleapis.auth.OAuth2;
+
+    var oauth2Client = new OAuth2(
         config.client_id, config.client_secret, config.redirect_uri);
     return oauth2Client.generateAuthUrl({ scope: scopes.join(' ') });
   },
   getToken: function(code, callback) {
-    var oauth2Client = new googleapis.auth.OAuth2Client(
+    var OAuth2 = googleapis.auth.OAuth2;
+    var oauth2Client = new OAuth2(
         config.client_id, config.client_secret, config.redirect_uri);
     oauth2Client.getToken(code, callback);
   },
   search: function(tokens, callback) {
     this._loadDriveIfRequired(function() {
-      var oauth2Client = new googleapis.auth.OAuth2Client(
+      var OAuth2 = googleapis.auth.OAuth2;
+      var oauth2Client = new OAuth2(
         config.client_id, config.client_secret, config.redirect_uri);
       oauth2Client.credentials = tokens;
       client
@@ -69,7 +73,8 @@ var GoogleDrive = {
   get: function(tokens, fileId, callback) {
     var that = this;
     this._loadDriveIfRequired(function() {
-      var oauth2Client = new googleapis.auth.OAuth2Client(
+      var OAuth2 = googleapis.auth.OAuth2;
+      var oauth2Client = new OAuth2(
         config.client_id, config.client_secret, config.redirect_uri);
 
       oauth2Client.credentials = tokens;
