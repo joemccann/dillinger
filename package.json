@@ -65,7 +65,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc": "^1.1.0",
     "marked": "^0.3.2",
-    "rc": "0.3.0",
+    "rc": "1.1.1",
     "request": "^2.64.0"
   },
   "devDependencies": {
