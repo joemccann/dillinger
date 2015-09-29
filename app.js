@@ -25,6 +25,7 @@ var config = require('./config')()
   , github = require('./plugins/github/server.js')
   , googledrive = require('./plugins/googledrive/server.js')
   , onedrive = require('./plugins/onedrive/server.js')
+  , env = process.env.NODE_ENV || 'development';
   ;
 
 app.set('port', process.env.PORT || 8080)
@@ -34,9 +35,15 @@ app.set('view engine', 'ejs')
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
+
+if(env === 'development'){
+  app.use(logger('dev'))
+}
+
 app.use(logger('dev'))
 app.use(compress())
-app.use(bodyParser())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 app.use(methodOverride())
 app.use(cookieParser('your secret here'))
 app.use(cookieSession({
@@ -46,7 +53,7 @@ app.use(cookieSession({
 
 // May not need to use serveStatic if using nginx for serving
 // static assets. Just comment it out below.
-app.use(serveStatic(path.join(__dirname, 'public')))
+app.use(serveStatic(__dirname + '/public'))
 
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'
@@ -71,9 +78,11 @@ app.locals.env = process.env.NODE_ENV
 // At startup time so sync is ok.
 app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8')
 
-if(app.get('env') === 'development'){
+
+if ('development' == env) {
   app.use(errorHandler())
 }
+
 
 app.get('/', routes.index)
 
