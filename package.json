@@ -94,7 +94,7 @@
     "node-sass": "^3.4.0-beta1",
     "jshint-stylish": "^1.0.0",
     "json-loader": "^0.5.1",
-    "karma": "^0.12.24",
+    "karma": "0.13.10",
     "karma-chrome-launcher": "^0.1.5",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
