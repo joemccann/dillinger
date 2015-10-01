@@ -96,7 +96,7 @@
     "gulp-csso": "^0.2.9",
     "gulp-filename-media-query": "^1.2.1",
     "gulp-group-css-media-queries": "^1.0.0",
-    "gulp-if": "^1.2.5",
+    "gulp-if": "2.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-open": "^0.3.0",
     "gulp-rev-mtime": "^0.0.4",
