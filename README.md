@@ -19,7 +19,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
 ### Version
-3.1.1
+3.2.0
 
 ### Tech
 
@@ -50,7 +50,7 @@ $ npm i -g gulp
 $ git clone [git-repo-url] dillinger
 $ cd dillinger
 $ npm i -d
-$ mkdir -p public/files/{md,html,pdf}
+$ mkdir -p downloads/files/{md,html,pdf}
 $ gulp build --prod
 $ NODE_ENV=production node app
 ```
