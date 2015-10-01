@@ -3,9 +3,9 @@
 #Dillinger
 node_modules/*
 logs/*
-public/files/md/*.md
-public/files/html/*.html
-public/css/style.css
+downloads/files/md/*.md
+downloads/files/html/*.html
+downloads/css/style.css
 
 *-config.json
 backup/*
