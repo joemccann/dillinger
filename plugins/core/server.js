@@ -36,7 +36,7 @@ var Kore = function(){
       var name = req.body.name.trim() 
 
       if(!name.includes('.md')){
-				name = name + '.md'
+        name = name + '.md'
       }
 
       var filename = path.resolve(__dirname, '../../downloads/files/md/' + name )
@@ -57,7 +57,7 @@ var Kore = function(){
       }) // end writeFile
     },
     downloadMd: function(req,res){
-		
+    
       var fileId = req.params.mdid
 
       var filePath = path.resolve(__dirname, '../../downloads/files/md/' + fileId )
@@ -137,6 +137,10 @@ var Kore = function(){
       res.json( json_response )
     },
     downloadHtml: function(req,res){
+
+      var fileId = req.params.html
+
+      var filePath = path.resolve(__dirname, '../../downloads/files/html/' + fileId )
       
       res.download(filePath, fileId, function downloadHtmlDownloadCb(err){
         if(err) {
