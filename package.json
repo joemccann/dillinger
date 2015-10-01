@@ -100,7 +100,7 @@
     "gulp-notify": "^2.2.0",
     "gulp-open": "^0.3.0",
     "gulp-rev-mtime": "^0.0.4",
-    "gulp-rimraf": "^0.1.1",
+    "gulp-rimraf": "0.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-size": "^1.1.0",
     "gulp-uncss": "^0.5.1",
