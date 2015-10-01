@@ -21,6 +21,7 @@ var config = require('./config')()
   , path = require('path')
   , fs = require('fs')
   , app = express()
+  , core = require('./plugins/core/server.js')
   , dropbox = require('./plugins/dropbox/server.js')
   , github = require('./plugins/github/server.js')
   , googledrive = require('./plugins/googledrive/server.js')
@@ -39,8 +40,10 @@ app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
 if(env === 'development'){
   app.use(logger('dev'))
 }
+else{
+  app.use(logger('short'))
+}
 
-app.use(logger('dev'))
 app.use(compress())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -83,42 +86,16 @@ if ('development' == env) {
   app.use(errorHandler())
 }
 
-
 app.get('/', routes.index)
-
 app.get('/not-implemented', routes.not_implemented)
 
+app.use(core)
 app.use(dropbox)
 app.use(github)
 app.use(googledrive)
 app.use(onedrive)
 
-/* Dillinger Actions */
-
-// save a markdown file and send header to download it directly as response
-app.post('/factory/fetch_markdown', routes.fetch_md)
-
-// Route to handle download of md file
-app.get('/files/md/:mdid', routes.download_md)
-
-// Save an html file and send header to download it directly as response
-app.post('/factory/fetch_html', routes.fetch_html)
-
-app.post('/factory/fetch_html_direct', routes.fetch_html_direct)
-
-// Route to handle download of html file
-app.get('/files/html/:html', routes.download_html)
-
-// Save a pdf file and send header to download it directly as response
-app.post('/factory/fetch_pdf', routes.fetch_pdf)
-
-// Route to handle download of pdf file
-app.get('/files/pdf/:pdf', routes.download_pdf)
-
-/* End Dillinger Actions */
-
-
-http.createServer(app).listen(app.get('port'), function() {
+http.createServer(app).listen(app.get('port'), function createServerCb() {
   console.log('Express server listening on port ' + app.get('port'))
   console.log('\nhttp://localhost:' + app.get('port') + '\n')
 })
