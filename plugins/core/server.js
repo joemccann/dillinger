@@ -7,12 +7,8 @@ var express = require('express')
   , phantomjs = require('phantomjs')
   , child = require('child_process')
   , md = require('./markdown-it.js').md
-  ,	debug = require('debug')('dillinger:core')  
-  // , Core = require('./core.js').Core
   ;
 
-
-console.warn('core server file...')
 
 var Kore = function(){
 
@@ -30,8 +26,6 @@ var Kore = function(){
   return {
     fetchMd: function(req,res){
 
-			console.warn('fetchmd...')
-
       var unmd = req.body.unmd
         , json_response =
         {
@@ -39,11 +33,16 @@ var Kore = function(){
         , error: false
         }
 
-      var name = req.body.name.trim() + '.md'
-      var filename = path.resolve(__dirname, '../../public/files/md/' + name )
+      var name = req.body.name.trim() 
+
+      if(!name.includes('.md')){
+				name = name + '.md'
+      }
+
+      var filename = path.resolve(__dirname, '../../downloads/files/md/' + name )
 
       // TODO: THIS CAN BE OPTIMIZED WITH PIPING INSTEAD OF WRITING TO DISK
-      fs.writeFile( filename, unmd, 'utf8', function(err, data){
+      fs.writeFile( filename, unmd, 'utf8', function fetchMdWriteFileCb(err, data){
 
         if(err){
           json_response.error = true
@@ -59,23 +58,18 @@ var Kore = function(){
     },
     downloadMd: function(req,res){
 		
-		console.warn('download md...')
-
       var fileId = req.params.mdid
 
-      var filePath = path.resolve(__dirname, '../../public/files/md/' + fileId )
+      var filePath = path.resolve(__dirname, '../../downloads/files/md/' + fileId )
 
-      res.download(filePath, fileId, function(err){
+      res.download(filePath, fileId, function downloadMdDownloadCb(err){
         if(err) {
           console.error(err)
           res.status(err.status).send(err.code)
         }
         else{
-
-          debug('sending markdown via download...')
-
           // Delete the file after download
-          setTimeout(function(){
+          setTimeout(function unlinkCbInSetTimeout(){
 
             fs.unlink(filePath, function(err, data){
               if(err) return console.error(err)
@@ -92,8 +86,6 @@ var Kore = function(){
     },
     fetchHtml: function(req,res){
 
-			console.warn('fetch html...')
-
       var unmd = req.body.unmd
         , json_response =
         {
@@ -104,7 +96,7 @@ var Kore = function(){
       // For formatted HTML or not...
       var format = req.body.formatting;
 
-      if ( ! format ) {
+      if ( !format ) {
         format = "";
       } else {
         format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8');
@@ -114,11 +106,9 @@ var Kore = function(){
 
       var name = req.body.name.trim() + '.html'
 
-      var filename = path.resolve(__dirname, '../../public/files/html/' + name )
+      var filename = path.resolve(__dirname, '../../downloads/files/html/' + name )
 
-      fs.writeFile( filename, html, 'utf8', function(err, data){
-
-      	console.warn('writing file')
+      fs.writeFile( filename, html, 'utf8', function writeFileCbFetchHtml(err, data){
 
         if(err){
           json_response.error = true
@@ -127,15 +117,13 @@ var Kore = function(){
           res.json( json_response )
         }
         else{
-					console.warn('write file html else...')
           json_response.data = name
-          console.dir(json_response)
           res.json( json_response )
          }
       }) // end writeFile
     },
     fetchHtmlDirect: function(req,res){
-    	console.warn('fetchhtmldirect...')
+
       var unmd = req.body.unmd
         , json_response =
         {
@@ -150,70 +138,30 @@ var Kore = function(){
     },
     downloadHtml: function(req,res){
       
-			console.warn('download html...')
-      var fileId = req.params.html
+      res.download(filePath, fileId, function downloadHtmlDownloadCb(err){
+        if(err) {
+          console.error(err)
+          res.status(err.status).send(err.code)
+        }
+        else{
 
-      var filePath = path.resolve(__dirname, '../../public/files/html/' + fileId )
+          // Delete the file after download
+          setTimeout(function unlinkDownloadHtmlCb(){
 
-  		var file = filePath;
+            fs.unlink(filePath, function(err, data){
+              if(err) return console.error(err)
+              console.log(filePath + " was unlinked")
 
+            },60000) // end unlink
 
-  		return res.download(file); // Set disposition and send it.
+          }) // end setTimeout
 
+        } // end else
 
-			console.warn('download html...')
-			var mime = require('mime');
-      
-      var fileId = req.params.html
-
-      var filePath = path.resolve(__dirname, '../../public/files/html/' + fileId )
-
-  		var file = filePath;
-
-  		var filename = path.basename(file);
-  		var mimetype = mime.lookup(file);
-
-  		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-  		res.setHeader('Content-type', mimetype);
-
-  		var filestream = fs.createReadStream(file);
-  		filestream.pipe(res);
-
-      setTimeout(function(){
-
-        fs.unlink(filePath, function(err, data){
-          if(err) return console.error(err)
-          console.log(filePath + " was unlinked")
-
-        },60000) // end unlink
-
-  		}) // end setTimeout
-      // res.download(filePath, fileId, function(err){
-      //   if(err) {
-      //     console.error(err)
-      //     res.status(err.status).send(err.code)
-      //   }
-      //   else{
-
-      //     // Delete the file after download
-      //     setTimeout(function(){
-
-      //       fs.unlink(filePath, function(err, data){
-      //         if(err) return console.error(err)
-      //         console.log(filePath + " was unlinked")
-
-      //       },60000) // end unlink
-
-      //     }) // end setTimeout
-
-      //   } // end else
-
-      // }) // end res.download
+      }) // end res.download
 
     },
     fetchPdf: function(req,res){
-
-			console.warn('fetch pdf...')
 
       var unmd = req.body.unmd
         , json_response =
@@ -224,9 +172,9 @@ var Kore = function(){
 
       var format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8')
       var html = _getFullHtml(req.body.name, unmd, format)
-      var temp = path.resolve(__dirname, '../../public/files/pdf/temp.html')
+      var temp = path.resolve(__dirname, '../../downloads/files/pdf/temp.html')
 
-      fs.writeFile( temp, html, 'utf8', function(err, data){
+      fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data){
 
         if(err){
           json_response.error = true
@@ -236,7 +184,7 @@ var Kore = function(){
         }
         else{
           var name = req.body.name.trim() + '.pdf'
-          var filename = path.resolve(__dirname, '../../public/files/pdf/' + name)
+          var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
 
           var childArgs = [
             path.join(__dirname, 'render.js'),
@@ -244,7 +192,7 @@ var Kore = function(){
             filename
           ]
 
-          child.execFile(phantomjs.path, childArgs, function(err, stdout, stderr) {
+          child.execFile(phantomjs.path, childArgs, function childExecFileCb(err, stdout, stderr) {
             if(err){
               json_response.error = true
               json_response.data = "Something wrong with the pdf conversion."
@@ -261,21 +209,17 @@ var Kore = function(){
     },
     downloadPdf: function(req,res){
 
-      console.warn('downloading pdf...')
-
       var fileId = req.params.pdf
 
-      var filePath = path.resolve(__dirname, '../../public/files/pdf/' + fileId)
+      var filePath = path.resolve(__dirname, '../../downloads/files/pdf/' + fileId)
 
-      console.log('adfsasdf')
-
-      res.download(filePath, fileId, function(err){
+      res.download(filePath, fileId, function downloadPdfDownloadCb(err){
         if(err) {
           console.error(err)
           res.status(err.status).send(err.code)
         }
         else{
-          setTimeout(function(){
+          setTimeout(function unlinkDownloadPdfCb(){
             fs.unlink(filePath, function(err, data){
               if(err) return console.error(err)
               console.log(filePath + " was unlinked")
@@ -289,7 +233,6 @@ var Kore = function(){
 }
 
 const Core = new Kore();
-
 
 /* Start Dillinger Routes */
 
@@ -305,25 +248,13 @@ app.post('/factory/fetch_html', Core.fetchHtml)
 app.post('/factory/fetch_html_direct', Core.fetchHtmlDirect)
 
 // Route to handle download of html file
-// app.get('/files/html/:html', function(req,res){
-// 			console.warn('download html...')
-//       var fileId = req.params.html
-
-//       var filePath = path.resolve(__dirname, '../../public/files/html/' + fileId )
-
-//   		var file = filePath;
-
-
-//   		return res.download(file); // Set disposition and send it.
-
-// })
-//Core.downloadHtml)
+app.get('/files/html/:html', Core.downloadHtml)
 
 // Save a pdf file and send header to download it directly as response
 app.post('/factory/fetch_pdf', Core.fetchPdf)
 
-// // Route to handle download of pdf file
-// app.get('/files/pdf/:pdf', Core.downloadPdf)
+// Route to handle download of pdf file
+app.get('/files/pdf/:pdf', Core.downloadPdf)
 
 /* End Dillinger Core */
 
