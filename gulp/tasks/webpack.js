@@ -42,7 +42,6 @@ gulp.task('webpack:dev', function(cb) {
 
 gulp.task('webpack:build', function(cb) {
 
-
   var webpackProductionConfig = Object.create(webpackConfig);
 
   webpackProductionConfig.plugins = webpackProductionConfig.plugins.concat(new webpack.DefinePlugin({
