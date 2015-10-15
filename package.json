@@ -89,7 +89,7 @@
     "css-loader": "^0.9.0",
     "dom-serializer": "^0.1.0",
     "exports-loader": "^0.6.2",
-    "glob": "^5.0.5",
+    "glob": "^5.0.15",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-combine-media-queries": "^0.2.0",
