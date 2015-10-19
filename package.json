@@ -121,7 +121,7 @@
     "raw-loader": "^0.5.1",
     "reaver": "^1.2.0",
     "run-sequence": "^1.0.1",
-    "style-loader": "^0.8.1",
+    "style-loader": "^0.13.0",
     "uglify-js": "^2.4.24",
     "walkdir": ">=0.0.7",
     "webpack": "^1.12.2",
