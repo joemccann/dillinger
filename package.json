@@ -119,7 +119,7 @@
     "phantomjs": "~1.9.12",
     "pretty-hrtime": "^0.2.2",
     "raw-loader": "^0.5.1",
-    "reaver": "^1.2.0",
+    "reaver": "^2.0.0",
     "run-sequence": "^1.0.1",
     "style-loader": "^0.8.1",
     "uglify-js": "^2.4.24",
