@@ -58,7 +58,7 @@
     "googleapis": "^2.1.5",
     "highlight.js": "^8.8.0",
     "jquery": "^2.1.1",
-    "katex": "^0.2.0",
+    "katex": "^0.5.1",
     "keymaster": "^1.6.2",
     "markdown-it": "^4.4.0",
     "markdown-it-abbr": "^1.0.0",
