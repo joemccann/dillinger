@@ -10,7 +10,8 @@ Dropbox Dillinger Plugin
       "callback_url": "YOUR_CALLBACK_URL",
       "auth_url": "https://www.dropbox.com/1/oauth/authorize",
       "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
-      "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
+      "access_token_url": "https://api.dropbox.com/1/oauth/access_token",
+      "repos_per_page": "50"
     }
 
 Optional configuration via environment
