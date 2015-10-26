@@ -93,7 +93,7 @@ $breakpoints-use-ems: true;
   $index: index($breakpoints-keys, $query);
 
   @if $query == last-breakpoint-key() {
-    @return;
+    @return null;
   }
 
   $size: nth($breakpoints-values, $index + 1);
