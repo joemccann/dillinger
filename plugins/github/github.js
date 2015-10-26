@@ -33,6 +33,7 @@ if (fs.existsSync(githubConfigFile)) {
   , "redirect_uri": "http://dillinger.io/"
   , "client_secret": "YOUR_SECRET"
   , "callback_url": "http://dillinger.io/oauth/github"
+  , "repos_per_page": "50"
   }
   console.warn('Github config not found at ' + githubConfigFile + '. Plugin disabled.')
 }
@@ -141,7 +142,7 @@ exports.Github = (function() {
       }
 
       if (isFinite(req.body.page) && +req.body.page > 1) {
-        uri += "&page=" + req.body.page
+        uri += "&perpage=" +  githubConfig.repos_per_page + "&page=" + req.body.page
       }
 
       var options = {
