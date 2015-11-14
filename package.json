@@ -106,7 +106,7 @@
     "gulp-uncss": "^0.5.1",
     "gulp-util": "^3.0.6",
     "htmlparser2": "^3.8.3",
-    "jshint-stylish": "^1.0.0",
+    "jshint-stylish": "^2.1.0",
     "json-loader": "^0.5.1",
     "karma": "0.13.10",
     "karma-chrome-launcher": "^0.1.5",
