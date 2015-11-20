@@ -60,7 +60,7 @@
     "jquery": "^2.1.1",
     "katex": "^0.2.0",
     "keymaster": "^1.6.2",
-    "markdown-it": "^4.4.0",
+    "markdown-it": "^5.0.2",
     "markdown-it-abbr": "^1.0.0",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-deflist": "^1.0.0",
