@@ -1,0 +1,10 @@
+dillinger:
+  image: joemccann/dillinger
+  container_name: dillinger
+  net: "nsolid"
+  ports:
+    - 80:80
+  environment:
+    - NODE_DEBUG=nsolid
+    - NSOLID_APPNAME=dillinger
+    - NSOLID_HUB=registry:4001

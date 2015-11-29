@@ -2,9 +2,9 @@
 #
 # Installs dillinger on a container
 #
-# VERSION  0.0.0
-FROM nodesource/node:0.12
-MAINTAINER Nuno Job "nunojobpinto@gmail.com"
+# VERSION  1.0.0
+
+FROM nodesource/nsolid-node	
 MAINTAINER Casey Bisson "casey.bisson@gmail.com"
 MAINTAINER William Blankenship "william.jblankenship@gmail.com"
 
@@ -37,11 +37,11 @@ ENV NODE_ENV=production
 #
 # light this candle
 #
-CMD ["node", "app.js"]
+CMD ["nsolid", "app.js"]
 
 #
 # `docker build` example:
 # sudo docker build -t joemccann/dillinger .
 #
 # `docker run` example:
-# docker run -d -p 80:80 joemccann/dillinger
+# docker run -d -p 80:80 --restart="always" joemccann/dillinger
