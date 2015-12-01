@@ -2,9 +2,25 @@ dillinger:
   image: joemccann/dillinger
   container_name: dillinger
   net: "nsolid"
-  ports:
-    - 80:80
   environment:
     - NODE_DEBUG=nsolid
     - NSOLID_APPNAME=dillinger
     - NSOLID_HUB=registry:4001
+nginx:
+  image: nginx
+  volumes:
+    - ./nginx/dillinger.conf:/etc/nginx/conf.d/dillinger.conf:ro
+  ports:
+    - 80:80
+console:
+  extends:
+    file: nsolid.yml
+    service: console
+proxy:
+  extends:
+    file: nsolid.yml
+    service: proxy
+registry:
+  extends:
+    file: nsolid.yml
+    service: registry
