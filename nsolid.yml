@@ -16,7 +16,7 @@ console:
   container_name: console
   environment:
     - NODE_DEBUG=nsolid
-    - NSOLID_APPNAME=dillinger
+    - NSOLID_APPNAME=console
     - NSOLID_HUB=registry:4001
   net: "nsolid"
   command: --hub proxy:9000
