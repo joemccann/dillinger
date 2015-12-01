@@ -5,7 +5,7 @@
 # VERSION  1.0.0
 
 FROM nodesource/nsolid-node	
-MAINTAINER Casey Bisson "casey.bisson@gmail.com"
+MAINTAINER Joe McCann "joe@nodesource.com"
 MAINTAINER William Blankenship "william.jblankenship@gmail.com"
 
 #
