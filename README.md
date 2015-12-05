@@ -95,6 +95,14 @@ $ gulp watch
 $ karma start
 ```
 
+### Docker, N|Solid and NGINX
+
+More details coming soon.
+
+#### docker-compose.yml
+
+Change the path for the nginx conf mounting path to your full path, not mine!
+
 ### Todos
 
  - Write Tests
