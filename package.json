@@ -55,7 +55,7 @@
     "ejs": "^2.3.4",
     "errorhandler": "^1.4.2",
     "express": "^4.13.3",
-    "googleapis": "^2.1.5",
+    "googleapis": "^2.1.7",
     "highlight.js": "^8.8.0",
     "jquery": "^2.1.1",
     "katex": "^0.2.0",
