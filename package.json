@@ -64,7 +64,7 @@
     "markdown-it-abbr": "^1.0.0",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-deflist": "^1.0.0",
-    "markdown-it-footnote": "^1.0.0",
+    "markdown-it-footnote": "2.0.0",
     "markdown-it-ins": "^1.0.0",
     "markdown-it-mark": "^1.0.0",
     "markdown-it-math": "^3.0.2",
