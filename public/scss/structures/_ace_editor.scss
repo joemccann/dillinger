@@ -45,3 +45,26 @@
   }
 
 }
+
+.editor-header {
+  width: 50%;
+  float: left;
+  border-bottom: 1px solid $c-border;
+  position: relative;
+
+  @include to('tablet') {
+    display: none;
+  }
+
+  &--first {
+    border-right: 1px solid $c-border;
+    @include to('tablet') {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .title {
+    display: inline-block;
+  }
+}
