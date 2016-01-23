@@ -54,6 +54,7 @@
     "depd": "^1.1.0",
     "ejs": "^2.3.4",
     "errorhandler": "^1.4.2",
+    "es6-promise": "^3.0.2",
     "express": "^4.13.3",
     "googleapis": "^2.1.5",
     "highlight.js": "^8.8.0",
