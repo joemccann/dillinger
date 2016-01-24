@@ -6,7 +6,7 @@ module.exports =
     'diDocuments.service',
     'diDocuments.export'
   ])
-  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService) {
+  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService, debounce) {
 
   var vm = this;
 
@@ -25,7 +25,7 @@ module.exports =
 
   $rootScope.documents = documentsService.getItems();
 
-  $rootScope.editor.on('change', doAutoSave);
+  $rootScope.editor.on('change', debounce(doAutoSave, 5000));
   $rootScope.$on('autosave', doAutoSave);
 
   function save(manuel) {
