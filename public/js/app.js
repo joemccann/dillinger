@@ -24,6 +24,7 @@
   require('./components/preview.directive');
 
   require('./components/wtfisdillinger-modal.controller');
+  require('./services/debounce.service');
 
   // User
   require('./user/user.controller');
@@ -75,7 +76,8 @@
     'plugins.dropbox',
     'plugins.googledrive',
     'plugins.onedrive',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'diDebounce.service'
   ]);
 
   // Run!
