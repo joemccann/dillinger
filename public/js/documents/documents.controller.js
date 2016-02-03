@@ -25,7 +25,7 @@ module.exports =
 
   $rootScope.documents = documentsService.getItems();
 
-  $rootScope.editor.on('change', debounce(doAutoSave, 5000));
+  $rootScope.editor.on('change', debounce(doAutoSave, 2000));
   $rootScope.$on('autosave', doAutoSave);
 
   function save(manuel) {
