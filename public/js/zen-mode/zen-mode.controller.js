@@ -41,6 +41,8 @@ module.exports =
       require('../documents/theme-dillinger');
 
       vm.zen = ace.edit('zen');
+      vm.zen.getSession().setMode('ace/mode/markdown');
+      vm.zen.setTheme('ace/theme/dillinger');
       vm.zen.getSession().setUseWrapMode(true);
       vm.zen.renderer.setShowGutter(false);
       vm.zen.setShowPrintMargin(false);

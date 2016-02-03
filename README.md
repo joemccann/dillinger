@@ -50,7 +50,6 @@ $ npm i -g gulp
 $ git clone [git-repo-url] dillinger
 $ cd dillinger
 $ npm i -d
-$ mkdir -p downloads/files/{md,html,pdf}
 $ gulp build --prod
 $ NODE_ENV=production node app
 ```
@@ -136,7 +135,7 @@ MIT
    [express]: <http://expressjs.com>
    [AngularJS]: <http://angularjs.org>
    [Gulp]: <http://gulpjs.com>
-   
+
    [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
    [PlGh]:  <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
