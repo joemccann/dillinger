@@ -27,7 +27,7 @@ var oauth_github_redirect = function(req, res) {
       access_token_secret: null,
       access_token: null
     }
-    uri = Github.generateAuthUrl()
+    uri = Github.generateAuthUrl(req)
     res.redirect(uri)
   }
 }
@@ -54,13 +54,14 @@ var oauth_github = function(req, res, cb) {
       // TODO: MAKE THIS MORE GRACEFUL
       if (err) res.send(err.message)
       else {
-        // access_token=519e3f859210aa34265a52acb6b88290087f8996&token_type=bearer
+        // access_token=519e3f859210aa34265a52acb6b88290087f8996&scope=repo&token_type=bearer
         if (!req.session.github) {
           req.session.github = {
             oauth: null
           }
         }
         req.session.github.oauth = (qs.parse(body)).access_token
+        req.session.github.scope = (qs.parse(body)).scope
         req.session.isGithubSynced = true
         console.log('about')
         Github.getUsername(req, res,function() {
