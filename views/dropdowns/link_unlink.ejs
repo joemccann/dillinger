@@ -12,11 +12,11 @@
 <% } %>
 
 <% if (isGithubConfigured) { %>
-<li>
+<li ng-controller="Github as github">
   <% if (isGithubAuth) { %>
     <a href="/unlink/github">Unlink
   <% } else { %>
-    <a href="/redirect/github"  class="import-github unlinked">Link with
+    <a class="import-github unlinked" ng-click="github.chooseScope()">Link with
   <% } %>
     <span>Github</span>
     <span class="icon icon-link"><%- include ../icons/linked %></span>

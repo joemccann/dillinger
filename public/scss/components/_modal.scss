@@ -30,6 +30,11 @@
        max-width: 500px;
     }
 
+    &.scope .modal-dialog {
+      max-width: 300px;
+      margin: 5rem auto 5rem;
+    }
+
     .modal-dialog {
       max-width: 600px;
       width: auto;

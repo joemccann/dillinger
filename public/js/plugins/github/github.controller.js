@@ -14,6 +14,7 @@ module.exports =
   vm.importFile          = importFile;
   vm.saveTo              = saveTo;
   vm.updateSHAOnDocument = updateSHAOnDocument;
+  vm.chooseScope         = chooseScope;
 
   //////////////////////////////
 
@@ -87,5 +88,18 @@ module.exports =
       });
     }
   }
+
+  function chooseScope() {
+    var modalInstance = $modal.open({
+      template: require('raw!./github-modal.scope.html'),
+      controller: function($scope, $modalInstance){
+        $scope.close = function () {
+          $modalInstance.dismiss('cancel');
+        };
+      },
+      windowClass: 'modal--dillinger scope',
+    });
+
+  };
 
 });

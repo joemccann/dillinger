@@ -50,10 +50,10 @@ exports.Github = (function() {
     }
 
   // String builder for auth url...
-  function _buildAuthUrl() {
+  function _buildAuthUrl(scope) {
     return  'https://github.com/login/oauth/authorize?client_id='
             + githubConfig.client_id
-            + '&scope=repo&redirect_uri='
+            + '&scope=' + scope + '&redirect_uri='
             + githubConfig.callback_url
   }
 
@@ -61,7 +61,14 @@ exports.Github = (function() {
     isConfigured: isConfigEnabled,
     githubConfig: githubConfig,
     generateAuthUrl: function(req, res) {
-      return _buildAuthUrl()
+
+      var scope = 'public_repo' // Default scope.
+      if(req.query.scope === 'repo') {
+        scope = 'repo';
+      }
+
+      return _buildAuthUrl(scope)
+
     },
     getUsername: function(req, res, cb) {
 
@@ -88,7 +95,16 @@ exports.Github = (function() {
 
     }, // end getUsername
     fetchOrgs: function(req, res) {
-      var uri = githubApi + 'user/orgs?access_token=' + req.session.github.oauth
+      var uri;
+      if(req.session.github.scope == 'repo') {
+        // If private access given, then can list all organization memberships.
+        // https://developer.github.com/v3/orgs/#list-your-organizations
+        uri = githubApi + 'user/orgs?access_token=' + req.session.github.oauth
+      } else {
+        // can only list public organization memberships.
+        // https://developer.github.com/v3/orgs/#list-user-organizations
+        uri = githubApi + 'users/' + req.session.github.username + '/orgs'
+      }
 
       var options = {
         headers: headers

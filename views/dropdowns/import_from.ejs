@@ -16,7 +16,7 @@
     <% if (isGithubAuth) { %>
       <a class="import-github linked" ng-click="github.importFile('<%= github_username %>')">
     <% } else { %>
-      <a href="/redirect/github"  class="import-github unlinked">
+      <a class="import-github unlinked" ng-click="github.chooseScope()">
     <% } %>
       <span>Github</span>
       <span class="icon icon-link"><%- include ../icons/linked %></span>
