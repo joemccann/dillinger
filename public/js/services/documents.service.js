@@ -161,7 +161,7 @@ module.exports =
    *    Get the current document title.
    */
   function getCurrentDocumentTitle() {
-    return service.currentDocument.title;
+    return service.currentDocument.title.replace(/(\\|\/)/g, '_');
   }
 
   /**
