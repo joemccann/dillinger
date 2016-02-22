@@ -94,7 +94,24 @@ $ gulp watch
 $ karma start
 ```
 
-### Docker, N|Solid and NGINX
+### Docker
+Dillinger is very easy to install and deploy in a Docker container.
+
+By default, the Docker will expose port 80, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image. 
+
+```sh
+cd dillinger
+docker build -t <youruser>/dillinger:latest .
+```
+This will create the dillinger image and pull in the necessary dependencies. Once done, run the Docker and map the port to whatever you wish on your host. In this example, we simply map port 80 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
+
+```sh
+docker run -d -p 80:80 --restart="always" <youruser>/dillinger:latest
+```
+
+Verify the deployment by navigating to your server address in your preferred browser.
+
+### N|Solid and NGINX
 
 More details coming soon.
 
@@ -140,5 +157,4 @@ MIT
    [PlGh]:  <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
    [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-
 

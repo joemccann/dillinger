@@ -2,12 +2,12 @@
 #
 # Installs dillinger on a container
 #
-# VERSION  1.0.0
+# VERSION  1.0.1
 
-FROM nodesource/nsolid-node	
+FROM nodesource/nsolid	
 MAINTAINER Joe McCann "joe@nodesource.com"
 MAINTAINER William Blankenship "william.jblankenship@gmail.com"
-
+MAINTAINER Steve Jones "stephen.j.jones@uea.ac.uk"
 #
 # install the node dependencies for our node server app
 # using caching suggestions per http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
