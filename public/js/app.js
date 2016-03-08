@@ -64,9 +64,13 @@
   // Zen Mode
   require('./zen-mode/zen-mode.controller');
   require('./zen-mode/zen-mode-toggle.directive');
+  
+  // SplitJS
+  require('./splitjs/splitjs.controller'); 
 
   // Configure Dependencies
   angular.module('Dillinger', [
+    'diSplitJs',  
     'diBase',
     'diDocuments',
     'diNotify',
