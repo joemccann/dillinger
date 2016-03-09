@@ -77,7 +77,7 @@ module.exports =
       var di;
       di = diNotify('Fetching Files...');
       return $http.post('import/github/tree_files', {
-        owner:    owner ? owner : service.config.user.name,
+        owner:    owner ? owner : service.config.current.owner,
         repo:     repo ? repo : service.config.current.repo,
         branch:   branch ? branch : service.config.current.branch,
         sha:      sha ? sha : service.config.current.sha,
@@ -109,13 +109,12 @@ module.exports =
       var di;
       di = diNotify('Fetching Branches...');
       return $http.post('import/github/branches', {
-        owner: owner ? owner : service.config.user.name,
+        owner: owner ? owner : service.config.current.owner,
         repo:  repo ? repo : service.config.current.repo
       }).success(function(data) {
         if (di != null) {
           di.$scope.$close();
         }
-        service.config.current.owner = owner;
         service.config.current.repo  = repo;
         service.config.branches      = data;
 
