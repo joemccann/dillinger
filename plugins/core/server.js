@@ -9,22 +9,24 @@ var express = require('express')
   , md = require('./markdown-it.js').md
   ;
 
-
-var Kore = function(){
-
-  function _getFullHtml(name, str, style){
+  function _getFullHtml(name, str, style) {
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'
       + name + '</title><style>'
       + ( ( style ) ? style : '' ) + '</style></head><body id="preview">\n'
       + md.render(str) + '\n</body></html>';
   }
 
-  function _getHtml(str){
+  function _getHtml(str) {
     return md.render(str)
   }
 
-  return {
-    fetchMd: function(req,res){
+  // Move this into _getFormat() to reload the CSS without restarting node.
+  var _format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8');
+  function _getFormat() {
+      return _format;
+  }
+
+    var fetchMd = function(req, res) {
 
       var unmd = req.body.unmd
         , json_response =
@@ -33,7 +35,7 @@ var Kore = function(){
         , error: false
         }
 
-      var name = req.body.name.trim() 
+      var name = req.body.name.trim()
 
       if(!name.includes('.md')){
         name = name + '.md'
@@ -55,9 +57,10 @@ var Kore = function(){
           res.send( JSON.stringify( json_response) )
          }
       }) // end writeFile
-    },
-    downloadMd: function(req,res){
-    
+    }
+
+    var downloadMd = function(req, res) {
+
       var fileId = req.params.mdid
 
       var filePath = path.resolve(__dirname, '../../downloads/files/md/' + fileId )
@@ -83,9 +86,9 @@ var Kore = function(){
 
       }) // end res.download
 
-    },
-    fetchHtml: function(req,res){
+    }
 
+    var fetchHtml = function(req, res) {
       var unmd = req.body.unmd
         , json_response =
         {
@@ -94,13 +97,7 @@ var Kore = function(){
         }
 
       // For formatted HTML or not...
-      var format = req.body.formatting;
-
-      if ( !format ) {
-        format = "";
-      } else {
-        format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8');
-      }
+      var format = req.body.formatting ? _getFormat() : "";
 
       var html = _getFullHtml(req.body.name, unmd, format);
 
@@ -121,8 +118,9 @@ var Kore = function(){
           res.json( json_response )
          }
       }) // end writeFile
-    },
-    fetchHtmlDirect: function(req,res){
+    }
+
+    var fetchHtmlDirect = function(req, res) {
 
       var unmd = req.body.unmd
         , json_response =
@@ -135,13 +133,14 @@ var Kore = function(){
 
       json_response.data = html
       res.json( json_response )
-    },
-    downloadHtml: function(req,res){
+    }
+
+    var downloadHtml = function(req, res){
 
       var fileId = req.params.html
 
       var filePath = path.resolve(__dirname, '../../downloads/files/html/' + fileId )
-      
+
       res.download(filePath, fileId, function downloadHtmlDownloadCb(err){
         if(err) {
           console.error(err)
@@ -164,8 +163,9 @@ var Kore = function(){
 
       }) // end res.download
 
-    },
-    fetchPdf: function(req,res){
+    }
+
+    var fetchPdf = function(req, res) {
 
       var unmd = req.body.unmd
         , json_response =
@@ -174,19 +174,18 @@ var Kore = function(){
       , error: false
       }
 
-      var format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8')
-      var html = _getFullHtml(req.body.name, unmd, format)
+      var html = _getFullHtml(req.body.name, unmd, _getFormat())
       var temp = path.resolve(__dirname, '../../downloads/files/pdf/temp.html')
 
-      fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data){
+      fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
 
-        if(err){
+        if(err) {
           json_response.error = true
           json_response.data = "Something wrong with the pdf conversion."
           console.error(err)
           res.json( json_response )
         }
-        else{
+        else {
           var name = req.body.name.trim() + '.pdf'
           var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
 
@@ -197,21 +196,22 @@ var Kore = function(){
           ]
 
           child.execFile(phantomjs.path, childArgs, function childExecFileCb(err, stdout, stderr) {
-            if(err){
+            if(err) {
               json_response.error = true
               json_response.data = "Something wrong with the pdf conversion."
               console.error(err)
               res.json( json_response )
             }
-            else{
+            else {
               json_response.data = name
               res.json( json_response )
             }
           })
         }
       })
-    },
-    downloadPdf: function(req,res){
+    }
+
+    var downloadPdf = function(req, res) {
 
       var fileId = req.params.pdf
 
@@ -232,33 +232,27 @@ var Kore = function(){
         }
       })
     } // end
-  }
-
-}
-
-const Core = new Kore();
 
 /* Start Dillinger Routes */
 
 // save a markdown file and send header to download it directly as response
-app.post('/factory/fetch_markdown', Core.fetchMd)
+app.post('/factory/fetch_markdown', fetchMd)
 
 // Route to handle download of md file
-app.get('/files/md/:mdid', Core.downloadMd)
+app.get('/files/md/:mdid', downloadMd)
 
 // Save an html file and send header to download it directly as response
-app.post('/factory/fetch_html', Core.fetchHtml)
+app.post('/factory/fetch_html', fetchHtml)
 
-app.post('/factory/fetch_html_direct', Core.fetchHtmlDirect)
+app.post('/factory/fetch_html_direct', fetchHtmlDirect)
 
 // Route to handle download of html file
-app.get('/files/html/:html', Core.downloadHtml)
+app.get('/files/html/:html', downloadHtml)
 
 // Save a pdf file and send header to download it directly as response
-app.post('/factory/fetch_pdf', Core.fetchPdf)
+app.post('/factory/fetch_pdf', fetchPdf)
 
 // Route to handle download of pdf file
-app.get('/files/pdf/:pdf', Core.downloadPdf)
+app.get('/files/pdf/:pdf', downloadPdf)
 
 /* End Dillinger Core */
-
