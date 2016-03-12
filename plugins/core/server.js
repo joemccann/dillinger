@@ -2,12 +2,14 @@ var express = require('express')
   , app = module.exports = express()
   , fs = require('fs')
   , path = require('path')
-  , request = require('request')
-  , qs = require('querystring')
-  , phantomjs = require('phantomjs')
-  , child = require('child_process')
   , md = require('./markdown-it.js').md
+  , phantom = require('phantom')
   ;
+
+  var phantomSession = phantom.create();
+  function getPhantomSession() {
+    return phantomSession;
+  }
 
   function _getFullHtml(name, str, style) {
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'
@@ -77,37 +79,40 @@ var express = require('express')
     var temp = path.resolve(__dirname, '../../downloads/files/pdf/temp.html')
 
     fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
-
       if(err) {
-        json_response.error = true
-        json_response.data = "Something wrong with the pdf conversion."
-        console.error(err)
-        res.json( json_response )
+        console.error(err);
+        res.end("Something wrong with the pdf conversion.");
+      } else {
+         _createPdf(req, res, temp);
       }
-      else {
-        var name = req.body.name.trim() + '.pdf'
-        var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
+    });
+  }
 
-        var childArgs = [
-          path.join(__dirname, 'render.js'),
-          temp,
-          filename
-        ]
+  function _createPdf(req, res, tempFilename) {
+    getPhantomSession().then(phantom => {
+      return phantom.createPage();
+    }).then(page => {
+      page.open( tempFilename ).then(status => {
+        _renderPage(page);
+      });
+    });
 
-        child.execFile(phantomjs.path, childArgs, function childExecFileCb(err, stdout, stderr) {
-          if(err) {
-            json_response.error = true
-            json_response.data = "Something wrong with the pdf conversion."
-            console.error(err)
-            res.json( json_response )
-          }
-          else {
-            res.attachment( name );
-            res.sendFile(filename);
-          }
-        })
-      }
-    })
+    function _renderPage(page) {
+      var name = req.body.name.trim() + '.pdf'
+      var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
+
+      page.property('paperSize', { format: 'A4', orientation: 'portrait', margin: '1cm' });
+      page.property('viewportSize', { width: 1024, height: 768 });
+
+      page.render(filename).then(function() {
+        res.attachment( name );
+        res.sendFile( filename, {}, function() {
+          fs.unlink(filename);
+        });
+
+        page.close();
+      });
+    }
   }
 
 /* Start Dillinger Routes */

@@ -75,6 +75,7 @@
     "marked": "^0.3.2",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
+    "phantom": "^2.0.4",
     "rc": "0.3.0",
     "request": "^2.64.0",
     "serve-favicon": "^2.3.0",
