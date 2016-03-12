@@ -3,12 +3,13 @@ var express = require('express')
   , fs = require('fs')
   , path = require('path')
   , md = require('./markdown-it.js').md
+  , temp = require('temp')
   , phantom = require('phantom')
   ;
 
-  var phantomSession = phantom.create();
+  var phantomSession = phantom.create()
   function getPhantomSession() {
-    return phantomSession;
+    return phantomSession
   }
 
   function _getFullHtml(name, str, style) {
@@ -76,14 +77,13 @@ var express = require('express')
     }
 
     var html = _getFullHtml(req.body.name, unmd, _getFormat())
-    var temp = path.resolve(__dirname, '../../downloads/files/pdf/temp.html')
-
-    fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
+    var tempPath = temp.path({suffix: '.htm'})
+    fs.writeFile( tempPath, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
       if(err) {
         console.error(err);
         res.end("Something wrong with the pdf conversion.");
       } else {
-         _createPdf(req, res, temp);
+         _createPdf(req, res, tempPath);
       }
     });
   }
@@ -99,18 +99,20 @@ var express = require('express')
 
     function _renderPage(page) {
       var name = req.body.name.trim() + '.pdf'
-      var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
+      var filename = temp.path({suffix: '.pdf'})
 
-      page.property('paperSize', { format: 'A4', orientation: 'portrait', margin: '1cm' });
-      page.property('viewportSize', { width: 1024, height: 768 });
+      page.property('paperSize', { format: 'A4', orientation: 'portrait', margin: '1cm' })
+      page.property('viewportSize', { width: 1024, height: 768 })
 
       page.render(filename).then(function() {
-        res.attachment( name );
+        res.attachment( name )
         res.sendFile( filename, {}, function() {
-          fs.unlink(filename);
+          // Cleanup.
+          fs.unlink(filename)
+          fs.unlink(tempFilename)
         });
 
-        page.close();
+        page.close()
       });
     }
   }
