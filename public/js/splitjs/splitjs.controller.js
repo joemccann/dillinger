@@ -2,7 +2,7 @@
  
 module.exports = 
   angular
-  .module('diSplitJs')
+  .module('diSplitJs',[])
   .controller('diSplitJs', function($scope){
      alert('wtf');
      var Split = require('./split'); 

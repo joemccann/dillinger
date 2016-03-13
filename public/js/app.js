@@ -70,7 +70,7 @@
             alert('wtf');
   // Configure Dependencies
   angular.module('Dillinger', [
-    /*'diSplitJs', */
+    'diSplitJs',
     'diBase',
     'diDocuments',
     'diNotify',
