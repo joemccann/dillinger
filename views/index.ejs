@@ -48,7 +48,11 @@
 </head>
 <body ng-controller="Base">
 
-  <iframe id="downloader" class="hide"></iframe>
+  <form method="POST" id="downloader">
+    <input type="hidden" name="name">
+    <input type="hidden" name="unmd">
+    <input type="hidden" name="formatting">
+  </form>
 
   <%- include splashscreen %>
 

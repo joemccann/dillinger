@@ -17,7 +17,6 @@ var config = require('./config')()
   , routes = require('./routes')
   , serveStatic = require('serve-static')
   , errorHandler = require('errorhandler')
-  , http = require('http')
   , path = require('path')
   , fs = require('fs')
   , app = express()
@@ -27,7 +26,6 @@ var config = require('./config')()
   , googledrive = require('./plugins/googledrive/server.js')
   , onedrive = require('./plugins/onedrive/server.js')
   , env = process.env.NODE_ENV || 'development';
-  ;
 
 app.set('port', process.env.PORT || 8080)
 app.set('views', __dirname + '/views')
@@ -81,7 +79,6 @@ app.locals.env = process.env.NODE_ENV
 // At startup time so sync is ok.
 app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8')
 
-
 if ('development' == env) {
   app.use(errorHandler())
 }
@@ -95,7 +92,7 @@ app.use(github)
 app.use(googledrive)
 app.use(onedrive)
 
-http.createServer(app).listen(app.get('port'), function createServerCb() {
-  console.log('Express server listening on port ' + app.get('port'))
-  console.log('\nhttp://localhost:' + app.get('port') + '\n')
+app.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + app.get('port'))
+    console.log('\nhttp://localhost:' + app.get('port') + '\n')
 })

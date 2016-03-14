@@ -4,39 +4,46 @@
 module.exports =
   angular
   .module('diDocuments.export', [
-    'diDocuments.service',
-    'diDocuments.export.service'
+    'diDocuments.service'
   ])
-  .controller('DocumentsExport', function($scope, documentsExportService) {
+  .controller('DocumentsExport', function($scope, documentsService) {
 
   var vm = this,
-      $downloader = document.getElementById('downloader');
+      $ = jQuery,
+      $downloader = $(document.getElementById('downloader')),
+      $name = $downloader.find('[name=name]'),
+      $unmd = $downloader.find('[name=unmd]'),
+      $formatting = $downloader.find('[name=formatting]');
+
 
   vm.asHTML       = asHTML;
   vm.asStyledHTML = asStyledHTML;
   vm.asMarkdown   = asMarkdown;
   vm.asPDF        = asPDF;
 
-  function initDownload() {
-    $downloader.src = '/files/' + documentsExportService.type + '/' + documentsExportService.file;
+  function initDownload(action, styled) {
+    $downloader[0].action = action;
+    $name.val( documentsService.getCurrentDocumentTitle() );
+    $unmd.val( documentsService.getCurrentDocumentBody() );
+    $formatting.val( styled );
 
-    return false;
+    $downloader.submit();
   }
 
   function asHTML(styled) {
-    return documentsExportService.fetchHTML(styled).then(initDownload);
+    initDownload( 'factory/fetch_html', styled );
   }
 
   function asStyledHTML() {
-    return asHTML(true);
+    asHTML(true);
   }
 
   function asMarkdown() {
-    return documentsExportService.fetchMarkdown().then(initDownload);
+    initDownload( 'factory/fetch_markdown' );
   }
 
   function asPDF() {
-    return documentsExportService.fetchPDF().then(initDownload);
+    initDownload( 'factory/fetch_pdf' );
   }
 
   $scope.$on('$destroy', function() {
