@@ -15,12 +15,15 @@ module.exports =
       var editor = angular.element(editorElem).attr('id');
       var preview = angular.element(previewElem).attr('id'); 
       
-      alert(editor); 
+      
+      var editorElementID = '#'+editor; 
+      var previewElementID = '#'+preview; 
+      //alert('#' + editor); 
       
       $scope.editor = editor; 
       $scope.preview = preview; 
       
-      Split([editor, preview],{
+      Split([editorElementID, previewElementID],{
           sizes: [50,50],
           minSize: 200
       }); 
