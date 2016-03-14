@@ -6,8 +6,16 @@ module.exports =
   .controller('diSplitJs', function($scope){
      alert('wtf');
      
-      var editor = angular.element(document.querySelector('#editor')); 
-      var preview = angular.element(document.querySelector('#preview'));
+     // var editor = angular.element(document.querySelector('#editor')).attr('id'); 
+     // var preview = angular.element(document.querySelector('#preview')).attr('id');
+      
+      var editorElem = document.querySelector('#editor');
+      var previewElem = document.querySelector('#preview');
+      
+      var editor = angular.element(editorElem).attr('id');
+      var preview = angular.element(previewElem).attr('id'); 
+      
+      alert(editor); 
       
       $scope.editor = editor; 
       $scope.preview = preview; 
