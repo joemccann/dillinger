@@ -13,6 +13,9 @@ module.exports =
       var previewElem = document.querySelector('#preview');
       
       alert(editorElem.parentNode.className); 
+      console.log(editorElem.parentNode.className);
+      //common parent does not have an id only class
+      //g-b g-b--t1of2 split split-editor
       
       var editor = angular.element(editorElem).attr('id');
       var preview = angular.element(previewElem).attr('id'); 
