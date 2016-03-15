@@ -9,7 +9,7 @@ module.exports =
      // var editor = angular.element(document.querySelector('#editor')).attr('id'); 
      // var preview = angular.element(document.querySelector('#preview')).attr('id');
       
-      var editorElem = document.querySelector('#editor');
+     /* var editorElem = document.querySelector('#editor');
       var previewElem = document.querySelector('#preview');
       
       var editor = angular.element(editorElem).attr('id');
@@ -21,9 +21,9 @@ module.exports =
       //alert('#' + editor); 
       
       $scope.editor = editor; 
-      $scope.preview = preview; 
+      $scope.preview = preview; */
       
-      Split([editorElementID, previewElementID],{
+      Split(['#editor', '#preview'],{
           sizes: [50,50],
           minSize: 200
       }); 
