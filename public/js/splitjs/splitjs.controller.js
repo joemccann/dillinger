@@ -4,16 +4,16 @@ module.exports =
   angular
   .module('diSplitJs',[])
   .controller('diSplitJs', function($scope){
-     alert('wtf');
+     console.log('hit');
      
      // var editor = angular.element(document.querySelector('#editor')).attr('id'); 
      // var preview = angular.element(document.querySelector('#preview')).attr('id');
       
       var editorElem = document.querySelector('#editor1');
-      var previewElem = document.querySelector('#preview1');
+      //var previewElem = document.querySelector('#preview1');
       
-      alert(editorElem.parentNode.className); 
-      alert(editorElem.parentNode.id);
+      console.log(editorElem.parentNode.className); 
+      console.log(editorElem.parentNode.id);
       
       //common parent does not have an id only class
       //g-b g-b--t1of2 split split-editor

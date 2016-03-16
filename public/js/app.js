@@ -80,7 +80,7 @@
     'plugins.dropbox',
     'plugins.googledrive',
     'plugins.onedrive',
-    'ui.bootstrap', 
+    'ui.bootstrap',
     'diDebounce.service'
   ]);
 
