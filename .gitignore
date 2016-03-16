@@ -50,3 +50,6 @@ npm-debug.log
 
 # Vim
 *.swp
+
+# VS Code
+.vscode
