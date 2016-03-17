@@ -67,7 +67,7 @@
     
   // SplitJS
   require('./splitjs/splitjs.controller'); 
-  alert('wtf');
+  
   // Configure Dependencies
   angular.module('Dillinger', [
     'diSplitJs',
