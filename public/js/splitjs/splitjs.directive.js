@@ -2,7 +2,7 @@
 
 module.exports =
 angular
-.module('diSplitJs.directives', [])
+.module('diSplitJs.directive', [])
 .directive('split-area'), function(){
     var directive; 
     
@@ -10,8 +10,8 @@ angular
         restrict: 'E',
         replace: true,
         controller: 'diSplitJs',
-        template: '<div id="test-directive"><h3>"Hello Directive"</h3></div>',
-        link: function(scope, elem, attr){
+        template: '<div id="test-directive"><h3>Hello Directive</h3></div>',
+        link: function($scope, $elem, attr){
             
         }
     }
