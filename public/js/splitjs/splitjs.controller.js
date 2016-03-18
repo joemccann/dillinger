@@ -2,7 +2,7 @@
 var Split = require('split.js'); 
 module.exports = 
   angular
-  .module('diSplitJs',[])
+  .module('diSplitJs',['diSplitJs.directives'])
   .controller('diSplitJs', function($scope){
      console.log('hit');
      
@@ -27,8 +27,8 @@ module.exports =
       //var previewElementID = '#'+preview; 
       //alert('#' + editor); 
       
-      $scope.editor = editor; 
-      $scope.preview = preview;
+     /* $scope.editor = editor; 
+      $scope.preview = preview;*/
       
       Split(['#editor1', '#preview1'],{
           sizes: [50,50],
