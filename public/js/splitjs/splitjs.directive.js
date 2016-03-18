@@ -10,7 +10,7 @@ angular
         restrict: 'E',
         replace: true,
         controller: 'diSplitJs',
-        template: '<div><h3>{{foo}}</h3></div>',
+        template: '<div id="test-directive"><h3>"Hello Directive"</h3></div>',
         link: function(scope, elem, attr){
             
         }

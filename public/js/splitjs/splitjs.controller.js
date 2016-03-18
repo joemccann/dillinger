@@ -15,7 +15,7 @@ module.exports =
       console.log(editorElem.parentNode.className); 
       console.log(editorElem.parentNode.id);
       console.log(editorElem.id); 
-      
+      console.log(document.querySelector('#test-directive')); 
       //common parent does not have an id only class
       //g-b g-b--t1of2 split split-editor
       
