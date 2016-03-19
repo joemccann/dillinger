@@ -2,9 +2,9 @@
 var Split = require('split.js'); 
 module.exports = 
   angular
-  .module('diSplitJs',['diSplitJs.directives'])
-  .controller('diSplitJs', function($scope){
-     console.log('hit');
+  .module('diSplitJs',['diSplitJsDir.directives'])
+  .controller('diSplitJsCtrl', function($rootScope){
+    /* console.log('hit');
      
      // var editor = angular.element(document.querySelector('#editor')).attr('id'); 
      // var preview = angular.element(document.querySelector('#preview')).attr('id');
@@ -30,8 +30,9 @@ module.exports =
      /* $scope.editor = editor; 
       $scope.preview = preview;*/
       
-      Split(['#editor1', '#preview1'],{
+   /*   Split(['#editor1', '#preview1'],{
           sizes: [50,50],
-          minSize: 200
+          minSize: 200 
       }); 
+      */
   });

@@ -67,16 +67,17 @@
     
   // SplitJS
   require('./splitjs/splitjs.controller');
-  require('./splitjs/splitjs.directive');  
+  require('./splitjs/splitjsDir.directive');  
   
   // Configure Dependencies
   angular.module('Dillinger', [
-    'diSplitJs',
+    
     'diBase',
     'diDocuments',
     'diNotify',
     'diUser',
     'diZenMode',
+    'diSplitJs',
     'plugins.github',
     'plugins.dropbox',
     'plugins.googledrive',

@@ -1,6 +1,9 @@
-<div class="header" ng-controller="diSplitJs">
+<div class="header">
   <h2 class="title">Document Name</h2>
   <document-title></document-title>
-    <split-area></split-area>       
+  <!--SplitArea test element -->
+  <div ng-controller="diSplitJsCtrl">
+    <split-area></split-area> 
+  </div>      
   <p ng-if="profile.enableWordsCount" class="words">Words: <span class="counter" ng-bind="words"></span></p>
 </div>
