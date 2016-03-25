@@ -1,47 +1,50 @@
-# Dillinger Docker File
-#
-# Installs dillinger on a container
-#
-# VERSION  1.0.1
+FROM debian:jessie
 
-FROM nodesource/nsolid	
-MAINTAINER Joe McCann "joe@nodesource.com"
-MAINTAINER William Blankenship "william.jblankenship@gmail.com"
-MAINTAINER Steve Jones "stephen.j.jones@uea.ac.uk"
-#
-# install the node dependencies for our node server app
-# using caching suggestions per http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
-#
-ADD package.json package.json
-RUN NODE_ENV=dev npm install
+ENV NVM_DIR=/opt/nvm \
+    APP_DIR=/opt/app
+ENV PATH=$APP_DIR/node_modules/.bin:${NVM_DIR}/default/bin:$PATH
 
-#
-# install the app
-#
-ADD . .
-RUN npm run predeploy
+COPY npm-shrinkwrap.json /tmp/
 
-#
-# running on port 80
-# change the port here and elsewhere
-#
-EXPOSE 80
+RUN apt-get update \
+ && GIT_DEPS=' \
+      ca-certificates \
+      curl \
+      git \
+    ' \
+    DILLINGER_DEPS=' \
+      bzip2 \
+    ' \
+    BUILD_DEPS="${GIT_DEPS} ${DILLINGER_DEPS}" \
+    NVM_VERSION=0.30.1 \
+    NODE_VERSION=0.11.16 \
+    DILLINGER_COMMIT_ID=8c131a04b2384b0e51d3174bec6e97111c4ca967 \
+ && apt-get install -y --no-install-recommends ${BUILD_DEPS} \
+ && curl https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash \
+ && . ${NVM_DIR}/nvm.sh \
+ && nvm install ${NODE_VERSION} \
+ && ln -s ${NVM_DIR}/v${NODE_VERSION} ${NVM_DIR}/default \
+ && npm config set unsafe-perm true \
+ && git clone https://github.com/joemccann/dillinger ${APP_DIR} \
+ && cd ${APP_DIR} \
+ && git checkout ${DILLINGER_COMMIT_ID} \
+ && rm -rf .git \
+ && mv /tmp/npm-shrinkwrap.json ${APP_DIR} \
+ && npm install -d \
+ && mkdir -p downloads/files/md && mkdir -p downloads/files/html && mkdir -p downloads/files/pdf \
+ && npm run predeploy \
+ && apt-get purge -y ${BUILD_DEPS} \
+ && apt-get autoremove -y \
+ && rm -rf /var/lib/apt/lists/*
 
-#
-# application environment variables
-# change the port here and elsewhere
-#
-ENV PORT=80
+WORKDIR ${APP_DIR}
+EXPOSE 8080
 ENV NODE_ENV=production
 
-#
-# light this candle
-#
-CMD ["nsolid", "app.js"]
+COPY app.js app.js
+COPY gulp/tasks/browserSync.js gulp/tasks/browserSync.js
+COPY gulp/tasks/webpack.js gulp/tasks/webpack.js
+COPY gulp/tasks/uncss.js gulp/tasks/uncss.js
+COPY public/scss/vendor/bootstrap-sass-3.2.0/test/test_helper.rb public/scss/vendor/bootstrap-sass-3.2.0/test/test_helper.rb
 
-#
-# `docker build` example:
-# sudo docker build -t joemccann/dillinger .
-#
-# `docker run` example:
-# docker run -d -p 80:80 --restart="always" joemccann/dillinger
+ENTRYPOINT ["node", "app"]

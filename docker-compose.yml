@@ -1,51 +1,10 @@
-console:
-  extends:
-    file: nsolid.yml
-    service: console
-proxy:
-  extends:
-    file: nsolid.yml
-    service: proxy
-registry:
-  extends:
-    file: nsolid.yml
-    service: registry
-dillinger1:
-  image: joemccann/dillinger
-  container_name: dillinger1
-  net: "nsolid"
-  environment:
-    - NODE_DEBUG=nsolid
-    - NSOLID_APPNAME=dillinger
-    - NSOLID_HUB=registry:4001
-dillinger2:
-  image: joemccann/dillinger
-  container_name: dillinger2
-  net: "nsolid"
-  environment:
-    - NODE_DEBUG=nsolid
-    - NSOLID_APPNAME=dillinger
-    - NSOLID_HUB=registry:4001
-dillinger3:
-  image: joemccann/dillinger
-  container_name: dillinger3
-  net: "nsolid"
-  environment:
-    - NODE_DEBUG=nsolid
-    - NSOLID_APPNAME=dillinger
-    - NSOLID_HUB=registry:4001
-dillinger4:
-  image: joemccann/dillinger
-  container_name: dillinger4
-  net: "nsolid"
-  environment:
-    - NODE_DEBUG=nsolid
-    - NSOLID_APPNAME=dillinger
-    - NSOLID_HUB=registry:4001
-nginx:
-  image: nginx
-  net: "nsolid"
-  volumes:
-    - ./nginx/dillinger.conf:/etc/nginx/conf.d/default.conf:ro
-  ports:
-    - 80:80
+version: '2'
+services:
+  dillinger:
+    build: .
+    container_name: dillinger
+    image: jonbrouse/:dillinger
+    ports:
+      - "8080:8080"
+    environment:
+      - "BIND_ADDRESS=0.0.0.0"
