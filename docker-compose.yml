@@ -3,8 +3,9 @@ services:
   dillinger:
     build: .
     container_name: dillinger
-    image: jonbrouse/:dillinger
+    image: jonbrouse/dillinger
     ports:
-      - "8080:8080"
+      - "12345:12345"
     environment:
       - "BIND_ADDRESS=0.0.0.0"
+      - "PORT=12345"
