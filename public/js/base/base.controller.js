@@ -17,9 +17,7 @@ module.exports =
     'diBase.directives.previewToggle',
     'diBase.directives.preview'
   ])
-  .controller('Base', function($scope, $timeout, $rootScope, userService, documentsService) {
-
-  var updateDocument;
+  .controller('Base', function($scope, $rootScope, userService, documentsService) {
 
   $scope.profile             = userService.profile;
   $rootScope.currentDocument = documentsService.getCurrentDocument();
@@ -33,7 +31,7 @@ module.exports =
   $rootScope.editor.setOption('minLines', 50);
   $rootScope.editor.setOption('maxLines', 90000);
 
-  updateDocument = function() {
+  var updateDocument = function() {
     $rootScope.currentDocument = documentsService.getCurrentDocument();
     return $rootScope.editor.getSession().setValue($rootScope.currentDocument.body);
   };
@@ -41,5 +39,33 @@ module.exports =
   $scope.updateDocument = updateDocument;
 
   $rootScope.$on('document.refresh', updateDocument);
+
+
+  var holder=document.body;
+//  alert(holder);
+  holder.ondragover = function () { return false; };
+holder.ondragend = function () { return false; };
+  holder.ondrop = function(event) {
+    //alert(event.dataTransfer.files[0]);
+    //console.log(event.dataTransfer.files);
+var file = event.dataTransfer.files[0];
+    var reader = new FileReader();
+    reader.onload = function(event) {
+//alert(event.target.result);
+//alert(document.querySelector('#editor textarea').value);
+//alert(document.querySelector('#editor textarea').innerHTML);
+//document.querySelector('#editor textarea').innerHTML = event.target.result;
+
+//$rootScope.editor.getSession()
+//$scope.$apply(function() {
+
+documentsService.setCurrentDocumentTitle(file.name);
+documentsService.setCurrentDocumentBody(event.target.result);
+updateDocument();
+//});
+    };
+     reader.readAsText(file);
+    event.preventDefault();
+  };
 
 });
