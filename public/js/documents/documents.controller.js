@@ -4,9 +4,10 @@ module.exports =
   angular
   .module('diDocuments', [
     'diDocuments.service',
-    'diDocuments.export'
+    'diDocuments.export',
+    'diDocuments.service.wordcount'
   ])
-  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService, debounce) {
+  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService, debounce, wordsCountService) {
 
   var vm = this;
 
@@ -55,15 +56,28 @@ module.exports =
     return $rootScope.$emit('document.refresh');
   }
 
+  function deleteConfirmed(item) {
+    return confirm(
+      'Are you sure you want to delete this document?' +
+      '\n' +
+      '\n' +
+      item.title +
+      '\n' +
+      'Word count: ' + wordsCountService.count()
+    );
+  }
+
   function removeDocument(item) {
     var next;
 
-    // The order is important here.
-    documentsService.removeItem(item);
-    next = documentsService.getItemByIndex(0);
-    documentsService.setCurrentDocument(next);
+    if ( deleteConfirmed(item) ) {
+      // The order is important here.
+      documentsService.removeItem(item);
+      next = documentsService.getItemByIndex(0);
+      documentsService.setCurrentDocument(next);
 
-    return $rootScope.$emit('document.refresh');
+      return $rootScope.$emit('document.refresh');
+    }
   }
 
   function createDocument() {
