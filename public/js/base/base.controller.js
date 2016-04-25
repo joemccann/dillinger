@@ -44,24 +44,29 @@ module.exports =
   var holder=document.body;
 //  alert(holder);
   holder.ondragover = function () { return false; };
-holder.ondragend = function () { return false; };
+  holder.ondragend = function () { return false; };
   holder.ondrop = function(event) {
     //alert(event.dataTransfer.files[0]);
     //console.log(event.dataTransfer.files);
-var file = event.dataTransfer.files[0];
+    var file = event.dataTransfer.files[0];
     var reader = new FileReader();
     reader.onload = function(event) {
-//alert(event.target.result);
-//alert(document.querySelector('#editor textarea').value);
-//alert(document.querySelector('#editor textarea').innerHTML);
-//document.querySelector('#editor textarea').innerHTML = event.target.result;
+    //alert(event.target.result);
+    //alert(document.querySelector('#editor textarea').value);
+    //alert(document.querySelector('#editor textarea').innerHTML);
+    //document.querySelector('#editor textarea').innerHTML = event.target.result;
 
-//$rootScope.editor.getSession()
-//$scope.$apply(function() {
+    //$rootScope.editor.getSession()
+    //$scope.$apply(function() {
 
-documentsService.setCurrentDocumentTitle(file.name);
-documentsService.setCurrentDocumentBody(event.target.result);
-updateDocument();
+    var item = documentsService.createItem();
+
+    documentsService.addItem(item);
+    documentsService.setCurrentDocument(item);
+
+    documentsService.setCurrentDocumentTitle(file.name);
+    documentsService.setCurrentDocumentBody(event.target.result);
+    $rootScope.$emit('document.refresh');
 //});
     };
      reader.readAsText(file);
