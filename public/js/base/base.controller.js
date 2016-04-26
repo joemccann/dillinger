@@ -15,7 +15,8 @@ module.exports =
     'diBase.directives.menuToggle',
     'diBase.directives.settingsToggle',
     'diBase.directives.previewToggle',
-    'diBase.directives.preview'
+    'diBase.directives.preview',
+    'diBase.directives.fileDropTarget'
   ])
   .controller('Base', function($scope, $rootScope, userService, documentsService) {
 
@@ -39,38 +40,4 @@ module.exports =
   $scope.updateDocument = updateDocument;
 
   $rootScope.$on('document.refresh', updateDocument);
-
-
-  var holder=document.body;
-//  alert(holder);
-  holder.ondragover = function () { return false; };
-  holder.ondragend = function () { return false; };
-  holder.ondrop = function(event) {
-    //alert(event.dataTransfer.files[0]);
-    //console.log(event.dataTransfer.files);
-    var file = event.dataTransfer.files[0];
-    var reader = new FileReader();
-    reader.onload = function(event) {
-    //alert(event.target.result);
-    //alert(document.querySelector('#editor textarea').value);
-    //alert(document.querySelector('#editor textarea').innerHTML);
-    //document.querySelector('#editor textarea').innerHTML = event.target.result;
-
-    //$rootScope.editor.getSession()
-    //$scope.$apply(function() {
-
-    var item = documentsService.createItem();
-
-    documentsService.addItem(item);
-    documentsService.setCurrentDocument(item);
-
-    documentsService.setCurrentDocumentTitle(file.name);
-    documentsService.setCurrentDocumentBody(event.target.result);
-    $rootScope.$emit('document.refresh');
-//});
-    };
-     reader.readAsText(file);
-    event.preventDefault();
-  };
-
 });

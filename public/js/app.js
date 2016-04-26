@@ -33,6 +33,7 @@
   // Documents
   require('./factorys/sheet.factory');
   require('./services/documents.service');
+  require('./components/file-drop-target.directive');
   require('./documents/documents-export.controller');
   require('./documents/documents.controller');
   require('./services/wordscount.service');
