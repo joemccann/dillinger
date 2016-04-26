@@ -33,7 +33,6 @@
   // Documents
   require('./factorys/sheet.factory');
   require('./services/documents.service');
-  require('./components/file-drop-target.directive');
   require('./documents/documents-export.controller');
   require('./documents/documents.controller');
   require('./services/wordscount.service');
@@ -65,6 +64,9 @@
   require('./zen-mode/zen-mode.controller');
   require('./zen-mode/zen-mode-toggle.directive');
 
+  // File import.
+  require('./file-import/drop-target.directive');
+
   // Configure Dependencies
   angular.module('Dillinger', [
     'diBase',
@@ -72,6 +74,7 @@
     'diNotify',
     'diUser',
     'diZenMode',
+    'diFileImport',
     'plugins.github',
     'plugins.dropbox',
     'plugins.googledrive',
