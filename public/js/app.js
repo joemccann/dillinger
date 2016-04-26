@@ -35,6 +35,7 @@
   require('./services/documents.service');
   require('./documents/documents-export.controller');
   require('./documents/documents.controller');
+  require('./documents/delete-modal.controller');
   require('./services/wordscount.service');
 
   // Plugin: Github

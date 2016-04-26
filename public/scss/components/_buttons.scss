@@ -77,6 +77,11 @@
     }
   }
 
+  &--delete-modal {
+    display: inline;
+    width: auto;
+  }
+
   &--ok,
   &--close {
     border-top: 0;

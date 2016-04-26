@@ -5,9 +5,10 @@ module.exports =
   .module('diDocuments', [
     'diDocuments.service',
     'diDocuments.export',
+    'diDocuments.controllers',
     'diDocuments.service.wordcount'
   ])
-  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService, debounce, wordsCountService) {
+  .controller('Documents', function($scope, $timeout, $rootScope, $modal, userService, documentsService, debounce, wordsCountService) {
 
   var vm = this;
 
@@ -56,28 +57,27 @@ module.exports =
     return $rootScope.$emit('document.refresh');
   }
 
-  function deleteConfirmed(item) {
-    return confirm(
-      'Are you sure you want to delete this document?' +
-      '\n' +
-      '\n' +
-      item.title +
-      '\n' +
-      'Word count: ' + wordsCountService.count()
-    );
-  }
-
   function removeDocument(item) {
-    var next;
+    var modalScope = $rootScope.$new();
+    modalScope.title = item.title;
+    modalScope.wordCount = wordsCountService.count();
 
-    if ( deleteConfirmed(item) ) {
-      // The order is important here.
+    modalScope.procede = function() {
+      var next;
+
       documentsService.removeItem(item);
       next = documentsService.getItemByIndex(0);
       documentsService.setCurrentDocument(next);
 
-      return $rootScope.$emit('document.refresh');
-    }
+      $rootScope.$emit('document.refresh');
+    };
+
+    $modal.open({
+      template: require('raw!../documents/delete-modal.directive.html'),
+      scope: modalScope,
+      controller: 'DeleteDialog',
+      windowClass: 'modal--dillinger about'
+    });
   }
 
   function createDocument() {
