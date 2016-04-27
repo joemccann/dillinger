@@ -3,8 +3,8 @@
 
 module.exports =
   angular
-  .module('diDocuments.controllers', ['diDocuments.service'])
-  .controller('DeleteDialog', function($scope, $modalInstance, $rootScope, $timeout, documentsService) {
+  .module('diDocuments.controllers', ['diDocuments.service', 'diBase.factories'])
+  .controller('DeleteDialog', function($scope, $modalInstance, $rootScope, $timeout, documentsService, focus) {
 
   var item = $scope.item;
 
@@ -32,5 +32,12 @@ module.exports =
   $scope.cancel = function() {
     return $modalInstance.dismiss('cancel');
   };
+
+  // Set focus on the YES button to allow the user to
+  // press enter or space to confirm deleting and to
+  // visually highlight the YES button.
+  $timeout(function() {
+    focus('deleteModalYes');
+  }, 100);
 
 });
