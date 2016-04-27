@@ -76,7 +76,7 @@ module.exports =
       template: require('raw!../documents/delete-modal.directive.html'),
       scope: modalScope,
       controller: 'DeleteDialog',
-      windowClass: 'modal--dillinger about'
+      windowClass: 'modal--dillinger'
     });
   }
 
