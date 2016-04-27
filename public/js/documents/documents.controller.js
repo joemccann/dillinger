@@ -59,18 +59,8 @@ module.exports =
 
   function removeDocument(item) {
     var modalScope = $rootScope.$new();
-    modalScope.title = item.title;
+    modalScope.item = item;
     modalScope.wordCount = wordsCountService.count();
-
-    modalScope.procede = function() {
-      var next;
-
-      documentsService.removeItem(item);
-      next = documentsService.getItemByIndex(0);
-      documentsService.setCurrentDocument(next);
-
-      $rootScope.$emit('document.refresh');
-    };
 
     $modal.open({
       template: require('raw!../documents/delete-modal.directive.html'),
