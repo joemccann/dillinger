@@ -12,28 +12,9 @@ module.exports =
         preventDefault(event);
 
         var file = event.originalEvent.dataTransfer.files[0];
-        readFile(file);
+        documentsService.importFile(file);
       }
     });
-
-    function readFile(file) {
-      var reader = new FileReader();
-      reader.onload = function(event) {
-        // Create a new document.
-        var item = documentsService.createItem();
-        documentsService.addItem(item);
-        documentsService.setCurrentDocument(item);
-
-        // Set the new documents title and body.
-        documentsService.setCurrentDocumentTitle(file.name);
-        documentsService.setCurrentDocumentBody(event.target.result);
-
-        // Refresh the editor and proview.
-        scope.$emit('document.refresh');
-      };
-
-      reader.readAsText(file);
-    }
 
     function preventDefault(event) {
       event.preventDefault();

@@ -21,23 +21,7 @@ module.exports =
 
         el.change(function() {
           var file = this.files[0];
-
-          var reader = new FileReader();
-          reader.onload = function(event) {
-            // Create a new document.
-            var item = documentsService.createItem();
-            documentsService.addItem(item);
-            documentsService.setCurrentDocument(item);
-
-            // Set the new documents title and body.
-            documentsService.setCurrentDocumentTitle(file.name);
-            documentsService.setCurrentDocumentBody(event.target.result);
-
-            // Refresh the editor and proview.
-            scope.$emit('document.refresh');
-          };
-
-          reader.readAsText(file);
+          documentsService.importFile(file);
         });
       }
     };

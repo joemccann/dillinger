@@ -23,6 +23,7 @@ module.exports =
     size:                    size,
     getItems:                getItems,
     removeItems:             removeItems,
+    importFile:              importFile,
     setCurrentDocument:      setCurrentDocument,
     getCurrentDocument:      getCurrentDocument,
     setCurrentDocumentTitle: setCurrentDocumentTitle,
@@ -180,6 +181,32 @@ module.exports =
   function getCurrentDocumentBody() {
     service.setCurrentDocumentBody($rootScope.editor.getSession().getValue());
     return service.currentDocument.body;
+  }
+
+  /**
+   *    Create a document from a file on disc.
+   *
+   *    @param  {File}  file  The file to import
+   *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   */
+  function importFile(file) {
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+      // Create a new document.
+      var item = createItem();
+      addItem(item);
+      setCurrentDocument(item);
+
+      // Set the new documents title and body.
+      setCurrentDocumentTitle(file.name);
+      setCurrentDocumentBody(event.target.result);
+
+      // Refresh the editor and proview.
+      $rootScope.$emit('document.refresh');
+    };
+
+    reader.readAsText(file);
   }
 
 /**

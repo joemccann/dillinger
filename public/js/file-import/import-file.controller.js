@@ -8,6 +8,4 @@ module.exports =
     $scope.choose = function() {
       $rootScope.$emit('importFile.choose');
     };
-
-    alert($scope.choose);
   });
