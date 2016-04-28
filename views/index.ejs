@@ -48,6 +48,8 @@
 </head>
 <body ng-controller="Base" file-import-drop-target>
 
+  <input type="file" accept=".md,.markdown" file-import-choose-file />
+
   <form method="POST" id="downloader">
     <input type="hidden" name="name">
     <input type="hidden" name="unmd">

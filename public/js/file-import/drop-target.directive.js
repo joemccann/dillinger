@@ -2,7 +2,7 @@
 
 module.exports =
   angular
-  .module('diFileImport', [])
+  .module('diFileImport.directives.dnd', [])
   .directive('fileImportDropTarget', function(documentsService) {
 
   function createDropTarget(scope, el, attrs) {

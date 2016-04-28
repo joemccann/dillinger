@@ -66,6 +66,8 @@
 
   // File import.
   require('./file-import/drop-target.directive');
+  require('./file-import/choose-file.directive');
+  require('./file-import/import-file.controller');
 
   // Configure Dependencies
   angular.module('Dillinger', [
