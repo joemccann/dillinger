@@ -7,7 +7,12 @@ module.exports =
 
   function createDropTarget(scope, el, attrs) {
     el.on({
-      'dragover dragend': preventDefault,
+      'dragover': function(e) {
+        // Gives the user visual feedback by changing the
+        // cursor to copy (usually a triangle with a plus sign).
+        e.originalEvent.dataTransfer.dropEffect = 'copy';
+        preventDefault(e);
+      },
       'drop': function(event) {
         preventDefault(event);
 
