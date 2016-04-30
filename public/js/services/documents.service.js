@@ -183,30 +183,64 @@ module.exports =
     return service.currentDocument.body;
   }
 
+  function isBinaryFile(text) {
+    var len = text.length;
+    var column = 0;
+    for (var i = 0; i < len; i++) {
+        column = (text.charAt(i) === '\n' ? 0 : column + 1);
+        if (column > 500) {
+          return true;
+        }
+    }
+
+    return false;
+  }
+
   /**
    *    Create a document from a file on disc.
    *
    *    @param  {File}  file  The file to import
    *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   *
+   *    @param {Boolean} showTip set to true to show a tip message
+   *                      about draging and droping files.
    */
-  function importFile(file) {
-    var reader = new FileReader();
+  function importFile(file, showTip) {
+      if (!file) {
+        return;
+      }
 
-    reader.onload = function(event) {
-      // Create a new document.
-      var item = createItem();
-      addItem(item);
-      setCurrentDocument(item);
+      var reader = new FileReader();
 
-      // Set the new documents title and body.
-      setCurrentDocumentTitle(file.name);
-      setCurrentDocumentBody(event.target.result);
+      reader.onload = function(event) {
+        var text = event.target.result;
+        if (isBinaryFile(text)) {
+          diNotify({
+            message: 'Importing binary files will cause dillinger to become unresponsive',
+            duration: 4000
+          });
 
-      // Refresh the editor and proview.
-      $rootScope.$emit('document.refresh');
-    };
+          return;
+        }
 
-    reader.readAsText(file);
+        // Create a new document.
+        var item = createItem();
+        addItem(item);
+        setCurrentDocument(item);
+
+        // Set the new documents title and body.
+        setCurrentDocumentTitle(file.name);
+        setCurrentDocumentBody(text);
+
+        // Refresh the editor and proview.
+        $rootScope.$emit('document.refresh');
+
+        if (showTip) {
+          diNotify({ message: 'You can also drag and drop files into dillinger' });
+        }
+      };
+
+      reader.readAsText(file);
   }
 
 /**

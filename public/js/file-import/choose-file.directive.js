@@ -21,7 +21,7 @@ module.exports =
 
         el.change(function() {
           var file = this.files[0];
-          documentsService.importFile(file);
+          documentsService.importFile(file, true);
         });
       }
     };
