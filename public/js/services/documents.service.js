@@ -23,6 +23,7 @@ module.exports =
     size:                    size,
     getItems:                getItems,
     removeItems:             removeItems,
+    importFile:              importFile,
     setCurrentDocument:      setCurrentDocument,
     getCurrentDocument:      getCurrentDocument,
     setCurrentDocumentTitle: setCurrentDocumentTitle,
@@ -180,6 +181,66 @@ module.exports =
   function getCurrentDocumentBody() {
     service.setCurrentDocumentBody($rootScope.editor.getSession().getValue());
     return service.currentDocument.body;
+  }
+
+  function isBinaryFile(text) {
+    var len = text.length;
+    var column = 0;
+    for (var i = 0; i < len; i++) {
+        column = (text.charAt(i) === '\n' ? 0 : column + 1);
+        if (column > 500) {
+          return true;
+        }
+    }
+
+    return false;
+  }
+
+  /**
+   *    Create a document from a file on disc.
+   *
+   *    @param  {File}  file  The file to import
+   *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   *
+   *    @param {Boolean} showTip set to true to show a tip message
+   *                      about draging and droping files.
+   */
+  function importFile(file, showTip) {
+      if (!file) {
+        return;
+      }
+
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var text = event.target.result;
+        if (isBinaryFile(text)) {
+          diNotify({
+            message: 'Importing binary files will cause dillinger to become unresponsive',
+            duration: 4000
+          });
+
+          return;
+        }
+
+        // Create a new document.
+        var item = createItem();
+        addItem(item);
+        setCurrentDocument(item);
+
+        // Set the new documents title and body.
+        setCurrentDocumentTitle(file.name);
+        setCurrentDocumentBody(text);
+
+        // Refresh the editor and proview.
+        $rootScope.$emit('document.refresh');
+
+        if (showTip) {
+          diNotify({ message: 'You can also drag and drop files into dillinger' });
+        }
+      };
+
+      reader.readAsText(file);
   }
 
 /**

@@ -64,6 +64,11 @@
   require('./zen-mode/zen-mode.controller');
   require('./zen-mode/zen-mode-toggle.directive');
 
+  // File import.
+  require('./file-import/drop-target.directive');
+  require('./file-import/choose-file.directive');
+  require('./file-import/import-file.controller');
+
   // Configure Dependencies
   angular.module('Dillinger', [
     'diBase',
@@ -71,6 +76,7 @@
     'diNotify',
     'diUser',
     'diZenMode',
+    'diFileImport',
     'plugins.github',
     'plugins.dropbox',
     'plugins.googledrive',
