@@ -1,6 +1,6 @@
 {
   "name": "Dillinger",
-  "version": "3.2.10",
+  "version": "3.3.0",
   "dependencies": {
     "angular": {
       "version": "1.5.0",
