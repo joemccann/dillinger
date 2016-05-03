@@ -4,9 +4,11 @@ module.exports =
   angular
   .module('diDocuments', [
     'diDocuments.service',
-    'diDocuments.export'
+    'diDocuments.export',
+    'diDocuments.controllers',
+    'diDocuments.service.wordcount'
   ])
-  .controller('Documents', function($scope, $timeout, $rootScope, userService, documentsService, debounce) {
+  .controller('Documents', function($scope, $timeout, $rootScope, $modal, userService, documentsService, debounce, wordsCountService) {
 
   var vm = this;
 
@@ -56,14 +58,16 @@ module.exports =
   }
 
   function removeDocument(item) {
-    var next;
+    var modalScope = $rootScope.$new();
+    modalScope.item = item;
+    modalScope.wordCount = wordsCountService.count();
 
-    // The order is important here.
-    documentsService.removeItem(item);
-    next = documentsService.getItemByIndex(0);
-    documentsService.setCurrentDocument(next);
-
-    return $rootScope.$emit('document.refresh');
+    $modal.open({
+      template: require('raw!../documents/delete-modal.directive.html'),
+      scope: modalScope,
+      controller: 'DeleteDialog',
+      windowClass: 'modal--dillinger'
+    });
   }
 
   function createDocument() {

@@ -22,6 +22,7 @@
   require('./components/toggle-preview.directive');
   require('./components/switch.directive');
   require('./components/preview.directive');
+  require('./components/focus.factory');
 
   require('./components/wtfisdillinger-modal.controller');
   require('./services/debounce.service');
@@ -35,6 +36,7 @@
   require('./services/documents.service');
   require('./documents/documents-export.controller');
   require('./documents/documents.controller');
+  require('./documents/delete-modal.controller');
   require('./services/wordscount.service');
 
   // Plugin: Github
