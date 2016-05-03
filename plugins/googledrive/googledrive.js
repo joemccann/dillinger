@@ -7,7 +7,7 @@ var configFile = path.resolve(__dirname, 'googledrive-config.json')
   , config = {}
   , scopes = ['https://www.googleapis.com/auth/drive']
   , isConfigEnabled = false
-  , client = null;
+  , drive = null;
 
 if (fs.existsSync(configFile)) {
   config = require(configFile);
@@ -33,12 +33,11 @@ if (fs.existsSync(configFile)) {
 
 var GoogleDrive = {
   isConfigured: isConfigEnabled,
+  // This structure may no longer be necessary - could load drive object earlier?
   _loadDriveIfRequired: function(callback) {
-    if (!client) {
-      googleapis.discover('drive', 'v2').execute(function(err, c) {
-        client = c;
-        callback();
-      });
+    if (!drive) {
+      drive = googleapis.drive('v2');
+      callback();
     } else {
       callback();
     }
@@ -62,12 +61,8 @@ var GoogleDrive = {
       var oauth2Client = new OAuth2(
         config.client_id, config.client_secret, config.redirect_uri);
       oauth2Client.credentials = tokens;
-      client
-        .drive.files.list({ q: 'mimeType = "text/x-markdown" and trashed = false' })
-        .withAuthClient(oauth2Client).execute(function(err, results) {
-          // TODO: handle pagination
-          callback && callback(err, results);
-        });
+        // TODO: handle pagination
+      drive.files.list({ q: 'mimeType = "text/x-markdown" and trashed = false', auth: oauth2Client }, callback);
       });
   },
   get: function(tokens, fileId, callback) {
@@ -78,16 +73,10 @@ var GoogleDrive = {
         config.client_id, config.client_secret, config.redirect_uri);
 
       oauth2Client.credentials = tokens;
-      client
-        .drive.files.get({ fileId: fileId })
-        .withAuthClient(oauth2Client).execute(function(err, result) {
-          if (err) {
-            callback(err, null);
-          } else {
-            that._getContents(tokens, result.downloadUrl, function(err, data) {
-              callback(err, { title: result.title, content: data });
-            });
-          }
+        drive.files.get({ fileId: fileId, auth: oauth2Client }, function(err,result){
+          that._getContents(tokens, result.downloadUrl, function(err, data) {
+            callback(err, { title: result.title, content: data });
+          });
         });
       });
   },
