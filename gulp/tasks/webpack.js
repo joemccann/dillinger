@@ -26,16 +26,16 @@ gulp.task('webpack:dev', function(cb) {
   return new webpackDevServer(devCompiler, {
     proxy: {
       '*': {
-        target: 'http://' + app.get('bind-address') + ':8080',
+        target: 'http://localhost:8080',
         secure: false,
       },
     },
-    publicPath:  'http://' + app.get('bind-address') + ':8090/js/',
+    publicPath:  'http://localhost:8090/js/',
     hot:         false,
     stats: {
       colors: true
     }
-  }).listen(8090, app.get('bind-address'), function(err) {
+  }).listen(8090, 'localhost', function(err) {
 
     if (err) {
       throw new gutil.PluginError('webpack:dev', err);

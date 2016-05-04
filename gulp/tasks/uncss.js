@@ -12,7 +12,7 @@ gulp.task("uncss", function() {
 
   return gulp.src("public/css/app.css")
     .pipe(uncss({
-      html: ["http://' + app.get('bind-address') + ':8080"],
+      html: ["http://localhost:8080"],
       ignore: [/zen/, /document/, /modal/, /settings/, /button/, /btn/, /toggle/, /menu/, /sidebar/, /dropdown/, /ace/, /editor/, /sr/, /form/, /di/, /not/]
     }))
     .on("error", handleErrors)
