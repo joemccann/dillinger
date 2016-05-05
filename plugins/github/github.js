@@ -349,7 +349,7 @@ exports.Github = (function() {
           message: message // Better commit messages?
         , path: path
         , branch: branch
-        , content: data.data
+        , content: new Buffer(data.data).toString('base64')
         , sha: sha
       };
 

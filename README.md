@@ -40,6 +40,8 @@ And of course Dillinger itself is open source with a [public repository][dill]
 
 ### Installation
 
+Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
+
 You need Gulp installed globally:
 
 ```sh
@@ -97,7 +99,7 @@ $ karma start
 ### Docker
 Dillinger is very easy to install and deploy in a Docker container.
 
-By default, the Docker will expose port 80, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image. 
+By default, the Docker will expose port 80, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image.
 
 ```sh
 cd dillinger
@@ -157,4 +159,3 @@ MIT
    [PlGh]:  <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
    [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-

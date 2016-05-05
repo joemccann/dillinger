@@ -25,7 +25,7 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 Capybara.configure do |config|
-  config.app_host = 'http://' + app.get('bind-address') + ':7000'
+  config.app_host = 'http://localhost:7000'
   config.default_driver    = :poltergeist
   config.javascript_driver = :poltergeist
   config.server_port       = 7000

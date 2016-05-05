@@ -28,7 +28,8 @@ var config = require('./config')()
   , env = process.env.NODE_ENV || 'development';
 
 app.set('port', process.env.PORT || 8080)
-app.set('bind-address', process.env.BIND_ADDRESS)
+app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
+
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 

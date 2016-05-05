@@ -8,7 +8,7 @@ var
 gulp.task('browserSync', function() {
   browserSync({
     files: ['views/**'],
-    proxy: app.get('bind-address') +'8090',
+    proxy: 'localhost:8090',
     notify: false
   });
 });

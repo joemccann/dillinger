@@ -193,7 +193,7 @@ module.exports =
       di = diNotify('Saving Document on Github...');
       return $http.post('save/github', {
         uri:     data.uri,
-        data:    btoa(data.body),
+        data:    data.body,
         path:    data.path,
         sha:     data.sha,
         branch:  data.branch,
