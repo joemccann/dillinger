@@ -20,6 +20,11 @@ module.exports =
   vm.fetchFile      = fetchFile;
   vm.close          = closeModal;
 
+  vm.itemsPerPage   = 10;
+  vm.currentPage    = 1;
+  vm.paginatedRepos = [];
+  vm.repos          = [];
+
   //////////////////////////////
 
   function setFile() {
@@ -33,7 +38,18 @@ module.exports =
   function setRepos() {
     vm.title = 'Repositories';
     vm.step  = 2;
-    vm.repos = githubService.config.repos;
+    vm.repos = githubService.config.repos.sort(function(a, b) {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    // Fill the paginatedRepos array with the first page of repos.
+    vm.onPageChange();
 
     return vm.repos;
   }
@@ -81,6 +97,17 @@ module.exports =
     githubService.fetchTreeFiles(sha).then(setTreeFiles);
 
     return false;
+  }
+
+  vm.onPageChange = function(page) {
+    // Arrays are zero based so we need to subtract 1 from the `currenPage`
+    // variable before using it in the context of a array.
+    var currentPage = vm.currentPage - 1;
+
+    vm.paginatedRepos = vm.repos.slice(
+      currentPage * vm.itemsPerPage,
+      (currentPage * vm.itemsPerPage) + vm.itemsPerPage
+    );
   }
 
 });

@@ -12,8 +12,8 @@
     <a ng-bind="org.name" ng-click="modal.fetchRepos(org.name)"></a>
   </li>
 
-  <!-- Reporsitories -->
-  <li ng-if="modal.step === 2" ng-repeat="repo in modal.repos">
+  <!-- Repositories -->
+  <li ng-if="modal.step === 2" ng-repeat="repo in modal.paginatedRepos">
     <a ng-bind="repo.name" ng-click="modal.fetchBranches(repo.name)"></a>
   </li>
 
@@ -28,6 +28,23 @@
   </li>
 
 </ul>
+
+<div ng-if="modal.repos.length > modal.itemsPerPage">
+  <pagination
+     ng-change      = "modal.onPageChange()"
+     ng-model       = "modal.currentPage"
+     total-items    = "modal.repos.length"
+     items-per-page = "modal.itemsPerPage"
+     class          = "pagination-m pagination--dillinger"
+     rotate         = "false"
+     previous-text  = "&lsaquo;"
+     next-text      = "&rsaquo;"
+     first-text     = "&laquo;"
+     last-text      = "&raquo;"
+     boundary-links = "true">
+  </pagination>
+</div>
+
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn--ok" ng-click="modal.close()">Close</button>
