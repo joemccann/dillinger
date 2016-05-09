@@ -10,7 +10,7 @@ var hljs = require('highlight.js')
         if (lang && hljs.getLanguage(lang)) {
           return hljs.highlight(lang, str).value;
         } else {
-          return hljs.highlightAuto(str).value;
+          return str.value;
         }
       }
     });
@@ -46,4 +46,4 @@ md
   .use(require('markdown-it-abbr'))
   .use(require('markdown-it-checkbox'));
 
-exports.md = md 
+exports.md = md
