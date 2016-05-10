@@ -13,11 +13,15 @@ module.exports =
 
   vm.profile = userService.profile;
 
+  // TODO: Move this to out of here (perhaps to its own directive).
   var $divs = jQuery('.split-editor, .split-preview');
   var $allowed = $divs;
   var sync = function(e) {
     var $this = jQuery(this);
 
+    // Prevents slow scrolling by only allows subsequent callbacks
+    // on the element that the first scroll event was triggered on.
+    // See #516 for details.
     if ($this.is($allowed)) {
       var
         other     = $divs.not(this)[0],
