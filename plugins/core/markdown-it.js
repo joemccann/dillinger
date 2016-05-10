@@ -46,4 +46,11 @@ md
   .use(require('markdown-it-abbr'))
   .use(require('markdown-it-checkbox'));
 
+md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
+  var token = tokens[idx];
+  token.attrPush([ 'class', 'table table-striped table-bordered' ]);
+
+  return self.renderToken(tokens, idx, options);
+};
+
 exports.md = md
