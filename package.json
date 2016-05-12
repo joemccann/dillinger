@@ -19,7 +19,6 @@
   ],
   "scripts": {
     "start": "node app.js",
-    "postinstall": "gulp build --prod",
     "test": "gulp test"
   },
   "keywords": [
