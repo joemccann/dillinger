@@ -3,3 +3,4 @@ node_js:
   - "5.10.1"
 before_install:
   - npm install -g gulp
+script: gulp build --prod
