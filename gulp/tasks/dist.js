@@ -11,6 +11,6 @@ gulp.task('dist', function() {
     ];
 
     return gulp.src(globs)
-        .pipe(zip('dillinger.zip'))
+        .pipe(zip('pre-built.zip'))
         .pipe(gulp.dest('dist'))
 });
