@@ -1,6 +1,5 @@
 var gulp = require('gulp');
-var tar = require('gulp-tar');
-var gzip = require('gulp-gzip');
+var zip = require('gulp-zip');
 
 gulp.task('dist', function() {
     var globs = [
@@ -12,7 +11,6 @@ gulp.task('dist', function() {
     ];
 
     return gulp.src(globs)
-        .pipe(tar('dillinger.tar'))
-        .pipe(gzip())
+        .pipe(zip('dillinger.zip'))
         .pipe(gulp.dest('dist'))
 });
