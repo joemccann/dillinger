@@ -158,8 +158,10 @@ exports.Github = (function() {
       }
 
       if (isFinite(req.body.page) && +req.body.page > 1) {
-        uri += "&per_page=" +  githubConfig.repos_per_page + "&page=" + req.body.page
+        uri += "&page=" + req.body.page
       }
+
+      uri += "&per_page=" +  githubConfig.repos_per_page
 
       var options = {
         headers: headers
