@@ -158,7 +158,7 @@ exports.Github = (function() {
       }
 
       if (isFinite(req.body.page) && +req.body.page > 1) {
-        uri += "&perpage=" +  githubConfig.repos_per_page + "&page=" + req.body.page
+        uri += "&per_page=" +  githubConfig.repos_per_page + "&page=" + req.body.page
       }
 
       var options = {
