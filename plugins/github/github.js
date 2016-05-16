@@ -162,6 +162,8 @@ exports.Github = (function() {
 
       uri += "&per_page=100"
 
+      uri += "&type=owner"
+
       var options = {
         headers: headers
       , uri: uri
