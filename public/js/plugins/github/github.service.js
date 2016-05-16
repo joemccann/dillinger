@@ -131,17 +131,20 @@ module.exports =
      *
      *    @param    {String}    owner    Owner Name
      */
-    fetchRepos: function(owner) {
+    fetchRepos: function(owner, page, per_page) {
       var di;
       di = diNotify('Fetching Repos...');
       return $http.post('import/github/repos', {
-        owner: owner
+        owner: owner,
+        page: page,
+        per_page: per_page,
       }).success(function(data) {
         if (di != null) {
           di.$scope.$close();
         }
         service.config.current.owner = owner;
-        service.config.repos = data;
+        service.config.repos = data.items;
+        service.config.pagination = data.pagination;
 
         return service.config.repos;
       }).error(function(err) {

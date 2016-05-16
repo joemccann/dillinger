@@ -2,6 +2,7 @@ var fs = require('fs')
   , path = require('path')
   , request = require('request')
   , url = require('url')
+  , parse = require('parse-link-header')
 
 var githubConfigFile = path.resolve(__dirname, 'github-config.json')
   , githubConfig = {}
@@ -160,7 +161,9 @@ exports.Github = (function() {
         uri += "&page=" + req.body.page
       }
 
-      uri += "&per_page=100"
+      if (isFinite(req.body.per_page) && +req.body.per_page > 1) {
+        uri += "&per_page=" + req.body.per_page
+      }
 
       uri += "&type=owner"
 
@@ -194,7 +197,10 @@ exports.Github = (function() {
             set.push(item)
           })
 
-          res.json(set)
+          res.json({
+            items: set,
+            pagination: parse(r.headers['link'])
+          });
 
         } // end else if
         else {
