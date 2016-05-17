@@ -22,8 +22,8 @@ module.exports =
 
   vm.itemsPerPage   = 10;
   vm.currentPage    = 1;
-  vm.paginatedRepos = [];
   vm.repos          = [];
+  vm.org_name       = null;
 
   //////////////////////////////
 
@@ -38,6 +38,10 @@ module.exports =
   function setRepos() {
     vm.title = 'Repositories';
     vm.step  = 2;
+    vm.pagination = githubService.config.pagination;
+    if (!vm.totalItems) {
+      vm.totalItems = vm.pagination.last.page * vm.itemsPerPage;
+    }
     vm.repos = githubService.config.repos.sort(function(a, b) {
       if (a.name < b.name) {
         return -1;
@@ -48,14 +52,17 @@ module.exports =
       }
     });
 
-    // Fill the paginatedRepos array with the first page of repos.
-    vm.onPageChange();
-
     return vm.repos;
   }
 
   function fetchRepos(name) {
-    githubService.fetchRepos(name).then(setRepos);
+    if (name) {
+      vm.org_name = name
+    }
+
+    githubService.fetchRepos(
+      vm.org_name, vm.currentPage, vm.itemsPerPage
+    ).then(setRepos);
 
     return false;
   }
@@ -99,15 +106,8 @@ module.exports =
     return false;
   }
 
-  vm.onPageChange = function(page) {
-    // Arrays are zero based so we need to subtract 1 from the `currenPage`
-    // variable before using it in the context of a array.
-    var currentPage = vm.currentPage - 1;
-
-    vm.paginatedRepos = vm.repos.slice(
-      currentPage * vm.itemsPerPage,
-      (currentPage * vm.itemsPerPage) + vm.itemsPerPage
-    );
+  vm.onPageChange = function() {
+    vm.fetchRepos(null, vm.currentPage);
   }
 
 });

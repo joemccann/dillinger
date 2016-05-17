@@ -13,7 +13,7 @@
   </li>
 
   <!-- Repositories -->
-  <li ng-if="modal.step === 2" ng-repeat="repo in modal.paginatedRepos">
+  <li ng-if="modal.step === 2" ng-repeat="repo in modal.repos">
     <a ng-bind="repo.name" ng-click="modal.fetchBranches(repo.name)"></a>
   </li>
 
@@ -29,11 +29,11 @@
 
 </ul>
 
-<div ng-if="modal.repos.length > modal.itemsPerPage">
+<div ng-if="modal.totalItems > modal.itemsPerPage && modal.step === 2">
   <pagination
      ng-change      = "modal.onPageChange()"
      ng-model       = "modal.currentPage"
-     total-items    = "modal.repos.length"
+     total-items    = "modal.totalItems"
      items-per-page = "modal.itemsPerPage"
      class          = "pagination-m pagination--dillinger"
      rotate         = "false"
