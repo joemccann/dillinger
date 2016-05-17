@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express')
   , app = module.exports = express()
   , fs = require('fs')
@@ -43,8 +45,13 @@ var express = require('express')
       name = name + '.md'
     }
 
-   res.attachment( name );
-   res.end( unmd );
+    if (req.body.preview === 'false') {
+      res.attachment( name );
+    } else {
+      res.type('txt');
+    }
+
+    res.end( unmd );
   }
 
   var fetchHtml = function(req, res) {
@@ -64,7 +71,12 @@ var express = require('express')
 
     var filename = path.resolve(__dirname, '../../downloads/files/html/' + name )
 
-    res.attachment( name );
+    if (req.body.preview === 'false') {
+      res.attachment( name );
+    } else {
+      res.type('html');
+    }
+
     res.end( html );
   }
 
@@ -105,7 +117,12 @@ var express = require('express')
       page.property('viewportSize', { width: 1024, height: 768 })
 
       page.render(filename).then(function() {
-        res.attachment( name )
+        if (req.body.preview === 'false') {
+          res.attachment( name )
+        } else {
+          res.type('pdf')
+        }
+
         res.sendFile( filename, {}, function() {
           // Cleanup.
           fs.unlink(filename)
