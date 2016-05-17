@@ -48,7 +48,14 @@ var express = require('express')
     if (req.body.preview === 'false') {
       res.attachment( name );
     } else {
-      res.type('txt');
+      // We don't use text/markdown because my "favorite" browser
+      // (IE) ignores the Content-Disposition: inline; and prompts
+      // the user to download the file.
+      res.type('text');
+
+      // For some reason IE and Chrome ignore the filename
+      // field when Content-Type: text/plain;
+      res.set('Content-Disposition', `inline; filename="${name}"`);
     }
 
     res.end( unmd );
@@ -75,6 +82,7 @@ var express = require('express')
       res.attachment( name );
     } else {
       res.type('html');
+      res.set('Content-Disposition', `inline; filename="${name}"`);
     }
 
     res.end( html );
@@ -121,6 +129,7 @@ var express = require('express')
           res.attachment( name )
         } else {
           res.type('pdf')
+          res.set('Content-Disposition', `inline; filename="${name}"`)
         }
 
         res.sendFile( filename, {}, function() {
