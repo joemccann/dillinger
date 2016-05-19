@@ -112,7 +112,7 @@ docker build -t <youruser>/dillinger:latest .
 This will create the dillinger image and pull in the necessary dependencies. Once done, run the Docker and map the port to whatever you wish on your host. In this example, we simply map port 80 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
 
 ```sh
-docker run -d -p 80:80 --restart="always" <youruser>/dillinger:latest
+docker run -d -p 80:8080 --restart="always" <youruser>/dillinger:latest
 ```
 
 Verify the deployment by navigating to your server address in your preferred browser.
