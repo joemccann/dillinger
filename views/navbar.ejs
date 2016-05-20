@@ -9,7 +9,13 @@
   <nav class="nav nav-right">
     <ul class="menu menu-utilities">
       <li class="menu-item menu-item--export-as has-dropdown" dropdown>
+        <a class="dropdown-toggle" dropdown-toggle>Preview as <span class="caret"></span></a>
+        <% var exportTarget = 'preview'; %>
+        <%- include dropdowns/export_as %>
+      </li>
+      <li class="menu-item menu-item--export-as has-dropdown" dropdown>
         <a class="dropdown-toggle" dropdown-toggle>Export as <span class="caret"></span></a>
+        <% var exportTarget = '_top'; %>
         <%- include dropdowns/export_as %>
       </li>
       <li class="menu-item menu-item--save-to has-dropdown" dropdown>

@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express')
   , app = module.exports = express()
   , fs = require('fs')
@@ -43,8 +45,20 @@ var express = require('express')
       name = name + '.md'
     }
 
-   res.attachment( name );
-   res.end( unmd );
+    if (req.body.preview === 'false') {
+      res.attachment( name );
+    } else {
+      // We don't use text/markdown because my "favorite" browser
+      // (IE) ignores the Content-Disposition: inline; and prompts
+      // the user to download the file.
+      res.type('text');
+
+      // For some reason IE and Chrome ignore the filename
+      // field when Content-Type: text/plain;
+      res.set('Content-Disposition', `inline; filename="${name}"`);
+    }
+
+    res.end( unmd );
   }
 
   var fetchHtml = function(req, res) {
@@ -64,7 +78,13 @@ var express = require('express')
 
     var filename = path.resolve(__dirname, '../../downloads/files/html/' + name )
 
-    res.attachment( name );
+    if (req.body.preview === 'false') {
+      res.attachment( name );
+    } else {
+      res.type('html');
+      res.set('Content-Disposition', `inline; filename="${name}"`);
+    }
+
     res.end( html );
   }
 
@@ -105,7 +125,13 @@ var express = require('express')
       page.property('viewportSize', { width: 1024, height: 768 })
 
       page.render(filename).then(function() {
-        res.attachment( name )
+        if (req.body.preview === 'false') {
+          res.attachment( name )
+        } else {
+          res.type('pdf')
+          res.set('Content-Disposition', `inline; filename="${name}"`)
+        }
+
         res.sendFile( filename, {}, function() {
           // Cleanup.
           fs.unlink(filename)
