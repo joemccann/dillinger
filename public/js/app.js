@@ -6,7 +6,8 @@
   var angular;
 
   // jQuery
-  window.jQuery = require('jquery');
+  window.jQuery = require('jquery'),
+  require('jquery-resizable-dom');
 
   // AngularJS
   angular = require('exports?angular!angular');
