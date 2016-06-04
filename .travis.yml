@@ -16,4 +16,3 @@ deploy:
   on:
     skip_cleanup: true
     tags: true
-    repo: benjamin-albert/dillinger
