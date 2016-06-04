@@ -57,6 +57,8 @@
     "es6-promise": "^3.0.2",
     "express": "^4.13.3",
     "googleapis": "^2.1.5",
+    "gulp-gzip": "^1.4.0",
+    "gulp-tar": "^1.9.0",
     "highlight.js": "^8.8.0",
     "jquery": "^2.1.1",
     "katex": "^0.2.0",
