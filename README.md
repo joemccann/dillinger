@@ -47,16 +47,12 @@ And of course Dillinger itself is open source with a [public repository][dill]
 
 Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
 
-You need Gulp installed globally:
+Download and extract the [latest pre-built release](https://github.com/joemccann/dillinger/releases).
 
+Install the dependencies and start the server.
 ```sh
-$ npm i -g gulp
-```
-
-```sh
-$ git clone [git-repo-url] dillinger
 $ cd dillinger
-$ npm i -d
+$ npm install --production
 $ NODE_ENV=production node app
 ```
 
@@ -99,7 +95,15 @@ $ gulp watch
 ```sh
 $ karma start
 ```
-
+#### Building for source
+For production release:
+```sh
+$ gulp build --prod
+```
+Generating pre-built zip archives for distribution:
+```sh
+$ gulp build dist --prod
+```
 ### Docker
 Dillinger is very easy to install and deploy in a Docker container.
 
