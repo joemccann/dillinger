@@ -1,6 +1,6 @@
 {
   "name": "Dillinger",
-  "description": "Dillinger, the last Markdown editor you'll ever need, by your's truly, Joe McCann.",
+  "description": "Dillinger, the last Markdown editor you'll ever need, by yours truly, Joe McCann.",
   "version": "3.3.0",
   "author": {
     "name": "Joe McCann",
@@ -10,7 +10,7 @@
   "contributors": [
     {
       "name": "Joe McCann",
-      "email": "joe@subprint.com"
+      "email": "joe@nodesource.com"
     },
     {
       "name": "Martin Broder",
@@ -19,7 +19,9 @@
   ],
   "scripts": {
     "start": "node app.js",
-    "test": "gulp test"
+    "test": "gulp test",
+    "predeploy": "gulp build --prod",
+    "build-docker": "node -e \"require('fs').writeFileSync('deps.json',JSON.stringify({dependencies:require('./package.json').dependencies}))\" && docker build -t joemccann/dillinger ."
   },
   "keywords": [
     "dillinger",
