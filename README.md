@@ -24,7 +24,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
 ### Version
-3.2.7
+3.3.0
 
 ### Tech
 
@@ -111,15 +111,21 @@ By default, the Docker will expose port 80, so change this within the Dockerfile
 
 ```sh
 cd dillinger
-docker build -t <youruser>/dillinger:latest .
+npm run-script build-docker
 ```
-This will create the dillinger image and pull in the necessary dependencies. Once done, run the Docker and map the port to whatever you wish on your host. In this example, we simply map port 80 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
+This will create the dillinger image and pull in the necessary dependencies. Moreover, this uses a _hack_ to get a more optimized `npm` build by copying the dependencies over and only installing when the `package.json` itself has changed.  Look inside the `package.json` and the `Dockerfile` for more details on how this works.
+
+Once done, run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8000 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
 
 ```sh
-docker run -d -p 80:8080 --restart="always" <youruser>/dillinger:latest
+docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:latest
 ```
 
 Verify the deployment by navigating to your server address in your preferred browser.
+
+```sh
+127.0.0.1:8000
+```
 
 ### N|Solid and NGINX
 
