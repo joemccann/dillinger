@@ -1,50 +1,51 @@
-FROM debian:jessie
+FROM nodesource/node:4.4.7
 
-ENV NVM_DIR=/opt/nvm \
-    APP_DIR=/opt/app
-ENV PATH=$APP_DIR/node_modules/.bin:${NVM_DIR}/default/bin:$PATH
+MAINTAINER Joe McCann <joe@nodesource.com>
 
-COPY npm-shrinkwrap.json /tmp/
+# Set some environment variables
 
-RUN apt-get update \
- && GIT_DEPS=' \
+ENV APP_DIR=/opt/app \
+    PATH=$APP_DIR/node_modules/.bin:$PATH \
+    DILLINGER_COMMIT_ID=9a1d7ed93018c12c6f2570c76364f7f822df176e 
+
+# Install our dependencies (libfontconfig for phantomjs)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      bzip2 \
       ca-certificates \
       curl \
       git \
-    ' \
-    DILLINGER_DEPS=' \
-      bzip2 \
-    ' \
-    BUILD_DEPS="${GIT_DEPS} ${DILLINGER_DEPS}" \
-    NVM_VERSION=0.30.1 \
-    NODE_VERSION=0.11.16 \
-    DILLINGER_COMMIT_ID=8c131a04b2384b0e51d3174bec6e97111c4ca967 \
- && apt-get install -y --no-install-recommends ${BUILD_DEPS} \
- && curl https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash \
- && . ${NVM_DIR}/nvm.sh \
- && nvm install ${NODE_VERSION} \
- && ln -s ${NVM_DIR}/v${NODE_VERSION} ${NVM_DIR}/default \
- && npm config set unsafe-perm true \
- && git clone https://github.com/joemccann/dillinger ${APP_DIR} \
- && cd ${APP_DIR} \
- && git checkout ${DILLINGER_COMMIT_ID} \
- && rm -rf .git \
- && mv /tmp/npm-shrinkwrap.json ${APP_DIR} \
- && npm install -d \
- && mkdir -p downloads/files/md && mkdir -p downloads/files/html && mkdir -p downloads/files/pdf \
- && npm run predeploy \
- && apt-get purge -y ${BUILD_DEPS} \
- && apt-get autoremove -y \
- && rm -rf /var/lib/apt/lists/*
+      libfontconfig \
+      python-software-properties \
+    && rm -rf /var/lib/apt/lists/*
+
+# Get latest version of npm for fsevents module (npm 2 fails)
+RUN npm install npm -g \
+    && npm config set unsafe-perm true \ 
+    && git clone https://github.com/joemccann/dillinger ${APP_DIR} 
+
+RUN cd ${APP_DIR} \
+    && git checkout ${DILLINGER_COMMIT_ID} \
+    && rm -rf .git \
+    && mkdir -p downloads/files/{md,html,pdf} 
+
+# deps.json only has the dependencies from the package.json.
+COPY deps.json ${APP_DIR}/package.json
+
+# Docker will use the cache until the dependencies in the package.json have changed
+RUN cd ${APP_DIR} \
+    && npm install --production --no-optional
+
+# copy all the css and js from gulp build (gulp build is done outside docker build)
+COPY public/css/app.css /opt/app/public/css/app.css
+
+# this next line will bust the cache when anything changes but the copies are quick
+COPY package.json ${APP_DIR}/package.json
+
+RUN apt-get purge -y ${BUILD_DEPS} \
+    && apt-get autoremove -y 
 
 WORKDIR ${APP_DIR}
 EXPOSE 8080
 ENV NODE_ENV=production
 
-COPY app.js app.js
-COPY gulp/tasks/browserSync.js gulp/tasks/browserSync.js
-COPY gulp/tasks/webpack.js gulp/tasks/webpack.js
-COPY gulp/tasks/uncss.js gulp/tasks/uncss.js
-COPY public/scss/vendor/bootstrap-sass-3.2.0/test/test_helper.rb public/scss/vendor/bootstrap-sass-3.2.0/test/test_helper.rb
-
-ENTRYPOINT ["node", "app"]
+CMD ["npm", "start"]
