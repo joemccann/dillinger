@@ -42,7 +42,7 @@
     "nsolid": "1.x.x"
   },
   "dependencies": {
-    "angular": "^1.3.0",
+    "angular": "^1.4.7",
     "angular-bootstrap": "^0.12.0",
     "body-parser": "^1.14.1",
     "brace": "^0.4.0",
