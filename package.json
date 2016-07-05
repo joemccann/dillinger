@@ -130,7 +130,7 @@
     "reaver": "^1.2.0",
     "run-sequence": "^1.0.1",
     "style-loader": "^0.8.1",
-    "uglify-js": "^2.4.24",
+    "uglify-js": "^2.5.0",
     "walkdir": ">=0.0.7",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.0",
