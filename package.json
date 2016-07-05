@@ -62,7 +62,7 @@
     "gulp-gzip": "^1.4.0",
     "gulp-tar": "^1.9.0",
     "highlight.js": "^8.8.0",
-    "jquery": "^2.1.1",
+    "jquery": "^2.1.4",
     "katex": "^0.2.0",
     "keymaster": "^1.6.2",
     "markdown-it": "^4.4.0",
