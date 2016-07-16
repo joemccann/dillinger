@@ -6,8 +6,6 @@ logs/*
 downloads/files/md/*.md
 downloads/files/html/*.html
 downloads/css/style.css
-public/js/bundle.js
-public/css/app.css
 
 *-config.json
 backup/*
