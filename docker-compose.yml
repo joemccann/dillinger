@@ -1,9 +1,9 @@
-version: '2'
+version: '3'
 services:
   dillinger:
     build: .
     container_name: dillinger
-    image: jonbrouse/dillinger
+    image: joemccann/dillinger
     ports:
       - "12345:12345"
     environment:

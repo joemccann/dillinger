@@ -3,7 +3,6 @@ FROM nodesource/node:4.4.7
 MAINTAINER Joe McCann <joe@nodesource.com>
 
 # Set some environment variables
-
 ENV APP_DIR=/opt/app \
     PATH=$APP_DIR/node_modules/.bin:$PATH \
     DILLINGER_COMMIT_ID=9a1d7ed93018c12c6f2570c76364f7f822df176e 
@@ -33,14 +32,16 @@ COPY deps.json ${APP_DIR}/package.json
 
 # Docker will use the cache until the dependencies in the package.json have changed
 RUN cd ${APP_DIR} \
-    && npm install --production --no-optional
+    && npm install --production 
 
-# copy all the css and js from gulp build (gulp build is done outside docker build)
-COPY public/css/app.css /opt/app/public/css/app.css
-
-# this next line will bust the cache when anything changes but the copies are quick
+# This line will bust the cache when anything changes, but the copies are quick
 COPY package.json ${APP_DIR}/package.json
 
+# Copy all the css and js from gulp build (gulp build is done outside docker build)
+COPY public/css/app.css /${APP_DIR}/public/css/app.css
+COPY public/js/bundle.js ${APP_DIR}/public/js/bundle.js
+
+# Trim the fat
 RUN apt-get purge -y ${BUILD_DEPS} \
     && apt-get autoremove -y 
 
