@@ -13,7 +13,7 @@ spec:
         name: web
     spec:
       containers:
-      - image: gcr.io/dillinger-cluster/dillinger:v3.3.1
+      - image: gcr.io/dillinger-cluster/dillinger:3.3.2
         name: web
         ports:
         - containerPort: 8080
