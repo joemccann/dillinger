@@ -1,11 +1,10 @@
 # web-service.yml
-# for Kubernetes on Google Cloud Platform
 apiVersion: v1
 kind: Service
 metadata:
-  name: dillinger-svc
+  name: web
   labels:
-    name: dillinger-web-svc
+    name: web
 spec:
   type: LoadBalancer
   ports:
@@ -13,4 +12,4 @@ spec:
       targetPort: 8080
       protocol: TCP
   selector:
-    name: dillinger-web
+    name: web

@@ -1,21 +1,20 @@
 # web-controller.yml
-# for Kubernetes on Google Cloud Platform
 apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
-    name: dillinger-web
+    name: web
   name: web-controller
 spec:
-  replicas: 4
+  replicas: 2
   template:
     metadata:
       labels:
-        name: dillinger-web-app
+        name: web
     spec:
       containers:
       - image: gcr.io/dillinger-cluster/dillinger:v1
-        name: dillinger-image
+        name: web
         ports:
         - containerPort: 8080
-          name: dillinger
+          name: http-server
