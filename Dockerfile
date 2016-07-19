@@ -4,8 +4,7 @@ MAINTAINER Joe McCann <joe@nodesource.com>
 
 # Set some environment variables
 ENV APP_DIR=/opt/app \
-    PATH=$APP_DIR/node_modules/.bin:$PATH \
-    DILLINGER_COMMIT_ID=9a1d7ed93018c12c6f2570c76364f7f822df176e 
+    PATH=$APP_DIR/node_modules/.bin:$PATH 
 
 # Install our dependencies (libfontconfig for phantomjs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,7 +22,7 @@ RUN npm install npm -g \
     && git clone https://github.com/joemccann/dillinger ${APP_DIR} 
 
 RUN cd ${APP_DIR} \
-    && git checkout ${DILLINGER_COMMIT_ID} \
+    && git checkout master \
     && rm -rf .git \
     && mkdir -p downloads/files/{md,html,pdf} 
 
