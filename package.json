@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by yours truly, Joe McCann.",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "author": {
     "name": "Joe McCann",
     "email": "joe@nodesource.com"
@@ -18,7 +18,7 @@
     }
   ],
   "config": {
-  	"version": "3.4.0"
+  	"version": "3.4.1"
   },
   "scripts": {
   	"sanity": "echo $npm_package_config_version",
@@ -26,7 +26,7 @@
     "test": "gulp test",
     "predeploy": "gulp build --prod",
     "build-docker": "node -e \"require('fs').writeFileSync('deps.json',JSON.stringify({dependencies:require('./package.json').dependencies}))\" && docker build -t joemccann/dillinger .",
-    "build-gcp": "docker tag joemccann/dillinger gcr.io/dillinger-cluster/dillinger:3.4.0 && gcloud docker push gcr.io/dillinger-cluster/dillinger:3.4.0"
+    "build-gcp": "docker tag joemccann/dillinger gcr.io/dillinger-cluster/dillinger:3.4.1 && gcloud docker push gcr.io/dillinger-cluster/dillinger:3.4.1"
   },
   "keywords": [
     "dillinger",
