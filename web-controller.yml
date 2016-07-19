@@ -23,7 +23,12 @@ spec:
         volumeMounts:
           - mountPath: /opt/app/configs/dropbox/
             name: dropbox-config
+          - mountPath: /opt/app/configs/github/
+            name: github-config
       volumes:
         - name: dropbox-config
           secret:
             secretName: dropbox-config
+        - name: github-config
+          secret:
+            secretName: github-config
