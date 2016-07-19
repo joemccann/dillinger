@@ -13,7 +13,7 @@ spec:
         name: web
     spec:
       containers:
-      - image: gcr.io/dillinger-cluster/dillinger:3.3.4
+      - image: gcr.io/dillinger-cluster/dillinger:3.4.0
         name: web
         imagePullPolicy: Always
         ports:
@@ -21,7 +21,7 @@ spec:
           protocol: TCP
           name: http-server
         volumeMounts:
-          - mountPath: /opt/app/plugins/dropbox/
+          - mountPath: /opt/app/configs/dropbox/
             name: dropbox-config
       volumes:
         - name: dropbox-config

@@ -7,7 +7,7 @@ var fs = require('fs')
   , parallel = require('./parallel')
   ;
 
-var dropbox_config_file = path.resolve(__dirname, '../../configs/', 'dropbox-config.json')
+var dropbox_config_file = path.resolve(__dirname, '../../configs/dropbox/', 'dropbox-config.json')
   , dropbox_config = {}
   , isConfigEnabled = false
   ;

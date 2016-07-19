@@ -4,7 +4,7 @@ var fs = require('fs')
   , url = require('url')
   , parse = require('parse-link-header')
 
-var githubConfigFile = path.resolve(__dirname, '../../configs/', 'github-config.json')
+var githubConfigFile = path.resolve(__dirname, '../../configs/github/', 'github-config.json')
   , githubConfig = {}
   , isConfigEnabled = false
 
