@@ -24,7 +24,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
 ### Version
-3.3.2
+3.3.3
 
 ### Tech
 
@@ -129,48 +129,8 @@ Verify the deployment by navigating to your server address in your preferred bro
 
 #### Kubernetes + Google Cloud
 
-(Assumes you've successfully created a cluster on GCP and you have a GCP account)
+See [KUBERNETES.md](https://github.com/joemccann/dillinger/KUBERNETES.md)
 
-Create the replication controller and the service running.
-
-```sh
-kubectl create -f web-controller.yml && kubectl create -f web-service.yml
-```
-
-Check the status of the pods
-
-```sh
-kubectl get pods
-```
-
-Get the IP address of your Dillinger app
-
-```sh
-gcloud compute forwarding-rules list
-```
-
-should output something like
-```
-$ gcloud compute forwarding-rules list
-NAME     REGION        IP_ADDRESS       IP_PROTOCOL TARGET
-abcdef   us-central1   104.197.XXX.XXX  TCP         us-xxxx
-```
-
-##### To update a running cluster...
-
-Update the version numbers in `package.json` (we should fix this so it isn't manual but npm environment variables don't work) for the `build-gcp` script.
-
-```sh
-npm run build-gcp
-```
-
-Now, you need to update the controller file, `web-controller.yml` to the latest image you just pushed to Google Container Registry (e.g. gcr.io/dillinger-cluster/dillinger:v3.3.2).  Save and close.
-
-```sh
-kubectl replace -f web-controller.yml
-```
-
-Now get the IP address and check to see it is running.
 
 #### docker-compose.yml
 
