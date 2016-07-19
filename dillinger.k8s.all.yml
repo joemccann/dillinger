@@ -38,7 +38,7 @@ items:
             app: web
         spec:
           containers:
-          - image: gcr.io/dillinger-cluster/dillinger:3.3.4
+          - image: gcr.io/dillinger-cluster/dillinger:3.4.0
             name: web
             ports:
             - containerPort: 8080
