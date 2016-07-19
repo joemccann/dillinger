@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dillinger
+---
+apiVersion: v1
+kind: ServiceList
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      namespace: dillinger
+      name: web
+    spec:
+      sessionAffinity: ClientIP
+      type: LoadBalancer
+      ports:
+        - port: 80
+          targetPort: 8080
+      selector:
+        app: web
+---
+apiVersion: extensions/v1beta1
+kind: DeploymentList
+items:
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      namespace: dillinger
+      labels:
+        app: web
+      name: web
+    spec:
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: web
+        spec:
+          containers:
+          - image: gcr.io/dillinger-cluster/dillinger:3.3.4
+            name: web
+            ports:
+            - containerPort: 8080
+              name: http-server
+            volumeMounts:
+            - mountPath: /opt/app/configs/dropbox/
+              name: dropbox-config
+          volumes:
+            - name: dropbox-config
+            secret:
+              secretName: dropbox-config
