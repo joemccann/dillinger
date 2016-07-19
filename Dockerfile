@@ -1,4 +1,4 @@
-FROM nodesource/node:4.4.7
+FROM nodesource/nsolid:v1.4.0
 
 MAINTAINER Joe McCann <joe@nodesource.com>
 
