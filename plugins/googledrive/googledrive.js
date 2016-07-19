@@ -3,7 +3,7 @@ var fs = require('fs')
   , googleapis = require('googleapis')
   , request = require('request');
 
-var configFile = path.resolve(__dirname, 'googledrive-config.json')
+var configFile = path.resolve(__dirname, '../../configs/', 'googledrive-config.json')
   , config = {}
   , scopes = ['https://www.googleapis.com/auth/drive']
   , isConfigEnabled = false

@@ -3,7 +3,7 @@ var fs = require('fs')
   , util = require('util')
   , request = require('request');
 
-var configFile = path.resolve(__dirname, 'onedrive-config.json')
+var configFile = path.resolve(__dirname, '../../configs/', 'onedrive-config.json')
   , config = {}
   , scopes = ['wl.basic', 'wl.skydrive_update']
   , isConfigEnabled = false
