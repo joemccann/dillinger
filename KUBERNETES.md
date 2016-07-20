@@ -1,16 +1,20 @@
 # Dillinger + Kubernetes
 
-Some tips on how to deploy Dillinger with Kubernetes....
+Some tips on how to deploy Dillinger to a Kubernetes cluster....
 
 NOTE: This document assumes you've successfully created a cluster on GCP and you have a GCP account with a project associated with the cluster.
 
 # Setup
 
-Create the replication controller and the service running Dillinger.
+Create the replication controller and the service running Dillinger.  These are already in the root of the directory in your `dillinger.k8s.all.yml` file.  Feel free to modify as you see fit.
+
+We use [N|Solid](https://nodesource.com/products/nsolid) as the Node.js runtime as it is the most robust/enterprise-grade Node.js platform.
 
 ```sh
-kubectl create -f web-controller.yml && kubectl create -f web-service.yml
+kubectl create -f dillinger.k8s.all.yml
 ```
+
+If you get an error remove the section for `secrets` and `volumeMounts`.
 
 Check the status of the pods
 
@@ -34,24 +38,10 @@ abcdef   us-central1   104.197.XXX.XXX  TCP         us-xxxx
 
 ##### To update a running cluster...
 
-Update the version numbers in `package.json` (we should fix this so it isn't manual but npm environment variables don't work) for the `build-gcp` script.  There are *three* locations where you need to update the versions in the `package.json`.
+Say you cloned the latest update.  You want this to roll out to your production environment.  Clone the repo then simply run:
 
 ```sh
-npm run build-gcp
-```
-
-This will tag the docker image and push to the Google Container Registry.
-
-Now, you need to update the controller file, `web-controller.yml` to the latest image you just pushed to Google Container Registry (e.g. gcr.io/dillinger-cluster/dillinger:v3.3.2).  Save and close.
-
-```sh
-vim web-controller.yml
-```
-
-Then update your Kubernetes cluster with the newest version
-
-```sh
-kubectl replace -f web-controller.yml
+kubectl replace -f dillinger.k8s.all.yml
 ```
 
 ## Create Secrets to Expose Plugin Configs
@@ -61,7 +51,7 @@ We now want to be able to expose our plugins like Dropbox and Github.  Instead o
 In the root of the Dillinger project directory, run:
 
 ```sh
-kubectl create secret generic dropbox-config --from-file=./plugins/dropbox/dropbox-config.json
+kubectl create secret generic dropbox-config --from-file=./configs/dropbox-config.json
 ```
 
 Should output:
@@ -83,10 +73,19 @@ NAME                  TYPE                                  DATA      AGE
 dropbox-config        Opaque                                1         1m
 ```
 
- Now updte your Kubernetes cluster
+You'll need to add the secret and mount it in the virtual filesystem on your pods.
+
+```sh
+vim dillinger.k8s.all.yml
+```
+Make the changes there and repeat for each plugin.
+
+TODO: Add option for environment variables, not hosted files.
+
+Now update your Kubernetes cluster:
  
  ```sh
-kubectl replace -f web-controller.yml
+kubectl replace -f dillinger.k8s.all.yml
 ```
 
 Once it is "updated" (replaced), delete current pods and the replication controller will automatically restart them with the version containing your secrets/configs.
@@ -94,3 +93,15 @@ Once it is "updated" (replaced), delete current pods and the replication control
 ```sh
 kubectl delete pods --all
 ``` 
+
+Now checkit out with the URL of the app and also see it running in the N|Solid console
+
+```sh
+kubectl get svc nsolid-secure-proxy --namespace=nsolid
+```
+Should output:
+
+```sh
+NAME                  CLUSTER-IP    EXTERNAL-IP     PORT(S)          AGE
+nsolid-secure-proxy   10.3.244.90   104.198.XX.XX   80/TCP,443/TCP   16h
+```

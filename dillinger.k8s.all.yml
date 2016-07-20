@@ -38,15 +38,17 @@ items:
             app: web
         spec:
           containers:
-          - image: gcr.io/dillinger-cluster/dillinger:3.4.0
+          - image: joemccann/dillinger
             name: web
+            env:
+              - name: NSOLID_APPNAME
+                value: dillinger
+              - name: NSOLID_HUB
+                value: "nsolid-registry.nsolid:2379"
+              - name: NSOLID_SOCKET
+                value: "8000"
+              - name: NSOLID_TAGS
+                value: "nsolid-v1.4.0"
             ports:
             - containerPort: 8080
               name: http-server
-            volumeMounts:
-            - mountPath: /opt/app/configs/dropbox/
-              name: dropbox-config
-          volumes:
-            - name: dropbox-config
-            secret:
-              secretName: dropbox-config
