@@ -6,7 +6,9 @@
   var angular;
 
   // jQuery
-  window.jQuery = require('jquery');
+  window.jQuery = require('jquery'),
+  require('jquery-ui-bundle/jquery-ui.js'),
+  require('inverseresize/alsoResizeReverse/alsoResizeInverse'); 
 
   // AngularJS
   angular = require('exports?angular!angular');
@@ -95,7 +97,11 @@
     return jQuery('.splashscreen').animate({
       opacity: 0
     }, 400, function() {
-      return jQuery('.splashscreen').remove();
+      return jQuery('.splashscreen').remove(),
+      jQuery('#editor1').resizable({
+          alsoResizeReverse: '#preview1'
+          
+      });
     });
   });
 

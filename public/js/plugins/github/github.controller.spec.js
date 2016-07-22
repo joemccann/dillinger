@@ -85,7 +85,7 @@ describe("githubController", function() {
   });
 
   beforeEach(inject(function($modal) {
-    spyOn($modal, 'open').andReturn(fakeModal);
+    spyOn($modal, 'open').and.returnValue(fakeModal);
   }));
 
   beforeEach(inject(function($controller, $rootScope,  $modal, _githubService_, _documentsService_, _diNotify_, $q) {
