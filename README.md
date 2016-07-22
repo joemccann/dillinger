@@ -49,10 +49,19 @@ Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
 
 Download and extract the [latest pre-built release](https://github.com/joemccann/dillinger/releases).
 
-Install the dependencies and start the server.
+Install the dependencies and devDependencies and start the server.
+
 ```sh
 $ cd dillinger
+$ npm install -d
+$ node app
+```
+
+For production environments...
+
+```sh
 $ npm install --production
+$ npm run predeploy
 $ NODE_ENV=production node app
 ```
 
