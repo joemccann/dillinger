@@ -26,7 +26,7 @@ describe("onedriveController", function() {
   beforeEach(window.angular.mock.module('Dillinger'));
 
   beforeEach(inject(function($modal) {
-    spyOn($modal, 'open').andReturn(fakeModal);
+    spyOn($modal, 'open').and.returnValue(fakeModal);
   }));
 
   beforeEach(function() {

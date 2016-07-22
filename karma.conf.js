@@ -9,7 +9,7 @@ fullWebpackConfig.cache = true;
 module.exports = function(config) {
   return config.set({
     basePath:   '',
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine-jquery','jasmine'],
     files:      [
       'public/js/app.js',
       'public/js/**/*.spec.js'
@@ -32,7 +32,8 @@ module.exports = function(config) {
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-webpack'
+      'karma-webpack',
+      'karma-jasmine-jquery'
     ],
     singleRun: false
   });

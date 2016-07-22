@@ -15,7 +15,8 @@ module.exports = {
   module: {
     noParse: [
       /brace/,
-      /angular/
+      /angular/,
+      /autoit.js/
     ],
     loaders: [
       {
