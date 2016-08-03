@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dillinger-prod
+---
+apiVersion: v1
+kind: ServiceList
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      namespace: dillinger-prod
+      name: web
+    spec:
+      sessionAffinity: ClientIP
+      type: LoadBalancer
+      ports:
+        - port: 80
+          targetPort: 8080
+      selector:
+        app: web
+---
+apiVersion: extensions/v1beta1
+kind: DeploymentList
+items:
+  - apiVersion: extensions/v1beta1
+    kind: Deployment
+    metadata:
+      namespace: dillinger-prod
+      labels:
+        app: web
+      name: web
+    spec:
+      replicas: 2
+      template:
+        metadata:
+          labels:
+            app: web
+        spec:
+          containers:
+          - image: joemccann/dillinger
+            name: web
+            env:
+              - name: NSOLID_APPNAME
+                value: dillinger-prod
+              - name: NSOLID_HUB
+                value: "nsolid-registry.nsolid:2379"
+              - name: NSOLID_SOCKET
+                value: "8000"
+              - name: NSOLID_TAGS
+                value: "nsolid-v1.4.0"
+            ports:
+            - containerPort: 8080
+              name: http-server
+            volumeMounts:
+            - mountPath: /opt/app/configs/dropbox/
+              name: dropbox-config
+            - mountPath: /opt/app/configs/github/
+              name: github-config
+            - mountPath: /opt/app/configs/onedrive/
+              name: onedrive-config
+            - mountPath: /opt/app/configs/googledrive/
+              name: googledrive-config
+          volumes:
+          - name: dropbox-config
+            secret:
+              secretName: dropbox-config
+          - name: googledrive-config
+            secret:
+              secretName: googledrive-config
+          - name: github-config
+            secret:
+              secretName: github-config
+          - name: onedrive-config
+            secret:
+              secretName: onedrive-config
