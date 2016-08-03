@@ -4,14 +4,21 @@ Some tips on how to deploy Dillinger to a Kubernetes cluster....
 
 NOTE: This document assumes you've successfully created a cluster on GCP and you have a GCP account with a project associated with the cluster.
 
-# Setup
+# Setups
 
-Create the replication controller and the service running Dillinger.  These are already in the root of the directory in your `dillinger.k8s.all.yml` file.  Feel free to modify as you see fit.
+Create the replication controller and the service running Dillinger.  These are already in the root of the directory in your `dillinger.k8s.dev.yml` file.  Feel free to modify as you see fit.
 
 We use [N|Solid](https://nodesource.com/products/nsolid) as the Node.js runtime as it is the most robust/enterprise-grade Node.js platform.
 
+Head here and follow the steps for using the N|Solid Docker Image with Kubernetes.
+
+https://github.com/nodesource/nsolid-kubernetes
+
+First create the deployment files, one for dev and one for production
+
 ```sh
-kubectl create -f dillinger.k8s.all.yml
+kubectl create -f dillinger.k8s.dev.yml
+kubectl create -f dillinger.k8s.production.yml
 ```
 
 If you get an error remove the section for `secrets` and `volumeMounts`.
@@ -38,10 +45,10 @@ abcdef   us-central1   104.197.XXX.XXX  TCP         us-xxxx
 
 ##### To update a running cluster...
 
-Say you cloned the latest update.  You want this to roll out to your production environment.  Clone the repo then simply run:
+Say you cloned the latest update.  You want this to roll out to your dev environment.  Clone the repo then simply run:
 
 ```sh
-kubectl replace -f dillinger.k8s.all.yml
+kubectl replace -f dillinger.k8s.dev.yml
 ```
 
 ## Create Secrets to Expose Plugin Configs
@@ -51,7 +58,8 @@ We now want to be able to expose our plugins like Dropbox and Github.  Instead o
 In the root of the Dillinger project directory, run:
 
 ```sh
-kubectl create secret generic dropbox-config --from-file=./configs/dropbox-config.json
+kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-dev
+kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-prod
 ```
 
 Should output:
@@ -73,19 +81,33 @@ NAME                  TYPE                                  DATA      AGE
 dropbox-config        Opaque                                1         1m
 ```
 
-You'll need to add the secret and mount it in the virtual filesystem on your pods.
+You'll need to add the secret and mount it in the virtual filesystem on your pods.s
 
 ```sh
-vim dillinger.k8s.all.yml
+vim dillinger.k8s.dev.yml
 ```
 Make the changes there and repeat for each plugin.
+
+Here's a shortcut or it's in the `kube-secrets.sh` file:
+
+```sh
+kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-dev
+kubectl create secret generic github-config --from-file=plugins/github/github-config.json --namespace=dillinger-dev
+kubectl create secret generic onedrive-config --from-file=plugins/onedrive/onedrive-config.json --namespace=dillinger-dev
+kubectl create secret generic googledrive-config --from-file=plugins/googledrive/googledrive-config.json --namespace=dillinger-dev
+kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-prod
+kubectl create secret generic github-config --from-file=plugins/github/github-config.json --namespace=dillinger-prod
+kubectl create secret generic onedrive-config --from-file=plugins/onedrive/onedrive-config.json --namespace=dillinger-prod
+kubectl create secret generic googledrive-config --from-file=plugins/googledrive/googledrive-config.json --namespace=dillinger-prod
+```
+
 
 TODO: Add option for environment variables, not hosted files.
 
 Now update your Kubernetes cluster:
- 
+s 
  ```sh
-kubectl replace -f dillinger.k8s.all.yml
+kubectl replace -f dillinger.k8s.dev.yml
 ```
 
 Once it is "updated" (replaced), delete current pods and the replication controller will automatically restart them with the version containing your secrets/configs.
