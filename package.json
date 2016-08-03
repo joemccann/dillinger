@@ -1,7 +1,7 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by yours truly, Joe McCann.",
-  "version": "3.4.3",
+  "version": "3.5.0",
   "author": {
     "name": "Joe McCann",
     "email": "joe@nodesource.com"
@@ -18,10 +18,10 @@
     }
   ],
   "config": {
-  	"version": "3.4.3"
+    "version": "3.4.3"
   },
   "scripts": {
-  	"sanity": "echo $npm_package_config_version",
+    "sanity": "echo $npm_package_config_version",
     "start": "node app.js",
     "test": "gulp test",
     "predeploy": "gulp build --prod",
