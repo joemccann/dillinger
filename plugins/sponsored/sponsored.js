@@ -26,20 +26,20 @@ function Sponsored(){
 	  }
 
 	  this.isConfigEnabled = true
-	  console.log('sponsored config found in environment. Plugin enabled. (URL: "' + sponsored_config.app_key + '")')
+	  console.log('Sponsored config found in environment. Plugin enabled. (URL: "' + sponsored_config.url + '")')
 	} 
 	else{
 	  this.sponsored_config = {
 	    "url": "YOUR_URL"
 	  }
-	  console.warn('sponsored config not found at ' + sponsored_config_file + '. Plugin disabled.')
+	  console.warn('Sponsored config not found at ' + this.sponsored_config_file + '. Plugin disabled.')
 	}
 
-}
+} // end Sponsored object
 
 
-// The fetchAd function does exactly that
-// @param config is required
+// The fetchAd function does exactly that - fetches
+// ad JSON for the ad
 // @param cb is required
 Sponsored.prototype.fetchAd = function fetchAd(cb){
 
@@ -84,4 +84,4 @@ Sponsored.prototype.generateAdHTML = function generateAdHTML(json){
 	+json.pixel+'" />'
 }
 
-module.exports = Sponsored
+module.exports = new Sponsored()

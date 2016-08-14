@@ -8,10 +8,10 @@ var path = require('path')
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
   , OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
   , Sponsored = require('../plugins/sponsored/sponsored.js')
-  , SponsoredConfig = require('../configs/sponsored/sponsored-config')
+  ;
 
 // Bootstrap ad object
-const ad = new Sponsored()
+// const ad = new Sponsored()
 
 // Show the home page
 exports.index = function(req, res) {
@@ -26,7 +26,8 @@ exports.index = function(req, res) {
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
-    isOneDriveConfigured: OneDrive.isConfigured
+    isOneDriveConfigured: OneDrive.isConfigured,
+    isSponsoredConfigured: Sponsored.isConfigEnabled
   }
 
   if (!req.session.isEvernoteSynced) {
@@ -35,9 +36,11 @@ exports.index = function(req, res) {
 
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
 
-  if(ad.isConfigEnabled){
-    ad.fetchAd(function createAdCb(json){
-      console.log(ad.generateAdHTML(json))
+  if(Sponsored.isConfigEnabled){
+    Sponsored.fetchAd(function createAdCb(json){
+      let html = Sponsored.generateAdHTML(json)
+      console.log(html)
+      indexConfig.adHTML = html
       return res.render('index', indexConfig)
     })
   }

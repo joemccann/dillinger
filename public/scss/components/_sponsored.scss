@@ -1,0 +1,120 @@
+// *************************************
+//
+//   Sponsored container
+//   -> Nav -> Sponsored Ad
+//
+// -------------------------------------
+//   Template (Haml)
+// -------------------------------------
+//
+// .ad-container
+//
+// *************************************
+
+$break-large: 1200px;
+$break-large-2: 1100px;
+$break-large-3: 1000px;
+$break-large-4: 900px;
+$break-mid: 720px;
+$break-mid-2: 620px;
+$break-mid-3: 520px;
+$break-mid-4: 460px;
+
+.profile-pic {
+  float: left;
+  width: 250px;
+}
+
+.ad-container {
+  display: block;
+  float: left;
+  max-width: 38%;
+  word-wrap: break-word;
+
+  @media screen and (max-width: $break-large) {
+	  max-width: 30%;
+  }
+  @media screen and (max-width: $break-large-2) {
+	  max-width: 27%;
+  }
+  @media screen and (max-width: $break-large-3) {
+	  max-width: 24%;
+  }
+  @media screen and (max-width: $break-large-4) {
+	  max-width: 30%;
+  }
+
+  @media screen and (max-width: $break-mid) {
+	  max-width: 50%;
+  }
+
+  @media screen and (max-width: $break-mid-2) {
+	  max-width: 45%;
+  }
+
+  @media screen and (max-width: $break-mid-2) {
+	  max-width: 40%;
+  }
+
+  @media screen and (max-width: $break-mid-4) {
+	  display: none;
+  }
+}
+
+// same as .dropdown-toggle
+.ad-container a{
+	display: block;
+  font-size: .75rem;
+  height: 51px;
+  letter-spacing: 1px;
+  line-height: 1rem;
+  padding: 18px 24px;
+
+  @media screen and (max-width: $break-large) {
+	  font-size: .825rem;
+	  line-height: .875rem;
+	  padding: 12px 12px 6px 24px;
+	  text-align: justify;
+  }
+  @media screen and (max-width: $break-large-2) {
+	  font-size: .8rem;
+	  line-height: .85rem;
+	  padding: 12px 6px 6px 24px;
+	  text-align: justify;
+  }
+
+  @media screen and (max-width: $break-large-3) {
+	  font-size: .775rem;
+	  line-height: .8rem;
+	  padding: 12px 6px 6px 24px;
+	  text-align: justify;
+  }
+  @media screen and (max-width: $break-large-4) {
+  }
+ 
+  @media screen and (max-width: $break-mid) {
+	  font-size: .75rem;
+	  line-height: 1rem;
+	  padding: 12px 24px;
+  }
+
+  @media screen and (max-width: $break-mid-2) {
+	  font-size: .66rem;
+	  letter-spacing: 1px;
+	  line-height: 1rem;
+	  padding: 6px 24px;
+  }
+
+  @media screen and (max-width: $break-mid-3) {
+	  font-size: .4rem;
+	  line-height: .875rem;
+	  padding: 6px 12px 6px 24px;
+	  text-align: justify;
+  }
+
+
+}
+
+.ad-container img{
+	display: none;
+}
