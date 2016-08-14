@@ -61,6 +61,8 @@ items:
               name: onedrive-config
             - mountPath: /opt/app/configs/googledrive/
               name: googledrive-config
+            - mountPath: /opt/app/configs/sponsored/
+              name: sponsored-config
           volumes:
           - name: dropbox-config
             secret:
@@ -74,3 +76,6 @@ items:
           - name: onedrive-config
             secret:
               secretName: onedrive-config
+          - name: sponsored-config
+            secret:
+              secretName: sponsored-config

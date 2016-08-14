@@ -53,13 +53,13 @@ kubectl replace -f dillinger.k8s.dev.yml
 
 ## Create Secrets to Expose Plugin Configs
 
-We now want to be able to expose our plugins like Dropbox and Github.  Instead of using environment variables we'll use the `dropbox-config.json` (and others) file which contains sensitive information.  That's why we use [Kubernetes Secrets](http://kubernetes.io/docs/user-guide/secrets/#creating-your-own-secrets) to protect it.
+We now want to be able to expose our configs like Dropbox and Github.  Instead of using environment variables we'll use the `dropbox-config.json` (and others) file which contains sensitive information.  That's why we use [Kubernetes Secrets](http://kubernetes.io/docs/user-guide/secrets/#creating-your-own-secrets) to protect it.
 
 In the root of the Dillinger project directory, run:
 
 ```sh
-kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-dev
-kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-prod
+kubectl create secret generic dropbox-config --from-file=configs/dropbox/dropbox-config.json --namespace=dillinger-dev
+kubectl create secret generic dropbox-config --from-file=configs/dropbox/dropbox-config.json --namespace=dillinger-prod
 ```
 
 Should output:
@@ -91,14 +91,17 @@ Make the changes there and repeat for each plugin.
 Here's a shortcut or it's in the `kube-secrets.sh` file:
 
 ```sh
-kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-dev
-kubectl create secret generic github-config --from-file=plugins/github/github-config.json --namespace=dillinger-dev
-kubectl create secret generic onedrive-config --from-file=plugins/onedrive/onedrive-config.json --namespace=dillinger-dev
-kubectl create secret generic googledrive-config --from-file=plugins/googledrive/googledrive-config.json --namespace=dillinger-dev
-kubectl create secret generic dropbox-config --from-file=plugins/dropbox/dropbox-config.json --namespace=dillinger-prod
-kubectl create secret generic github-config --from-file=plugins/github/github-config.json --namespace=dillinger-prod
-kubectl create secret generic onedrive-config --from-file=plugins/onedrive/onedrive-config.json --namespace=dillinger-prod
-kubectl create secret generic googledrive-config --from-file=plugins/googledrive/googledrive-config.json --namespace=dillinger-prod
+kubectl create secret generic dropbox-config --from-file=configs/dropbox/dropbox-config.json --namespace=dillinger-dev
+kubectl create secret generic github-config --from-file=configs/github/github-config.json --namespace=dillinger-dev
+kubectl create secret generic onedrive-config --from-file=configs/onedrive/onedrive-config.json --namespace=dillinger-dev
+kubectl create secret generic googledrive-config --from-file=configs/googledrive/googledrive-config.json --namespace=dillinger-dev
+kubectl create secret generic sponsored-config --from-file=configs/sponsored/sponsored-config.json --namespace=dillinger-dev
+kubectl create secret generic dropbox-config --from-file=configs/dropbox/dropbox-config.json --namespace=dillinger-prod
+kubectl create secret generic github-config --from-file=configs/github/github-config.json --namespace=dillinger-prod
+kubectl create secret generic onedrive-config --from-file=configs/onedrive/onedrive-config.json --namespace=dillinger-prod
+kubectl create secret generic googledrive-config --from-file=configs/googledrive/googledrive-config.json --namespace=dillinger-prod
+kubectl create secret generic sponsored-config --from-file=configs/sponsored/sponsored-config.json --namespace=dillinger-prod
+
 ```
 
 
