@@ -10,9 +10,6 @@ var path = require('path')
   , Sponsored = require('../plugins/sponsored/sponsored.js')
   ;
 
-// Bootstrap ad object
-// const ad = new Sponsored()
-
 // Show the home page
 exports.index = function(req, res) {
 
@@ -31,7 +28,7 @@ exports.index = function(req, res) {
   }
 
   if (!req.session.isEvernoteSynced) {
-    console.warn('Evernote not implemented yet.')
+    console.warn('Evernote not implemented.')
   }
 
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username

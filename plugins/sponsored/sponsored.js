@@ -18,7 +18,7 @@ function Sponsored(){
 	if( fs.existsSync(this.sponsored_config_file) ){
 	  this.sponsored_config = require(this.sponsored_config_file)
 	  this.isConfigEnabled = true
-	  console.log('Sponsored config found in environment. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
+	  console.log('Sponsored config found in file. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
 	} 
 	else if( process.env.sponsored_app_url !== undefined ){
 
