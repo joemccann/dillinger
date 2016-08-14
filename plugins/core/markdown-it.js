@@ -1,6 +1,5 @@
 'use strict';
 
-
 var hljs = require('highlight.js')
   , katex = require('katex')
   , md = require('markdown-it')({

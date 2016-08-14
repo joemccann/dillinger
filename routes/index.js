@@ -1,3 +1,5 @@
+'use strict'
+
 var path = require('path')
   , request = require('request')
   , qs = require('querystring')
@@ -5,6 +7,11 @@ var path = require('path')
   , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
   , OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
+  , Sponsored = require('../plugins/sponsored/sponsored.js')
+  , SponsoredConfig = require('../configs/sponsored/sponsored-config')
+
+// Bootstrap ad object
+const ad = new Sponsored()
 
 // Show the home page
 exports.index = function(req, res) {
@@ -27,7 +34,16 @@ exports.index = function(req, res) {
   }
 
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
-  return res.render('index', indexConfig)
+
+  if(ad.isConfigEnabled){
+    ad.fetchAd(function createAdCb(json){
+      console.log(ad.generateAdHTML(json))
+      return res.render('index', indexConfig)
+    })
+  }
+  else{
+      return res.render('index', indexConfig)    
+  }
 
 }
 
