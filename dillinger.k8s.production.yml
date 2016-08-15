@@ -53,15 +53,15 @@ items:
             - containerPort: 8080
               name: http-server
             volumeMounts:
-            - mountPath: /opt/app/configs/dropbox/
+            - mountPath: /configs/dropbox/
               name: dropbox-config
-            - mountPath: /opt/app/configs/github/
+            - mountPath: /configs/github/
               name: github-config
-            - mountPath: /opt/app/configs/onedrive/
+            - mountPath: /configs/onedrive/
               name: onedrive-config
-            - mountPath: /opt/app/configs/googledrive/
+            - mountPath: /configs/googledrive/
               name: googledrive-config
-            - mountPath: /opt/app/configs/sponsored/
+            - mountPath: /configs/sponsored/
               name: sponsored-config
           volumes:
           - name: dropbox-config
