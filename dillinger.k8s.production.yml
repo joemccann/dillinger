@@ -63,6 +63,8 @@ items:
               name: googledrive-config
             - mountPath: /configs/sponsored/
               name: sponsored-config
+            - mountPath: /configs/googleanalytics/
+              name: googleanalytics-config
           volumes:
           - name: dropbox-config
             secret:
@@ -79,3 +81,6 @@ items:
           - name: sponsored-config
             secret:
               secretName: sponsored-config
+          - name: googleanalytics-config
+            secret:
+              secretName: googleanalytics-config
