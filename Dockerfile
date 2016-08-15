@@ -12,12 +12,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       python-software-properties \
     && rm -rf /var/lib/apt/lists/*
 
-# Install app dependencies
-COPY package.json package.json
+# deps.json only has the dependencies from the package.json.
+# this is faster via npm run build-docker
+COPY deps.json ./package.json
 RUN npm install
 
-# Bundle app source
+# Copy source over and create configs dir
 COPY . .
+RUN mkdir -p /configs
 
 # Trim the fat
 RUN apt-get purge -y ${BUILD_DEPS} \
