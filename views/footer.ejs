@@ -1,8 +1,10 @@
 <% if(env === 'production') { %>
   <script src="/js/bundle.js" type="text/javascript" async></script>
+  <% if (isGoogleAnalyticsConfigured) { %>
   <script type="text/javascript">
     <%- GATrackingHTML %>
   </script>
+    <% } %> 
 <% } else { %>
   <script src="/js/bundle.js"></script>
 <% }%>
