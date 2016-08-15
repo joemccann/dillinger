@@ -4,6 +4,7 @@ const request = require('request')
 	, _ = require('lodash')
 	, path = require('path')
 	, fs = require('fs')
+	, GA = require('../googleanalytics/googleanalytics.js')
 	;
 
 // Sponsored Object
@@ -80,9 +81,23 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
 
 // Helper to generate the HTML for the ad
 Sponsored.prototype.generateAdHTML = function generateAdHTML(json){
-	return '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
-	+json.description+'</a><img src="'
-	+json.pixel+'" />'
+
+	let html = ''
+
+	// Add track clicks logic if enabled...
+	if(GA.isConfigEnabled){
+		html = 	'<a href="'+json.statlink+'" onClick="trackOutboundLink(\''
+						+json.statlink+'\'); return false;" rel="nofollow" target="_blank">'
+						+json.description+'</a><img src="'
+						+json.pixel+'" />'
+
+	}
+	else{
+		html = '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
+						+json.description+'</a><img src="'
+						+json.pixel+'" />'
+	}
+	return html
 }
 
 module.exports = new Sponsored()

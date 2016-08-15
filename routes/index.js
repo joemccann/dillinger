@@ -8,6 +8,7 @@ var path = require('path')
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
   , OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
   , Sponsored = require('../plugins/sponsored/sponsored.js')
+  , GoogleAnalytics = require('../plugins/googleanalytics/googleanalytics.js')
   ;
 
 // Show the home page
@@ -24,7 +25,8 @@ exports.index = function(req, res) {
     isGithubConfigured: Github.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
     isOneDriveConfigured: OneDrive.isConfigured,
-    isSponsoredConfigured: Sponsored.isConfigEnabled
+    isSponsoredConfigured: Sponsored.isConfigEnabled,
+    isGoogleAnalyticsConfigured: GoogleAnalytics.isConfigEnabled
   }
 
   if (!req.session.isEvernoteSynced) {
@@ -33,16 +35,21 @@ exports.index = function(req, res) {
 
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
 
+  // If GA is enabled, let's create the HTML and tracking
+  if (GoogleAnalytics.isConfigEnabled){
+    indexConfig.GATrackLinksHTML = GoogleAnalytics.generateTrackLinkClicks()
+    indexConfig.GATrackingHTML = GoogleAnalytics.generateGATrackingJS()
+  }
+
+  // If Sponsored ads is enabled get the ad HTML
   if(Sponsored.isConfigEnabled){
     Sponsored.fetchAd(function createAdCb(json){
-      let html = Sponsored.generateAdHTML(json)
-      console.log(html)
-      indexConfig.adHTML = html
+      indexConfig.adHTML = Sponsored.generateAdHTML(json)
       return res.render('index', indexConfig)
     })
   }
   else{
-      return res.render('index', indexConfig)    
+    return res.render('index', indexConfig)    
   }
 
 }
@@ -51,4 +58,3 @@ exports.index = function(req, res) {
 exports.not_implemented = function(req, res) {
   res.render('not-implemented')
 }
-
