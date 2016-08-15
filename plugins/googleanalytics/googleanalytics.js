@@ -7,7 +7,7 @@ const path = require('path')
 // GoogleAnalytics Object
 function GoogleAnalytics(){
 
-	this.GoogleAnalytics_config_file = path.resolve(__dirname, '../../configs/GoogleAnalytics/', 'GoogleAnalytics-config.json')
+	this.GoogleAnalytics_config_file = path.resolve(__dirname, '../../configs/googleanalytics/', 'googleanalytics-config.json')
 	this.GoogleAnalytics_config = {}
 	this.isConfigEnabled = false
 
