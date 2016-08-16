@@ -16,7 +16,7 @@ let exec_opts = {
   stdio: 'inherit'
 }
 
-// exec(build, exec_opts)
+exec(build, exec_opts)
 
 // Now let's update our Kubernetes deploymet files to the latest
 // version of the docker image
