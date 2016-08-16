@@ -96,12 +96,11 @@
   return jQuery(window).on('load', function() {
     return jQuery('.splashscreen').animate({
       opacity: 0
-    }, 400, function() {
-      return jQuery('.splashscreen').remove(),
-      jQuery('#editor1').resizable({
-          alsoResizeReverse: '#preview1'
-          
-      });
+    }, 150, function() {
+      return jQuery('.splashscreen').remove()
+      // jQuery('#editor1').resizable({
+      //     alsoResizeReverse: '#preview1'          
+      // });
     });
   });
 
