@@ -29,10 +29,7 @@ exports.index = function(req, res) {
     isGoogleAnalyticsConfigured: GoogleAnalytics.isConfigEnabled
   }
 
-  if (!req.session.isEvernoteSynced) {
-    console.warn('Evernote not implemented.')
-  }
-
+  // Capture github username for the future...
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
 
   // If GA is enabled, let's create the HTML and tracking

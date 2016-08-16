@@ -21,8 +21,7 @@
     "start": "node app.js",
     "test": "gulp test",
     "predeploy": "gulp build --prod",
-    "build-docker": "node -e \"require('fs').writeFileSync('deps.json',JSON.stringify({dependencies:require('./package.json').dependencies}))\" && docker build -t joemccann/dillinger . && docker push joemccann/dillinger",
-    "build-gcp": "docker tag joemccann/dillinger gcr.io/dillinger-cluster/dillinger:3.4.3 && gcloud docker push gcr.io/dillinger-cluster/dillinger:3.6.1"
+    "postversion": "bin/build.js"
   },
   "keywords": [
     "dillinger",
