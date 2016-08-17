@@ -4,7 +4,7 @@
 
 'use strict'
 
-var config = require('./config')()
+const config = require('./config')()
   , connect = require('connect')
   , methodOverride = require('method-override')
   , logger = require('morgan')
@@ -53,6 +53,16 @@ app.use(cookieSession({
   name: 'dillinger-session',
   keys: ['open', 'source']
 }))
+
+// Let's 301 redirect to simply dillinger.io
+app.use(function forceLiveDomain(req, res, next) {
+  let host = req.get('Host');
+  if (host === 'www.dillinger.io') {
+    return res.redirect(301, 'http://dillinger.io' + req.originalUrl)
+  }
+  return next()
+})
+
 
 // May not need to use serveStatic if using nginx for serving
 // static assets. Just comment it out below.
