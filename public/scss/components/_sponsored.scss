@@ -25,6 +25,11 @@ $break-mid-4: 460px;
   width: 250px;
 }
 
+.ad-container a::before{
+  color: $c-ad;
+  content: "Ad:  ";
+}
+
 .ad-container {
   display: block;
   float: left;
@@ -62,6 +67,7 @@ $break-mid-4: 460px;
 }
 
 // same as .dropdown-toggle
+
 .ad-container a{
 	display: block;
   font-size: .75rem;
