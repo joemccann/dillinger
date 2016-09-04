@@ -14,12 +14,23 @@ function Sponsored(){
 	this.sponsored_config = {}
 	this.isConfigEnabled = false
 
+	let self = this
+
+	function _isUrlExistent(){
+		return self.sponsored_config.url
+	}
+
 	// This fs call blocks so make sure you only instantiate the
 	// instance of the sponsored object once.
 	if( fs.existsSync(this.sponsored_config_file) ){
 	  this.sponsored_config = require(this.sponsored_config_file)
-	  this.isConfigEnabled = true
-	  console.log('Sponsored config found in file. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
+	  
+	  if(_isUrlExistent()){
+		  this.isConfigEnabled = true
+		  console.log('Sponsored config found in file. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
+	  }
+	  else console.warn('Sponsored URL not found in your config file. Plugin disabled.')
+
 	} 
 	else if( process.env.sponsored_app_url !== undefined ){
 
@@ -27,8 +38,12 @@ function Sponsored(){
 	    "url": process.env.sponsored_app_url
 	  }
 
-	  this.isConfigEnabled = true
-	  console.log('Sponsored config found in environment. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
+	  if( _isUrlExistent() ){
+		  this.isConfigEnabled = true
+		  console.log('Sponsored config found in environment. Plugin enabled. (URL: "' + this.sponsored_config.url + '")')
+	  }
+	  else console.warn('Sponsored URL not found in your environment variables. Plugin disabled.')
+
 	} 
 	else{
 	  this.sponsored_config = {
