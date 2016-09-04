@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "gulp test",
-    "predeploy": "gulp build --prod",
+    "preversion": "gulp build --prod",
     "postversion": "bin/build.js"
   },
   "keywords": [
