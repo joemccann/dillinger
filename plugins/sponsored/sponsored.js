@@ -86,7 +86,7 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
 				throw new Error(e)
 			} // end catch
 
-			if(process.env.DEBUG) console.log(generateAdHTML(adJSON.ads[0]))
+			if(process.env.DEBUG) console.log( generateAdHTML(adJSON.ads[0]) )
 			else cb(adJSON.ads[0]) // based on buysellads JSON
 
 		} // end else
@@ -95,7 +95,7 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
 } // end fetchAd
 
 // Helper to generate the HTML for the ad
-Sponsored.prototype.generateAdHTML = function generateAdHTML(json){
+function generateAdHTML(json){
 
 	let html = ''
 
@@ -113,6 +113,10 @@ Sponsored.prototype.generateAdHTML = function generateAdHTML(json){
 						+json.pixel+'" />'
 	}
 	return html
+
 }
+
+Sponsored.prototype.generateAdHTML = generateAdHTML
+
 
 module.exports = new Sponsored()

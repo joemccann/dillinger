@@ -23,6 +23,7 @@ module.exports =
   vm.asPDF        = asPDF;
 
   function initDownload(action, styled) {
+
     $downloader[0].action = action;
     $downloader[0].target = $attrs.diTarget;
 
@@ -35,6 +36,11 @@ module.exports =
   }
 
   function asHTML(styled) {
+    if (window.ga) {
+      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      ga('send', 'event', 'click', styled ? (previewOrExport +' As Styled HTML') : 
+        (previewOrExport + ' As Plain HTML'), previewOrExport + ' As...')
+    }
     initDownload( 'factory/fetch_html', styled );
   }
 
@@ -43,10 +49,18 @@ module.exports =
   }
 
   function asMarkdown() {
+    if (window.ga) {
+      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      ga('send', 'event', 'click', previewOrExport + ' As Markdown', previewOrExport + ' As...')
+    }
     initDownload( 'factory/fetch_markdown' );
   }
 
   function asPDF() {
+    if (window.ga) {
+      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      ga('send', 'event', 'click', previewOrExport + ' As PDF', previewOrExport + ' As...')
+    }
     initDownload( 'factory/fetch_pdf' );
   }
 
