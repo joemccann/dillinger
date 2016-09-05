@@ -23,7 +23,9 @@
                    ||
                    ||
 
-  using node.js version <%= node_version %>
+  Node.js version <%= node_version %>
+
+  Dillinger version <%= dillinger_version %>
 
   -->
 
@@ -44,7 +46,7 @@
   <link href="/css/app.css" rel="stylesheet">
   <% if (isGoogleAnalyticsConfigured) { %>
   <script type="text/javascript">
-   <%- GATrackLinksHTML %>
+   <%- GATrackSponsoredLinksHTML %>
   </script>
   <% } %> 
 
