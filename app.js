@@ -34,11 +34,6 @@ app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 
-// Support for HTTP/2 Server Push
-app.use(netjet({
-  cache: { max: 100 }
-}))
-
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
@@ -69,6 +64,10 @@ app.use(function forceLiveDomain(req, res, next) {
   return next()
 })
 
+// Support for HTTP/2 Server Push
+app.use(netjet({
+  cache: { max: 100 }
+}))
 
 // May not need to use serveStatic if using nginx for serving
 // static assets. Just comment it out below.
