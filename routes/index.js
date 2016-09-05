@@ -34,7 +34,7 @@ exports.index = function(req, res) {
 
   // If GA is enabled, let's create the HTML and tracking
   if (GoogleAnalytics.isConfigEnabled){
-    indexConfig.GATrackLinksHTML = GoogleAnalytics.generateTrackLinkClicks()
+    indexConfig.GATrackSponsoredLinksHTML = GoogleAnalytics.generateTrackSponsoredLinkClicks()
     indexConfig.GATrackingHTML = GoogleAnalytics.generateGATrackingJS()
   }
 
