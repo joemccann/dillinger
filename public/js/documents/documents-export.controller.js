@@ -37,7 +37,7 @@ module.exports =
 
   function asHTML(styled) {
     if (window.ga) {
-      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      var previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
       ga('send', 'event', 'click', styled ? (previewOrExport +' As Styled HTML') : 
         (previewOrExport + ' As Plain HTML'), previewOrExport + ' As...')
     }
@@ -50,7 +50,7 @@ module.exports =
 
   function asMarkdown() {
     if (window.ga) {
-      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      var previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
       ga('send', 'event', 'click', previewOrExport + ' As Markdown', previewOrExport + ' As...')
     }
     initDownload( 'factory/fetch_markdown' );
@@ -58,7 +58,7 @@ module.exports =
 
   function asPDF() {
     if (window.ga) {
-      let previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
+      var previewOrExport = ($attrs.diTarget === 'preview') ? 'Preview' : 'Export'
       ga('send', 'event', 'click', previewOrExport + ' As PDF', previewOrExport + ' As...')
     }
     initDownload( 'factory/fetch_pdf' );

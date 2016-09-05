@@ -23,6 +23,9 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
         if (di != null) {
           di.$scope.$close();
         }
+        if (window.ga) {
+          ga('send', 'event', 'click', 'Save To Google Drive', 'Save To...')
+        }
         return diNotify({
           message: "Successfully saved to Google Drive",
           duration: 5000

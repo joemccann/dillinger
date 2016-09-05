@@ -29,6 +29,9 @@ module.exports = angular.module('plugins.onedrive.service', []).factory('onedriv
             duration: 3000
           });
         } else {
+          if (window.ga) {
+            ga('send', 'event', 'click', 'Save To One Drive', 'Save To...')
+          }
           return diNotify({
             message: "Successfully saved File to One Drive",
             duration: 5000

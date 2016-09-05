@@ -60,6 +60,9 @@ module.exports =
           duration: 5000
         });
       } else {
+        if (window.ga) {
+          ga('send', 'event', 'click', 'Save To Dropbox', 'Save To...')
+        }
         return diNotify({
           message: 'Successfully saved to: ' + result.data.path,
           duration: 5000

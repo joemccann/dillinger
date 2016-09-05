@@ -211,6 +211,9 @@ module.exports =
           message: 'Successfully saved to ' + result.content.path + '!',
           duration: 5000
         });
+        if (window.ga) {
+          ga('send', 'event', 'click', 'Save To GitHub', 'Save To...')
+        }
         return result;
       }).error(function(err) {
         return diNotify({
