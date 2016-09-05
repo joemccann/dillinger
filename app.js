@@ -48,7 +48,7 @@ app.use(compress())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(methodOverride())
-app.use(cookieParser('your secret here'))
+app.use(cookieParser('1337 h4x0r'))
 app.use(cookieSession({
   name: 'dillinger-session',
   keys: ['open', 'source']
@@ -71,6 +71,7 @@ app.use(serveStatic(__dirname + '/public'))
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'
 app.locals.description = config.description || 'Dillinger, the last Markdown Editor, ever.'
+app.locals.dillinger_version = require('./package.json').version
 
 if (config.googleWebmasterMeta) {
   app.locals.googleWebmasterMeta = config.googleWebmasterMeta
@@ -85,7 +86,6 @@ if (config.author) {
 }
 
 app.locals.node_version = process.version.replace('v', '')
-app.locals.app_version = require('./package.json').version
 app.locals.env = process.env.NODE_ENV
 
 // At startup time so sync is ok.
