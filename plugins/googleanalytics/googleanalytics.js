@@ -54,7 +54,7 @@ GoogleAnalytics.prototype.generateGATrackingJS = function generateGATrackingJS()
   `
 }
 
-GoogleAnalytics.prototype.generateTrackLinkClicks = function generateTrackLinkClicks(){
+GoogleAnalytics.prototype.generateTrackSponsoredLinkClicks = function generateTrackSponsoredLinkClicks(){
 
   return `var trackOutboundLink = function(url) {
     ga('send', 'event', 'outbound', 'click', url, {
