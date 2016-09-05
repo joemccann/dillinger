@@ -8,11 +8,6 @@ const exec = require('child_process').execSync
 	, pkg = require('../package.json')
 	;
 
-function updateDeps(){
-	fs.writeFileSync(path.join(__dirname, '..', 'deps.json'),JSON.stringify(pkg.dependencies))
-	console.log('deps.json updated')
-}
-
 let build = `docker build -t joemccann/dillinger:${pkg.version} . && \
 	docker push joemccann/dillinger:${pkg.version} `;
 
@@ -24,6 +19,12 @@ let exec_opts = {
 const filenameDev = path.join(__dirname, '..', 'dillinger.k8s.dev.yml')
 	, filenameProd = path.join(__dirname, '..', 'dillinger.k8s.production.yml')
 	;
+
+function updateDeps(){
+	fs.writeFileSync(path.join(__dirname, '..', 'deps.json'),JSON.stringify(pkg.dependencies))
+	console.log('\ndeps.json file updated\n')
+}
+
 
 function updateKubeFile(filename){
 
@@ -50,7 +51,6 @@ function updateKubeFile(filename){
 
 // First, update our deps.json file for faster docker builds
 updateDeps()
-
 
 // Now, build the docker image...
 exec(build, exec_opts)

@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # deps.json only has the dependencies from the package.json.
 # this is faster via npm run build-docker
-COPY deps.json ./package.json
+COPY package.json ./package.json
 RUN npm install
 
 # Copy source over and create configs dir
