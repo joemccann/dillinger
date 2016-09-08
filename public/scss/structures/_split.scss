@@ -44,6 +44,7 @@
     padding-left: 0;
     padding-right: 0;
     position: relative;
+    z-index: map-get($z-index, editor);
 
     .show-preview & {
       display: none;
