@@ -39,8 +39,15 @@ module.exports =
     vm.title = 'Repositories';
     vm.step  = 2;
     vm.pagination = githubService.config.pagination;
+     
     if (!vm.totalItems) {
-      vm.totalItems = vm.pagination.last.page * vm.itemsPerPage;
+      //#pagination BUG - @graredcr - 25/09/2016
+      if (String(vm.pagination) == "null")
+      {
+        vm.totalItems = 1 * vm.itemsPerPage;
+      }else{
+        vm.totalItems = vm.pagination.last.page * vm.itemsPerPage;
+      }
     }
     vm.repos = githubService.config.repos.sort(function(a, b) {
       if (a.name < b.name) {
