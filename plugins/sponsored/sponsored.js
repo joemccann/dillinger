@@ -72,14 +72,18 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
 
   // Go get the ad JSON
 	request(this.sponsored_config.url, function adsFetchCb(err,response,body){
+		
+		let adJSON = {}
+		
 		if(err){ 
-			throw new Error(err)
+			console.error('Error on fetching ad. ' + err)
+			return cb(null)
 		}
 		else if (response.statusCode > 399){
-			throw new Error('Error. Response Code: ' + response.statusCode)
+			console.error(new Error('Error on fetching ad. Response Code: ' + response.statusCode))
+			return cb(null)
 		}
 		else{
-			let adJSON
 			try{
 				adJSON = JSON.parse(body)
 			}catch(e){
@@ -96,6 +100,8 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
 
 // Helper to generate the HTML for the ad
 function generateAdHTML(json){
+
+	if(!json) return ''
 
 	let html = ''
 
@@ -117,6 +123,5 @@ function generateAdHTML(json){
 }
 
 Sponsored.prototype.generateAdHTML = generateAdHTML
-
 
 module.exports = new Sponsored()
