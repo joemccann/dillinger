@@ -66,6 +66,10 @@ module.exports =
 
   function saveTo(username) {
     var file = documentsService.getCurrentDocument();
+    var githubCommitMessage = file.githubCommitMessage;
+
+    if (file.skipCI)
+      githubCommitMessage = githubCommitMessage + " [skip ci]";
 
     // Document must be an imported file from Github to work.
     if (file.isGithubFile) {
@@ -78,7 +82,7 @@ module.exports =
         repo:    file.github.repo,
         owner:   file.github.owner,
         uri:     file.github.url,
-        message: 'Saved ' + file.title + ' with Dillinger.io'
+        message: githubCommitMessage || 'Saved ' + file.title + ' with Dillinger.io'
       };
 
       return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);

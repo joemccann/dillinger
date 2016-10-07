@@ -12,6 +12,7 @@ module.exports =
     'diBase.controllers.about',
     'diBase.directives.switch',
     'diBase.directives.documentTitle',
+    'diBase.directives.githubCommitMessage',
     'diBase.directives.menuToggle',
     'diBase.directives.settingsToggle',
     'diBase.directives.previewToggle',
