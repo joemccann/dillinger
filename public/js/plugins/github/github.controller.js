@@ -83,7 +83,7 @@ module.exports =
         };
 
         return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
-      });
+      }, file);
     } else {
       return diNotify({
         message: 'Your Document must be an imported file from Github.'
@@ -103,7 +103,7 @@ module.exports =
     });
   };
 
-  function prepareGithubCommit(callback) {
+  function prepareGithubCommit(callback, file) {
     var modalInstance = $modal.open({
       template: require('raw!./github-commit-message-modal.html'),
       controller: function($scope, $modalInstance) {
