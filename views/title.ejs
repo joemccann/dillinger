@@ -1,8 +1,5 @@
 <div class="header">
   <h2 class="title">Document Name</h2>
   <document-title></document-title>
-  <% if (isGithubConfigured) { %>
-  <github-commit-message class="githubCommitMessage"></github-commit-message>
-  <% } %>
   <p ng-if="profile.enableWordsCount" class="words">Words: <span class="counter" ng-bind="words"></span></p>
 </div>

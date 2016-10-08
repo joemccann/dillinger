@@ -19,7 +19,6 @@
   // Base
   require('./base/base.controller');
   require('./components/document-title.directive');
-  require('./components/github-commit-message.directive');
   require('./components/toggle-menu.directive');
   require('./components/toggle-settings.directive');
   require('./components/toggle-preview.directive');

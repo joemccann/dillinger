@@ -66,26 +66,24 @@ module.exports =
 
   function saveTo(username) {
     var file = documentsService.getCurrentDocument();
-    var githubCommitMessage = file.githubCommitMessage;
-
-    if (file.skipCI)
-      githubCommitMessage = githubCommitMessage + " [skip ci]";
 
     // Document must be an imported file from Github to work.
     if (file.isGithubFile) {
-      var filePath = file.github.path.substr(0,file.github.path.lastIndexOf('/'));
-      var postData = {
-        body:    file.body,
-        path:    filePath ? filePath + '/' + file.title : file.title,
-        sha:     file.github.sha,
-        branch:  file.github.branch,
-        repo:    file.github.repo,
-        owner:   file.github.owner,
-        uri:     file.github.url,
-        message: githubCommitMessage || 'Saved ' + file.title + ' with Dillinger.io'
-      };
+      prepareGithubCommit(function(githubCommitMessage) {
+        var filePath = file.github.path.substr(0,file.github.path.lastIndexOf('/'));
+        var postData = {
+          body:    file.body,
+          path:    filePath ? filePath + '/' + file.title : file.title,
+          sha:     file.github.sha,
+          branch:  file.github.branch,
+          repo:    file.github.repo,
+          owner:   file.github.owner,
+          uri:     file.github.url,
+          message: githubCommitMessage
+        };
 
-      return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
+        return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
+      });
     } else {
       return diNotify({
         message: 'Your Document must be an imported file from Github.'
@@ -103,7 +101,25 @@ module.exports =
       },
       windowClass: 'modal--dillinger scope',
     });
+  };
 
+  function prepareGithubCommit(callback) {
+    var modalInstance = $modal.open({
+      template: require('raw!./github-commit-message-modal.html'),
+      controller: function($scope, $modalInstance) {
+        $scope.close = function() {
+          $modalInstance.dismiss('cancel');
+        };
+        $scope.commit = function() {
+          var commitMessage = $scope.commitMessage || 'Saved ' + file.title + ' with Dillinger.io';
+          if ($scope.skipCI)
+            commitMessage = commitMessage + " [skip ci]";
+          callback(commitMessage);
+          $scope.close();
+        };
+      },
+      windowClass: 'modal--dillinger scope',
+    });
   };
 
 });

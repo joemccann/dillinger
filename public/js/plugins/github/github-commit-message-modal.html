@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()">
+    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+  </button>
+  <h3>GitHub Commit</h3>
+</div>
+<div class="modal-body">
+  <div>
+	  <label></label>
+	  <div class="row"><div class="col-xs-12"><input type="text" class="form-control" placeholder="GitHub Commit Message" ng-model="commitMessage"/></div></div>
+	  <input type="checkbox" ng-model="skipCI"/>
+	  Skip CI
+  </div>
+  <p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" 
+          data-ng-click="commit();">Commit</button>
+</div>
+
