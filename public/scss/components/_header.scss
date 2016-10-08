@@ -19,20 +19,5 @@
     color: #000;
   }
 }
-.githubCommitMessage {
-  @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
-  font-weight: map-get($headingtype, semibold);
-  font-family: unquote(map-get($headingtype, font-family));
-  color: $c-links;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  z-index: map-get($z-index, overlay);
-  position: absolute;
-  right: 100px;
-  top: -20px;
-  width: 400px;
 
-  span {
-    color: #000;
-  }
 }
