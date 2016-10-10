@@ -159,6 +159,25 @@ module.exports =
   }
 
   /**
+   *    Update the current document CI trigger setting.
+   *
+   *    @param  {Boolean}  skipCI  Weather or not to skip CI
+   */
+  function setCurrentDocumentCI(skipCI) {
+    service.currentDocument.skipCI = skipCI;
+    return skipCI;
+  }
+  /**
+   *    Update the current document Github Commit Message
+   *
+   *    @param  {String}  githubCommitMessage  Github Commit Message
+   */
+  function setCurrentDocumentGithubCommitMessage(message) {
+    service.currentDocument.githubCommitMessage = message;
+    return message;
+  }
+
+  /**
    *    Get the current document title.
    */
   function getCurrentDocumentTitle() {
