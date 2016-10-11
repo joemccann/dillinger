@@ -1,0 +1,19 @@
+name: dillinger
+version: master
+summary: The last Markdown editor, ever
+description: |
+  Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered
+  HTML5 Markdown editor.
+
+grade: devel
+confinement: strict
+
+apps:
+  server:
+    command: node $SNAP/lib/node_modules/dillinger/app.js
+    plugs: [network-bind]
+
+parts:
+  dillinger:
+    source: .
+    plugin: nodejs
