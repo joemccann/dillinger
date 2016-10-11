@@ -10,8 +10,9 @@ confinement: strict
 
 apps:
   server:
-    command: node $SNAP/lib/node_modules/dillinger/app.js
+    command: node $SNAP/lib/node_modules/Dillinger/app.js
     plugs: [network-bind]
+    daemon: simple
 
 parts:
   dillinger:
