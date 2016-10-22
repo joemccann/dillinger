@@ -57,7 +57,7 @@
     border-radius:          3px;
     // box-shadow:             0px 1px 4px 0px #8C94A3;
     color:                  #fff;
-    font-family:            unquote(map-get($headingtype, font-family));
+    font-family:            map-get($headingtype, font-family);
     font-weight:            map-get($headingtype, regular);
     overflow:               hidden;
     padding:                1rem 2rem .5rem;

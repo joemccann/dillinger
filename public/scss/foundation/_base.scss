@@ -15,7 +15,7 @@ html {
 
 body {
   @include fontsize(zeta, all);
-  font-family: unquote(map-get($bodytype, font-family));
+  font-family: map-get($bodytype, font-family);
   font-weight: map-get($bodytype, regular);
   line-height: 2rem;
   height: 100%;
@@ -88,7 +88,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: unquote(map-get($headingtype, font-family));
+  font-family: map-get($headingtype, font-family);
   font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
   font-style: normal;
   font-weight: map-get($headingtype, bold);

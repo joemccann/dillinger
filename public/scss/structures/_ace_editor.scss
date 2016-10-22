@@ -8,7 +8,7 @@
 
 #editor {
   @include fontsize(zeta, all);
-  font-family: unquote(map-get($monospacetype, font-family));
+  font-family: map-get($monospacetype, font-family);
   font-weight: map-get($monospacetype, regular);
   line-height: 2rem;
   width: 100%;

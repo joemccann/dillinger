@@ -6,7 +6,7 @@
 .words {
   @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
   font-weight: map-get($headingtype, semibold);
-  font-family: unquote(map-get($headingtype, font-family));
+  font-family: map-get($headingtype, font-family);
   color: $c-links;
   letter-spacing: 1px;
   text-transform: uppercase;

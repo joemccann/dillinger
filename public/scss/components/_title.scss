@@ -47,7 +47,7 @@
   &-document {
     @include sp(epsilon, $monospacetype, 1, 1, all);
     font-weight: map-get($monospacetype, regular);
-    font-family: unquote(map-get($monospacetype, font-family));
+    font-family: map-get($monospacetype, font-family);
     color: $c-text;
     padding-left: 16px;
     padding-right: 16px;

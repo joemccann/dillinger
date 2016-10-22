@@ -18,7 +18,7 @@
   width: 100%;
   text-transform: uppercase;
   font-weight: map-get($headingtype, bold);
-  font-family: unquote(map-get($headingtype, font-family));
+  font-family: map-get($headingtype, font-family);
   font-size: 14px;
   text-shadow: 0 1px 0 darken($c-highlight, 20%);
   padding: 16px 24px;

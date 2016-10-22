@@ -58,7 +58,7 @@
   a {
     @include clearfix;
     @include fontsize(epsilon, all);
-    font-family: unquote(map-get($headingtype, font-family));
+    font-family: map-get($headingtype, font-family);
     font-weight: map-get($headingtype, regular);
     -webkit-font-smoothing: antialiased;
     line-height: 28px;

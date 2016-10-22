@@ -47,7 +47,7 @@
 
   p {
     @include sp($fontsize: epsilon, $font: $headingtype, $lineheight: 2, $below: 2, $breakpoint: all);
-    font-family: unquote(map-get($headingtype, font-family));
+    font-family: map-get($headingtype, font-family);
     font-weight: map-get($headingtype, regular);
     text-align: center;
     max-width: 500px;
