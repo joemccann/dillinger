@@ -32,6 +32,7 @@ items:
       name: web
     spec:
       replicas: 2
+      revisionHistoryLimit: 3
       template:
         metadata:
           labels:
