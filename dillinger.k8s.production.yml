@@ -43,7 +43,7 @@ items:
             name: web
             env:
               - name: NSOLID_APPNAME
-                value: dillinger-dev
+                value: dillinger-production
               - name: NSOLID_COMMAND
                 value: "storage.nsolid:9001"
               - name: NSOLID_DATA
