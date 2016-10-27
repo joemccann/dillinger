@@ -46,8 +46,10 @@ else{
 }
 
 app.use(compress())
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+
+app.use(bodyParser.json({limit: '512mb'}));
+app.use(bodyParser.urlencoded({limit: '512mb', extended: true}));
+
 app.use(methodOverride())
 app.use(cookieParser('1337 h4x0r'))
 app.use(cookieSession({
