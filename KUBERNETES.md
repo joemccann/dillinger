@@ -111,9 +111,9 @@ kubectl create secret generic googleanalytics-config --from-file=configs/googlea
 TODO: Add option for environment variables, not hosted files.
 
 Now update your Kubernetes cluster:
-s 
+
  ```sh
-kubectl replace -f dillinger.k8s.dev.yml
+kubectl apply -f dillinger.k8s.dev.yml
 ```
 
 Once it is "updated" (replaced), delete current pods and the replication controller will automatically restart them with the version containing your secrets/configs.
@@ -122,7 +122,7 @@ Once it is "updated" (replaced), delete current pods and the replication control
 kubectl delete pods --all
 ``` 
 
-Now checkit out with the URL of the app and also see it running in the N|Solid console
+Now check it out with the URL of the app and also see it running in the N|Solid console
 
 ```sh
 kubectl get svc nsolid-secure-proxy --namespace=nsolid

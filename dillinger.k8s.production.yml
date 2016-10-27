@@ -32,6 +32,7 @@ items:
       name: web
     spec:
       replicas: 2
+      revisionHistoryLimit: 3
       template:
         metadata:
           labels:
@@ -42,13 +43,15 @@ items:
             name: web
             env:
               - name: NSOLID_APPNAME
-                value: dillinger-prod
-              - name: NSOLID_HUB
-                value: "registry.nsolid:80"
-              - name: NSOLID_SOCKET
-                value: "8000"
+                value: dillinger-production
+              - name: NSOLID_COMMAND
+                value: "storage.nsolid:9001"
+              - name: NSOLID_DATA
+                value: "storage.nsolid:9002"
+              - name: NSOLID_BULK
+                value: "storage.nsolid:9003"
               - name: NSOLID_TAGS
-                value: "nsolid-v1.4.0"
+                value: "nsolid-boron-v2.0.0,dillinger-production"
             ports:
             - containerPort: 8080
               name: http-server
