@@ -40,6 +40,7 @@ module.exports =
   $rootScope.$on('preview.updated', updateWords);
 
   // Methods on the Controller
+  vm.toggleGitHubComment = toggleGitHubComment;
   vm.toggleAutoSave   = toggleAutoSave;
   vm.toggleWordsCount = toggleWordsCount;
   vm.toggleNightMode  = toggleNightMode;
@@ -51,6 +52,13 @@ module.exports =
 
   // ------------------------------
 
+  function toggleGitHubComment(e) {
+    e.preventDefault();
+    vm.profile.enableGitHubComment = !vm.profile.enableGitHubComment;
+    userService.save(vm.profile);
+
+    return false;
+  }
 
   function toggleAutoSave(e) {
     e.preventDefault();

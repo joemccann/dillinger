@@ -7,7 +7,7 @@ module.exports =
     'plugins.github.service',
     'plugins.github.modal'
   ])
-  .controller('Github', function($rootScope, $modal, githubService, documentsService, diNotify) {
+  .controller('Github', function($rootScope, $modal, githubService, documentsService, diNotify, userService) {
 
   var vm = this;
 
@@ -117,9 +117,13 @@ module.exports =
           callback(commitMessage);
           $scope.close();
         };
+        if (! userService.profile.enableGitHubComment)
+          $scope.commit();
       },
       windowClass: 'modal--dillinger scope',
     });
+    if (! userService.profile.enableGitHubComment)
+        modalInstance.opened.then(function() { modalInstance.close()});
   };
 
 });
