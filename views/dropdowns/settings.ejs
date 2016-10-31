@@ -17,6 +17,14 @@
       <switch class="toggle-scroll-sync" value="user.profile.enableScrollSync"></switch>
     </a>
   </li>
+  <% if (isGithubAuth) { %>
+  <li>
+    <a ng-click="user.toggleGitHubComment($event)">
+      <span class="has-checkbox">GitHub Comment</span>
+      <switch class="toggle-github-comment" value="user.profile.enableGitHubComment"></switch>
+    </a>
+  </li>
+  <% } %>
   <!--
   <li>
     <a ng-click="user.toggleNightMode()">

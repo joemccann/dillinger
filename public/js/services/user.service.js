@@ -10,7 +10,8 @@ module.exports =
       enableAutoSave:   true,
       enableWordsCount: true,
       enableScrollSync: false,
-      enableNightMode:  false
+      enableNightMode:  false,
+      enableGitHubComment: true
     },
     service = {
       profile: {},
