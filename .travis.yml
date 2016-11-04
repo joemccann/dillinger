@@ -9,6 +9,7 @@ before_install:
 script:
   - gulp build --prod
   - gulp dist
+after_success:
   # Build the snap.
   - docker run -v $(pwd):/cwd snapcore/snapcraft sh -c 'cd /cwd && snapcraft'
 deploy:
