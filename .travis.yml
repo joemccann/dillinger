@@ -10,7 +10,7 @@ script:
   - gulp build --prod
   - gulp dist
   # Build the snap.
-  - docker run -v $(pwd):/cwd snapcore/snapcraft sh -c 'apt update && apt install -y git && cd /cwd && snapcraft'
+  - docker run -v $(pwd):/cwd snapcore/snapcraft sh -c 'cd /cwd && snapcraft'
 deploy:
   provider: releases
   api_key:
