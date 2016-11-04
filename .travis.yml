@@ -1,3 +1,6 @@
+sudo: required
+services:
+  - docker
 language: node_js
 node_js:
   - 4.4.7
@@ -6,6 +9,8 @@ before_install:
 script:
   - gulp build --prod
   - gulp dist
+  # Build the snap.
+  - docker run -v $(pwd):/cwd snapcore/snapcraft sh -c 'apt install -y git && cd /cwd && snapcraft'
 deploy:
   provider: releases
   api_key:
