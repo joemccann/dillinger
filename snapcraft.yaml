@@ -5,7 +5,6 @@ description: |
   Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered
   HTML5 Markdown editor.
 
-grade: devel
 confinement: strict
 
 apps:
@@ -18,3 +17,5 @@ parts:
   dillinger:
     source: .
     plugin: nodejs
+    node-engine: '4.4.7'
+    build-packages: [bzip2, git]
