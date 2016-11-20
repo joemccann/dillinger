@@ -370,7 +370,7 @@ function imageUploader(file) {
       } else {
         var public_url = result.data.url 
         // Now take public_url and and wrap in markdown
-        var template = '!['+name+']('+public_url+')]'
+        var template = '!['+name+']('+public_url+')'
         // Now take the ace editor cursor and make the current
         // value the template        
         service.setCurrentCursorValue(template)
