@@ -209,8 +209,11 @@ exports.Dropbox = (function() {
       // End local testing...
 
       dboxclient.put(pathToImage, buffer, function(status, reply){
-        console.dir(reply)
-        return res.json({data: reply})
+        // TODO: NEED TO CHECK FOR FAILURE HERE
+        dboxclient.media(pathToImage, function(status, reply) {
+          // TODO: NEED TO CHECK FOR FAILURE HERE
+          return res.json({data: reply})
+        })
       })
 
     }, // end saveImageToDropbox

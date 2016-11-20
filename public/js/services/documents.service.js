@@ -32,6 +32,7 @@ module.exports =
     getCurrentDocumentBody:  getCurrentDocumentBody,
     setCurrentDocumentSHA:   setCurrentDocumentSHA,
     getCurrentDocumentSHA:   getCurrentDocumentSHA,
+    setCurrentCursorValue:   setCurrentCursorValue,
     save:                    save,
     init:                    init
   };
@@ -202,6 +203,15 @@ module.exports =
     return service.currentDocument.body;
   }
 
+  /**
+   *    Append current value to cursor location.
+   */
+  function setCurrentCursorValue(value) {
+    var position = $rootScope.editor.getCursorPosition()
+    $rootScope.editor.getSession().insert(position, value)
+    return value;
+  }
+
   function isBinaryFile(text) {
     var len = text.length;
     var column = 0;
@@ -335,13 +345,10 @@ module.exports =
 function imageUploader(file) {
 
   var reader = new FileReader()
+    , name = file.name
+    ;
 
-    /* file.{name,size,type} */
-  var name = file.name
-  
   reader.onloadend = function() {
-
-    // console.log(reader.result);
 
     var di = diNotify({
       message: 'Uploading Image to Dropbox...',
@@ -351,6 +358,7 @@ function imageUploader(file) {
       image_name: name,
       fileContents: reader.result
     }).success(function(result) {
+
       if (angular.isDefined(di.$scope)) {
         di.$scope.$close();
       }
@@ -360,13 +368,20 @@ function imageUploader(file) {
           duration: 2000
         });
       } else {
-        console.dir(result)
+        var public_url = result.data.url 
+        // Now take public_url and and wrap in markdown
+        var template = '!['+name+']('+public_url+')]'
+        // Now take the ace editor cursor and make the current
+        // value the template        
+        service.setCurrentCursorValue(template)
+
+        // Track event in GA
         // if (window.ga) {
         //   ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
         // }
         return diNotify({
-          message: 'Successfully uploaded image to: ' + result.data.path,
-          duration: 2000
+          message: 'Successfully uploaded image to Dropbox.',
+          duration: 4000
         });
       }
     }).error(function(err) {
@@ -377,8 +392,6 @@ function imageUploader(file) {
 
   }
   reader.readAsDataURL(file)
-
-  return
 
 }
 
