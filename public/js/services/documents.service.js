@@ -365,7 +365,7 @@ function imageUploader(file) {
       if (result.data.error) {
         return diNotify({
           message: 'An Error occured: ' + result.data.error,
-          duration: 2000
+          duration: 5000
         });
       } else {
         var public_url = result.data.url 
