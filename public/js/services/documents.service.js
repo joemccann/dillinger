@@ -215,52 +215,118 @@ module.exports =
     return false;
   }
 
+  function mdFileReader(file){
+
+    var reader = new FileReader()
+
+    reader.onload = function(event) {
+
+      var text = event.target.result
+
+      if (isBinaryFile(text)) {
+        return diNotify({
+          message: 'Importing binary files will cause dillinger to become unresponsive',
+          duration: 4000
+        })
+      }
+        
+      // Create a new document.
+      var item = createItem();
+      addItem(item);
+      setCurrentDocument(item);
+
+      // Set the new documents title and body.
+      setCurrentDocumentTitle(file.name);
+      setCurrentDocumentBody(text);
+
+      // Refresh the editor and proview.
+      $rootScope.$emit('document.refresh');
+
+      }
+
+    reader.readAsText(file);
+  } 
   /**
-   *    Create a document from a file on disc.
+   *    Generic file import method. Checks for images and markdown.
    *
    *    @param  {File}  file  The file to import
    *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
    *
    *    @param {Boolean} showTip set to true to show a tip message
-   *                      about draging and droping files.
+   *                      about dragging and dropping files.
    */
+
   function importFile(file, showTip) {
-      if (!file) {
-        return;
+      
+    if (!file) {
+      return;
+    }
+
+    var reader = new FileReader();
+
+    // If it is text or image or something else
+    reader.onloadend = function(event) {
+
+      var data = event.target.result
+        , firstFourBitsArray = (new Uint8Array(data)).subarray(0, 4)
+        , type = ''
+        , header = ''
+        ;
+
+      // Snag hex value
+      for(var i = 0; i < arr.length; i++) {
+         header += firstFourBitsArray[i].toString(16);
       }
 
-      var reader = new FileReader();
+      // Determine image type or unknown
+      switch (header) {
+        case "89504e47":
+          type = "image/png";
+          break;
+        case "47494638":
+          type = "image/gif";
+          break;
+        case "ffd8ffe0":
+        case "ffd8ffe1":
+        case "ffd8ffe2":
+          type = "image/jpeg";
+          break;
+        default:
+          type = "unknown";
+          break;
+      }
 
-      reader.onload = function(event) {
-        var text = event.target.result;
-        if (isBinaryFile(text)) {
-          diNotify({
-            message: 'Importing binary files will cause dillinger to become unresponsive',
-            duration: 4000
-          });
+      if (showTip) {
+        diNotify({ message: 'You can also drag and drop files into dillinger' });
+      }
 
-          return;
-        }
+      if(type === 'unknown') {
+        return mdFileReader(file)
+      }
+      else{
+        // Do the upload of the image to cloud service
+        // and return an URL of the image
+        return imageUploader(file)
+      }
 
-        // Create a new document.
-        var item = createItem();
-        addItem(item);
-        setCurrentDocument(item);
+    }
 
-        // Set the new documents title and body.
-        setCurrentDocumentTitle(file.name);
-        setCurrentDocumentBody(text);
+    // Read as array buffer so we can determine if image
+    // from the bits
+    reader.readAsArrayBuffer(file)
 
-        // Refresh the editor and proview.
-        $rootScope.$emit('document.refresh');
-
-        if (showTip) {
-          diNotify({ message: 'You can also drag and drop files into dillinger' });
-        }
-      };
-
-      reader.readAsText(file);
   }
+
+/**
+ *    Upload a file to a cloud service and return a URL.
+ *
+ *    @param  {File}  file  The file object
+ *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+ */
+
+function imageUploader(file) {
+  console.warn('imageUploader not implemented')
+}
 
 /**
  *    Update the current document SHA.
