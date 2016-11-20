@@ -158,7 +158,7 @@ exports.Dropbox = (function() {
       })
 
     },
-    saveToDropbox: function(req, res){
+    saveFileToDropbox: function(req, res){
 
       if (!req.session.isDropboxSynced) {
         res.type('text/plain')
@@ -180,7 +180,40 @@ exports.Dropbox = (function() {
         return res.json({data: reply})
       })
 
-    }, // end saveToDropbox
+    }, // end saveFileToDropbox
+    saveImageToDropbox: function(req, res){
+
+      if (!req.session.isDropboxSynced) {
+        res.type('text/plain')
+        return res.status(403).send("You are not authenticated with Dropbox.")
+      }
+
+      var access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
+        , dboxclient = dboxapp.client(access_token)
+        , pathToImage = '/Dillinger/_images/' + req.body.image_name
+        , data_url = req.body.fileContents
+        , matches = data_url.match(/^data:.+\/(.+);base64,(.*)$/)
+        , base64_data = matches[2]
+        , buffer = new Buffer(base64_data, 'base64')
+        ;
+
+      // For local testing...
+      // var filepath = path.resolve(__dirname, '../../public/files/') + "/" + req.body.image_name
+      
+      // console.log(filepath + " is the local path")
+      
+      // fs.writeFile( filepath, buffer, function (err) {
+      //   if(err) console.error(err)
+      //     console.log('wrote the file')
+      // }); 
+      // End local testing...
+
+      dboxclient.put(pathToImage, buffer, function(status, reply){
+        console.dir(reply)
+        return res.json({data: reply})
+      })
+
+    }, // end saveImageToDropbox
     handleIncomingFlowRequest: function(req, res, cb){
 
       var filePath = req.query.path

@@ -99,8 +99,12 @@ var fetch_dropbox_file = function(req, res) {
 
 var save_dropbox = function(req, res) {
 
-  Dropbox.saveToDropbox(req, res)
+  Dropbox.saveFileToDropbox(req, res)
 
+}
+
+var save_dropbox_image = function (req,res) {
+  Dropbox.saveImageToDropbox(req, res)
 }
 
 /* End Dropbox stuff */
@@ -120,6 +124,8 @@ app.post('/import/dropbox', import_dropbox);
 app.post('/fetch/dropbox', fetch_dropbox_file);
 
 app.post('/save/dropbox', save_dropbox);
+
+app.post('/save/dropbox/image', save_dropbox_image);
 
 app.get('/js/dropbox.js', function(req, res) {
   fs.readFile(path.join(__dirname, 'client.js'), 'utf8', function(err, data) {

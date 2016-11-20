@@ -8,7 +8,7 @@
 module.exports =
   angular
   .module('diDocuments.service', ['diDocuments.sheet'])
-  .factory('documentsService', function($rootScope, Sheet, diNotify) {
+  .factory('documentsService', function($rootScope, $http, Sheet, diNotify) {
 
   var service = {
     currentDocument: {},
@@ -215,6 +215,13 @@ module.exports =
     return false;
   }
 
+  /**
+   *    Import a md file into dillinger. 
+   *
+   *    @param  {File}  file  The file to import
+   *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   *
+   */
   function mdFileReader(file){
 
     var reader = new FileReader()
@@ -274,7 +281,7 @@ module.exports =
         ;
 
       // Snag hex value
-      for(var i = 0; i < arr.length; i++) {
+      for(var i = 0; i < firstFourBitsArray.length; i++) {
          header += firstFourBitsArray[i].toString(16);
       }
 
@@ -322,10 +329,57 @@ module.exports =
  *
  *    @param  {File}  file  The file object
  *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+ *
  */
 
 function imageUploader(file) {
-  console.warn('imageUploader not implemented')
+
+  var reader = new FileReader()
+
+    /* file.{name,size,type} */
+  var name = file.name
+  
+  reader.onloadend = function() {
+
+    // console.log(reader.result);
+
+    var di = diNotify({
+      message: 'Uploading Image to Dropbox...',
+      duration: 5000
+    });
+    return $http.post('save/dropbox/image', {
+      image_name: name,
+      fileContents: reader.result
+    }).success(function(result) {
+      if (angular.isDefined(di.$scope)) {
+        di.$scope.$close();
+      }
+      if (result.data.error) {
+        return diNotify({
+          message: 'An Error occured: ' + result.data.error,
+          duration: 2000
+        });
+      } else {
+        console.dir(result)
+        // if (window.ga) {
+        //   ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
+        // }
+        return diNotify({
+          message: 'Successfully uploaded image to: ' + result.data.path,
+          duration: 2000
+        });
+      }
+    }).error(function(err) {
+      return diNotify({
+        message: 'An Error occured: ' + err
+      });
+    });
+
+  }
+  reader.readAsDataURL(file)
+
+  return
+
 }
 
 /**
