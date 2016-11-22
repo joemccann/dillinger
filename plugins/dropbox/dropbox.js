@@ -187,13 +187,14 @@ exports.Dropbox = (function() {
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
-
-      var access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
+      
+      var access_token = {
+            oauth_token: req.session.dropbox.oauth.access_token
+          , oauth_token_secret: req.session.dropbox.oauth.access_token_secret
+        }
         , dboxclient = dboxapp.client(access_token)
         , pathToImage = '/Dillinger/_images/' + req.body.image_name
-        , data_url = req.body.fileContents
-        , matches = data_url.match(/^data:.+\/(.+);base64,(.*)$/)
-        , base64_data = matches[2]
+        , base64_data = req.body.fileContents.split(',')[1] // Is this thorough enough?
         , buffer = new Buffer(base64_data, 'base64')
         ;
 

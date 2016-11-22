@@ -68,8 +68,6 @@ var oauth_dropbox = function(req, res) {
           res.redirect('/')
 
     })  // end dbox.getRemoteAccessToken()
-
-
 }
 
 var unlink_dropbox = function(req, res) {
@@ -91,21 +89,11 @@ var import_dropbox = function(req, res) {
 
 }
 
-var fetch_dropbox_file = function(req, res) {
+var fetch_dropbox_file = function(req, res) { Dropbox.fetchDropboxFile(req, res) }
 
-  Dropbox.fetchDropboxFile(req, res)
+var save_dropbox = function(req, res) { Dropbox.saveFileToDropbox(req, res) }
 
-}
-
-var save_dropbox = function(req, res) {
-
-  Dropbox.saveFileToDropbox(req, res)
-
-}
-
-var save_dropbox_image = function (req,res) {
-  Dropbox.saveImageToDropbox(req, res)
-}
+var save_dropbox_image = function (req,res) { Dropbox.saveImageToDropbox(req, res) }
 
 /* End Dropbox stuff */
 
