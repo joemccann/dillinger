@@ -211,10 +211,13 @@ exports.Dropbox = (function() {
 
       dboxclient.put(pathToImage, buffer, function(status, reply){
         // TODO: NEED TO CHECK FOR FAILURE HERE
-        dboxclient.media(pathToImage, function(status, reply) {
-          // TODO: NEED TO CHECK FOR FAILURE HERE
-          return res.json({data: reply})
+        dboxclient.shares(pathToImage, {short_url:false}, function(status,reply){
+          // Because Dropbox doesn't allow us to link directly
+          // we have to append this to the url: 'raw=1'
+          reply.url = reply.url + '&raw=1'
+          return res.json({data: reply})          
         })
+
       })
 
     }, // end saveImageToDropbox
