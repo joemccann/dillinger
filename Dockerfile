@@ -1,4 +1,4 @@
-FROM nodesource/nsolid:boron-2.0.0
+FROM nodesource/nsolid:boron-2.0.1
 
 MAINTAINER Joe McCann <joe@nodesource.com>
 
