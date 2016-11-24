@@ -316,7 +316,7 @@ exports.Github = (function() {
 
           if (isPrivateRepo) {
             d = JSON.parse(d)
-            jsonResp.data.content = (new Buffer(d.content, 'base64').toString('ascii'))
+            jsonResp.data.content = (new Buffer(d.content, 'base64').toString('utf-8'))
           }
 
           res.json(jsonResp)
