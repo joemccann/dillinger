@@ -95,7 +95,7 @@
     "balanced-match": "^0.2.0",
     "browser-sync": "^1.9.2",
     "cave": "^2.0.0",
-    "clean-css": "^3.4.4",
+    "clean-css": "^3.4.8",
     "critical": "^0.6.0",
     "css-loader": "^0.9.0",
     "dom-serializer": "^0.1.0",
