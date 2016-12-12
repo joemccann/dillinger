@@ -13,6 +13,10 @@ Dropbox Dillinger Plugin
       "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
     }
 
+The values for `app_key` and `app_secret` can be obtained on the dropbox app page.
+
+For `callback_url`, use `http://yoursite/oauth/dropbox` (or supply your own callback URL if you've created a custom route).
+
 Optional configuration via environment
 ==
 
