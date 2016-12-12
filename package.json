@@ -140,6 +140,6 @@
     "walkdir": ">=0.0.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.12.0",
-    "yargs": "^1.3.2"
+    "yargs": "^3.29.0"
   }
 }
