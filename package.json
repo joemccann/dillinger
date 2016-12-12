@@ -113,7 +113,7 @@
     "gulp-rev-mtime": "^0.0.4",
     "gulp-rimraf": "0.2.0",
     "gulp-sass": "^2.0.4",
-    "gulp-size": "^1.1.0",
+    "gulp-size": "^2.0.0",
     "gulp-uncss": "^0.5.1",
     "gulp-util": "^3.0.6",
     "gulp-zip": "^3.2.0",
