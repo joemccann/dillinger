@@ -19,3 +19,4 @@ parts:
     plugin: nodejs
     node-engine: '4.4.7'
     build-packages: [bzip2, git]
+    node-packages: [is-property]
