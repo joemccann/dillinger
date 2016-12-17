@@ -69,7 +69,7 @@
     "keymaster": "^1.6.2",
     "lodash": "^4.15.0",
     "markdown-it": "^4.4.0",
-    "markdown-it-abbr": "^1.0.0",
+    "markdown-it-abbr": "^1.0.4",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-deflist": "^1.0.0",
     "markdown-it-footnote": "^1.0.0",
