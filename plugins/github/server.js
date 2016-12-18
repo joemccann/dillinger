@@ -36,7 +36,6 @@ var oauth_github = function(req, res, cb) {
   if (!req.query.code) {
     cb();
   } else {
-    req.session.oauth = {}
 
     var code = req.query.code
       , client_id = Github.githubConfig.client_id
