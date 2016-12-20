@@ -131,7 +131,7 @@
     "ng-annotate-webpack-plugin": "^0.1.2",
     "node-sass": "^3.4.0-beta1",
     "phantomjs": "~1.9.12",
-    "pretty-hrtime": "^0.2.2",
+    "pretty-hrtime": "1.0.1",
     "raw-loader": "^0.5.1",
     "reaver": "^1.2.0",
     "run-sequence": "^1.0.1",
