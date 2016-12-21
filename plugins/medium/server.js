@@ -35,9 +35,8 @@ var oauth_medium = function(req, res, cb) {
 
     Medium.mediumClient.exchangeAuthorizationCode(code, redirect_url, function (err, token) {
 
+      // Fix this...this is bad for the user...
         if(err) return console.error(err.message)
-
-        console.dir(req.session.medium)
 
         if (!req.session.medium) {
           req.session.medium = {
@@ -45,8 +44,6 @@ var oauth_medium = function(req, res, cb) {
           }
         }
         req.session.medium.oauth.token = token
-
-        console.dir(req.session.medium)
         
         Medium.mediumClient.getUser(function (err, user) {
           if(err) {
@@ -56,7 +53,6 @@ var oauth_medium = function(req, res, cb) {
             return res.send(err.message)
           }
           else{
-            console.dir(user)
             req.session.medium.userId  = user.id
             req.session.isMediumSynced = true
             res.redirect('/')            

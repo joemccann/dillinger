@@ -44,7 +44,6 @@ exports.index = function(req, res) {
   // Check for Medium bits...
   if (req.session.medium && req.session.medium.oauth 
       && req.session.medium.oauth.token && req.session.medium.oauth.token.access_token) {
-    console.log(req.session.medium.oauth.token.access_token + " is the Medium access token")
     // Set the access token on the medium client
     Medium.setAccessTokenFromSession(req.session.medium.oauth.token.access_token)
   }else
