@@ -51,7 +51,7 @@ items:
               - name: NSOLID_BULK
                 value: "storage.nsolid:9003"
               - name: NSOLID_TAGS
-                value: "nsolid-boron-v2.0.0,dillinger-dev"
+                value: "nsolid-boron-v2.1.0,dillinger-dev"
             ports:
             - containerPort: 8080
               name: http-server
