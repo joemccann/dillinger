@@ -68,6 +68,8 @@ items:
               name: sponsored-config
             - mountPath: /configs/googleanalytics/
               name: googleanalytics-config
+            - mountPath: /configs/medium/
+              name: medium-config
           volumes:
           - name: dropbox-config
             secret:
@@ -84,6 +86,9 @@ items:
           - name: sponsored-config
             secret:
               secretName: sponsored-config
+          - name: medium-config
+            secret:
+              secretName: medium-config
           - name: googleanalytics-config
             secret:
               secretName: googleanalytics-config
