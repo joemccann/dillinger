@@ -16,6 +16,7 @@ var medium_config_file = path.resolve(__dirname, '../../configs/medium/', 'mediu
 if ( fs.existsSync(medium_config_file) ) {
   medium_config = require(medium_config_file)
   isConfigEnabled = true
+  console.log('Medium config found in environment. Plugin enabled. . (Key: "' + medium_config.client_id + '")')
 } else if (process.env.medium_client_id !== undefined) {
   medium_config = {
     "client_id": process.env.medium_client_id,
@@ -48,8 +49,8 @@ exports.Medium = (function() {
     config: medium_config,
     generateAuthUrl: function(req, res, cb) {
 
-      return mediumApp.getAuthorizationUrl('secretState', medium_config.callback_url, [
-        mediumSdk.Scope.BASIC_PROFILE, mediumSdk.Scope.PUBLISH_POST, "uploadImage"
+      return mediumApp.getAuthorizationUrl('dillinger-secrets-are-insecure', medium_config.redirect_url, [
+        mediumSdk.Scope.BASIC_PROFILE, mediumSdk.Scope.PUBLISH_POST
       ])
 
     },
@@ -61,33 +62,31 @@ exports.Medium = (function() {
       })
 
     }, // end getUsername
-    saveToMedium: function(req, res){
+    save: function(req, res){
 
-      var postData = req.body.data
-        , title = req.body.title
-        ;
+      var title = req.body.title || 'New Unnamed Post'
+
+      console.log(req.session.medium.userId)
 
       mediumApp.createPost({
         userId: req.session.medium.userId,
         title: title,
-          contentFormat: medium.PostContentFormat.MARKDOWN,
-          content: postData,
-          publishStatus: medium.PostPublishStatus.DRAFT
-        }, function (err, post) {
-          console.log(token, user, post)
+        contentFormat: mediumSdk.PostContentFormat.MARKDOWN,
+        content: req.body.content,
+        publishStatus: mediumSdk.PostPublishStatus.DRAFT
+      }, function (err, post) {
 
-          if (!err) {
-            var p = JSON.parse(post)
-            console.dir(p)
-            return res.json(200, p)
-          }
-          return res.json(400, { "error": "Unable to post to Medium: " + (err)})
+        if(err){
+          console.error(err.message)
+          return res.json(400, err)
+        }
+
+        var p = post
+        console.dir(p)
+        return res.json(200, p)
 
       }) // end createPost
 
     } // end SaveToMedium
   } // end return object
 })()
-
-var test = exports.Medium
-test.getAuthorizationUrl()

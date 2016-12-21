@@ -24,6 +24,19 @@
   </li>
   <% } %>
 
+  <% if (isMediumConfigured) { %>
+  <li ng-controller="Medium as medium">
+    <% if (isMediumAuth) { %>
+      <a class="save-to-medium linked" ng-click="medium.saveTo()">
+    <% } else { %>
+      <a href="/redirect/medium" class="import-medium unlinked">
+    <% } %>
+      <span>Medium</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %>
+
   <% if (isGoogleDriveConfigured) { %>
   <li ng-controller="Googledrive as googledrive">
     <% if (isGoogleDriveAuth) { %>

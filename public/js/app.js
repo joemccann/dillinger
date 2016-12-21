@@ -56,6 +56,11 @@
   require('./plugins/google-drive/google-drive-modal.controller');
   require('./plugins/google-drive/google-drive.controller');
 
+  // Plugin: Medium
+  require('./plugins/medium/medium.service');
+  require('./plugins/medium/medium-modal.controller');
+  require('./plugins/medium/medium.controller');
+
   // Plugin: One Drive
   require('./plugins/one-drive/one-drive.service');
   require('./plugins/one-drive/one-drive-modal.controller');
@@ -83,6 +88,7 @@
     'diFileImport',
     'plugins.github',
     'plugins.dropbox',
+    'plugins.medium',
     'plugins.googledrive',
     'plugins.onedrive',
     'ui.bootstrap',

@@ -20,7 +20,6 @@ var oauth_medium_redirect = function(req, res) {
     res.redirect(uri)
   }
 
-}
 
 var oauth_medium = function(req, res, cb) {
 
@@ -29,13 +28,13 @@ var oauth_medium = function(req, res, cb) {
     req.session.oauth = {}
 
     var code = req.query.code
-      , client_id = Medium.medium_config.client_id
-      , redirect_url = Medium.medium_config.redirect_url
-      , client_secret = Medium.medium_config.client_secret
+      , client_id = Medium.config.client_id
+      , redirect_url = Medium.config.redirect_url
+      , client_secret = Medium.config.client_secret
 
     Medium.mediumClient.exchangeAuthorizationCode(code, redirect_url, function (err, token) {
 
-        if(err)
+        if(err) return console.error(err.message)
 
         if (!req.session.medium) {
           req.session.medium = {
@@ -44,10 +43,19 @@ var oauth_medium = function(req, res, cb) {
         }
         req.session.medium.oauth.token = token
         console.log('token: ' + token)
-        client.getUser(function (err, user) {
-          req.session.medium.userId  = user.id
-          req.session.isMediumSynced = true
-          res.redirect('/')
+        console.dir(token)
+        Medium.mediumClient.getUser(function (err, user) {
+          if(err) {
+            // something went wrong
+            console.error(err.message)
+            unlink_medium(req, res)
+            return res.send(err.message)
+          }
+          else{
+            req.session.medium.userId  = user.id
+            req.session.isMediumSynced = true
+            res.redirect('/')            
+          }
         }) // end getUser
     }) // end exchangeAuthorizationCode
 
@@ -61,7 +69,16 @@ var unlink_medium = function(req, res) {
   res.redirect('/')
 }
 
-var save_medium = function(req, res) { Medium.saveToMedium(req, res) }
+var save_medium = function(req, res) { 
+
+  if (!req.session.medium) {
+    res.status(401).send('Medium is not linked.');
+    return;
+  }
+  
+  Medium.save(req,res)
+
+}
 
 
 /* End Medium stuff */

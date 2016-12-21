@@ -5,6 +5,7 @@ var path = require('path')
   , qs = require('querystring')
   , Dropbox = require( path.resolve(__dirname, '../plugins/dropbox/dropbox.js') ).Dropbox
   , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
+  , Medium = require( path.resolve(__dirname, '../plugins/medium/medium.js') ).Medium
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
   , OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
   , Sponsored = require('../plugins/sponsored/sponsored.js')
@@ -18,11 +19,13 @@ exports.index = function(req, res) {
   var indexConfig = {
     isDropboxAuth: !!req.session.isDropboxSynced,
     isGithubAuth: !!req.session.isGithubSynced,
+    isMediumAuth: !!req.session.isMediumSynced,
     isEvernoteAuth: !!req.session.isEvernoteSynced,
     isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
     isOneDriveAuth: !!req.session.isOneDriveSynced,
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
+    isMediumConfigured: Medium.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
     isOneDriveConfigured: OneDrive.isConfigured,
     isSponsoredConfigured: Sponsored.isConfigEnabled,
