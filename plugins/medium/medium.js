@@ -16,7 +16,7 @@ var medium_config_file = path.resolve(__dirname, '../../configs/medium/', 'mediu
 if ( fs.existsSync(medium_config_file) ) {
   medium_config = require(medium_config_file)
   isConfigEnabled = true
-  console.log('Medium config found in environment. Plugin enabled. . (Key: "' + medium_config.client_id + '")')
+  console.log('Medium config found in environment. Plugin enabled.')
 } else if (process.env.medium_client_id !== undefined) {
   medium_config = {
     "client_id": process.env.medium_client_id,
@@ -25,7 +25,7 @@ if ( fs.existsSync(medium_config_file) ) {
     "redirect_url": process.env.medium_redirect_url
   }
   isConfigEnabled = true
-  console.log('Medium config found in environment. Plugin enabled. (Key: "' + medium_config.client_id + '")')
+  console.log('Medium config found in environment. Plugin enabled.')
 } else {
   medium_config = {
     "client_id": "YOUR_CLIENT_ID"
@@ -62,11 +62,12 @@ exports.Medium = (function() {
       })
 
     }, // end getUsername
+    setAccessTokenFromSession: function(token){
+      mediumApp.setAccessToken(token)
+    },
     save: function(req, res){
 
       var title = req.body.title || 'New Unnamed Post'
-
-      console.log(req.session.medium.userId)
 
       mediumApp.createPost({
         userId: req.session.medium.userId,
@@ -78,12 +79,10 @@ exports.Medium = (function() {
 
         if(err){
           console.error(err.message)
-          return res.json(400, err)
+          return res.status(400).json(err.message + " Please unlink and relink your Medium account.")
         }
 
-        var p = post
-        console.dir(p)
-        return res.json(200, p)
+        return res.status(200).json(post)
 
       }) // end createPost
 

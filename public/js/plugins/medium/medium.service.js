@@ -37,7 +37,8 @@ angular.module('plugins.medium.service', []).factory('mediumService', function($
         });
       }).error(function(err) {
         return diNotify({
-          message: "An Error occured: " + err
+          message: "An Error occured: " + err,
+          duration: 5000
         });
       });
     },
