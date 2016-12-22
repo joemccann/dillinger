@@ -7,14 +7,14 @@ medium Medium Plugin
   {
     "client_id": "YOUR_CLIENT_ID"
   , "client_secret": "YOUR_SECRET"
-  , "redirect_uri": "http://dillinger.io/"
-  , "callback_url": "http://dillinger.io/oauth/medium"
+  , "redirect_url": "http://dillinger.io/oauth/medium"
+  , "callback_url": "http://dillinger.io/"
   }    
 ```
 
 The values for `client_id` and `client_secret` can be obtained on the Medium app page.
 
-For `callback_url`, use `http://yoursite/oauth/medium` (or supply your own callback URL if you've created a custom route).
+For `redirect_url`, use `http://yoursite/oauth/medium` (or supply your own callback URL if you've created a custom route).
 
 Optional Configuration Via Environment Variables
 ==
@@ -24,4 +24,5 @@ Set the following environment variables if adding `medium-config.json` may prese
   medium_client_id=YOUR_KEY
   medium_client_secret=YOUR_SECRET
   medium_callback_url=YOUR_CALLBACK_URL
+  medium_redirect_url=YOUR_REDIRECT_URL
 ```
