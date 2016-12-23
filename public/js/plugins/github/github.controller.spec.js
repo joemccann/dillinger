@@ -43,7 +43,7 @@ describe("githubController", function() {
           body: 'Github Controller Test Body',
           isGithubFile: true,
           github: {
-            path: '/dilinger/testpath.md'
+            path: '/dillinger/testpath.md'
           }
         };
         return item;
@@ -72,7 +72,7 @@ describe("githubController", function() {
         user: {
           name: {}
         },
-        orgs: "dilinger-orgs"
+        orgs: "dillinger-orgs"
       },
       registerUserAsOrg: {
       },
@@ -104,7 +104,7 @@ describe("githubController", function() {
 
   it('should import the file, refresh and autosave the document', function() {
     spyOn($scope, '$emit');
-    $scope.vm.importFile("dilinger-import");
+    $scope.vm.importFile("dillinger-import");
     $scope.$digest();
 
     expect($scope.$emit).toHaveBeenCalledWith('autosave');
@@ -113,10 +113,11 @@ describe("githubController", function() {
 
   it('should save, refresh and autosave the document', function() {
     spyOn($scope, '$emit');
-    $scope.vm.saveTo("dilinger-save");
+    $scope.vm.saveTo("dillinger-save");
     $scope.$digest();
 
     expect($scope.$emit).toHaveBeenCalledWith('autosave');
     expect($scope.$emit).toHaveBeenCalledWith('document.refresh');
   });
+
 });

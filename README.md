@@ -102,7 +102,7 @@ $ gulp watch
 
 (optional) Third:
 ```sh
-$ karma start
+$ gulp test
 ```
 #### Building for source
 For production release:
