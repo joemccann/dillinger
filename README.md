@@ -119,14 +119,14 @@ By default, the Docker will expose port 80, so change this within the Dockerfile
 
 ```sh
 cd dillinger
-npm run-script build-docker
+docker build -t joemccann/dillinger:${package.json.version}
 ```
-This will create the dillinger image and pull in the necessary dependencies. Moreover, this uses a _hack_ to get a more optimized `npm` build by copying the dependencies over and only installing when the `package.json` itself has changed.  Look inside the `package.json` and the `Dockerfile` for more details on how this works.
+This will create the dillinger image and pull in the necessary dependencies. Be sure to swap out `${package.json.version}` with the actual version of Dillinger.
 
 Once done, run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8000 of the host to port 80 of the Docker (or whatever port was exposed in the Dockerfile):
 
 ```sh
-docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:latest
+docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:${package.json.version}
 ```
 
 Verify the deployment by navigating to your server address in your preferred browser.
