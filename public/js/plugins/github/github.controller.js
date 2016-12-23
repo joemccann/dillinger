@@ -69,7 +69,8 @@ module.exports =
 
     // Document must be an imported file from Github to work.
     if (file.isGithubFile) {
-      prepareGithubCommit(function(githubCommitMessage) {
+
+       prepareGithubCommit(function(githubCommitMessage) {
         var filePath = file.github.path.substr(0,file.github.path.lastIndexOf('/'));
         var postData = {
           body:    file.body,
@@ -83,13 +84,14 @@ module.exports =
         };
 
         return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
-      }, file);
+
+      }, file); // end prepareGithubCommit
     } else {
       return diNotify({
         message: 'Your Document must be an imported file from Github.'
       });
-    }
-  }
+    } // end else
+  } // end saveTo()
 
   function chooseScope() {
     var modalInstance = $modal.open({

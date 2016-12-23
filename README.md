@@ -36,7 +36,6 @@ Dillinger uses a number of open source projects to work properly:
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
 * [Gulp] - the streaming build system
-* [keymaster.js] - awesome keyboard handler lib by [@thomasfuchs]
 * [jQuery] - duh
 
 And of course Dillinger itself is open source with a [public repository][dill]
@@ -45,8 +44,6 @@ And of course Dillinger itself is open source with a [public repository][dill]
 ### Installation
 
 Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
-
-Download and extract the [latest pre-built release](https://github.com/joemccann/dillinger/releases).
 
 Install the dependencies and devDependencies and start the server.
 
@@ -72,6 +69,8 @@ Dillinger is currently extended with the following plugins
 * Github
 * Google Drive
 * OneDrive
+* Medium
+* Google Analytics
 
 Readmes, how to use them in your own application can be found here:
 
@@ -79,6 +78,8 @@ Readmes, how to use them in your own application can be found here:
 * [plugins/github/README.md] [PlGh]
 * [plugins/googledrive/README.md] [PlGd]
 * [plugins/onedrive/README.md] [PlOd]
+* [plugins/medium/README.md] [PlMe]
+* [plugins/medium/README.md] [PlOd]
 
 ### Development
 
@@ -101,7 +102,7 @@ $ gulp watch
 
 (optional) Third:
 ```sh
-$ karma start
+$ karma test
 ```
 #### Building for source
 For production release:
@@ -140,20 +141,9 @@ Verify the deployment by navigating to your server address in your preferred bro
 See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETES.md)
 
 
-#### docker-compose.yml
-
-Change the path for the nginx conf mounting path to your full path, not mine!
-
-### N|Solid and NGINX
-
-More details coming soon.
-
-
 ### Todos
 
- - Write Tests
- - Rethink Github Save
- - Add Code Comments
+ - Write MOAR Tests
  - Add Night Mode
 
 License
@@ -170,13 +160,11 @@ MIT
    [dill]: <https://github.com/joemccann/dillinger>
    [git-repo-url]: <https://github.com/joemccann/dillinger.git>
    [john gruber]: <http://daringfireball.net>
-   [@thomasfuchs]: <http://twitter.com/thomasfuchs>
    [df1]: <http://daringfireball.net/projects/markdown/>
    [markdown-it]: <https://github.com/markdown-it/markdown-it>
    [Ace Editor]: <http://ace.ajax.org>
    [node.js]: <http://nodejs.org>
    [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [keymaster.js]: <https://github.com/madrobby/keymaster>
    [jQuery]: <http://jquery.com>
    [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
    [express]: <http://expressjs.com>
@@ -184,6 +172,7 @@ MIT
    [Gulp]: <http://gulpjs.com>
 
    [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]:  <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
+   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
    [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
+   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>

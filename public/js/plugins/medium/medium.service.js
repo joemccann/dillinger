@@ -11,10 +11,6 @@ angular.module('plugins.medium.service', []).factory('mediumService', function($
     files: []
   };
   service = {
-    fetched: {
-      fileName: "",
-      file: null
-    },
     saveFile: function(title, body) {
       var di;
       di = diNotify({

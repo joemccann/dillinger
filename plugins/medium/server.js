@@ -9,16 +9,15 @@ var express = require('express')
 // "http://dillinger.io/oauth/medium"
 var oauth_medium_redirect = function(req, res) {
   
-    // Create Medium session object and stash for later.
-    var uri
-    req.session.medium = {}
-    
-    req.session.medium.oauth = {
+  // Create Medium session object and stash for later.
+  req.session.medium = {
+    oauth: {
       token: null
     }
-    uri = Medium.generateAuthUrl(req)
-    res.redirect(uri)
   }
+
+  return res.redirect( Medium.generateAuthUrl(req) )
+}
 
 
 var oauth_medium = function(req, res, cb) {
@@ -36,32 +35,34 @@ var oauth_medium = function(req, res, cb) {
     Medium.mediumClient.exchangeAuthorizationCode(code, redirect_url, function (err, token) {
 
       // Fix this...this is bad for the user...
-        if(err) return console.error(err.message)
+      if(err) return console.error(err.message)
 
-        if (!req.session.medium) {
-          req.session.medium = {
-            oauth: null
-          }
+      // If it doesn't exist, create it.
+      if (!req.session.medium) {
+        req.session.medium = {
+          oauth: null
         }
-        req.session.medium.oauth.token = token
-        
-        Medium.mediumClient.getUser(function (err, user) {
-          if(err) {
-            // something went wrong
-            console.error(err.message)
-            unlink_medium(req, res)
-            return res.send(err.message)
-          }
-          else{
-            req.session.medium.userId  = user.id
-            req.session.isMediumSynced = true
-            res.redirect('/')            
-          }
-        }) // end getUser
-    }) // end exchangeAuthorizationCode
+      }
+      // Attach the token object to the session
+      req.session.medium.oauth.token = token
 
+      // Initiate a getUser call to stash the user ID      
+      Medium.mediumClient.getUser(function (err, user) {
+        if(err) {
+          // something went wrong
+          console.error(err.message)
+          unlink_medium(req, res)
+          return res.send(err.message)
+        }
+        else{
+          req.session.medium.userId  = user.id
+          req.session.isMediumSynced = true
+          res.redirect('/')            
+        }
+      }) // end getUser
+    }) // end exchangeAuthorizationCode
   } // end else
-}
+} // end oauth_medium()
 
 var unlink_medium = function(req, res) {
   // Essentially remove the session for medium...
