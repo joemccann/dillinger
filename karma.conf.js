@@ -31,10 +31,11 @@ module.exports = function(config) {
     browsers:  ['PhantomJS'],
     plugins: [
       'karma-phantomjs-launcher',
+      'karma-jasmine-jquery',
       'karma-jasmine',
-      'karma-webpack',
-      'karma-jasmine-jquery'
+      'karma-webpack' 
     ],
-    singleRun: false
+    singleRun: false,
+    concurrency: Infinity
   });
 };

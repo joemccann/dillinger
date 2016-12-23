@@ -82,6 +82,10 @@ module.exports =
           message: githubCommitMessage
         };
 
+        documentsService.setCurrentDocumentSHA(result.data.content.sha);
+        $rootScope.$emit('document.refresh');
+
+
         return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
       }, file);
     } else {
