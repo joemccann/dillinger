@@ -63,23 +63,17 @@ $ NODE_ENV=production node app
 
 ### Plugins
 
-Dillinger is currently extended with the following plugins
+Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
 
-* Dropbox
-* Github
-* Google Drive
-* OneDrive
-* Medium
-* Google Analytics
+| Plugin | README |
+| ------ | ------ |
+| Dropbox | [plugins/dropbox/README.md] [PlDb] |
+| Github | [plugins/github/README.md] [PlGh] |
+| Google Drive | [plugins/googledrive/README.md] [PlGd] |
+| OneDrive | [plugins/onedrive/README.md] [PlOd] |
+| Medium | [plugins/medium/README.md] [PlMe] |
+| Google Analytics | [plugins/googleanalytics/README.md] [PlGa] |
 
-Readmes, how to use them in your own application can be found here:
-
-* [plugins/dropbox/README.md] [PlDb]
-* [plugins/github/README.md] [PlGh]
-* [plugins/googledrive/README.md] [PlGd]
-* [plugins/onedrive/README.md] [PlOd]
-* [plugins/medium/README.md] [PlMe]
-* [plugins/medium/README.md] [PlOd]
 
 ### Development
 
@@ -176,3 +170,4 @@ MIT
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
    [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
    [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
+   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
