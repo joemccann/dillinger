@@ -106,7 +106,7 @@
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-combine-media-queries": "^0.2.0",
-    "gulp-csso": "^0.2.9",
+    "gulp-csso": "1.0.0",
     "gulp-filename-media-query": "^1.2.1",
     "gulp-group-css-media-queries": "^1.1.0",
     "gulp-if": "2.0.0",
