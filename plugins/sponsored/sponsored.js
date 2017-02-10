@@ -103,7 +103,7 @@ function generateAdHTML(json){
 
 	if(!json) return ''
 
-	let html = imgs = ''
+	let html, imgs = ''
 
 	/* pixel: string, with || delimiters to split into an array */
 
