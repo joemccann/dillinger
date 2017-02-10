@@ -111,7 +111,7 @@
     "gulp-group-css-media-queries": "^1.1.0",
     "gulp-if": "2.0.0",
     "gulp-notify": "^2.2.0",
-    "gulp-open": "^0.3.0",
+    "gulp-open": "^1.0.0",
     "gulp-rev-mtime": "^0.0.4",
     "gulp-rimraf": "0.2.0",
     "gulp-sass": "^2.0.4",
