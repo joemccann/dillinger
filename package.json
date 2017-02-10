@@ -46,6 +46,7 @@
     "angular-bootstrap": "^0.12.0",
     "body-parser": "^1.14.1",
     "brace": "^0.4.0",
+    "breakdance": "^0.1.5",
     "colors": "^1.1.2",
     "compression": "^1.5.2",
     "connect": "^3.4.0",

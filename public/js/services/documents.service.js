@@ -212,14 +212,18 @@ module.exports =
     return value;
   }
 
+  /**
+   *    Loose/weak check for a binary file type
+   *    @param  {String}  text  Supposedly the text of a file.
+   *
+  */
   function isBinaryFile(text) {
     var len = text.length;
     var column = 0;
+
     for (var i = 0; i < len; i++) {
-        column = (text.charAt(i) === '\n' ? 0 : column + 1);
-        if (column > 500) {
-          return true;
-        }
+      column = (text.charAt(i) === '\n' ? 0 : column + 1);
+      if (column > 500) { return true; }
     }
 
     return false;
@@ -263,6 +267,94 @@ module.exports =
 
     reader.readAsText(file);
   } 
+
+    /**
+   *    Import an HTML file into dillinger. 
+   *
+   *    @param  {File}  file  The file to import
+   *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   *
+   */
+  function htmlFileReader(file){
+
+    console.log('htmlFileReader')
+
+    var reader = new FileReader()
+
+    reader.onload = function(event) {
+
+      console.log('htmlFileReader2')
+
+      var text = event.target.result
+
+      console.log('htmlFileReader3')
+          
+      // Create a new document.
+      var item = createItem();
+      addItem(item);
+      setCurrentDocument(item);
+     
+      console.log('htmlFileReader4')
+
+      // Set the new document's title.
+      setCurrentDocumentTitle(file.name);
+      // Call breakdance method to convert HTML to MD
+      console.log('about to breakdance')
+      
+      convertHTMLtoMD(text);
+      
+      }
+
+    reader.readAsText(file);
+  } 
+
+/**
+ *    Convert HTML text to markdown. 
+ *
+ *    @param  {text}  string  The html text to be converted
+ *
+ */
+function convertHTMLtoMD(text) {
+
+  // Add page title
+    var di = diNotify({
+      message: 'Converting HTML to Markdown...',
+      duration: 2500
+    });
+    return $http.post('factory/html_to_md', {
+      html: text
+    }).success(function(result) {
+
+      if (angular.isDefined(di.$scope)) {
+        di.$scope.$close();
+      }
+      if (result.data.error) {
+        return diNotify({
+          message: 'An Error occured: ' + result.data.error,
+          duration: 5000
+        });
+      } else {
+        // Set the new document's body
+        console.log(result.data.convertedMd)
+        setCurrentDocumentBody(result.data.convertedMd);
+
+        // Refresh the editor and proview.
+        $rootScope.$emit('document.refresh');
+
+        // Track event in GA
+        // if (window.ga) {
+        //   ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
+        // }
+      }
+    }).error(function(err) {
+      return diNotify({
+        message: 'An Error occured: ' + err
+      })
+    })
+
+}
+
+
   /**
    *    Generic file import method. Checks for images and markdown.
    *
@@ -273,7 +365,9 @@ module.exports =
    *                      about dragging and dropping files.
    */
 
-  function importFile(file, showTip) {
+  function importFile(file, showTip, isHTML) {
+
+    console.log('importfile ishtml is' + isHTML)
       
     if (!file) {
       return;
@@ -318,7 +412,8 @@ module.exports =
       }
 
       if(type === 'unknown') {
-        return mdFileReader(file)
+        if(isHTML) return htmlFileReader(file)
+        else return mdFileReader(file)
       }
       else{
         // Do the upload of the image to cloud service

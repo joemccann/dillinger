@@ -5,7 +5,8 @@ module.exports =
     'diFileImport.directives.dnd'
   ])
   .controller('ImportFile', function($scope, $rootScope) {
-    $scope.choose = function() {
-      $rootScope.$emit('importFile.choose');
+    $scope.choose = function(isHtml) {
+      var htmlFileCheck = isHtml ? {isHtml:true} : null
+      $rootScope.$emit('importFile.choose', htmlFileCheck);
     };
-  });
+  })

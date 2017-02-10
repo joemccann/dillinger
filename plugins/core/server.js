@@ -7,6 +7,7 @@ var express = require('express')
   , md = require('./markdown-it.js').md
   , temp = require('temp')
   , phantom = require('phantom')
+  , breakdance = require('breakdance')
   ;
 
 const phantomSession = phantom.create()
@@ -141,6 +142,22 @@ function _createPdf(req, res, tempFilename) {
   }
 }
 
+// Convert HTML to MD
+function htmlToMd(req,res){
+ 
+  var md = ''
+
+  try{
+    md = breakdance(req.body.html)
+  }catch(e){
+    return res.status(400).json({data:{error: 'Something went wrong with the HTML to Markdown conversion.'} }) 
+  }
+
+  return res.status(200).json({data:{convertedMd: md} })
+
+}
+
+
 /* Start Dillinger Routes */
 
 // Download a markdown file directly as response.
@@ -151,5 +168,8 @@ app.post('/factory/fetch_html', fetchHtml)
 
 // Download a pdf file directly as response.
 app.post('/factory/fetch_pdf', fetchPdf)
+
+// Download a pdf file directly as response.
+app.post('/factory/html_to_md', htmlToMd)
 
 /* End Dillinger Core */
