@@ -103,20 +103,36 @@ function generateAdHTML(json){
 
 	if(!json) return ''
 
-	let html = ''
+	let html = imgs = ''
 
+	/* pixel: string, with || delimiters to split into an array */
+
+	let pixels = json.pixel.split('||')
+
+	let time = Math.round(Date.now() / 10000)
+
+	let pixelArrLen = pixels.length
+
+	for (var j = 0; j < pixelArrLen; j++){
+
+		let src = pixels[j].replace('[timestamp]', time)
+	
+		imgs += '<img src="' +src+'" />'
+
+	}
+	
 	// Add track clicks logic if enabled...
 	if(GA.isConfigEnabled){
 		html = 	'<a href="'+json.statlink+'" onClick="trackOutboundLink(\''
 						+json.statlink+'\'); return false;" rel="nofollow" target="_blank">'
-						+json.description+'</a><img src="'
-						+json.pixel+'" />'
+						+json.description+'</a>'
+						+imgs
 
 	}
 	else{
 		html = '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
-						+json.description+'</a><img src="'
-						+json.pixel+'" />'
+						+json.description+'</a>'
+						+imgs
 	}
 	return html
 
