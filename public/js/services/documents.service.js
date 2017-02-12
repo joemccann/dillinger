@@ -168,6 +168,7 @@ module.exports =
     service.currentDocument.skipCI = skipCI;
     return skipCI;
   }
+
   /**
    *    Update the current document Github Commit Message
    *
@@ -268,7 +269,7 @@ module.exports =
     reader.readAsText(file);
   } 
 
-    /**
+  /**
    *    Import an HTML file into dillinger. 
    *
    *    @param  {File}  file  The file to import
@@ -277,82 +278,73 @@ module.exports =
    */
   function htmlFileReader(file){
 
-    console.log('htmlFileReader')
-
     var reader = new FileReader()
 
     reader.onload = function(event) {
 
-      console.log('htmlFileReader2')
-
       var text = event.target.result
-
-      console.log('htmlFileReader3')
           
       // Create a new document.
       var item = createItem();
       addItem(item);
       setCurrentDocument(item);
-     
-      console.log('htmlFileReader4')
 
       // Set the new document's title.
       setCurrentDocumentTitle(file.name);
       // Call breakdance method to convert HTML to MD
-      console.log('about to breakdance')
       
       convertHTMLtoMD(text);
       
-      }
+    }
 
     reader.readAsText(file);
   } 
 
-/**
- *    Convert HTML text to markdown. 
- *
- *    @param  {text}  string  The html text to be converted
- *
- */
-function convertHTMLtoMD(text) {
+  /**
+   *    Convert HTML text to markdown. 
+   *
+   *    @param  {text}  string  The html text to be converted
+   *
+   */
+  function convertHTMLtoMD(text) {
 
-  // Add page title
-    var di = diNotify({
-      message: 'Converting HTML to Markdown...',
-      duration: 2500
-    });
-    return $http.post('factory/html_to_md', {
-      html: text
-    }).success(function(result) {
+    // Add page title
+      var di = diNotify({
+        message: 'Converting HTML to Markdown...',
+        duration: 2500
+      });
+      return $http.post('factory/html_to_md', {
+        html: text
+      }).success(function(result) {
 
-      if (angular.isDefined(di.$scope)) {
-        di.$scope.$close();
-      }
-      if (result.data.error) {
+        if (angular.isDefined(di.$scope)) {
+          di.$scope.$close();
+        }
+        if (result.data.error) {
+          return diNotify({
+            message: 'An Error occured: ' + result.data.error,
+            duration: 5000
+          });
+        } else {
+          // Set the new document's body
+          // console.log(result.data.convertedMd)
+          setCurrentDocumentBody(result.data.convertedMd);
+
+          // Refresh the editor and proview.
+          $rootScope.$emit('document.refresh');
+
+          // Track event in GA
+          // if (window.ga) {
+          //   ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
+          // }
+        }
+      }).error(function(err) {
         return diNotify({
-          message: 'An Error occured: ' + result.data.error,
-          duration: 5000
-        });
-      } else {
-        // Set the new document's body
-        console.log(result.data.convertedMd)
-        setCurrentDocumentBody(result.data.convertedMd);
-
-        // Refresh the editor and proview.
-        $rootScope.$emit('document.refresh');
-
-        // Track event in GA
-        // if (window.ga) {
-        //   ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
-        // }
-      }
-    }).error(function(err) {
-      return diNotify({
-        message: 'An Error occured: ' + err
+          message: 'An Error occured: ' + err
+        })
       })
-    })
 
-}
+  }
 
 
   /**
@@ -367,10 +359,8 @@ function convertHTMLtoMD(text) {
 
   function importFile(file, showTip, isHTML) {
 
-    console.log('importfile ishtml is' + isHTML)
-      
     if (!file) {
-      return;
+      return console.log('No file passed to importFile function.');
     }
 
     var reader = new FileReader();
@@ -429,83 +419,83 @@ function convertHTMLtoMD(text) {
 
   }
 
-/**
- *    Upload a file to a cloud service and return a URL.
- *
- *    @param  {File}  file  The file object
- *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
- *
- */
+  /**
+   *    Upload a file to a cloud service and return a URL.
+   *
+   *    @param  {File}  file  The file object
+   *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
+   *
+   */
 
-function imageUploader(file) {
+  function imageUploader(file) {
 
-  var reader = new FileReader()
-    , name = file.name
-    ;
+    var reader = new FileReader()
+      , name = file.name
+      ;
 
-  reader.onloadend = function() {
+    reader.onloadend = function() {
 
-    var di = diNotify({
-      message: 'Uploading Image to Dropbox...',
-      duration: 5000
-    });
-    return $http.post('save/dropbox/image', {
-      image_name: name,
-      fileContents: reader.result
-    }).success(function(result) {
-
-      if (angular.isDefined(di.$scope)) {
-        di.$scope.$close();
-      }
-      if (result.data.error) {
-        return diNotify({
-          message: 'An Error occured: ' + result.data.error,
-          duration: 5000
-        });
-      } else {
-        var public_url = result.data.url 
-        // Now take public_url and and wrap in markdown
-        var template = '!['+name+']('+public_url+')'
-        // Now take the ace editor cursor and make the current
-        // value the template        
-        service.setCurrentCursorValue(template)
-
-        // Track event in GA
-        // if (window.ga) {
-        //   ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
-        // }
-        return diNotify({
-          message: 'Successfully uploaded image to Dropbox.',
-          duration: 4000
-        });
-      }
-    }).error(function(err) {
-      return diNotify({
-        message: 'An Error occured: ' + err
+      var di = diNotify({
+        message: 'Uploading Image to Dropbox...',
+        duration: 5000
       });
-    });
+      return $http.post('save/dropbox/image', {
+        image_name: name,
+        fileContents: reader.result
+      }).success(function(result) {
+
+        if (angular.isDefined(di.$scope)) {
+          di.$scope.$close();
+        }
+        if (result.data.error) {
+          return diNotify({
+            message: 'An Error occured: ' + result.data.error,
+            duration: 5000
+          });
+        } else {
+          var public_url = result.data.url 
+          // Now take public_url and and wrap in markdown
+          var template = '!['+name+']('+public_url+')'
+          // Now take the ace editor cursor and make the current
+          // value the template        
+          service.setCurrentCursorValue(template)
+
+          // Track event in GA
+          // if (window.ga) {
+          //   ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
+          // }
+          return diNotify({
+            message: 'Successfully uploaded image to Dropbox.',
+            duration: 4000
+          });
+        }
+      }).error(function(err) {
+        return diNotify({
+          message: 'An Error occured: ' + err
+        });
+      });
+
+    }
+    reader.readAsDataURL(file)
 
   }
-  reader.readAsDataURL(file)
 
-}
+  /**
+   *    Update the current document SHA.
+   *
+   *    @param  {String}  sha  The document SHA.
+   */
+  function setCurrentDocumentSHA(sha) {
+    service.currentDocument.github.sha = sha;
+    return sha;
+  }
 
-/**
- *    Update the current document SHA.
- *
- *    @param  {String}  sha  The document SHA.
- */
-function setCurrentDocumentSHA(sha) {
-  service.currentDocument.github.sha = sha;
-  return sha;
-}
-
-/**
- *    Get the current document SHA.
- */
-function getCurrentDocumentSHA() {
-  return service.currentDocument.github.sha;
-}
+  /**
+   *    Get the current document SHA.
+   */
+  function getCurrentDocumentSHA() {
+    return service.currentDocument.github.sha;
+  }
 
   function save(manual) {
     if (!angular.isDefined(manual)) {
@@ -532,4 +522,4 @@ function getCurrentDocumentSHA() {
     }
   }
 
-});
+}); // end factory
