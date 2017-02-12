@@ -17,7 +17,9 @@ module.exports =
         preventDefault(event);
 
         var file = event.originalEvent.dataTransfer.files[0];
-        documentsService.importFile(file);
+        // Check here for HTML or MD
+        let isHTML = file.type == 'text/html' ? true : false
+        documentsService.importFile(file, false, isHTML)
       }
     });
 
