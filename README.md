@@ -8,9 +8,15 @@ Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered H
   - See HTML in the right
   - Magic
 
+# New Features!
+
+  - Import a HTML file and watch it magically convert to Markdown
+  - Drag and drop images (requires your Dropbox account be linked)
+
+
 You can also:
   - Import and save files from GitHub, Dropbox, Google Drive and One Drive
-  - Drag and drop files into Dillinger
+  - Drag and drop markdown and HTML files into Dillinger
   - Export documents as Markdown, HTML and PDF
 
 Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site][df1]
@@ -36,6 +42,7 @@ Dillinger uses a number of open source projects to work properly:
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
 * [Gulp] - the streaming build system
+* [Breakdance](http://breakdance.io) - HTML to Markdown converter
 * [jQuery] - duh
 
 And of course Dillinger itself is open source with a [public repository][dill]
