@@ -384,8 +384,7 @@ exports.Github = (function() {
             return res.json(200, data)
           }
 
-
-        })
+        }) // end request()
 
       }
     }
