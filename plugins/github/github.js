@@ -372,10 +372,18 @@ exports.Github = (function() {
         request(options, function(e, r, d) {
           // 200 = Updated
           // 201 = Created
-          if (!e && r.statusCode === 200 || r.statusCode === 201) {
-            return res.json(200, JSON.parse(d))
+          var data 
+          
+          try{
+            data = JSON.parse(d)
+          }catch(e){
+            return res.json(400, { "error": "Unable to save file: " + (e || data.message) })
           }
-          return res.json(400, { "error": "Unable to save file: " + (e || JSON.parse(d).message) })
+
+          if (!e && r.statusCode === 200 || r.statusCode === 201) {
+            return res.json(200, data)
+          }
+
 
         })
 

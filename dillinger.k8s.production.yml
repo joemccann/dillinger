@@ -31,8 +31,8 @@ items:
         app: web
       name: web
     spec:
-      replicas: 2
-      revisionHistoryLimit: 3
+      replicas: 8
+      revisionHistoryLimit: 1
       template:
         metadata:
           labels:
