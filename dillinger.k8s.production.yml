@@ -29,7 +29,7 @@ items:
       namespace: dillinger-prod
       labels:
         app: web
-      name: web
+      name: web-deployment
     spec:
       replicas: 8
       revisionHistoryLimit: 1
