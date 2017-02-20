@@ -106,33 +106,39 @@ function generateAdHTML(json){
 	let html, imgs = ''
 
 	/* pixel: string, with || delimiters to split into an array */
+	try{
+		let pixels = json.pixel.split('||')
 
-	let pixels = json.pixel.split('||')
+		let time = Math.round(Date.now() / 10000)
 
-	let time = Math.round(Date.now() / 10000)
+		let pixelArrLen = pixels.length
 
-	let pixelArrLen = pixels.length
+		for (var j = 0; j < pixelArrLen; j++){
 
-	for (var j = 0; j < pixelArrLen; j++){
+			let src = pixels[j].replace('[timestamp]', time)
+		
+			imgs += '<img src="' +src+'" />'
 
-		let src = pixels[j].replace('[timestamp]', time)
-	
-		imgs += '<img src="' +src+'" />'
+		}
+		
+		// Add track clicks logic if enabled...
+		if(GA.isConfigEnabled){
+			html = 	'<a href="'+json.statlink+'" onClick="trackOutboundLink(\''
+							+json.statlink+'\'); return false;" rel="nofollow" target="_blank">'
+							+json.description+'</a>'
+							+imgs
 
-	}
-	
-	// Add track clicks logic if enabled...
-	if(GA.isConfigEnabled){
-		html = 	'<a href="'+json.statlink+'" onClick="trackOutboundLink(\''
-						+json.statlink+'\'); return false;" rel="nofollow" target="_blank">'
-						+json.description+'</a>'
-						+imgs
+		}
+		else{
+			html = '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
+							+json.description+'</a>'
+							+imgs
+		}
 
-	}
-	else{
-		html = '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
-						+json.description+'</a>'
-						+imgs
+	}catch(e){
+		console.warn("Something went awry with the json from ad provider.")
+		console.error(e)
+		html = ''		
 	}
 	return html
 

@@ -10,7 +10,7 @@ items:
     kind: Service
     metadata:
       namespace: dillinger-dev
-      name: web
+      name: dillinger-dev-web-service
     spec:
       sessionAffinity: ClientIP
       type: LoadBalancer
@@ -29,10 +29,10 @@ items:
       namespace: dillinger-dev
       labels:
         app: web
-      name: web-deployment
+      name: dillinger-dev-deployment
     spec:
-      replicas: 4
-      revisionHistoryLimit: 1
+      replicas: 1
+      revisionHistoryLimit: 3
       template:
         metadata:
           labels:
@@ -41,7 +41,7 @@ items:
           restartPolicy: Always
           containers:
           - image: joemccann/dillinger:3.15.1
-            name: web
+            name: dillinger-dev-app-container
             env:
               - name: NSOLID_APPNAME
                 value: dillinger-dev
