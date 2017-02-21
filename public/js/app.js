@@ -41,6 +41,11 @@
   require('./documents/delete-modal.controller');
   require('./services/wordscount.service');
 
+  // Plugin: Bitbucket
+  require('./plugins/bitbucket/bitbucket.service');
+  require('./plugins/bitbucket/bitbucket-modal.controller');
+  require('./plugins/bitbucket/bitbucket.controller');
+
   // Plugin: Github
   require('./plugins/github/github.service');
   require('./plugins/github/github-modal.controller');
@@ -86,6 +91,7 @@
     'diUser',
     'diZenMode',
     'diFileImport',
+    'plugins.bitbucket',
     'plugins.github',
     'plugins.dropbox',
     'plugins.medium',

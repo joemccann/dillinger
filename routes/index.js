@@ -4,6 +4,7 @@ var path = require('path')
   , request = require('request')
   , qs = require('querystring')
   , Dropbox = require( path.resolve(__dirname, '../plugins/dropbox/dropbox.js') ).Dropbox
+  , Bitbucket = require( path.resolve(__dirname, '../plugins/bitbucket/bitbucket.js') ).Bitbucket
   , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
   , Medium = require( path.resolve(__dirname, '../plugins/medium/medium.js') ).Medium
   , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
@@ -18,12 +19,14 @@ exports.index = function(req, res) {
   // Some flags to be set for client-side logic.
   var indexConfig = {
     isDropboxAuth: !!req.session.isDropboxSynced,
+    isBitbucketAuth: !!req.session.isBitbucketSynced,
     isGithubAuth: !!req.session.isGithubSynced,
     isMediumAuth: !!req.session.isMediumSynced,
     isEvernoteAuth: !!req.session.isEvernoteSynced,
     isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
     isOneDriveAuth: !!req.session.isOneDriveSynced,
     isDropboxConfigured: Dropbox.isConfigured,
+    isBitbucketConfigured: Bitbucket.isConfigured,
     isGithubConfigured: Github.isConfigured,
     isMediumConfigured: Medium.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
@@ -31,6 +34,10 @@ exports.index = function(req, res) {
     isSponsoredConfigured: Sponsored.isConfigEnabled,
     isGoogleAnalyticsConfigured: GoogleAnalytics.isConfigEnabled
   }
+
+  // Capture Bitbucket username for the future...
+  if (req.session.bitbucket && req.session.bitbucket.username) indexConfig.bitbucket_username = req.session.bitbucket.username
+  else indexConfig.isBitbucketAuth = false
 
   // Capture github username for the future...
   if (req.session.github && req.session.github.username) indexConfig.github_username = req.session.github.username
