@@ -34,10 +34,6 @@ var oauth_bitbucket = function(req, res, cb) {
       , redirect_uri = Bitbucket.bitbucketConfig.redirect_uri
       , client_secret = Bitbucket.bitbucketConfig.client_secret
 
-/*curl -X POST -u "client_id:secret" \
-  https://bitbucket.org/site/oauth2/access_token \
-  -d grant_type=authorization_code -d code={code}*/
-
     var params = '?grant_type=authorization_code'
                   + '&code=' + code
                   + '&client_id=' + client_id
@@ -79,7 +75,7 @@ var oauth_bitbucket_refresh = function(req, res) {
 
     var client_id = Bitbucket.bitbucketConfig.client_id
       , client_secret = Bitbucket.bitbucketConfig.client_secret
-      , refresh_token = Bitbucket.bitbucketConfig.refresh_token
+      , refresh_token = req.session.bitbucket.refresh_token
 
     var uri = Bitbucket.generateRefreshUrl();
 
@@ -101,8 +97,8 @@ var oauth_bitbucket_refresh = function(req, res) {
         req.session.bitbucket.expires_in = (JSON.parse(body)).expires_in
         req.session.bitbucket.refresh_token = (JSON.parse(body)).refresh_token
         req.session.bitbucket.token_type = (JSON.parse(body)).token_type
-        console.log('about')
-        Bitbucket.getUsername(req, res, function() {})
+
+        res.send('Session token refreshed.');
       }
     })
 }

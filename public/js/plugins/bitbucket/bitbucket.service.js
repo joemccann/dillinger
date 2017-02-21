@@ -42,7 +42,7 @@ module.exports =
     config: {},
 
     refreshToken: function() {
-      $http.get('/redirect/bitbucket');
+      $http.get('/refresh/bitbucket');
     },
     /**
      *    Add the User to the Organizations Array, as we want to let him
