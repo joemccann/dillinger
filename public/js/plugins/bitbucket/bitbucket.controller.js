@@ -12,9 +12,6 @@ module.exports =
   var vm = this;
 
   vm.importFile          = importFile;
-  vm.saveTo              = saveTo;
-  vm.updateSHAOnDocument = updateSHAOnDocument;
-  vm.chooseScope         = chooseScope;
 
   //////////////////////////////
 
@@ -23,7 +20,7 @@ module.exports =
       bitbucketService.refreshToken();
     }, 60000 * 15)
   })();
-  
+
   function importFile(username) {
 
     var closeModal;
