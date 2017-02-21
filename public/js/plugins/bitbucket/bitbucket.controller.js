@@ -23,6 +23,7 @@ module.exports =
       bitbucketService.refreshToken();
     }, 60000 * 15)
   })();
+  
   function importFile(username) {
 
     var closeModal;
@@ -66,75 +67,5 @@ module.exports =
       return $rootScope.$emit('autosave');
     });
   }
-
-  function updateSHAOnDocument(result) {
-    documentsService.setCurrentDocumentSHA(result.data.content.sha);
-    $rootScope.$emit('document.refresh');
-    return $rootScope.$emit('autosave');
-  }
-
-  function saveTo(username) {
-    var file = documentsService.getCurrentDocument();
-
-    // Document must be an imported file from Bitbucket to work.
-    if (file.isBitbucketFile) {
-
-       prepareBitbucketCommit(function(bitbucketCommitMessage) {
-        var filePath = file.bitbucket.path.substr(0,file.bitbucket.path.lastIndexOf('/'));
-        var postData = {
-          body:    file.body,
-          path:    filePath ? filePath + '/' + file.title : file.title,
-          sha:     file.bitbucket.sha,
-          branch:  file.bitbucket.branch,
-          repo:    file.bitbucket.repo,
-          owner:   file.bitbucket.owner,
-          uri:     file.bitbucket.url,
-          message: bitbucketCommitMessage
-        };
-
-        return bitbucketService.saveToBitbucket(postData).then(vm.updateSHAOnDocument);
-
-      }, file); // end prepareBitbucketCommit
-    } else {
-      return diNotify({
-        message: 'Your Document must be an imported file from Bitbucket.'
-      });
-    } // end else
-  } // end saveTo()
-
-  function chooseScope() {
-    var modalInstance = $modal.open({
-      template: require('raw!./bitbucket-modal.scope.html'),
-      controller: function($scope, $modalInstance){
-        $scope.close = function () {
-          $modalInstance.dismiss('cancel');
-        };
-      },
-      windowClass: 'modal--dillinger scope',
-    });
-  };
-
-  function prepareBitbucketCommit(callback, file) {
-    var modalInstance = $modal.open({
-      template: require('raw!./bitbucket-commit-message-modal.html'),
-      controller: function($scope, $modalInstance) {
-        $scope.close = function() {
-          $modalInstance.dismiss('cancel');
-        };
-        $scope.commit = function() {
-          var commitMessage = $scope.commitMessage || 'Saved ' + file.title + ' with Dillinger.io';
-          if ($scope.skipCI)
-            commitMessage = commitMessage + " [skip ci]";
-          callback(commitMessage);
-          $scope.close();
-        };
-        if (! userService.profile.enableBitbucketComment)
-          $scope.commit();
-      },
-      windowClass: 'modal--dillinger scope',
-    });
-    if (! userService.profile.enableBitbucketComment)
-        modalInstance.opened.then(function() { modalInstance.close()});
-  };
 
 });
