@@ -11,6 +11,20 @@
   </li>
   <% } %>
 
+  <!--
+  <% if (isBitbucketConfigured) { %>
+  <li ng-controller="Bitbucket as bitbucket">
+    <% if (isBitbucketAuth) { %>
+      <a class="save-to-bitbucket linked" ng-click="bitbucket.saveTo('<%= bitbucket_username %>')">
+    <% } else { %>
+      <a class="import-bitbucket unlinked" ng-click="bitbucket.chooseScope()">
+    <% } %>
+      <span>Bitbucket</span>
+      <span class="icon icon-link"><%- include ../icons/linked %></span>
+    </a>
+  </li>
+  <% } %> -->
+  
   <% if (isGithubConfigured) { %>
   <li ng-controller="Github as github">
     <% if (isGithubAuth) { %>

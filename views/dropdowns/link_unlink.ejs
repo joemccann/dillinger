@@ -11,6 +11,19 @@
 </li>
 <% } %>
 
+<% if (isBitbucketConfigured) { %>
+<li ng-controller="Bitbucket as bitbucket">
+  <% if (isBitbucketAuth) { %>
+    <a href="/unlink/bitbucket">Unlink
+  <% } else { %>
+    <a class="import-bitbucket unlinked" href="/redirect/bitbucket">Link with
+  <% } %>
+    <span>Bitbucket</span>
+    <span class="icon icon-link"><%- include ../icons/linked %></span>
+  </a>
+</li>
+<% } %>
+
 <% if (isGithubConfigured) { %>
 <li ng-controller="Github as github">
   <% if (isGithubAuth) { %>
