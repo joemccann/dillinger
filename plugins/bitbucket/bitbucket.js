@@ -319,23 +319,27 @@ exports.Bitbucket = (function() {
               });
             });
           }
+          function filterFiles() {
+            files = files.filter(function(item) { return regExp.test(item.path) });
+            if (files.length === 0) return res.json();
+            files.forEach(function(file, index, files) {
+              files[index].url = (uri.split('?')[0] + file.path).replace('/src/', '/raw/');
+              if (files.length === index+1) res.json(files)
+            })
+          }
 
           var everyFile = [];
-          if (directories.length === 0) return res.json(files);
-          directories.forEach(function(dir, index, dirs) {
-            everyFile.push(recurse(dir));
-            if (dirs.length === index + 1) {
-                Promise.all(everyFile)
-                .then(function() {
-                  files = files.filter(function(item) { return regExp.test(item.path) });
-                  if (files.length === 0) return res.json();
-                  files.forEach(function(file, index, files) {
-                    files[index].url = (uri.split('?')[0] + file.path).replace('/src/', '/raw/');
-                    if (files.length === index+1) res.json(files)
-                  })
-                });
-            }
-          });
+          if (directories.length === 0) {
+            filterFiles();
+          } else {
+            directories.forEach(function(dir, index, dirs) {
+              everyFile.push(recurse(dir));
+              if (dirs.length === index + 1) {
+                  Promise.all(everyFile)
+                  .then(filterFiles());
+              }
+            });
+          }
         } // end else if
         else {
           res.json({ error: 'Unable to fetch files from Bitbucket.' })
