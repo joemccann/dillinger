@@ -321,6 +321,7 @@ exports.Bitbucket = (function() {
           }
 
           var everyFile = [];
+          if (directories.length === 0) return res.json(files);
           directories.forEach(function(dir, index, dirs) {
             everyFile.push(recurse(dir));
             if (dirs.length === index + 1) {
