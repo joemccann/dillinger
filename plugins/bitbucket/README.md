@@ -2,6 +2,14 @@ Bitbucket Dillinger Plugin
 ==
 
 0. Create your app with Bitbucket:  https://bitbucket.org/account/user/<username>/api
+  Add an OAuth consumer and make sure that the following permissions are set (checkboxes marked):
+  
+  Account: Email,
+  Account: Read, 
+  Team Membership: Read,
+  Repositories: Read,
+  Repositories: Write
+
 1. Create your `bitbucket-config.json`.  It needs to contain:
 ```
     {
