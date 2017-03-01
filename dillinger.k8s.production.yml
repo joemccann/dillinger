@@ -39,7 +39,7 @@ items:
             app: web
         spec:
           containers:
-          - image: joemccann/dillinger:3.15.2
+          - image: joemccann/dillinger:3.16.0
             name: web
             env:
               - name: NSOLID_APPNAME
