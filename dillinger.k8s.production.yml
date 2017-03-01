@@ -70,6 +70,8 @@ items:
               name: googleanalytics-config
             - mountPath: /configs/medium/
               name: medium-config
+            - mountPath: /configs/bitbucket/
+              name: bitbucket-config
           volumes:
           - name: dropbox-config
             secret:
@@ -92,3 +94,6 @@ items:
           - name: googleanalytics-config
             secret:
               secretName: googleanalytics-config
+          - name: bitbucket-config
+            secret:
+              secretName: bitbucket-config              
