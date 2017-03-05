@@ -144,7 +144,7 @@ See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETE
 
 ### Todos
 
- - Write MOAR Tests
+ - Write MORE Tests
  - Add Night Mode
 
 License
