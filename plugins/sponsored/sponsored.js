@@ -76,7 +76,17 @@ Sponsored.prototype.fetchAd = function fetchAd(forwardedIp,cb){
     throw Error('fetchAd requires cb parameter to be a function')
   }
 
-  let sponsoredUrl = this.sponsored_config.url + "?forwardedip=" + forwardedIp
+  let sponsoredUrl
+
+  // When testing...
+  if(forwardedIp == '127.0.0.1'){
+  	// BuySellAds sends a DIFFERENT payload if you send
+  	// 127.0.0.1 as the forwardedIP :facepalm:
+	  let tempIp = '173.244.209.21'
+  	sponsoredUrl = this.sponsored_config.url + "?forwardedip=" + tempIp
+  }else{
+		sponsoredUrl = this.sponsored_config.url + "?forwardedip=" + forwardedIp
+  }
 
   // Go get the ad JSON
 	request(sponsoredUrl, function adsFetchCb(err,response,body){
@@ -107,39 +117,41 @@ Sponsored.prototype.fetchAd = function fetchAd(forwardedIp,cb){
 } // end fetchAd
 
 // Helper to generate the HTML for the ad
-function generateAdHTML(json){
+function generateAdHTML(ad){
 
-	if(!json) return ''
+	if(!ad) return ''
 
 	let html, imgs = ''
 
 	/* pixel: string, with || delimiters to split into an array */
-	try{
-		let pixels = json.pixel.split('||')
+	// try{
+	// 	let pixels = json.pixel.split('||')
 
-		let time = Math.round(Date.now() / 10000)
+	// 	let time = Math.round(Date.now() / 10000)
 
-		let pixelArrLen = pixels.length
+	// 	let pixelArrLen = pixels.length
 
-		for (var j = 0; j < pixelArrLen; j++){
+	// 	for (var j = 0; j < pixelArrLen; j++){
 
-			let src = pixels[j].replace('[timestamp]', time)
+	// 		let src = pixels[j].replace('[timestamp]', time)
 		
-			imgs += '<img src="' +src+'" />'
+	// 		imgs += '<img src="' +src+'" />'
 
-		}
+	// 	}
+
+	try{
 		
 		// Add track clicks logic if enabled...
 		if(GA.isConfigEnabled){
-			html = 	'<a href="'+json.statlink+'" onClick="trackOutboundLink(\''
-							+json.statlink+'\'); return false;" rel="nofollow" target="_blank">'
-							+json.description+'</a>'
+			html = 	'<a href="'+ad.statlink+'" onClick="trackOutboundLink(\''
+							+ad.statlink+'\'); return false;" rel="nofollow" target="_blank">'
+							+ad.description+'</a>'
 							+imgs
 
 		}
 		else{
-			html = '<a href="'+json.statlink+'" rel="nofollow" target="_blank">'
-							+json.description+'</a>'
+			html = '<a href="'+ad.statlink+'" rel="nofollow" target="_blank">'
+							+ad.description+'</a>'
 							+imgs
 		}
 
