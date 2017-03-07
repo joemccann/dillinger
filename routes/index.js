@@ -53,15 +53,20 @@ exports.index = function(req, res) {
       && req.session.medium.oauth.token && req.session.medium.oauth.token.access_token) {
     // Set the access token on the medium client
     Medium.setAccessTokenFromSession(req.session.medium.oauth.token.access_token)
-  }else
-  {
-    console.log("No Medium Session.")
+  }else{
     req.session.isMediumSynced = false
   }
 
   // If Sponsored ads is enabled get the ad HTML
   if(Sponsored.isConfigEnabled){
-    Sponsored.fetchAd(function createAdCb(json){
+    let forwardedIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+
+    // WARNING: this will break when we switch to IPv6
+    if (forwardedIp.substr(0, 7) == "::ffff:") {
+      forwardedIp = forwardedIp.substr(7)
+    }
+
+    Sponsored.fetchAd(forwardedIp, function createAdCb(json){
       indexConfig.adHTML = Sponsored.generateAdHTML(json)
       return res.render('index', indexConfig)
     })

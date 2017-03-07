@@ -57,8 +57,14 @@ function Sponsored(){
 
 // The fetchAd function does exactly that - fetches
 // ad JSON for the ad
+// @string forwardedIp is required
 // @param cb is required
-Sponsored.prototype.fetchAd = function fetchAd(cb){
+Sponsored.prototype.fetchAd = function fetchAd(forwardedIp,cb){
+
+  // nah dawg you need a callback
+  if (!forwardedIp) {
+    throw Error('fetchAd requires a forwarded IP address.')
+  }
 
   // nah dawg you need a callback
   if (!cb) {
@@ -70,8 +76,10 @@ Sponsored.prototype.fetchAd = function fetchAd(cb){
     throw Error('fetchAd requires cb parameter to be a function')
   }
 
+  let sponsoredUrl = this.sponsored_config.url + "?forwardedip=" + forwardedIp
+
   // Go get the ad JSON
-	request(this.sponsored_config.url, function adsFetchCb(err,response,body){
+	request(sponsoredUrl, function adsFetchCb(err,response,body){
 		
 		let adJSON = {}
 		
