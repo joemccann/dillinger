@@ -38,7 +38,7 @@ app.set('view engine', 'ejs')
 
 // // Required to trust GCP proxy for the
 // x-forwarded-by heading
-app.set('trust_proxy', 1) 
+app.set('trust proxy', true) 
 
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.

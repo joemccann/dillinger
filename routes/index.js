@@ -59,9 +59,12 @@ exports.index = function(req, res) {
 
   // If Sponsored ads is enabled get the ad HTML
   if(Sponsored.isConfigEnabled){
-    let forwardedIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+    let forwardedIp = req.headers['X-Forwarded-For'] || req.connection.remoteAddress
 
-    console.log('\n x-forwarded-for: \t' + req.headers['x-forwarded-for'])
+    console.log('X-Forwarded-For: \t' + req.headers['X-Forwarded-For'])
+
+    console.log(req.ip)
+    console.dir(req.ips)
 
     // WARNING: this will break when we switch to IPv6
     if (forwardedIp.substr(0, 7) == "::ffff:") {
