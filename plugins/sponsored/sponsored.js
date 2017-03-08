@@ -78,6 +78,8 @@ Sponsored.prototype.fetchAd = function fetchAd(forwardedIp, cb){
 
   let sponsoredUrl
 
+  console.log("\n"+forwardedIp + " is the forwarded IP \n")
+
   // When testing...
   if(forwardedIp == '127.0.0.1'){
   	// BuySellAds sends a DIFFERENT payload if you send
@@ -121,6 +123,10 @@ function generateAdHTML(ad){
 
 	if(!ad) return ''
 
+	// console.dir(ad)
+	console.log('statlink: \t'+ad.statlink)
+	console.log('description: \t'+ad.description)
+
 	let html, imgs = ''
 
 	/* pixel: string, with || delimiters to split into an array */
@@ -160,6 +166,7 @@ function generateAdHTML(ad){
 		console.error(e)
 		html = ''		
 	}
+	console.log(html)
 	return html
 
 }
