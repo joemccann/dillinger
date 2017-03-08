@@ -123,7 +123,7 @@ function generateAdHTML(ad){
 
 	if(!ad) return ''
 
-	// console.dir(ad)
+	console.dir(ad)
 	console.log('statlink: \t'+ad.statlink)
 	console.log('description: \t'+ad.description)
 

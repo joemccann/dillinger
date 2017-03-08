@@ -36,6 +36,10 @@ app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
 app.set('views', __dirname + '/views')
 app.set('view engine', 'ejs')
 
+// // Required to trust GCP proxy for the
+// x-forwarded-by heading
+app.set('trust_proxy', 1) 
+
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')))

@@ -61,6 +61,8 @@ exports.index = function(req, res) {
   if(Sponsored.isConfigEnabled){
     let forwardedIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
+    console.log('\n x-forwarded-for: \t' + req.headers['x-forwarded-for'])
+
     // WARNING: this will break when we switch to IPv6
     if (forwardedIp.substr(0, 7) == "::ffff:") {
       forwardedIp = forwardedIp.substr(7)
