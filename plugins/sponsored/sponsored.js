@@ -59,9 +59,9 @@ function Sponsored(){
 // ad JSON for the ad
 // @string forwardedIp is required
 // @param cb is required
-Sponsored.prototype.fetchAd = function fetchAd(forwardedIp,cb){
+Sponsored.prototype.fetchAd = function fetchAd(forwardedIp, cb){
 
-  // nah dawg you need a callback
+  // nah dawg you need a forwarded IP address
   if (!forwardedIp) {
     throw Error('fetchAd requires a forwarded IP address.')
   }
