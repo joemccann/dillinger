@@ -64,7 +64,6 @@ For production environments...
 
 ```sh
 $ npm install --production
-$ npm run predeploy
 $ NODE_ENV=production node app
 ```
 
