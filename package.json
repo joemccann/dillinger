@@ -87,7 +87,7 @@
     "parse-link-header": "0.4.1",
     "phantom": "^2.0.4",
     "rc": "0.3.0",
-    "request": "^2.64.0",
+    "request": "^2.65.0",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
     "temp": "^0.8.3",
