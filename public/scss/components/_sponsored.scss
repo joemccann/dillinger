@@ -54,10 +54,6 @@ $break-mid-4: 460px;
   padding: 18px 24px;
 }
 
-#_default_ ._default_ > * {
-  vertical-align: middle;
-}
-
 #_default_ a {
   color: #35d7bb;
   text-decoration: none;
@@ -88,7 +84,7 @@ $break-mid-4: 460px;
 
 #_default_ a:before {
   position: relative;
-  top: 1px;
+  top: 0px;
   padding: 5px;
   color: #a0aabf;
   content: "Ad";
@@ -118,15 +114,15 @@ $break-mid-4: 460px;
   }
 
   @media screen and (max-width: $break-mid) {
+	  max-width: 60%;
+  }
+
+  @media screen and (max-width: $break-mid-2) {
+	  max-width: 55%;
+  }
+
+  @media screen and (max-width: $break-mid-2) {
 	  max-width: 50%;
-  }
-
-  @media screen and (max-width: $break-mid-2) {
-	  max-width: 45%;
-  }
-
-  @media screen and (max-width: $break-mid-2) {
-	  max-width: 40%;
   }
 
   @media screen and (max-width: $break-mid-4) {
@@ -136,7 +132,7 @@ $break-mid-4: 460px;
 
 // same as .dropdown-toggle
 
-#_default_ a{
+#_default_ ._default_{
 	display: block;
   font-size: .75rem;
   height: 51px;
@@ -176,7 +172,7 @@ $break-mid-4: 460px;
 	  font-size: .66rem;
 	  letter-spacing: 1px;
 	  line-height: 1rem;
-	  padding: 6px 24px;
+	  padding: 10px 24px;
   }
 
   @media screen and (max-width: $break-mid-3) {
