@@ -7,7 +7,7 @@
 //   Template (Haml)
 // -------------------------------------
 //
-// .ad-container
+// #_default
 //
 // *************************************
 
@@ -25,12 +25,80 @@ $break-mid-4: 460px;
   width: 250px;
 }
 
-.ad-container a::before{
+#_default_ a::before{
   color: $c-ad;
-  content: "Ad:  ";
 }
 
-.ad-container {
+#_default_ img{
+  display: none;
+}
+
+
+#_default_ #_default_ {
+  display: block;
+  float: left;
+  max-width: 38%;
+  word-wrap: break-word;
+}
+
+#_default_ .default-ad {
+  display: none;
+}
+
+#_default_ ._default_ {
+  display: block;
+  font-size: .75rem;
+  height: 51px;
+  letter-spacing: 1px;
+  line-height: 1rem;
+  padding: 18px 24px;
+}
+
+#_default_ ._default_ > * {
+  vertical-align: middle;
+}
+
+#_default_ a {
+  color: #35d7bb;
+  text-decoration: none;
+}
+
+#_default_ a:hover {
+  color: lighten(#35d7bb, 20%);
+}
+
+#_default_ .default-image {
+  display: none;
+}
+
+#_default_ .default-title:after {
+  content: " — ";
+}
+
+#_default_ .default-title,
+#_default_ .default-description {
+  display: inline;
+}
+
+#_default_ .default-title {
+  position: relative;
+  font-weight: 600;
+  display: none;
+}
+
+#_default_ a:before {
+  position: relative;
+  top: 1px;
+  padding: 5px;
+  color: #a0aabf;
+  content: "Ad";
+  text-transform: uppercase;
+  font-size: 8px;
+  font-family: Verdana, sans-serif;
+}
+
+
+#_default_ {
   display: block;
   float: left;
   max-width: 38%;
@@ -68,7 +136,7 @@ $break-mid-4: 460px;
 
 // same as .dropdown-toggle
 
-.ad-container a{
+#_default_ a{
 	display: block;
   font-size: .75rem;
   height: 51px;
@@ -121,6 +189,3 @@ $break-mid-4: 460px;
 
 }
 
-.ad-container img{
-	display: none;
-}

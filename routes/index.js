@@ -58,27 +58,27 @@ exports.index = function(req, res) {
   }
 
   // If Sponsored ads is enabled get the ad HTML
-  if(Sponsored.isConfigEnabled){
-    let forwardedIp = req.headers['X-Forwarded-For'] || req.connection.remoteAddress
+  // if(Sponsored.isConfigEnabled){
+  //   let forwardedIp = req.headers['X-Forwarded-For'] || req.connection.remoteAddress
 
-    console.log('X-Forwarded-For: \t' + req.headers['X-Forwarded-For'])
+  //   console.log('X-Forwarded-For: \t' + req.headers['X-Forwarded-For'])
 
-    console.log(req.ip)
-    console.dir(req.ips)
+  //   console.log(req.ip)
+  //   console.dir(req.ips)
 
-    // WARNING: this will break when we switch to IPv6
-    if (forwardedIp.substr(0, 7) == "::ffff:") {
-      forwardedIp = forwardedIp.substr(7)
-    }
+  //   // WARNING: this will break when we switch to IPv6
+  //   if (forwardedIp.substr(0, 7) == "::ffff:") {
+  //     forwardedIp = forwardedIp.substr(7)
+  //   }
 
-    Sponsored.fetchAd(forwardedIp, function createAdCb(json){
-      indexConfig.adHTML = Sponsored.generateAdHTML(json)
-      return res.render('index', indexConfig)
-    })
-  }
-  else{
+  //   Sponsored.fetchAd(forwardedIp, function createAdCb(json){
+  //     indexConfig.adHTML = Sponsored.generateAdHTML(json)
+  //     return res.render('index', indexConfig)
+  //   })
+  // }
+  // else{
     return res.render('index', indexConfig)    
-  }
+  // }
 
 }
 
