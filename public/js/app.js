@@ -109,10 +109,8 @@
     return jQuery('.splashscreen').animate({
       opacity: 0
     }, 150, function() {
+      console.log('loaded...')
       return jQuery('.splashscreen').remove()
-      // jQuery('#editor1').resizable({
-      //     alsoResizeReverse: '#preview1'          
-      // });
     });
   });
 

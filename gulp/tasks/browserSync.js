@@ -7,7 +7,7 @@ var
 
 gulp.task('browserSync', function() {
   browserSync({
-    files: ['views/**'],
+    files: ['views/**', 'public/**'],
     proxy: 'localhost:8090',
     notify: false
   });
