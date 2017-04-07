@@ -81,13 +81,11 @@ module.exports =
    *    Saves the File on Dropbox.
    */
   function saveTo() {
-    console.log('saveTo controller dbox')
     
     var body, title;
 
     title  = documentsService.getCurrentDocumentTitle();
     body   = documentsService.getCurrentDocumentBody();
-    
     return dropboxService.saveFile(title, body);
   }
 

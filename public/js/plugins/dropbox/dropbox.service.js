@@ -47,16 +47,18 @@ module.exports =
       message: 'Saving File to Dropbox...',
       duration: 5000
     });
+
     return $http.post('save/dropbox', {
       pathToMdFile: '/Dillinger/' + title,
       fileContents: body
-    }).success(function(result) {
+    }).then(
+      function successCallback(response){
       if (angular.isDefined(di.$scope)) {
         di.$scope.$close();
       }
-      if (result.data.error) {
+      if (response.data.error) {
         return diNotify({
-          message: 'An Error occured: ' + result.data.error,
+          message: 'An Error occured: ' + response.data.error,
           duration: 5000
         });
       } else {
@@ -64,16 +66,17 @@ module.exports =
           ga('send', 'event', 'click', 'Save To Dropbox', 'Save To...')
         }
         return diNotify({
-          message: 'Successfully saved to: ' + result.data.path,
+          message: 'Successfully saved to: ' + response.data.data.path,
           duration: 5000
         });
       }
-    }).error(function(err) {
-      return diNotify({
-        message: 'An Error occured: ' + err
+      }, function errorCallback(err){
+        return diNotify({
+          message: 'An Error occured: ' + err
+        });
       });
-    });
-  }
+
+  } // end saveToFile
 
   /**
    *    Fetch File from Dropbox.
@@ -81,17 +84,16 @@ module.exports =
    *    @param  {String}  filePath  Path to the file on Dropbox.
    */
   function fetchFile(filePath) {
-    return $http.post('fetch/dropbox', {
-      mdFile: filePath
-    }).success(function(data) {
-      dropboxService.fetched.file = data.data;
-      return dropboxService.fetched.file;
-    }).error(function(err) {
-      return diNotify({
-        message: 'An Error occured: ' + err
+    return $http.post('fetch/dropbox', {mdFile: filePath}).then(
+      function successCallback(response){
+        dropboxService.fetched.file = response.data.data;
+        return dropboxService.fetched.file;
+      }, function errorCallback(err){
+        return diNotify({
+          message: 'An Error occured: ' + err
+        });
       });
-    });
-  }
+  } // end fetchFile
 
   /**
    *    Fetch all Markdown related Files from Dropbox.
@@ -102,12 +104,13 @@ module.exports =
       duration: 5000
     });
 
-    return $http.post('import/dropbox', {fileExts: 'md'}).then(function successCallback(response){
-      if (angular.isDefined(dropboxService.di.$scope)) {
-        dropboxService.di.$scope.$close();
-      }
-      dropboxService.files = response.data;
-      return dropboxService.files;
+    return $http.post('import/dropbox', {fileExts: 'md'}).then(
+      function successCallback(response){
+        if (angular.isDefined(dropboxService.di.$scope)) {
+          dropboxService.di.$scope.$close();
+        }
+        dropboxService.files = response.data;
+        return dropboxService.files;
       }, function errorCallback(err){
           return diNotify({
             message: 'An Error occured: ' + err
