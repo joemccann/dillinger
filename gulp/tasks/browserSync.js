@@ -8,7 +8,11 @@ var
 gulp.task('browserSync', function() {
   browserSync({
     files: ['views/**', 'public/**'],
-    proxy: 'localhost:8090',
-    notify: false
+    proxy: 'dillinger.io:8090',
+    notify: true,
+    port: 80,
+    host: 'dillinger.io',
+    open: 'external'
   });
 });
+
