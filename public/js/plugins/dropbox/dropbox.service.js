@@ -101,20 +101,19 @@ module.exports =
       message: 'Fetching Markdown related files from Dropbox...',
       duration: 5000
     });
-    return $http.post('import/dropbox', {
-      fileExts: 'md'
-    }).success(function(data) {
+
+    return $http.post('import/dropbox', {fileExts: 'md'}).then(function successCallback(response){
       if (angular.isDefined(dropboxService.di.$scope)) {
         dropboxService.di.$scope.$close();
       }
-      dropboxService.files = data;
+      dropboxService.files = response.data;
       return dropboxService.files;
-    }).error(function(err) {
-      return diNotify({
-        message: 'An Error occured: ' + err
+      }, function errorCallback(err){
+          return diNotify({
+            message: 'An Error occured: ' + err
+          });
       });
-    });
-  }
+  } // end fetchfiles
 
   function save() {
     localStorage.setItem('dropbox', angular.toJson(dropboxService.fetched));

@@ -109,7 +109,6 @@
     return jQuery('.splashscreen').animate({
       opacity: 0
     }, 150, function() {
-      console.log('loaded...')
       return jQuery('.splashscreen').remove()
     });
   });

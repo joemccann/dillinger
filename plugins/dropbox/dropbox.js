@@ -114,6 +114,7 @@ exports.Dropbox = (function() {
     },
     searchForMdFiles: function(opts, cb) {
 
+console.dir(opts)
       // *sigh* http://forums.dropbox.com/topic.php?id=50266&replies=1
 
       var dropboxObj = opts.dropboxObj
