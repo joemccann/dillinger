@@ -39,11 +39,7 @@ items:
             app: web
         spec:
           containers:
-<<<<<<< HEAD
-          - image: joemccann/dillinger:3.16.7
-=======
           - image: joemccann/dillinger:3.17.0
->>>>>>> wtfjs
             name: web
             env:
               - name: NSOLID_APPNAME
