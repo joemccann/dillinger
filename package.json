@@ -1,7 +1,11 @@
 {
   "name": "Dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by yours truly, Joe McCann.",
+<<<<<<< HEAD
   "version": "3.16.7",
+=======
+  "version": "3.17.0",
+>>>>>>> wtfjs
   "author": {
     "name": "Joe McCann",
     "email": "joe@nodesource.com"

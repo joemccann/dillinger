@@ -40,7 +40,11 @@ items:
         spec:
           restartPolicy: Always
           containers:
+<<<<<<< HEAD
           - image: joemccann/dillinger:3.16.7
+=======
+          - image: joemccann/dillinger:3.17.0
+>>>>>>> wtfjs
             name: dillinger-dev-app-container
             env:
               - name: NSOLID_APPNAME
