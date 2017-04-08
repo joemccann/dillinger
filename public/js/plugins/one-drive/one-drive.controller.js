@@ -15,12 +15,12 @@ module.exports = angular.module('plugins.onedrive', ['plugins.onedrive.service',
         }
       }
     });
-    return modalInstance.result.then(function() {
+    return modalInstance.result.then(function successCallback() {
       documentsService.setCurrentDocumentTitle(onedriveService.fetched.fileName);
       documentsService.setCurrentDocumentBody(onedriveService.fetched.file);
       $rootScope.$emit('document.refresh');
       return $rootScope.$emit('autosave');
-    }, function() {
+    }, function errorCallback() {
       return console.log("Modal dismissed at: " + (new Date()));
     });
   };

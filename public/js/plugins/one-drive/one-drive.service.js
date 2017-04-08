@@ -19,7 +19,7 @@ module.exports = angular.module('plugins.onedrive.service', []).factory('onedriv
       return $http.post('save/onedrive', {
         title: title,
         content: body
-      }).success(function(data) {
+      }).then(function successCallback(data) {
         if (di != null) {
           di.$scope.$close();
         }
@@ -37,18 +37,18 @@ module.exports = angular.module('plugins.onedrive.service', []).factory('onedriv
             duration: 5000
           });
         }
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
-          message: "An Error occured: " + err
+          message: "An Error occured: " + err.message
         });
       });
     },
     fetchFile: function(fileId, fileName) {
-      return $http.get("fetch/onedrive?fileId=" + fileId).success(function(data) {
-        return service.fetched.file = data.content;
-      }).error(function(err) {
+      return $http.get("fetch/onedrive?fileId=" + fileId).then(function successCallback(data) {
+        return service.fetched.file = data.data.content;
+      }, function errorCallback(err) {
         return diNotify({
-          message: "An Error occured: " + err
+          message: "An Error occured: " + err.message
         });
       });
     },
@@ -58,14 +58,27 @@ module.exports = angular.module('plugins.onedrive.service', []).factory('onedriv
         message: "Fetching Markdown related files from One Drive...",
         duration: 5000
       });
-      return $http.get('import/onedrive').success(function(data) {
+      return $http.get('import/onedrive').then(function successCallback(data) {
+
+        if (data && data.data.error) {
+          if (di != null) {
+            di.$scope.$close();
+          }
+          return diNotify({
+            message: "An Error occured: " + data.data.error.message,
+            duration: 3000
+          });
+        }
+
         if (di != null) {
           di.$scope.$close();
         }
-        return service.files = data.data || [];
-      }).error(function(err) {
+
+        return service.files = data.data.data || [];
+
+      }, function errorCallback(err) {
         return diNotify({
-          message: "An Error occured: " + err
+          message: "An Error occured: " + error.message
         });
       });
     },
