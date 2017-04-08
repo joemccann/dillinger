@@ -19,7 +19,7 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
       return $http.post('save/googledrive', {
         title: title,
         content: body
-      }).success(function(data) {
+      }).then(function successCallback(data) {
         if (di != null) {
           di.$scope.$close();
         }
@@ -30,17 +30,17 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
           message: "Successfully saved to Google Drive",
           duration: 5000
         });
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
           message: "An Error occured: " + err
         });
       });
     },
     fetchFile: function(fileId) {
-      return $http.get("fetch/googledrive?fileId=" + fileId).success(function(data) {
-        service.fetched.fileName = data.title;
-        return service.fetched.file = data.content;
-      }).error(function(err) {
+      return $http.get("fetch/googledrive?fileId=" + fileId).then(function successCallback(data) {
+        service.fetched.fileName = data.data.title;
+        return service.fetched.file = data.data.content;
+      }, function errorCallback(err) {
         return diNotify({
           message: "An Error occured: " + err
         });
@@ -52,12 +52,12 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
         message: "Fetching Markdown related files from Google Drive...",
         duration: 5000
       });
-      return $http.get('import/googledrive').success(function(data) {
+      return $http.get('import/googledrive').then(function(data) {
         if (di != null) {
           di.$scope.$close();
         }
-        return service.files = data.items || [];
-      }).error(function(err) {
+        return service.files = data.data.items || [];
+      }, function errorCallback(err) {
         return diNotify({
           message: "An Error occured: " + err
         });
