@@ -109,6 +109,7 @@
     return jQuery('.splashscreen').animate({
       opacity: 0
     }, 150, function() {
+      console.log('github test ds')
       return jQuery('.splashscreen').remove()
     });
   });

@@ -83,7 +83,16 @@ module.exports =
           message: githubCommitMessage
         };
 
-        return githubService.saveToGithub(postData).then(vm.updateSHAOnDocument);
+        return githubService.saveToGithub(postData).then(
+          function successCallback(result) {
+            vm.updateSHAOnDocument(result)
+          }, function errorCallback(err){
+          return diNotify({
+            message: 'An Error occured: ' + err.error,
+            duration: 5000
+          });
+
+            });
 
       }, file); // end prepareGithubCommit
     } else {
@@ -106,6 +115,7 @@ module.exports =
   };
 
   function prepareGithubCommit(callback, file) {
+
     var modalInstance = $modal.open({
       template: require('raw!./github-commit-message-modal.html'),
       controller: function($scope, $modalInstance) {
@@ -124,6 +134,7 @@ module.exports =
       },
       windowClass: 'modal--dillinger scope',
     });
+
     if (! userService.profile.enableGitHubComment)
         modalInstance.opened.then(function() { modalInstance.close()});
   };

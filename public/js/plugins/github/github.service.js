@@ -38,6 +38,7 @@ module.exports =
      *    search through his own Repos.
      */
     registerUserAsOrg: function() {
+      if(!Array.isArray(service.config.orgs)) service.config.orgs = []
       return service.config.orgs.push({
         name: service.config.user.name
       });
@@ -50,18 +51,18 @@ module.exports =
      */
     fetchFile: function(url, path) {
       service.config.current.url = url;
-      return $http.post('import/github/file', {
-        url: url
-      }).success(function(result) {
-        service.config.current.file = result.data.content;
-        service.config.current.url  = result.data.url;
-        service.config.current.sha  = result.data.sha;
-        return false;
-      }).error(function(err) {
-        return diNotify({
-          message: 'An Error occured: ' + err
+      return $http.post('import/github/file', {url: url})
+        .then(function successCallback(result){
+          service.config.current.file = result.data.data.content;
+          service.config.current.url  = result.data.data.url;
+          service.config.current.sha  = result.data.data.sha;
+          return false;
+        }, function errorCallback(err){
+          return diNotify({
+            message: 'An Error occured: ' + err
+          });
         });
-      });
+
     },
 
     /**
@@ -82,7 +83,7 @@ module.exports =
         branch:   branch ? branch : service.config.current.branch,
         sha:      sha ? sha : service.config.current.sha,
         fileExts: fileExts ? fileExts : 'md'
-      }).success(function(data) {
+      }).then(function successCallback(response) {
         if (di != null) {
           di.$scope.$close();
         }
@@ -90,13 +91,13 @@ module.exports =
         service.config.current.repo   = repo ? repo : service.config.current.repo;
         service.config.current.branch = branch ? branch : service.config.current.branch;
         service.config.current.sha    = sha ? sha : service.config.current.sha;
-        service.config.current.tree   = data.tree;
+        service.config.current.tree   = response.data.tree;
         return service.config.current;
-      }).error(function(err) {
+      }, function errorCallback(err){
         return diNotify({
           message: 'An Error occured: ' + err
         });
-      });
+      })
     },
 
     /**
@@ -111,15 +112,15 @@ module.exports =
       return $http.post('import/github/branches', {
         owner: owner ? owner : service.config.current.owner,
         repo:  repo ? repo : service.config.current.repo
-      }).success(function(data) {
+      }).then(function successCallback(response) {
         if (di != null) {
           di.$scope.$close();
         }
         service.config.current.repo  = repo;
-        service.config.branches      = data;
+        service.config.branches      = response.data;
 
         return service.config.branches;
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
           message: 'An Error occured: ' + err
         });
@@ -138,16 +139,16 @@ module.exports =
         owner: owner,
         page: page,
         per_page: per_page,
-      }).success(function(data) {
+      }).then(function successCallback(response) {
         if (di != null) {
           di.$scope.$close();
         }
         service.config.current.owner = owner;
-        service.config.repos = data.items;
-        service.config.pagination = data.pagination;
+        service.config.repos = response.data.items;
+        service.config.pagination = response.data.pagination;
 
         return service.config.repos;
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
           message: 'An Error occured: ' + err
         });
@@ -160,14 +161,14 @@ module.exports =
     fetchOrgs: function() {
       var di;
       di = diNotify('Fetching Organizations...');
-      return $http.post('import/github/orgs').success(function(data) {
+      return $http.post('import/github/orgs').then(function successCallback(data) {
         if (di != null) {
           di.$scope.$close();
         }
-        service.config.orgs = data;
+        service.config.orgs = data.data;
 
         return service.config.orgs;
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
           message: 'An Error occured: ' + err
         });
@@ -203,21 +204,21 @@ module.exports =
         repo:    data.repo,
         message: data.message,
         owner:   data.owner
-      }).success(function(result) {
+      }).then(function successCallback(result) {
         if (di.$scope != null) {
           di.$scope.$close();
         }
         diNotify({
-          message: 'Successfully saved to ' + result.content.path + '!',
+          message: 'Successfully saved to ' + result.data.content.path + '!',
           duration: 5000
         });
         if (window.ga) {
           ga('send', 'event', 'click', 'Save To GitHub', 'Save To...')
         }
         return result;
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
-          message: 'An Error occured: ' + err.error,
+          message: 'An Error occured: ' + err.data.error,
           duration: 5000
         });
       });

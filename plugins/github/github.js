@@ -330,7 +330,6 @@ exports.Github = (function() {
     }, // end fetchFile
 
     saveToGithub: function(req, res) {
-
       var data = req.body
       if (!data.uri) {
         res.json(400, { "error": "Requires Github URI" })
@@ -372,16 +371,20 @@ exports.Github = (function() {
         request(options, function(e, r, d) {
           // 200 = Updated
           // 201 = Created
+          // 409 = Conflict
           var data 
-          
           try{
             data = JSON.parse(d)
           }catch(e){
-            return res.json(400, { "error": "Unable to save file: " + (e || data.message) })
+            return res.status(400).json({ "error": "Unable to save file: " + (e || data.message) })
+          }
+          // In case the sha doesn't match...
+          if (!e && r.statusCode === 409) {
+            return res.status(409).json({ "error": "Unable to save file: " + (e || data.message) })
           }
 
           if (!e && r.statusCode === 200 || r.statusCode === 201) {
-            return res.json(200, data)
+            return res.status(200).json(data)
           }
 
         }) // end request()

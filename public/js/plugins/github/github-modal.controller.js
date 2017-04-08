@@ -39,7 +39,6 @@ module.exports =
     vm.title = 'Repositories';
     vm.step  = 2;
     vm.pagination = githubService.config.pagination;
-     
     if (!vm.totalItems) {
       //#pagination BUG - @graredcr - 25/09/2016
       if (String(vm.pagination) == "null")
