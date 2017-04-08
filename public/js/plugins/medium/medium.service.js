@@ -20,7 +20,7 @@ angular.module('plugins.medium.service', []).factory('mediumService', function($
       return $http.post('save/medium', {
         title: title,
         content: body
-      }).success(function(data) {
+      }).then(function successCallback(data) {
         if (di != null) {
           di.$scope.$close();
         }
@@ -31,7 +31,7 @@ angular.module('plugins.medium.service', []).factory('mediumService', function($
           message: "Successfully saved to Medium",
           duration: 5000
         });
-      }).error(function(err) {
+      }, function errorCallback(err) {
         return diNotify({
           message: "An Error occured: " + err,
           duration: 5000
