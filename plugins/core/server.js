@@ -157,7 +157,6 @@ function htmlToMd(req,res){
 
 }
 
-
 /* Start Dillinger Routes */
 
 // Download a markdown file directly as response.
