@@ -150,10 +150,10 @@ function htmlToMd(req,res){
   try{
     md = breakdance(req.body.html)
   }catch(e){
-    return res.status(400).json({data:{error: 'Something went wrong with the HTML to Markdown conversion.'} }) 
+    return res.status(400).json({error: {message: 'Something went wrong with the HTML to Markdown conversion.'} }) 
   }
 
-  return res.status(200).json({data:{convertedMd: md} })
+  return res.status(200).json({convertedMd: md})
 
 }
 

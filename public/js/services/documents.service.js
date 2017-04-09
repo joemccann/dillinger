@@ -315,14 +315,13 @@ module.exports =
       });
       return $http.post('factory/html_to_md', {
         html: text
-      }).success(function(result) {
-
+      }).then(function successCallback(result) {
         if (angular.isDefined(di.$scope)) {
           di.$scope.$close();
         }
         if (result.data.error) {
           return diNotify({
-            message: 'An Error occured: ' + result.data.error,
+            message: 'An Error occured: ' + result.data.error.message,
             duration: 5000
           });
         } else {
@@ -334,13 +333,17 @@ module.exports =
           $rootScope.$emit('document.refresh');
 
           // Track event in GA
-          // if (window.ga) {
-          //   ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
-          // }
+          if (window.ga) {
+            ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
+          }
         }
-      }).error(function(err) {
+      }, function errorCallback(err) {
+        if (angular.isDefined(di.$scope)) {
+          di.$scope.$close();
+        }
         return diNotify({
-          message: 'An Error occured: ' + err
+          message: 'An Error occured: ' + err.data.error.message,
+          duration: 5000
         })
       })
 
