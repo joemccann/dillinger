@@ -25,7 +25,7 @@ function updateKubeFile(filename){
 
 		if(err) return console.error(err)
 
-			let pattern = /dillinger:([^\s]+)/i; 
+			let pattern = /dillinger:([^\s]+)/ig; 
 
 			data = data.replace(pattern, `dillinger:${pkg.version}`)
 		
@@ -42,7 +42,7 @@ function updateKubeFile(filename){
 }
 
 // Build the docker image...
-exec(build, exec_opts)
+// exec(build, exec_opts)
 
 // Now let's update our Kubernetes deployment files to the latest
 // version of the docker image

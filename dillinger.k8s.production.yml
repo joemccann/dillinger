@@ -39,11 +39,11 @@ items:
             app: web
         spec:
           containers:
-          - image: joemccann/dillinger:3.22.0
+          - image: joemccann/dillinger:3.22.1
             name: web
             env:
               - name: NSOLID_APPNAME
-                value: app-dillinger:3.22.0
+                value: app-dillinger:3.22.1
               - name: NSOLID_COMMAND
                 value: "storage.nsolid:9001"
               - name: NSOLID_DATA
@@ -51,7 +51,7 @@ items:
               - name: NSOLID_BULK
                 value: "storage.nsolid:9003"
               - name: NSOLID_TAGS
-                value: "nsolid-boron-v2.1.0,dillinger:3.22.0"
+                value: "nsolid-boron-v2.1.0,dillinger:3.22.1
             ports:
             - containerPort: 8080
               name: http-server
