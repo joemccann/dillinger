@@ -72,7 +72,7 @@ var oauth_bitbucket = function(req, res, cb) {
 
 var oauth_bitbucket_refresh = function(req, res) {
 
-    if(req.session.isBitbucketSynced || !req.session.bitbucket.refresh_token) 
+if ( (typeof req.session.bitbucket.refresh_token === "undefined") || !req.session.isBitbucketSynced)
         return res.send('Session token never established.')
 
     var client_id = Bitbucket.bitbucketConfig.client_id
