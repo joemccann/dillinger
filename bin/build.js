@@ -42,7 +42,7 @@ function updateKubeFile(filename){
 }
 
 // Build the docker image...
-// exec(build, exec_opts)
+exec(build, exec_opts)
 
 // Now let's update our Kubernetes deployment files to the latest
 // version of the docker image
