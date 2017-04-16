@@ -43,7 +43,7 @@ items:
             name: web
             env:
               - name: NSOLID_APPNAME
-                value: dillinger-production
+                value: app-dillinger:3.22.0
               - name: NSOLID_COMMAND
                 value: "storage.nsolid:9001"
               - name: NSOLID_DATA
@@ -51,7 +51,7 @@ items:
               - name: NSOLID_BULK
                 value: "storage.nsolid:9003"
               - name: NSOLID_TAGS
-                value: "nsolid-boron-v2.1.0,dillinger-production"
+                value: "nsolid-boron-v2.1.0,dillinger:3.22.0"
             ports:
             - containerPort: 8080
               name: http-server

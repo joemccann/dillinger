@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       python-software-properties \
     && rm -rf /var/lib/apt/lists/*
 
-# deps.json only has the dependencies from the package.json.
 # this is faster via npm run build-docker
 COPY package.json ./package.json
 RUN npm install \
