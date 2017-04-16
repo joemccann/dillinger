@@ -33,7 +33,7 @@ function updateKubeFile(filename){
 
 			if(err) return console.error(err)
 
-			console.log(`Updated Kubernetes deploy file: ${filename}\n`)
+			console.log(`\nUpdated Kubernetes deploy file: ${filename} to dillinger:${pkg.version}\n`)
 
 		}) // end write
 
