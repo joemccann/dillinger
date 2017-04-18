@@ -31,7 +31,7 @@ items:
         app: web
       name: web-deployment
     spec:
-      replicas: 8
+      replicas: 4
       revisionHistoryLimit: 1
       template:
         metadata:
