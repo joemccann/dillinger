@@ -1,6 +1,6 @@
 FROM nodesource/nsolid:boron-2.1.0
 
-MAINTAINER Joe McCann <joe@nodesource.com>
+LABEL maintainer "Joe McCann <joe@nodesource.com>"
 
 # Install our dependencies (libfontconfig for phantomjs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
