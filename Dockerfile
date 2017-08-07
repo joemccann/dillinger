@@ -1,4 +1,4 @@
-FROM nodesource/nsolid:boron-2.1.0
+FROM nodesource/nsolid:boron-2.3.0
 
 LABEL maintainer "Joe McCann <joe@nodesource.com>"
 
