@@ -7,11 +7,12 @@ module.exports =
 
   var
     defaults = {
-      enableAutoSave:   true,
-      enableWordsCount: true,
-      enableScrollSync: false,
-      enableNightMode:  false,
-      enableGitHubComment: true
+      enableAutoSave:        true,
+      enableWordsCount:      true,
+      enableCharactersCount: true,
+      enableScrollSync:      false,
+      enableNightMode:       false,
+      enableGitHubComment:   true
     },
     service = {
       profile: {},
