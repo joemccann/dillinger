@@ -3,7 +3,7 @@
   position: relative;
 }
 
-.words, .characters {
+.words {
   @include sp($fontsize: eta, $font: $headingtype, $lineheight: 1, $below: 1, $breakpoint: all);
   font-weight: map-get($headingtype, semibold);
   font-family: map-get($headingtype, font-family);
@@ -19,5 +19,3 @@
     color: #000;
   }
 }
-
-.wordsCountService + .characters { top: 22px; }

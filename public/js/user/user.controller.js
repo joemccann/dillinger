@@ -5,10 +5,9 @@ module.exports =
   angular
   .module('diUser', [
     'diUser.service',
-    'diDocuments.service.wordcount',
-    'diDocuments.service.charactercount'
+    'diDocuments.service.wordcount'
   ])
-  .controller('User', function($rootScope, $timeout, $modal, userService, wordsCountService, charactersCountService) {
+  .controller('User', function($rootScope, $timeout, $modal, userService, wordsCountService) {
 
   var vm = this;
 
@@ -39,17 +38,15 @@ module.exports =
   };
 
   $rootScope.$on('preview.updated', updateWords);
-  $rootScope.$on('preview.updated', updateCharacters);
 
   // Methods on the Controller
-  vm.toggleGitHubComment   = toggleGitHubComment;
-  vm.toggleAutoSave        = toggleAutoSave;
-  vm.toggleWordsCount      = toggleWordsCount;
-  vm.toggleCharactersCount = toggleCharactersCount;
-  vm.toggleNightMode       = toggleNightMode;
-  vm.toggleScrollSync      = toggleScrollSync;
-  vm.resetProfile          = resetProfile;
-  vm.showAbout             = showAbout;
+  vm.toggleGitHubComment = toggleGitHubComment;
+  vm.toggleAutoSave   = toggleAutoSave;
+  vm.toggleWordsCount = toggleWordsCount;
+  vm.toggleNightMode  = toggleNightMode;
+  vm.toggleScrollSync = toggleScrollSync;
+  vm.resetProfile     = resetProfile;
+  vm.showAbout        = showAbout;
 
   doSync();
 
@@ -74,14 +71,6 @@ module.exports =
   function toggleWordsCount(e) {
     e.preventDefault();
     vm.profile.enableWordsCount = !vm.profile.enableWordsCount;
-    userService.save(vm.profile);
-
-    return false;
-  }
-
-  function toggleCharactersCount(e) {
-    e.preventDefault();
-    vm.profile.enableCharactersCount = !vm.profile.enableCharactersCount;
     userService.save(vm.profile);
 
     return false;
@@ -114,14 +103,6 @@ module.exports =
 
   function updateWords() {
     $rootScope.words = wordsCountService.count();
-
-    return $timeout(function() {
-      return $rootScope.$apply();
-    }, 0);
-  }
-
-  function updateCharacters() {
-    $rootScope.characters = charactersCountService.count();
 
     return $timeout(function() {
       return $rootScope.$apply();
