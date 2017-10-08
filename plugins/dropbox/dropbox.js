@@ -16,15 +16,16 @@ var dropbox_config_file = path.resolve(__dirname, '../../configs/dropbox/', 'dro
 if (fs.existsSync(dropbox_config_file)) {
   dropbox_config = require(dropbox_config_file);
   isConfigEnabled = true;
+  console.log('Dropbox config found in environment. Plugin enabled. (Key: "' + dropbox_config.app_key + '")');  
 } else if (process.env.dropbox_app_key !== undefined) {
   dropbox_config = {
     "app_key": process.env.dropbox_app_key,
     "app_secret": process.env.dropbox_app_secret,
     "callback_url": process.env.dropbox_callback_url,
-    "auth_url": "https://www.dropbox.com/1/oauth/authorize",
-    "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
-    "access_token_url": "https://api.dropbox.com/1/oauth/access_token",
-    "collections_url": "https://api-content.dropbox.com/1"
+    "auth_url": "https://www.dropbox.com/oauth2/authorize",
+    "request_token_url": "https://api.dropbox.com/oauth2/request_token",
+    "access_token_url": "https://api.dropbox.com/oauth2/access_token",
+    "collections_url": "https://api-content.dropbox.com/2"
   };
   isConfigEnabled = true;
   console.log('Dropbox config found in environment. Plugin enabled. (Key: "' + dropbox_config.app_key + '")');
@@ -114,13 +115,15 @@ exports.Dropbox = (function() {
     },
     searchForMdFiles: function(opts, cb) {
 
-console.dir(opts)
+      //console.dir(opts)
       // *sigh* http://forums.dropbox.com/topic.php?id=50266&replies=1
 
       var dropboxObj = opts.dropboxObj
         , fileExts = opts.fileExts.split('|')
         , regExp = arrayToRegExp(fileExts)
-        , access_token = { oauth_token: dropboxObj.oauth.access_token, oauth_token_secret: dropboxObj.oauth.access_token_secret }
+        , access_token = { 
+            oauth_token: dropboxObj.oauth.access_token, 
+            oauth_token_secret: dropboxObj.oauth.access_token_secret }
         , dboxclient = dboxapp.client(access_token)
         , options, batches, cbFilter
         ;
@@ -225,7 +228,10 @@ console.dir(opts)
     handleIncomingFlowRequest: function(req, res, cb){
 
       var filePath = req.query.path
-        , access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret}
+        , access_token = {
+          oauth_token : req.session.dropbox.oauth.access_token, 
+          oauth_token_secret : req.session.dropbox.oauth.access_token_secret
+        }
         , dboxclient = dboxapp.client(access_token)
 
       if (!access_token) {
