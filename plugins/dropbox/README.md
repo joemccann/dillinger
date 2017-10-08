@@ -9,9 +9,9 @@ Dropbox Dillinger Plugin
       "app_key": "YOUR_KEY",
       "app_secret": "YOUR_SECRET",
       "callback_url": "YOUR_CALLBACK_URL",
-      "auth_url": "https://www.dropbox.com/1/oauth/authorize",
-      "request_token_url": "https://api.dropbox.com/1/oauth/request_token",
-      "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
+      "auth_url": "https://www.dropbox.com/oauth2/authorize",
+      "request_token_url": "https://api.dropbox.com/oauth2/request_token",
+      "access_token_url": "https://api.dropbox.com/oauth2/access_token"
     }
 ```
 The values for `app_key` and `app_secret` can be obtained on the dropbox app page.
