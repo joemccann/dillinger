@@ -22,7 +22,7 @@ module.exports =
   $scope.profile             = userService.profile;
   $rootScope.currentDocument = documentsService.getCurrentDocument();
   $rootScope.editor          = ace.edit('editor');
-
+  $rootScope.viewSrcMode     = false; 
   $rootScope.editor.getSession().setMode('ace/mode/markdown');
   $rootScope.editor.setTheme('ace/theme/dillinger');
   $rootScope.editor.getSession().setUseWrapMode(true);
@@ -38,5 +38,9 @@ module.exports =
 
   $scope.updateDocument = updateDocument;
 
+  $scope.toggleView = function() {
+    $rootScope.viewSrcMode = !$rootScope.viewSrcMode;
+  }
+  
   $rootScope.$on('document.refresh', updateDocument);
 });
