@@ -11,36 +11,74 @@
 //
 // *************************************
 
-#preview {
-
-// -------------------------------------
-//   Modifiers
-// -------------------------------------
-
-// .split--modifier
-
-// -------------------------------------
-//   States
-// -------------------------------------
-
-// .split.is-state
-
-// -------------------------------------
-//   Context
-// -------------------------------------
-
-// .has-split
-
-// -------------------------------------
-//   Scaffolding
-// -------------------------------------
-
-// .split-scaffolding
-  a {
-    color: $c-links;
-    text-decoration: underline;
+.preview-html {
+  
+  // -------------------------------------
+  //   Modifiers
+  // -------------------------------------
+  
+  // .split--modifier
+  
+  // -------------------------------------
+  //   States
+  // -------------------------------------
+  
+  // .split.is-state
+  
+  // -------------------------------------
+  //   Context
+  // -------------------------------------
+  
+  // .has-split
+  
+  // -------------------------------------
+  //   Scaffolding
+  // -------------------------------------
+  
+  // .split-scaffolding
+    a {
+      color: $c-links;
+      text-decoration: underline;
+    }
+  
+    padding: 15px;
+  
   }
-
-  padding: 15px;
-
-}
+  
+  .preview-src { 
+      white-space: normal;
+  }
+  
+  .preview-mode-toggle-src {
+    @include hide-text;
+    background-image: url('../img/icons/code.svg');
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    display: none;
+  
+    @include from('tablet') {
+      display: block;
+    }
+  }
+  
+  .preview-mode-toggle-html {
+    @include hide-text;
+    background-image: url('../img/icons/eye.svg');
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+    display: none;
+  
+    @include from('tablet') {
+      display: block;
+    }
+  }
