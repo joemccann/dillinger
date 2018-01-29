@@ -66,7 +66,7 @@
     "highlight.js": "^8.8.0",
     "inverseresize": "git+https://github.com/CCole/alsoResizeInverse.git",
     "jquery": "^2.1.1",
-    "jquery-ui-bundle": "^1.11.4",
+    "jquery-ui-bundle": "^1.12.1",
     "katex": "^0.9.0-alpha2",
     "keymaster": "^1.6.2",
     "lodash": "^4.15.0",
