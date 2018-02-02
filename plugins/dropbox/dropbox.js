@@ -5,6 +5,7 @@ var fs = require('fs')
   , qs = require('querystring')
   , url = require('url')
   , parallel = require('./parallel')
+  , DropboxSDK = require('dropbox').Dropbox;
   ;
 
 var dropbox_config_file = path.resolve(__dirname, '../../configs/dropbox/', 'dropbox-config.json')
@@ -22,10 +23,7 @@ if (fs.existsSync(dropbox_config_file)) {
     "app_key": process.env.dropbox_app_key,
     "app_secret": process.env.dropbox_app_secret,
     "callback_url": process.env.dropbox_callback_url,
-    "auth_url": "https://www.dropbox.com/oauth2/authorize",
-    "request_token_url": "https://api.dropbox.com/oauth2/request_token",
-    "access_token_url": "https://api.dropbox.com/oauth2/access_token",
-    "collections_url": "https://api-content.dropbox.com/2"
+    "auth_url": "https://www.dropbox.com/oauth2/authorize"
   };
   isConfigEnabled = true;
   console.log('Dropbox config found in environment. Plugin enabled. (Key: "' + dropbox_config.app_key + '")');
@@ -34,22 +32,16 @@ if (fs.existsSync(dropbox_config_file)) {
     "app_key": "YOUR_KEY"
   , "app_secret": "YOUR_SECRET"
   , "callback_url": "YOUR_CALLBACK_URL"
-  , "auth_url": "https://www.dropbox.com/1/oauth/authorize"
-  , "request_token_url": "https://api.dropbox.com/1/oauth/request_token"
-  , "access_token_url": "https://api.dropbox.com/1/oauth/access_token"
-  , "collections_url": "https://api-content.dropbox.com/1"
+  , "auth_url": "https://www.dropbox.com/oauth2/authorize"
   };
   console.warn('Dropbox config not found at ' + dropbox_config_file + '. Plugin disabled.');
 }
 
 exports.Dropbox = (function() {
 
-  var dboxapp = dbox.app({
-    "app_key": dropbox_config.app_key
-  , "app_secret": dropbox_config.app_secret
-  , "root": "dropbox"
-  });
-
+  var dbx = new DropboxSDK({ accessToken: dropbox_config.app_key, clientId: dropbox_config.app_key });
+  dbx.setClientSecret(dropbox_config.app_secret);
+  
   function arrayToRegExp(arr) {
     return new RegExp("(" + arr.map(function(e) { return e.replace('.','\\.'); }).join('|') + ")$", 'i');
   }
@@ -57,33 +49,24 @@ exports.Dropbox = (function() {
   return {
     isConfigured: isConfigEnabled,
     config: dropbox_config,
-    getNewRequestToken: function(req, res, cb) {
-
-      // Create your auth_url for the view
-      dboxapp.requesttoken(function(status, request_token){
-
-        return cb(status, request_token);
-
-      });
-
+    // Get a URL that can be used to authenticate users for the Dropbox API.
+    getAuthUrl: function(req, res, cb) {
+      return cb(dbx.getAuthenticationUrl(dropbox_config.callback_url, null, 'code'));
     },
-    getRemoteAccessToken: function(request_token, request_token_secret, cb) {
-
-      var req_token = { oauth_token: request_token, oauth_token_secret: request_token_secret };
-
-      dboxapp.accesstoken(req_token, function(status, access_token){
-        return cb(status, access_token)
+    // Get an OAuth2 access token from an OAuth2 Code.
+    getRemoteAccessToken: function(code, cb) {
+      dbx.getAccessTokenFromCode(dropbox_config.callback_url, code).then(function(result) {
+        return cb('ok', result)
       })
 
     }, // end getRemoteAccessToken()
     getAccountInfo: function(dropboxObj, cb) {
-      var access_token = { oauth_token: dropboxObj.oauth.access_token, oauth_token_secret: dropboxObj.oauth.access_token_secret };
-
-      var dboxclient = dboxapp.client(access_token)
-
-      dboxclient.account(function(status, reply) {
-        return cb(status, reply)
-      })
+      dbx.setAccessToken(dropboxObj);
+      dbx.usersGetCurrentAccount().then(function(user) {
+        cb(null, user)
+      }).catch(function(err) {
+        cb(err)
+      });
 
     }, // end getAccountInfo()
     fetchDropboxFile: function(req, res) {
@@ -93,67 +76,36 @@ exports.Dropbox = (function() {
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
 
-      var access_token = {
-        oauth_token : req.session.dropbox.oauth.access_token,
-        oauth_token_secret : req.session.dropbox.oauth.access_token_secret
-      }
-
-      var dboxclient = dboxapp.client(access_token)
-
       var pathToMdFile = req.body.mdFile
-
-      dboxclient.get(pathToMdFile, function(status, reply, metadata) {
-
+      dbx.filesDownload({path: pathToMdFile}).then(function(doc) {
         // https://github.com/joemccann/dillinger/issues/64
         // In case of an empty file...
-        reply = reply ? reply.toString() : ''
-
-        return res.json({data: reply.toString()})
-
-      })
+        var reply = doc.fileBinary ? doc.fileBinary.toString() : ''
+        return res.json({data: reply})
+        })
 
     },
     searchForMdFiles: function(opts, cb) {
 
-      //console.dir(opts)
-      // *sigh* http://forums.dropbox.com/topic.php?id=50266&replies=1
-
-      var dropboxObj = opts.dropboxObj
-        , fileExts = opts.fileExts.split('|')
+        var fileExts = opts.fileExts.split('|')
         , regExp = arrayToRegExp(fileExts)
-        , access_token = { 
-            oauth_token: dropboxObj.oauth.access_token, 
-            oauth_token_secret: dropboxObj.oauth.access_token_secret }
-        , dboxclient = dboxapp.client(access_token)
-        , options, batches, cbFilter
+        , batches
         ;
-
-      options = {
-        file_limit: 500
-      , include_deleted: false
-      }
-
-      cbFilter = function(_cb) {
-        return function(status, reply) {
-          var files = []
-          if (status > 399 || !reply) {
-            return _cb(new Error('Bad response.'))
-          }
-
-          reply.forEach(function(item) {
-            if (regExp.test(item.path)) {
-              files.push(item)
-            }
-          })
-
-          _cb(null, files)
-        }
-      }
 
       // generate a new dropbox search per file extension
       batches = fileExts.map(function(ext) {
         return function(_cb) {
-          dboxclient.search("/", ext, options, cbFilter(_cb))
+          dbx.filesSearch({path: '', query: ext, max_results: 500, mode: 'filename'}).then(function(res) {
+            var files = []
+            res.matches.forEach(function(item) {
+              if (regExp.test(item.metadata.path_lower)) {
+                files.push(item.metadata)
+              }
+            });
+            _cb(null, files)
+          }).catch(function(err) {
+            _cb(err, null)
+          });
         }
       })
 
@@ -169,18 +121,13 @@ exports.Dropbox = (function() {
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
 
-      var access_token = {oauth_token : req.session.dropbox.oauth.access_token, oauth_token_secret : req.session.dropbox.oauth.access_token_secret};
-
-      var dboxclient = dboxapp.client(access_token)
-
       // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
-
       var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
       if (!path.extname(pathToMdFile))
         pathToMdFile += ".md"
       var contents = req.body.fileContents || 'Test Data from Dillinger.'
 
-      dboxclient.put(pathToMdFile, contents, function(status, reply){
+      dbx.filesUpload({path: pathToMdFile, contents: contents, autorename: true, mode : {'.tag': 'overwrite'}}).then(function(reply) {
         return res.json({data: reply})
       })
 
@@ -191,13 +138,8 @@ exports.Dropbox = (function() {
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
-      
-      var access_token = {
-            oauth_token: req.session.dropbox.oauth.access_token
-          , oauth_token_secret: req.session.dropbox.oauth.access_token_secret
-        }
-        , dboxclient = dboxapp.client(access_token)
-        , pathToImage = '/Dillinger/_images/' + req.body.image_name
+
+        var pathToImage = '/Dillinger/_images/' + req.body.image_name
         , base64_data = req.body.fileContents.split(',')[1] // Is this thorough enough?
         , buffer = new Buffer(base64_data, 'base64')
         ;
@@ -212,37 +154,16 @@ exports.Dropbox = (function() {
       //     console.log('wrote the file')
       // }); 
       // End local testing...
-
-      dboxclient.put(pathToImage, buffer, function(status, reply){
-        // TODO: NEED TO CHECK FOR FAILURE HERE
-        dboxclient.shares(pathToImage, {short_url:false}, function(status,reply){
-          // Because Dropbox doesn't allow us to link directly
-          // we have to append this to the url: 'raw=1'
+      dbx.filesUpload({path: pathToImage, contents: buffer, mode : {'.tag': 'add'}})
+        .then(function() {
+          return dbx.sharingCreateSharedLink({path: pathToImage})
+        .then(function(reply) {
           reply.url = reply.url + '&raw=1'
-          return res.json({data: reply})          
+          return res.json({data: reply})
         })
-
       })
 
-    }, // end saveImageToDropbox
-    handleIncomingFlowRequest: function(req, res, cb){
-
-      var filePath = req.query.path
-        , access_token = {
-          oauth_token : req.session.dropbox.oauth.access_token, 
-          oauth_token_secret : req.session.dropbox.oauth.access_token_secret
-        }
-        , dboxclient = dboxapp.client(access_token)
-
-      if (!access_token) {
-        return res.redirect('/redirect/dropbox')
-      }
-
-      dboxclient.get(filePath, function(status, reply, metadata){
-        return res.json({data: reply.toString(), filename: path.basename(filePath)})
-      })
-
-    } // end handleIncomingFlowRequest
+    }
 
   }
 

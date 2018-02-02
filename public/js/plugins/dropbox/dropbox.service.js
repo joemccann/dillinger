@@ -66,7 +66,7 @@ module.exports =
           ga('send', 'event', 'click', 'Save To Dropbox', 'Save To...')
         }
         return diNotify({
-          message: 'Successfully saved to: ' + response.data.data.path,
+          message: 'Successfully saved to: ' + response.data.data.path_display,
           duration: 5000
         });
       }

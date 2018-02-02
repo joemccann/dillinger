@@ -30,6 +30,8 @@ const config = require('./config')()
   , onedrive = require('./plugins/onedrive/server.js')
   , env = process.env.NODE_ENV || 'development';
 
+require('isomorphic-fetch') /* patch global fetch for dropbox module*/
+
 app.set('port', process.env.PORT || 8080)
 app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
 

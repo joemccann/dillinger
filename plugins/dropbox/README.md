@@ -9,9 +9,7 @@ Dropbox Dillinger Plugin
       "app_key": "YOUR_KEY",
       "app_secret": "YOUR_SECRET",
       "callback_url": "YOUR_CALLBACK_URL",
-      "auth_url": "https://www.dropbox.com/oauth2/authorize",
-      "request_token_url": "https://api.dropbox.com/oauth2/request_token",
-      "access_token_url": "https://api.dropbox.com/oauth2/access_token"
+      "auth_url": "https://www.dropbox.com/oauth2/authorize"
     }
 ```
 The values for `app_key` and `app_secret` can be obtained on the dropbox app page.
@@ -26,3 +24,12 @@ Set the following environment variables if adding `dropbox-config.json` may pres
     dropbox_app_key=YOUR_KEY
     dropbox_app_secret=YOUR_SECRET
     dropbox_callback_url=YOUR_CALLBACK_URL
+    
+Dropbox v1 to v2 Migration
+==
+
+If your app was previously set up to use the v1 Dropbox API via Dillinger, all you need to do to ensure the v2 upgrade will work with Dropbox is:
+
+- Ensure `Allow implicit grant` is set under your OAuth2 settings
+- Ensure Redirect URI` is set under your OAuth2 settings to point to your Dillinger instance
+- Ensure `app_key` and `app_secret` are present in your config and that the URLs are updated to the new endpoints
