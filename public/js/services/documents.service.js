@@ -30,6 +30,7 @@ module.exports =
     getCurrentDocumentTitle: getCurrentDocumentTitle,
     setCurrentDocumentBody:  setCurrentDocumentBody,
     getCurrentDocumentBody:  getCurrentDocumentBody,
+    setCurrentDocumentId:    setCurrentDocumentId,
     setCurrentDocumentSHA:   setCurrentDocumentSHA,
     getCurrentDocumentSHA:   getCurrentDocumentSHA,
     setCurrentCursorValue:   setCurrentCursorValue,
@@ -169,6 +170,15 @@ module.exports =
     return skipCI;
   }
 
+  /**
+   *    Update the current document ID.
+   *
+   *    @param  {Boolean}  fileId  DocumentID
+   */
+  function setCurrentDocumentId(fileId) {
+    service.currentDocument.fileId = fileId;
+    return fileId;
+  }
   /**
    *    Update the current document Github Commit Message
    *

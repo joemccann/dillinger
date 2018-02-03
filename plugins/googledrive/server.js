@@ -71,7 +71,7 @@ var save_googledrive = function(req, res) {
     res.status(401).send('Google Drive is not linked.');
     return;
   }
-  var fileId = req.query.fileId
+  var fileId = req.body.fileId
     , content = req.body.content
     , title = req.body.title
     , tokens = req.session.googledrive;
