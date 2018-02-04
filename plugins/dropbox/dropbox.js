@@ -1,7 +1,6 @@
 var fs = require('fs')
   , path = require('path')
   , request = require('request')
-  , dbox = require('dbox')
   , qs = require('querystring')
   , url = require('url')
   , parallel = require('./parallel')
