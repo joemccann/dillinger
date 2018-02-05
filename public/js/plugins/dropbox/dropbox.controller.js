@@ -74,6 +74,8 @@ module.exports =
       $rootScope.$emit('autosave');
 
       return false;
+    }, function() {
+      modalInstance.dismiss('cancel');
     });
   }
 
