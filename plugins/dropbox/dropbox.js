@@ -3,7 +3,6 @@ var fs = require('fs')
   , request = require('request')
   , qs = require('querystring')
   , url = require('url')
-  , parallel = require('./parallel')
   , DropboxSDK = require('dropbox').Dropbox;
   ;
 
@@ -85,32 +84,29 @@ exports.Dropbox = (function() {
 
     },
     searchForMdFiles: function(opts, cb) {
+      
+      var fileExts = opts.fileExts.split('|')
+      , regExp = arrayToRegExp(fileExts)
+      ;
+      var queries = [];
+      fileExts.forEach(function(ext) {
+        queries.push(dbx.filesSearch({path: '', query: ext, max_results: 500, mode: 'filename'}))
+      })
 
-        var fileExts = opts.fileExts.split('|')
-        , regExp = arrayToRegExp(fileExts)
-        , batches
-        ;
-
-      // generate a new dropbox search per file extension
-      batches = fileExts.map(function(ext) {
-        return function(_cb) {
-          dbx.filesSearch({path: '', query: ext, max_results: 500, mode: 'filename'}).then(function(res) {
-            var files = []
-            res.matches.forEach(function(item) {
-              if (regExp.test(item.metadata.path_lower)) {
-                files.push(item.metadata)
-              }
-            });
-            _cb(null, files)
-          }).catch(function(err) {
-            _cb(err, null)
+      Promise.all(queries).then(function(filetypes) {
+        var files = [];
+        
+        filetypes.forEach(function(filetype) {
+          filetype.matches.forEach(function(item) {
+            if (regExp.test(item.metadata.path_lower)) {
+              files.push(item.metadata)
+            }
           });
-        }
-      })
-
-      parallel(batches, function(err, res) {
-        cb(err, res)
-      })
+        })
+        cb(null, files)
+      }).catch(function(err) {
+        cb(err, null)
+      });
 
     },
     saveFileToDropbox: function(req, res){

@@ -112,8 +112,11 @@ module.exports =
         dropboxService.files = response.data;
         return dropboxService.files;
       }, function errorCallback(err){
+          if (angular.isDefined(dropboxService.di.$scope)) {
+            dropboxService.di.$scope.$close();
+          }
           return diNotify({
-            message: 'An Error occured: ' + err
+            message: 'An Error occured: ' + err.data
           });
       });
   } // end fetchfiles

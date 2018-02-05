@@ -60,10 +60,14 @@ var unlink_dropbox = function(req, res) {
 var import_dropbox = function(req, res) {
   var postBody = req.body || {}
 
-  Dropbox.searchForMdFiles({fileExts: postBody.fileExts}, function(status, data) {
-    if (status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
-    if (status > 399) return res.status(status).send("Something went wrong. Please refresh.")
-    return res.json(data)
+  Dropbox.searchForMdFiles({fileExts: postBody.fileExts}, function(err, data) {
+
+    if (err === null) {
+      return res.json(data)
+    }
+    if (err.status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
+    if (err.status === 400) return res.status(400).send("Bad request to Dropbox. Please unlink and link again.")
+    if (err.status > 399) return res.status(status).send("Something went wrong. Please refresh.")
   })
 
 }
