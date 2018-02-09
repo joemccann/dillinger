@@ -5,7 +5,7 @@ services:
     container_name: dillinger
     image: joemccann/dillinger
     ports:
-      - "12345:12345"
+      - "9000:9000"
     environment:
       - "BIND_ADDRESS=0.0.0.0"
-      - "PORT=12345"
+      - "PORT=9000"

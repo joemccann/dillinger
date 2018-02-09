@@ -8,3 +8,4 @@ kubectl create secret generic sponsored-config --from-file=configs/sponsored/spo
 kubectl create secret generic googleanalytics-config --from-file=configs/googleanalytics/googleanalytics-config.json --namespace=dillinger-prod
 kubectl create secret generic medium-config --from-file=configs/medium/medium-config.json --namespace=dillinger-prod
 kubectl create secret generic bitbucket-config --from-file=configs/bitbucket/bitbucket-config.json --namespace=dillinger-prod
+
