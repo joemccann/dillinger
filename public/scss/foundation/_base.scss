@@ -19,6 +19,7 @@ body {
   font-weight: map-get($bodytype, regular);
   line-height: 2rem;
   height: 100%;
+  overflow: hidden;
 }
 
 // -------------------------------------
