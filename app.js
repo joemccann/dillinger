@@ -52,6 +52,9 @@ if(env === 'development'){
 else{
   app.use(logger('short'))
 }
+if(env === 'production'){
+  app.use(require('connect-assets')({paths: ['public/js', 'public/css'], fingerprinting: true, build: false }));
+}
 
 app.use(compress())
 
