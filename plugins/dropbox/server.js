@@ -60,7 +60,7 @@ var unlink_dropbox = function(req, res) {
 var import_dropbox = function(req, res) {
   var postBody = req.body || {}
 
-  Dropbox.searchForMdFiles({fileExts: postBody.fileExts}, function(err, data) {
+  Dropbox.searchForMdFiles(req.session.dropbox.oauthtoken, {fileExts: postBody.fileExts}, function(err, data) {
 
     if (err === null) {
       return res.json(data)
