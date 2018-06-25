@@ -1,6 +1,6 @@
 <% if(env === 'production') { %>
   <%- include clientside-sponsored %>
-  <%- js('bundle.js', { async: true }) %>
+  <script src="/js/bundle.js" type="text/javascript" async></script>
   <% if (isGoogleAnalyticsConfigured) { %>
   <script type="text/javascript">
     <%- GATrackingHTML %>
