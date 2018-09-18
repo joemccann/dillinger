@@ -4,31 +4,33 @@
 
 'use strict'
 
-const config = require('./config')()
-  , connect = require('connect')
-  , methodOverride = require('method-override')
-  , logger = require('morgan')
-  , favicon = require('serve-favicon')
-  , compress = require('compression')
-  , bodyParser = require('body-parser')
-  , cookieParser = require('cookie-parser')
-  , cookieSession = require('cookie-session')
-  , express = require('express')
-  , netjet = require('netjet')
-  , routes = require('./routes')
-  , serveStatic = require('serve-static')
-  , errorHandler = require('errorhandler')
-  , path = require('path')
-  , fs = require('fs')
-  , app = express()
-  , core = require('./plugins/core/server.js')
-  , dropbox = require('./plugins/dropbox/server.js')
-  , bitbucket = require('./plugins/bitbucket/server.js')
-  , github = require('./plugins/github/server.js')
-  , medium = require('./plugins/medium/server.js')
-  , googledrive = require('./plugins/googledrive/server.js')
-  , onedrive = require('./plugins/onedrive/server.js')
-  , env = process.env.NODE_ENV || 'development';
+const config = require('./config')(),
+  connect = require('connect'),
+  methodOverride = require('method-override'),
+  logger = require('morgan'),
+  favicon = require('serve-favicon'),
+  compress = require('compression'),
+  bodyParser = require('body-parser'),
+  cookieParser = require('cookie-parser'),
+  cookieSession = require('cookie-session'),
+  express = require('express'),
+  netjet = require('netjet'),
+  routes = require('./routes'),
+  serveStatic = require('serve-static'),
+  errorHandler = require('errorhandler'),
+  path = require('path'),
+  fs = require('fs'),
+  app = express(),
+  core = require('./plugins/core/server.js'),
+  dropbox = require('./plugins/dropbox/server.js'),
+  bitbucket = require('./plugins/bitbucket/server.js'),
+  github = require('./plugins/github/server.js'),
+  medium = require('./plugins/medium/server.js'),
+  googledrive = require('./plugins/googledrive/server.js'),
+  onedrive = require('./plugins/onedrive/server.js'),
+  env = process.env.NODE_ENV || 'development';
+
+require('isomorphic-fetch') /* patch global fetch for dropbox module*/
 
 app.set('port', process.env.PORT || 8080)
 app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
@@ -38,23 +40,34 @@ app.set('view engine', 'ejs')
 
 // // Required to trust GCP proxy for the
 // x-forwarded-by heading
-app.set('trust proxy', true) 
+app.set('trust proxy', true)
 
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
 
-if(env === 'development'){
+if (env === 'development') {
   app.use(logger('dev'))
-}
-else{
+} else {
   app.use(logger('short'))
+}
+if (env === 'production') {
+  app.use(require('connect-assets')({
+    paths: ['public/js', 'public/css'],
+    fingerprinting: true,
+    build: false
+  }));
 }
 
 app.use(compress())
 
-app.use(bodyParser.json({limit: '512mb'}));
-app.use(bodyParser.urlencoded({limit: '512mb', extended: true}));
+app.use(bodyParser.json({
+  limit: '512mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '512mb',
+  extended: true
+}));
 
 app.use(methodOverride())
 app.use(cookieParser('1337 h4x0r'))
@@ -74,7 +87,9 @@ app.use(function forceLiveDomain(req, res, next) {
 
 // Support for HTTP/2 Server Push
 app.use(netjet({
-  cache: { max: 100 }
+  cache: {
+    max: 100
+  }
 }))
 
 // May not need to use serveStatic if using nginx for serving
@@ -109,6 +124,7 @@ if ('development' == env) {
 }
 
 app.get('/', routes.index)
+app.get('/privacy', routes.privacy)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
@@ -119,7 +135,7 @@ app.use(medium)
 app.use(googledrive)
 app.use(onedrive)
 
-app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + app.get('port'))
-    console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
+app.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'))
+  console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
 })

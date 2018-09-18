@@ -66,7 +66,7 @@ module.exports =
           ga('send', 'event', 'click', 'Save To Dropbox', 'Save To...')
         }
         return diNotify({
-          message: 'Successfully saved to: ' + response.data.data.path,
+          message: 'Successfully saved to: ' + response.data.data.path_display,
           duration: 5000
         });
       }
@@ -112,8 +112,11 @@ module.exports =
         dropboxService.files = response.data;
         return dropboxService.files;
       }, function errorCallback(err){
+          if (angular.isDefined(dropboxService.di.$scope)) {
+            dropboxService.di.$scope.$close();
+          }
           return diNotify({
-            message: 'An Error occured: ' + err
+            message: 'An Error occured: ' + err.data
           });
       });
   } // end fetchfiles

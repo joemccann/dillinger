@@ -43,7 +43,13 @@
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href="/css/app.css" rel="stylesheet">
+
+  <% if(env === 'production') { %>
+    <%- css('app.css') %>
+  <% } else { %>
+    <link href="/css/app.css" rel="stylesheet">
+  <% }%>
+
   <% if (isGoogleAnalyticsConfigured) { %>
   <script type="text/javascript">
    <%- GATrackSponsoredLinksHTML %>

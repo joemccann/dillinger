@@ -7,32 +7,18 @@ var express = require('express')
 /* Dropbox Stuff */
 
 var oauth_dropbox_redirect = function(req, res) {
-  Dropbox.getNewRequestToken(req, res, function(status, request_token) {
-
-    var dropbox_auth_url = Dropbox.config.auth_url +
-                    "?oauth_token=" + request_token.oauth_token +
-                    "&oauth_callback=" +
-                    Dropbox.config.callback_url
-
-    console.log(dropbox_auth_url + " is the auth_url for dropbox")
+  Dropbox.getAuthUrl(req, res, function(url) {
 
     // Create dropbox session object and stash for later.
     req.session.dropbox = {}
-    req.session.dropbox.oauth = {
-      request_token: request_token.oauth_token,
-      request_token_secret: request_token.oauth_token_secret,
-      access_token_secret: null,
-      access_token: null
-    }
+    req.session.dropbox.oauth = {}
 
-    res.redirect(dropbox_auth_url)
+    res.redirect(url)
 
   })
 }
 
 var oauth_dropbox = function(req, res) {
-
-  // console.dir(req.query)
 
     if (!req.session.dropbox) {
       console.log('No dropbox session - browser bug')
@@ -40,28 +26,22 @@ var oauth_dropbox = function(req, res) {
       req.session.dropbox.oauth = {}
     }
 
-    // Create dropbox session object and stash for later.
-    req.session.dropbox.oauth.access_token_secret = null
-    req.session.dropbox.oauth.access_token = null
-
     // We are now fetching the actual access token and stash in
     // session object values in callback.
-    Dropbox.getRemoteAccessToken(
-      req.session.dropbox.oauth.request_token,
-      req.session.dropbox.oauth.request_token_secret,
-      function(status, access_token) {
 
-          req.session.dropbox.oauth.access_token_secret = access_token.oauth_token_secret
-          req.session.dropbox.oauth.access_token = access_token.oauth_token
-          req.session.dropbox.uid = access_token.uid
+    Dropbox.getRemoteAccessToken(req.query.code,
+      function(status, access_token) {
+          req.session.dropbox.oauthtoken = access_token
           req.session.isDropboxSynced = true
 
           // Check to see it works by fetching account info
-          Dropbox.getAccountInfo(req.session.dropbox, function(status, reply) {
+          Dropbox.getAccountInfo(access_token, function(err, reply) {
+            if (!err) {
+              console.log("User %s is now authenticated.", reply.name.display_name)
+            } else {
+              console.log("Error retriving user details")
+            }
 
-            console.log('Got account info!')
-            console.log(reply)
-            console.log("User %s is now authenticated.", reply.display_name )
           })
 
           // Now go back to home page with session data in tact.
@@ -80,11 +60,14 @@ var unlink_dropbox = function(req, res) {
 var import_dropbox = function(req, res) {
   var postBody = req.body || {}
 
-  Dropbox.searchForMdFiles({ dropboxObj: req.session.dropbox, fileExts: postBody.fileExts }, function(status, data) {
-    console.log(status)
-    if (status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
-    if (status > 399) return res.status(status).send("Something went wrong. Please refresh.")
-    return res.json(data)
+  Dropbox.searchForMdFiles(req.session.dropbox.oauthtoken, {fileExts: postBody.fileExts}, function(err, data) {
+
+    if (err === null) {
+      return res.json(data)
+    }
+    if (err.status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
+    if (err.status === 400) return res.status(400).send("Bad request to Dropbox. Please unlink and link again.")
+    if (err.status > 399) return res.status(status).send("Something went wrong. Please refresh.")
   })
 
 }

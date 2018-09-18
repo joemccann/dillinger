@@ -6,4 +6,3 @@ Makefile
 docker-compose.yml
 node_modules
 .git
-configs/
