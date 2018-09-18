@@ -124,6 +124,7 @@ if ('development' == env) {
 }
 
 app.get('/', routes.index)
+app.get('/privacy', routes.privacy)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
