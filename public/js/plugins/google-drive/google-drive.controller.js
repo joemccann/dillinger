@@ -18,6 +18,7 @@ module.exports = angular.module('plugins.googledrive', ['plugins.googledrive.ser
     return modalInstance.result.then(function() {
       documentsService.setCurrentDocumentTitle(googledriveService.fetched.fileName);
       documentsService.setCurrentDocumentBody(googledriveService.fetched.file);
+      documentsService.setCurrentDocumentId(googledriveService.fetched.fileId);
       $rootScope.$emit('document.refresh');
       return $rootScope.$emit('autosave');
     }, function() {
@@ -25,10 +26,15 @@ module.exports = angular.module('plugins.googledrive', ['plugins.googledrive.ser
     });
   };
   saveTo = function() {
-    var body, title;
-    title = documentsService.getCurrentDocumentTitle();
-    body = documentsService.getCurrentDocumentBody();
-    return googledriveService.saveFile(title, body);
+    var body, title, fileId, data;
+    data = documentsService.getCurrentDocument();
+    title = data.title;
+    body = data.body
+    fileId = data.fileId;
+    googledriveService.saveFile(title, body, fileId, function(id) {
+      // persist id of document in case document was not imported
+      return documentsService.setCurrentDocumentId(id);
+    });
   };
   vm.importFile = importFile;
   vm.saveTo = saveTo;

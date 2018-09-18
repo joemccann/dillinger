@@ -10,7 +10,7 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
       fileName: "",
       file: null
     },
-    saveFile: function(title, body) {
+    saveFile: function(title, body, fileId, cb) {
       var di;
       di = diNotify({
         message: "Saving File to Google Drive...",
@@ -18,7 +18,8 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
       });
       return $http.post('save/googledrive', {
         title: title,
-        content: body
+        content: body,
+        fileId: fileId
       }).then(function successCallback(data) {
         if (di != null) {
           di.$scope.$close();
@@ -26,6 +27,7 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
         if (window.ga) {
           ga('send', 'event', 'click', 'Save To Google Drive', 'Save To...')
         }
+        cb(data.data.id);
         return diNotify({
           message: "Successfully saved to Google Drive",
           duration: 5000
@@ -38,6 +40,7 @@ module.exports = angular.module('plugins.googledrive.service', []).factory('goog
     },
     fetchFile: function(fileId) {
       return $http.get("fetch/googledrive?fileId=" + fileId).then(function successCallback(data) {
+        service.fetched.fileId = fileId
         service.fetched.fileName = data.data.title;
         return service.fetched.file = data.data.content;
       }, function errorCallback(err) {
