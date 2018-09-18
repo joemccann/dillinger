@@ -2105,7 +2105,7 @@
       .table-responsive {
         width: 100%;
         margin-bottom: 15px;
-        overflow-y: hidden;
+
         -ms-overflow-style: -ms-autohiding-scrollbar;
         border: 1px solid #ddd
       }
@@ -7291,6 +7291,2522 @@
 
   </style>
 
+  <style type="text/css">
+    @charset "UTF-8";
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0-alpha2/katex.min.css';
+
+    code {
+      color: #c7254e;
+      background-color: #f9f2f4;
+      border-radius: 4px
+    }
+
+    code,
+    kbd {
+      padding: 2px 4px
+    }
+
+    kbd {
+      color: #fff;
+      background-color: #333;
+      border-radius: 3px;
+      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25)
+    }
+
+    kbd kbd {
+      padding: 0;
+      font-size: 100%;
+      box-shadow: none
+    }
+
+    pre {
+      display: block;
+      margin: 0 0 10px;
+      word-break: break-all;
+      word-wrap: break-word;
+      color: #333;
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+      border-radius: 4px
+    }
+
+    pre code {
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+      white-space: pre-wrap;
+      background-color: transparent;
+      border-radius: 0
+    }
+
+    .pre-scrollable {
+      max-height: 340px;
+      overflow-y: scroll
+    }
+
+    table {
+      background-color: transparent
+    }
+
+    th {
+      text-align: left
+    }
+
+    .table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px
+    }
+
+    .table>thead>tr>th {
+      padding: 8px;
+      line-height: 1.4285714;
+      border-top: 1px solid #ddd
+    }
+
+    .table>thead>tr>td,
+    .table>tbody>tr>th,
+    .table>tbody>tr>td,
+    .table>tfoot>tr>th,
+    .table>tfoot>tr>td {
+      padding: 8px;
+      line-height: 1.4285714;
+      vertical-align: top;
+      border-top: 1px solid #ddd
+    }
+
+    .table>thead>tr>th {
+      vertical-align: bottom;
+      border-bottom: 2px solid #ddd
+    }
+
+    .table>caption+thead>tr:first-child>th,
+    .table>caption+thead>tr:first-child>td,
+    .table>colgroup+thead>tr:first-child>th,
+    .table>colgroup+thead>tr:first-child>td,
+    .table>thead:first-child>tr:first-child>th,
+    .table>thead:first-child>tr:first-child>td {
+      border-top: 0
+    }
+
+    .table>tbody+tbody {
+      border-top: 2px solid #ddd
+    }
+
+    .table .table {
+      background-color: #fff
+    }
+
+    .table-condensed>thead>tr>th,
+    .table-condensed>thead>tr>td,
+    .table-condensed>tbody>tr>th,
+    .table-condensed>tbody>tr>td,
+    .table-condensed>tfoot>tr>th,
+    .table-condensed>tfoot>tr>td {
+      padding: 5px
+    }
+
+    .table-bordered,
+    .table-bordered>thead>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tfoot>tr>th,
+    .table-bordered>tfoot>tr>td {
+      border: 1px solid #ddd
+    }
+
+    .table-bordered>thead>tr>th,
+    .table-bordered>thead>tr>td {
+      border-bottom-width: 2px
+    }
+
+    .table-striped>tbody>tr:nth-child(odd)>td,
+    .table-striped>tbody>tr:nth-child(odd)>th {
+      background-color: #f9f9f9
+    }
+
+    .table-hover>tbody>tr:hover>td,
+    .table-hover>tbody>tr:hover>th {
+      background-color: #f5f5f5
+    }
+
+    table col[class*="col-"] {
+      position: static;
+      float: none;
+      display: table-column
+    }
+
+    table td[class*="col-"],
+    table th[class*="col-"] {
+      position: static;
+      float: none;
+      display: table-cell
+    }
+
+    .table>thead>tr>td.active,
+    .table>thead>tr>th.active,
+    .table>thead>tr.active>td,
+    .table>thead>tr.active>th,
+    .table>tbody>tr>td.active,
+    .table>tbody>tr>th.active,
+    .table>tbody>tr.active>td,
+    .table>tbody>tr.active>th,
+    .table>tfoot>tr>td.active,
+    .table>tfoot>tr>th.active,
+    .table>tfoot>tr.active>td,
+    .table>tfoot>tr.active>th {
+      background-color: #f5f5f5
+    }
+
+    .table-hover>tbody>tr>td.active:hover,
+    .table-hover>tbody>tr>th.active:hover,
+    .table-hover>tbody>tr.active:hover>td,
+    .table-hover>tbody>tr:hover>.active,
+    .table-hover>tbody>tr.active:hover>th {
+      background-color: #e8e8e8
+    }
+
+    .table>thead>tr>td.success,
+    .table>thead>tr>th.success,
+    .table>thead>tr.success>td,
+    .table>thead>tr.success>th,
+    .table>tbody>tr>td.success,
+    .table>tbody>tr>th.success,
+    .table>tbody>tr.success>td,
+    .table>tbody>tr.success>th,
+    .table>tfoot>tr>td.success,
+    .table>tfoot>tr>th.success,
+    .table>tfoot>tr.success>td,
+    .table>tfoot>tr.success>th {
+      background-color: #dff0d8
+    }
+
+    .table-hover>tbody>tr>td.success:hover,
+    .table-hover>tbody>tr>th.success:hover,
+    .table-hover>tbody>tr.success:hover>td,
+    .table-hover>tbody>tr:hover>.success,
+    .table-hover>tbody>tr.success:hover>th {
+      background-color: #d0e9c6
+    }
+
+    .table>thead>tr>td.info,
+    .table>thead>tr>th.info,
+    .table>thead>tr.info>td,
+    .table>thead>tr.info>th,
+    .table>tbody>tr>td.info,
+    .table>tbody>tr>th.info,
+    .table>tbody>tr.info>td,
+    .table>tbody>tr.info>th,
+    .table>tfoot>tr>td.info,
+    .table>tfoot>tr>th.info,
+    .table>tfoot>tr.info>td,
+    .table>tfoot>tr.info>th {
+      background-color: #d9edf7
+    }
+
+    .table-hover>tbody>tr>td.info:hover,
+    .table-hover>tbody>tr>th.info:hover,
+    .table-hover>tbody>tr.info:hover>td,
+    .table-hover>tbody>tr:hover>.info,
+    .table-hover>tbody>tr.info:hover>th {
+      background-color: #c4e3f3
+    }
+
+    .table>thead>tr>td.warning,
+    .table>thead>tr>th.warning,
+    .table>thead>tr.warning>td,
+    .table>thead>tr.warning>th,
+    .table>tbody>tr>td.warning,
+    .table>tbody>tr>th.warning,
+    .table>tbody>tr.warning>td,
+    .table>tbody>tr.warning>th,
+    .table>tfoot>tr>td.warning,
+    .table>tfoot>tr>th.warning,
+    .table>tfoot>tr.warning>td,
+    .table>tfoot>tr.warning>th {
+      background-color: #fcf8e3
+    }
+
+    .table-hover>tbody>tr>td.warning:hover,
+    .table-hover>tbody>tr>th.warning:hover,
+    .table-hover>tbody>tr.warning:hover>td,
+    .table-hover>tbody>tr:hover>.warning,
+    .table-hover>tbody>tr.warning:hover>th {
+      background-color: #faf2cc
+    }
+
+    .table>thead>tr>td.danger,
+    .table>thead>tr>th.danger,
+    .table>thead>tr.danger>td,
+    .table>thead>tr.danger>th,
+    .table>tbody>tr>td.danger,
+    .table>tbody>tr>th.danger,
+    .table>tbody>tr.danger>td,
+    .table>tbody>tr.danger>th,
+    .table>tfoot>tr>td.danger,
+    .table>tfoot>tr>th.danger,
+    .table>tfoot>tr.danger>td,
+    .table>tfoot>tr.danger>th {
+      background-color: #f2dede
+    }
+
+    .table-hover>tbody>tr>td.danger:hover,
+    .table-hover>tbody>tr>th.danger:hover,
+    .table-hover>tbody>tr.danger:hover>td,
+    .table-hover>tbody>tr:hover>.danger,
+    .table-hover>tbody>tr.danger:hover>th {
+      background-color: #ebcccc
+    }
+
+    fieldset {
+      border: 0;
+      min-width: 0
+    }
+
+    legend {
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      font-size: 21px;
+      line-height: inherit;
+      color: #333;
+      border-bottom: 1px solid #e5e5e5
+    }
+
+    label {
+      display: inline-block;
+      max-width: 100%;
+      margin-bottom: 5px;
+      font-weight: 700
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 4px 0 0;
+      margin-top: 1px \9;
+      line-height: normal
+    }
+
+    input[type="file"] {
+      display: block
+    }
+
+    input[type="range"] {
+      display: block;
+      width: 100%
+    }
+
+    select[multiple],
+    select[size] {
+      height: auto
+    }
+
+    input[type="file"]:focus,
+    input[type="radio"]:focus,
+    input[type="checkbox"]:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px
+    }
+
+    output {
+      padding-top: 7px
+    }
+
+    output,
+    .form-control {
+      display: block;
+      font-size: 14px;
+      line-height: 1.4285714;
+      color: #555
+    }
+
+    .form-control {
+      width: 100%;
+      height: 34px;
+      padding: 6px 12px;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+    }
+
+    .form-control:focus {
+      border-color: #66afe9;
+      outline: 0;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+    }
+
+    .form-control::-moz-placeholder {
+      color: #777;
+      opacity: 1
+    }
+
+    .form-control:-ms-input-placeholder {
+      color: #777
+    }
+
+    .form-control::-webkit-input-placeholder {
+      color: #777
+    }
+
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+      cursor: not-allowed;
+      background-color: #eee;
+      opacity: 1
+    }
+
+    textarea.form-control {
+      height: auto
+    }
+
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    input[type="month"] {
+      line-height: 34px;
+      line-height: 1.4285714 \0
+    }
+
+    input[type="date"].input-sm,
+    .form-horizontal .form-group-sm input[type="date"].form-control,
+    .input-group-sm>input[type="date"].form-control,
+    .input-group-sm>input[type="date"].input-group-addon,
+    .input-group-sm>.input-group-btn>input[type="date"].btn,
+    input[type="time"].input-sm,
+    .form-horizontal .form-group-sm input[type="time"].form-control,
+    .input-group-sm>input[type="time"].form-control,
+    .input-group-sm>input[type="time"].input-group-addon,
+    .input-group-sm>.input-group-btn>input[type="time"].btn,
+    input[type="datetime-local"].input-sm,
+    .form-horizontal .form-group-sm input[type="datetime-local"].form-control,
+    .input-group-sm>input[type="datetime-local"].form-control,
+    .input-group-sm>input[type="datetime-local"].input-group-addon,
+    .input-group-sm>.input-group-btn>input[type="datetime-local"].btn,
+    input[type="month"].input-sm,
+    .form-horizontal .form-group-sm input[type="month"].form-control,
+    .input-group-sm>input[type="month"].form-control,
+    .input-group-sm>input[type="month"].input-group-addon,
+    .input-group-sm>.input-group-btn>input[type="month"].btn {
+      line-height: 30px
+    }
+
+    input[type="date"].input-lg,
+    .form-horizontal .form-group-lg input[type="date"].form-control,
+    .input-group-lg>input[type="date"].form-control,
+    .input-group-lg>input[type="date"].input-group-addon,
+    .input-group-lg>.input-group-btn>input[type="date"].btn,
+    input[type="time"].input-lg,
+    .form-horizontal .form-group-lg input[type="time"].form-control,
+    .input-group-lg>input[type="time"].form-control,
+    .input-group-lg>input[type="time"].input-group-addon,
+    .input-group-lg>.input-group-btn>input[type="time"].btn,
+    input[type="datetime-local"].input-lg,
+    .form-horizontal .form-group-lg input[type="datetime-local"].form-control,
+    .input-group-lg>input[type="datetime-local"].form-control,
+    .input-group-lg>input[type="datetime-local"].input-group-addon,
+    .input-group-lg>.input-group-btn>input[type="datetime-local"].btn,
+    input[type="month"].input-lg,
+    .form-horizontal .form-group-lg input[type="month"].form-control,
+    .input-group-lg>input[type="month"].form-control,
+    .input-group-lg>input[type="month"].input-group-addon,
+    .input-group-lg>.input-group-btn>input[type="month"].btn {
+      line-height: 46px
+    }
+
+    .form-group {
+      margin-bottom: 15px
+    }
+
+    .radio,
+    .checkbox {
+      position: relative;
+      display: block;
+      min-height: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px
+    }
+
+    .radio label,
+    .checkbox label {
+      padding-left: 20px;
+      margin-bottom: 0;
+      font-weight: 400;
+      cursor: pointer
+    }
+
+    .radio input[type="radio"],
+    .radio-inline input[type="radio"],
+    .checkbox input[type="checkbox"],
+    .checkbox-inline input[type="checkbox"] {
+      position: absolute;
+      margin-left: -20px;
+      margin-top: 4px \9
+    }
+
+    .radio+.radio,
+    .checkbox+.checkbox {
+      margin-top: -5px
+    }
+
+    .radio-inline,
+    .checkbox-inline {
+      display: inline-block;
+      padding-left: 20px;
+      margin-bottom: 0;
+      vertical-align: middle;
+      font-weight: 400;
+      cursor: pointer
+    }
+
+    .radio-inline+.radio-inline,
+    .checkbox-inline+.checkbox-inline {
+      margin-top: 0;
+      margin-left: 10px
+    }
+
+    input[type="radio"][disabled],
+    input[type="radio"].disabled,
+    fieldset[disabled] input[type="radio"],
+    input[type="checkbox"][disabled],
+    input[type="checkbox"].disabled,
+    fieldset[disabled] input[type="checkbox"],
+    .radio-inline.disabled,
+    fieldset[disabled] .radio-inline,
+    .checkbox-inline.disabled,
+    fieldset[disabled] .checkbox-inline,
+    .radio.disabled label,
+    fieldset[disabled] .radio label,
+    .checkbox.disabled label,
+    fieldset[disabled] .checkbox label {
+      cursor: not-allowed
+    }
+
+    .form-control-static {
+      padding-top: 7px;
+      padding-bottom: 7px;
+      margin-bottom: 0
+    }
+
+    .form-control-static.input-lg,
+    .form-horizontal .form-group-lg .form-control-static.form-control,
+    .input-group-lg>.form-control-static.form-control,
+    .input-group-lg>.form-control-static.input-group-addon,
+    .input-group-lg>.input-group-btn>.form-control-static.btn,
+    .form-control-static.input-sm,
+    .form-horizontal .form-group-sm .form-control-static.form-control,
+    .input-group-sm>.form-control-static.form-control,
+    .input-group-sm>.form-control-static.input-group-addon,
+    .input-group-sm>.input-group-btn>.form-control-static.btn {
+      padding-left: 0;
+      padding-right: 0
+    }
+
+    .input-sm,
+    .form-horizontal .form-group-sm .form-control,
+    .input-group-sm>.form-control {
+      height: 30px;
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px
+    }
+
+    .input-group-sm>.input-group-addon {
+      height: 30px;
+      line-height: 1.5
+    }
+
+    .input-group-sm>.input-group-btn>.btn {
+      height: 30px;
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px
+    }
+
+    select.input-sm,
+    .form-horizontal .form-group-sm select.form-control,
+    .input-group-sm>select.form-control,
+    .input-group-sm>select.input-group-addon,
+    .input-group-sm>.input-group-btn>select.btn {
+      height: 30px;
+      line-height: 30px
+    }
+
+    textarea.input-sm,
+    .form-horizontal .form-group-sm textarea.form-control,
+    .input-group-sm>textarea.form-control,
+    .input-group-sm>textarea.input-group-addon,
+    .input-group-sm>.input-group-btn>textarea.btn,
+    select[multiple].input-sm,
+    .form-horizontal .form-group-sm select[multiple].form-control,
+    .input-group-sm>select[multiple].form-control,
+    .input-group-sm>select[multiple].input-group-addon,
+    .input-group-sm>.input-group-btn>select[multiple].btn {
+      height: auto
+    }
+
+    .input-lg,
+    .form-horizontal .form-group-lg .form-control,
+    .input-group-lg>.form-control {
+      height: 46px;
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 1.33;
+      border-radius: 6px
+    }
+
+    .input-group-lg>.input-group-addon {
+      height: 46px;
+      line-height: 1.33
+    }
+
+    .input-group-lg>.input-group-btn>.btn {
+      height: 46px;
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 1.33;
+      border-radius: 6px
+    }
+
+    select.input-lg,
+    .form-horizontal .form-group-lg select.form-control,
+    .input-group-lg>select.form-control,
+    .input-group-lg>select.input-group-addon,
+    .input-group-lg>.input-group-btn>select.btn {
+      height: 46px;
+      line-height: 46px
+    }
+
+    textarea.input-lg,
+    .form-horizontal .form-group-lg textarea.form-control,
+    .input-group-lg>textarea.form-control,
+    .input-group-lg>textarea.input-group-addon,
+    .input-group-lg>.input-group-btn>textarea.btn,
+    select[multiple].input-lg,
+    .form-horizontal .form-group-lg select[multiple].form-control,
+    .input-group-lg>select[multiple].form-control,
+    .input-group-lg>select[multiple].input-group-addon,
+    .input-group-lg>.input-group-btn>select[multiple].btn {
+      height: auto
+    }
+
+    .has-feedback {
+      position: relative
+    }
+
+    .has-feedback .form-control {
+      padding-right: 42.5px
+    }
+
+    .form-control-feedback {
+      position: absolute;
+      top: 25px;
+      right: 0;
+      z-index: 2;
+      display: block;
+      width: 34px;
+      height: 34px;
+      line-height: 34px;
+      text-align: center
+    }
+
+    .input-lg+.form-control-feedback,
+    .form-horizontal .form-group-lg .form-control+.form-control-feedback,
+    .input-group-lg>.form-control+.form-control-feedback,
+    .input-group-lg>.input-group-addon+.form-control-feedback,
+    .input-group-lg>.input-group-btn>.btn+.form-control-feedback {
+      width: 46px;
+      height: 46px;
+      line-height: 46px
+    }
+
+    .input-sm+.form-control-feedback,
+    .form-horizontal .form-group-sm .form-control+.form-control-feedback,
+    .input-group-sm>.form-control+.form-control-feedback,
+    .input-group-sm>.input-group-addon+.form-control-feedback,
+    .input-group-sm>.input-group-btn>.btn+.form-control-feedback {
+      width: 30px;
+      height: 30px;
+      line-height: 30px
+    }
+
+    .has-success .help-block,
+    .has-success .control-label,
+    .has-success .radio,
+    .has-success .checkbox,
+    .has-success .radio-inline,
+    .has-success .checkbox-inline {
+      color: #3c763d
+    }
+
+    .has-success .form-control {
+      border-color: #3c763d;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+    }
+
+    .has-success .form-control:focus {
+      border-color: #2b542c;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #67b168
+    }
+
+    .has-success .input-group-addon {
+      color: #3c763d;
+      border-color: #3c763d;
+      background-color: #dff0d8
+    }
+
+    .has-success .form-control-feedback {
+      color: #3c763d
+    }
+
+    .has-warning .help-block,
+    .has-warning .control-label,
+    .has-warning .radio,
+    .has-warning .checkbox,
+    .has-warning .radio-inline,
+    .has-warning .checkbox-inline {
+      color: #8a6d3b
+    }
+
+    .has-warning .form-control {
+      border-color: #8a6d3b;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+    }
+
+    .has-warning .form-control:focus {
+      border-color: #66512c;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #c0a16b
+    }
+
+    .has-warning .input-group-addon {
+      color: #8a6d3b;
+      border-color: #8a6d3b;
+      background-color: #fcf8e3
+    }
+
+    .has-warning .form-control-feedback {
+      color: #8a6d3b
+    }
+
+    .has-error .help-block,
+    .has-error .control-label,
+    .has-error .radio,
+    .has-error .checkbox,
+    .has-error .radio-inline,
+    .has-error .checkbox-inline {
+      color: #a94442
+    }
+
+    .has-error .form-control {
+      border-color: #a94442;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+    }
+
+    .has-error .form-control:focus {
+      border-color: #843534;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483
+    }
+
+    .has-error .input-group-addon {
+      color: #a94442;
+      border-color: #a94442;
+      background-color: #f2dede
+    }
+
+    .has-error .form-control-feedback {
+      color: #a94442
+    }
+
+    .has-feedback label.sr-only~.form-control-feedback {
+      top: 0
+    }
+
+    .help-block {
+      display: block;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      color: #737373
+    }
+
+    .form-horizontal .radio,
+    .form-horizontal .checkbox,
+    .form-horizontal .radio-inline,
+    .form-horizontal .checkbox-inline {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 7px
+    }
+
+    .form-horizontal .radio,
+    .form-horizontal .checkbox {
+      min-height: 27px
+    }
+
+    .form-horizontal .form-group {
+      margin-left: -15px;
+      margin-right: -15px
+    }
+
+    .form-horizontal .form-group:before {
+      content: " ";
+      display: table
+    }
+
+    .form-horizontal .form-group:after {
+      content: " ";
+      display: table;
+      clear: both
+    }
+
+    .form-horizontal .has-feedback .form-control-feedback {
+      top: 0;
+      right: 15px
+    }
+
+    .btn {
+      display: inline-block;
+      vertical-align: middle;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none
+    }
+
+    .btn:focus,
+    .btn:active:focus,
+    .btn.active:focus {
+      outline: thin dotted;
+      outline: 5px auto -webkit-focus-ring-color;
+      outline-offset: -2px
+    }
+
+    .btn:hover,
+    .btn:focus {
+      color: #333;
+      text-decoration: none
+    }
+
+    .btn:active,
+    .btn.active {
+      outline: 0;
+      background-image: none;
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)
+    }
+
+    .btn.disabled,
+    .btn[disabled],
+    fieldset[disabled] .btn {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: .65;
+      filter: alpha(opacity=65);
+      box-shadow: none
+    }
+
+    .btn-default {
+      color: #333;
+      background-color: #fff;
+      border-color: #ccc
+    }
+
+    .btn-default:hover,
+    .btn-default:focus,
+    .btn-default:active,
+    .btn-default.active,
+    .open>.btn-default.dropdown-toggle {
+      color: #333;
+      background-color: #e6e6e6;
+      border-color: #adadad
+    }
+
+    .btn-default:active,
+    .btn-default.active,
+    .open>.btn-default.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-default.disabled,
+    .btn-default.disabled:hover,
+    .btn-default.disabled:focus,
+    .btn-default.disabled:active,
+    .btn-default.disabled.active,
+    .btn-default[disabled],
+    .btn-default[disabled]:hover,
+    .btn-default[disabled]:focus,
+    .btn-default[disabled]:active,
+    .btn-default[disabled].active,
+    fieldset[disabled] .btn-default,
+    fieldset[disabled] .btn-default:hover,
+    fieldset[disabled] .btn-default:focus,
+    fieldset[disabled] .btn-default:active,
+    fieldset[disabled] .btn-default.active {
+      background-color: #fff;
+      border-color: #ccc
+    }
+
+    .btn-default .badge {
+      color: #fff;
+      background-color: #333
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: #428bca;
+      border-color: #357ebd
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active,
+    .btn-primary.active,
+    .open>.btn-primary.dropdown-toggle {
+      color: #fff;
+      background-color: #3071a9;
+      border-color: #285e8e
+    }
+
+    .btn-primary:active,
+    .btn-primary.active,
+    .open>.btn-primary.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-primary.disabled,
+    .btn-primary.disabled:hover,
+    .btn-primary.disabled:focus,
+    .btn-primary.disabled:active,
+    .btn-primary.disabled.active,
+    .btn-primary[disabled],
+    .btn-primary[disabled]:hover,
+    .btn-primary[disabled]:focus,
+    .btn-primary[disabled]:active,
+    .btn-primary[disabled].active,
+    fieldset[disabled] .btn-primary,
+    fieldset[disabled] .btn-primary:hover,
+    fieldset[disabled] .btn-primary:focus,
+    fieldset[disabled] .btn-primary:active,
+    fieldset[disabled] .btn-primary.active {
+      background-color: #428bca;
+      border-color: #357ebd
+    }
+
+    .btn-primary .badge {
+      color: #428bca;
+      background-color: #fff
+    }
+
+    .btn-success {
+      color: #fff;
+      background-color: #5cb85c;
+      border-color: #4cae4c
+    }
+
+    .btn-success:hover,
+    .btn-success:focus,
+    .btn-success:active,
+    .btn-success.active,
+    .open>.btn-success.dropdown-toggle {
+      color: #fff;
+      background-color: #449d44;
+      border-color: #398439
+    }
+
+    .btn-success:active,
+    .btn-success.active,
+    .open>.btn-success.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-success.disabled,
+    .btn-success.disabled:hover,
+    .btn-success.disabled:focus,
+    .btn-success.disabled:active,
+    .btn-success.disabled.active,
+    .btn-success[disabled],
+    .btn-success[disabled]:hover,
+    .btn-success[disabled]:focus,
+    .btn-success[disabled]:active,
+    .btn-success[disabled].active,
+    fieldset[disabled] .btn-success,
+    fieldset[disabled] .btn-success:hover,
+    fieldset[disabled] .btn-success:focus,
+    fieldset[disabled] .btn-success:active,
+    fieldset[disabled] .btn-success.active {
+      background-color: #5cb85c;
+      border-color: #4cae4c
+    }
+
+    .btn-success .badge {
+      color: #5cb85c;
+      background-color: #fff
+    }
+
+    .btn-info {
+      color: #fff;
+      background-color: #5bc0de;
+      border-color: #46b8da
+    }
+
+    .btn-info:hover,
+    .btn-info:focus,
+    .btn-info:active,
+    .btn-info.active,
+    .open>.btn-info.dropdown-toggle {
+      color: #fff;
+      background-color: #31b0d5;
+      border-color: #269abc
+    }
+
+    .btn-info:active,
+    .btn-info.active,
+    .open>.btn-info.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-info.disabled,
+    .btn-info.disabled:hover,
+    .btn-info.disabled:focus,
+    .btn-info.disabled:active,
+    .btn-info.disabled.active,
+    .btn-info[disabled],
+    .btn-info[disabled]:hover,
+    .btn-info[disabled]:focus,
+    .btn-info[disabled]:active,
+    .btn-info[disabled].active,
+    fieldset[disabled] .btn-info,
+    fieldset[disabled] .btn-info:hover,
+    fieldset[disabled] .btn-info:focus,
+    fieldset[disabled] .btn-info:active,
+    fieldset[disabled] .btn-info.active {
+      background-color: #5bc0de;
+      border-color: #46b8da
+    }
+
+    .btn-info .badge {
+      color: #5bc0de;
+      background-color: #fff
+    }
+
+    .btn-warning {
+      color: #fff;
+      background-color: #f0ad4e;
+      border-color: #eea236
+    }
+
+    .btn-warning:hover,
+    .btn-warning:focus,
+    .btn-warning:active,
+    .btn-warning.active,
+    .open>.btn-warning.dropdown-toggle {
+      color: #fff;
+      background-color: #ec971f;
+      border-color: #d58512
+    }
+
+    .btn-warning:active,
+    .btn-warning.active,
+    .open>.btn-warning.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-warning.disabled,
+    .btn-warning.disabled:hover,
+    .btn-warning.disabled:focus,
+    .btn-warning.disabled:active,
+    .btn-warning.disabled.active,
+    .btn-warning[disabled],
+    .btn-warning[disabled]:hover,
+    .btn-warning[disabled]:focus,
+    .btn-warning[disabled]:active,
+    .btn-warning[disabled].active,
+    fieldset[disabled] .btn-warning,
+    fieldset[disabled] .btn-warning:hover,
+    fieldset[disabled] .btn-warning:focus,
+    fieldset[disabled] .btn-warning:active,
+    fieldset[disabled] .btn-warning.active {
+      background-color: #f0ad4e;
+      border-color: #eea236
+    }
+
+    .btn-warning .badge {
+      color: #f0ad4e;
+      background-color: #fff
+    }
+
+    .btn-danger {
+      color: #fff;
+      background-color: #d9534f;
+      border-color: #d43f3a
+    }
+
+    .btn-danger:hover,
+    .btn-danger:focus,
+    .btn-danger:active,
+    .btn-danger.active,
+    .open>.btn-danger.dropdown-toggle {
+      color: #fff;
+      background-color: #c9302c;
+      border-color: #ac2925
+    }
+
+    .btn-danger:active,
+    .btn-danger.active,
+    .open>.btn-danger.dropdown-toggle {
+      background-image: none
+    }
+
+    .btn-danger.disabled,
+    .btn-danger.disabled:hover,
+    .btn-danger.disabled:focus,
+    .btn-danger.disabled:active,
+    .btn-danger.disabled.active,
+    .btn-danger[disabled],
+    .btn-danger[disabled]:hover,
+    .btn-danger[disabled]:focus,
+    .btn-danger[disabled]:active,
+    .btn-danger[disabled].active,
+    fieldset[disabled] .btn-danger,
+    fieldset[disabled] .btn-danger:hover,
+    fieldset[disabled] .btn-danger:focus,
+    fieldset[disabled] .btn-danger:active,
+    fieldset[disabled] .btn-danger.active {
+      background-color: #d9534f;
+      border-color: #d43f3a
+    }
+
+    .btn-danger .badge {
+      color: #d9534f;
+      background-color: #fff
+    }
+
+    .btn-link {
+      color: #428bca;
+      font-weight: 400;
+      cursor: pointer;
+      border-radius: 0
+    }
+
+    .btn-link,
+    .btn-link:active,
+    .btn-link[disabled],
+    fieldset[disabled] .btn-link {
+      background-color: transparent;
+      box-shadow: none
+    }
+
+    .btn-link,
+    .btn-link:hover,
+    .btn-link:focus,
+    .btn-link:active {
+      border-color: transparent
+    }
+
+    .btn-link:hover,
+    .btn-link:focus {
+      color: #2a6496;
+      text-decoration: underline;
+      background-color: transparent
+    }
+
+    .btn-link[disabled]:hover,
+    .btn-link[disabled]:focus,
+    fieldset[disabled] .btn-link:hover,
+    fieldset[disabled] .btn-link:focus {
+      color: #777;
+      text-decoration: none
+    }
+
+    .btn-lg {
+      padding: 10px 16px;
+      font-size: 18px;
+      line-height: 1.33;
+      border-radius: 6px
+    }
+
+    .btn-sm {
+      padding: 5px 10px
+    }
+
+    .btn-sm,
+    .btn-xs {
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px
+    }
+
+    .btn-xs {
+      padding: 1px 5px
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%
+    }
+
+    .btn-block+.btn-block {
+      margin-top: 5px
+    }
+
+    input[type="submit"].btn-block,
+    input[type="reset"].btn-block,
+    input[type="button"].btn-block {
+      width: 100%
+    }
+
+    .fade {
+      opacity: 0;
+      -webkit-transition: opacity .15s linear;
+      transition: opacity .15s linear
+    }
+
+    .fade.in {
+      opacity: 1
+    }
+
+    .collapse {
+      display: none
+    }
+
+    .collapse.in {
+      display: block
+    }
+
+    tr.collapse.in {
+      display: table-row
+    }
+
+    tbody.collapse.in {
+      display: table-row-group
+    }
+
+    .collapsing {
+      position: relative;
+      height: 0;
+      overflow: hidden;
+      -webkit-transition: height .35s ease;
+      transition: height .35s ease
+    }
+
+    .input-group {
+      position: relative;
+      display: table;
+      border-collapse: separate
+    }
+
+    .input-group[class*="col-"] {
+      float: none;
+      padding-left: 0;
+      padding-right: 0
+    }
+
+    .input-group .form-control {
+      position: relative;
+      z-index: 2;
+      float: left;
+      width: 100%;
+      margin-bottom: 0
+    }
+
+    .input-group-addon,
+    .input-group-btn,
+    .input-group .form-control {
+      display: table-cell
+    }
+
+    .input-group-addon:not(:first-child):not(:last-child),
+    .input-group-btn:not(:first-child):not(:last-child),
+    .input-group .form-control:not(:first-child):not(:last-child) {
+      border-radius: 0
+    }
+
+    .input-group-addon {
+      white-space: nowrap
+    }
+
+    .input-group-addon,
+    .input-group-btn {
+      width: 1%;
+      vertical-align: middle
+    }
+
+    .input-group-addon {
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #555;
+      text-align: center;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-radius: 4px
+    }
+
+    .input-group-addon.input-sm,
+    .form-horizontal .form-group-sm .input-group-addon.form-control,
+    .input-group-sm>.input-group-addon,
+    .input-group-sm>.input-group-btn>.input-group-addon.btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 3px
+    }
+
+    .input-group-addon.input-lg,
+    .form-horizontal .form-group-lg .input-group-addon.form-control,
+    .input-group-lg>.input-group-addon,
+    .input-group-lg>.input-group-btn>.input-group-addon.btn {
+      padding: 10px 16px;
+      font-size: 18px;
+      border-radius: 6px
+    }
+
+    .input-group-addon input[type="radio"],
+    .input-group-addon input[type="checkbox"] {
+      margin-top: 0
+    }
+
+    .input-group .form-control:first-child,
+    .input-group-addon:first-child,
+    .input-group-btn:first-child>.btn,
+    .input-group-btn:first-child>.btn-group>.btn,
+    .input-group-btn:first-child>.dropdown-toggle,
+    .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle),
+    .input-group-btn:last-child>.btn-group:not(:last-child)>.btn {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0
+    }
+
+    .input-group-addon:first-child {
+      border-right: 0
+    }
+
+    .input-group .form-control:last-child,
+    .input-group-addon:last-child,
+    .input-group-btn:last-child>.btn,
+    .input-group-btn:last-child>.btn-group>.btn,
+    .input-group-btn:last-child>.dropdown-toggle,
+    .input-group-btn:first-child>.btn:not(:first-child),
+    .input-group-btn:first-child>.btn-group:not(:first-child)>.btn {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0
+    }
+
+    .input-group-addon:last-child {
+      border-left: 0
+    }
+
+    .input-group-btn {
+      font-size: 0;
+      white-space: nowrap
+    }
+
+    .input-group-btn,
+    .input-group-btn>.btn {
+      position: relative
+    }
+
+    .input-group-btn>.btn+.btn {
+      margin-left: -1px
+    }
+
+    .input-group-btn>.btn:hover,
+    .input-group-btn>.btn:focus,
+    .input-group-btn>.btn:active {
+      z-index: 2
+    }
+
+    .input-group-btn:first-child>.btn,
+    .input-group-btn:first-child>.btn-group {
+      margin-right: -1px
+    }
+
+    .input-group-btn:last-child>.btn,
+    .input-group-btn:last-child>.btn-group {
+      margin-left: -1px
+    }
+
+    .pagination {
+      display: inline-block;
+      padding-left: 0;
+      margin: 20px 0;
+      border-radius: 4px
+    }
+
+    .pagination>li {
+      display: inline
+    }
+
+    .pagination>li>a,
+    .pagination>li>span {
+      position: relative;
+      float: left;
+      padding: 6px 12px;
+      line-height: 1.4285714;
+      text-decoration: none;
+      color: #428bca;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      margin-left: -1px
+    }
+
+    .pagination>li:first-child>a,
+    .pagination>li:first-child>span {
+      margin-left: 0;
+      border-bottom-left-radius: 4px;
+      border-top-left-radius: 4px
+    }
+
+    .pagination>li:last-child>a,
+    .pagination>li:last-child>span {
+      border-bottom-right-radius: 4px;
+      border-top-right-radius: 4px
+    }
+
+    .pagination>li>a:hover,
+    .pagination>li>a:focus,
+    .pagination>li>span:hover,
+    .pagination>li>span:focus {
+      color: #2a6496;
+      background-color: #eee;
+      border-color: #ddd
+    }
+
+    .pagination>.active>a,
+    .pagination>.active>a:hover,
+    .pagination>.active>a:focus,
+    .pagination>.active>span,
+    .pagination>.active>span:hover,
+    .pagination>.active>span:focus {
+      z-index: 2;
+      color: #fff;
+      background-color: #428bca;
+      border-color: #428bca;
+      cursor: default
+    }
+
+    .pagination>.disabled>span,
+    .pagination>.disabled>span:hover,
+    .pagination>.disabled>span:focus,
+    .pagination>.disabled>a,
+    .pagination>.disabled>a:hover,
+    .pagination>.disabled>a:focus {
+      color: #777;
+      background-color: #fff;
+      border-color: #ddd;
+      cursor: not-allowed
+    }
+
+    .pagination-lg>li>a,
+    .pagination-lg>li>span {
+      padding: 10px 16px;
+      font-size: 18px
+    }
+
+    .pagination-lg>li:first-child>a,
+    .pagination-lg>li:first-child>span {
+      border-bottom-left-radius: 6px;
+      border-top-left-radius: 6px
+    }
+
+    .pagination-lg>li:last-child>a,
+    .pagination-lg>li:last-child>span {
+      border-bottom-right-radius: 6px;
+      border-top-right-radius: 6px
+    }
+
+    .pagination-sm>li>a,
+    .pagination-sm>li>span {
+      padding: 5px 10px;
+      font-size: 12px
+    }
+
+    .pagination-sm>li:first-child>a,
+    .pagination-sm>li:first-child>span {
+      border-bottom-left-radius: 3px;
+      border-top-left-radius: 3px
+    }
+
+    .pagination-sm>li:last-child>a,
+    .pagination-sm>li:last-child>span {
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px
+    }
+
+    .close {
+      float: right;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .2;
+      filter: alpha(opacity=20)
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: .5;
+      filter: alpha(opacity=50)
+    }
+
+    button.close {
+      padding: 0;
+      cursor: pointer;
+      background: 0 0;
+      border: 0;
+      -webkit-appearance: none
+    }
+
+    .modal-open,
+    .modal {
+      overflow: hidden
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1050;
+      -webkit-overflow-scrolling: touch;
+      outline: 0
+    }
+
+    .modal.fade .modal-dialog {
+      -webkit-transform: translate3d(0, -25%, 0);
+      transform: translate3d(0, -25%, 0);
+      -webkit-transition: -webkit-transform .3s ease-out;
+      transition: transform .3s ease-out;
+      transition: transform .3s ease-out, -webkit-transform .3s ease-out
+    }
+
+    .modal.in .modal-dialog {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0)
+    }
+
+    .modal-open .modal {
+      overflow-x: hidden;
+      overflow-y: auto
+    }
+
+    .modal-dialog {
+      position: relative;
+      width: auto;
+      margin: 10px
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fff;
+      border: 1px solid #999;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: 6px;
+      box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+      background-clip: padding-box;
+      outline: 0
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1040;
+      background-color: #000
+    }
+
+    .modal-backdrop.fade {
+      opacity: 0;
+      filter: alpha(opacity=0)
+    }
+
+    .modal-backdrop.in {
+      opacity: .5;
+      filter: alpha(opacity=50)
+    }
+
+    .modal-header {
+      padding: 15px;
+      border-bottom: 1px solid #e5e5e5;
+      min-height: 16.4285714px
+    }
+
+    .modal-header .close {
+      margin-top: -2px
+    }
+
+    .modal-title {
+      margin: 0;
+      line-height: 1.4285714
+    }
+
+    .modal-body {
+      position: relative;
+      padding: 15px
+    }
+
+    .modal-footer {
+      padding: 15px;
+      text-align: right;
+      border-top: 1px solid #e5e5e5
+    }
+
+    .modal-footer:before,
+    .modal-footer:after {
+      content: " ";
+      display: table
+    }
+
+    .modal-footer:after {
+      clear: both
+    }
+
+    .modal-footer .btn+.btn {
+      margin-left: 5px;
+      margin-bottom: 0
+    }
+
+    .modal-footer .btn-group .btn+.btn {
+      margin-left: -1px
+    }
+
+    .modal-footer .btn-block+.btn-block {
+      margin-left: 0
+    }
+
+    .modal-scrollbar-measure {
+      position: absolute;
+      top: -9999px;
+      width: 50px;
+      height: 50px;
+      overflow: scroll
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      content: " ";
+      display: table
+    }
+
+    .clearfix:after {
+      clear: both
+    }
+
+    .center-block {
+      display: block;
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    .pull-right {
+      float: right !important
+    }
+
+    .pull-left {
+      float: left !important
+    }
+
+    .hide {
+      display: none !important
+    }
+
+    .show {
+      display: block !important
+    }
+
+    .invisible {
+      visibility: hidden
+    }
+
+    .text-hide {
+      font: 0/0 a;
+      color: transparent;
+      text-shadow: none;
+      background-color: transparent;
+      border: 0
+    }
+
+    .hidden {
+      display: none !important;
+      visibility: hidden !important
+    }
+
+    .affix {
+      position: fixed;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0)
+    }
+
+    .hljs {
+      display: block;
+      overflow-x: auto;
+      padding: .5em;
+      background: #002b36;
+      color: #839496;
+      -webkit-text-size-adjust: none
+    }
+
+    .hljs-comment,
+    .hljs-template_comment,
+    .diff .hljs-header,
+    .hljs-doctype,
+    .hljs-pi,
+    .lisp .hljs-string,
+    .hljs-javadoc {
+      color: #586e75
+    }
+
+    .hljs-keyword,
+    .hljs-winutils,
+    .method,
+    .hljs-addition,
+    .css .hljs-tag,
+    .hljs-request,
+    .hljs-status,
+    .nginx .hljs-title {
+      color: #859900
+    }
+
+    .hljs-number,
+    .hljs-command,
+    .hljs-string,
+    .hljs-tag .hljs-value,
+    .hljs-rules .hljs-value,
+    .hljs-phpdoc,
+    .hljs-dartdoc,
+    .tex .hljs-formula,
+    .hljs-regexp,
+    .hljs-hexcolor,
+    .hljs-link_url {
+      color: #2aa198
+    }
+
+    .hljs-title,
+    .hljs-localvars,
+    .hljs-chunk,
+    .hljs-decorator,
+    .hljs-built_in,
+    .hljs-identifier,
+    .vhdl .hljs-literal,
+    .hljs-id,
+    .css .hljs-function {
+      color: #268bd2
+    }
+
+    .hljs-attribute,
+    .hljs-variable,
+    .lisp .hljs-body,
+    .smalltalk .hljs-number,
+    .hljs-constant,
+    .hljs-class .hljs-title,
+    .hljs-parent,
+    .hljs-type,
+    .hljs-link_reference {
+      color: #b58900
+    }
+
+    .hljs-preprocessor,
+    .hljs-preprocessor .hljs-keyword,
+    .hljs-pragma,
+    .hljs-shebang,
+    .hljs-symbol,
+    .hljs-symbol .hljs-string,
+    .diff .hljs-change,
+    .hljs-special,
+    .hljs-attr_selector,
+    .hljs-subst,
+    .hljs-cdata,
+    .css .hljs-pseudo,
+    .hljs-header {
+      color: #cb4b16
+    }
+
+    .hljs-deletion,
+    .hljs-important {
+      color: #dc322f
+    }
+
+    .hljs-link_label {
+      color: #6c71c4
+    }
+
+    .tex .hljs-formula {
+      background: #073642
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: border-box
+    }
+
+    html {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%
+    }
+
+    body {
+      margin: 0
+    }
+
+    article,
+    aside,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    main,
+    nav,
+    section,
+    summary {
+      display: block
+    }
+
+    audio,
+    canvas,
+    progress,
+    video {
+      display: inline-block;
+      vertical-align: baseline
+    }
+
+    audio:not([controls]) {
+      display: none;
+      height: 0
+    }
+
+    [hidden],
+    template {
+      display: none
+    }
+
+    a {
+      background: 0 0
+    }
+
+    a:active,
+    a:hover {
+      outline: 0
+    }
+
+    abbr[title] {
+      border-bottom: 1px dotted
+    }
+
+    b,
+    strong {
+      font-weight: 700
+    }
+
+    dfn {
+      font-style: italic
+    }
+
+    h1 {
+      margin: .67em 0
+    }
+
+    mark {
+      background: #ff0;
+      color: #000
+    }
+
+    small {
+      font-size: 80%
+    }
+
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline
+    }
+
+    sup {
+      top: -.5em
+    }
+
+    sub {
+      bottom: -.25em
+    }
+
+    images {
+      border: 0
+    }
+
+    svg:not(:root) {
+      overflow: hidden
+    }
+
+    figure {
+      margin: 1em 40px
+    }
+
+    hr {
+      box-sizing: content-box;
+      height: 0
+    }
+
+    pre {
+      overflow: auto
+    }
+
+    code,
+    kbd {
+      font-size: 1em
+    }
+
+    code,
+    kbd,
+    pre,
+    samp {
+      font-family: monospace, monospace
+    }
+
+    samp {
+      font-size: 1em
+    }
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      color: inherit;
+      font: inherit;
+      margin: 0
+    }
+
+    button {
+      overflow: visible
+    }
+
+    button,
+    select {
+      text-transform: none
+    }
+
+    button,
+    html input[type="button"],
+    input[type="reset"],
+    input[type="submit"] {
+      -webkit-appearance: button;
+      cursor: pointer
+    }
+
+    button[disabled],
+    html input[disabled] {
+      cursor: default
+    }
+
+    button::-moz-focus-inner,
+    input::-moz-focus-inner {
+      border: 0;
+      padding: 0
+    }
+
+    input {
+      line-height: normal
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      box-sizing: border-box;
+      padding: 0
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      height: auto
+    }
+
+    input[type="search"] {
+      -webkit-appearance: textfield;
+      box-sizing: content-box
+    }
+
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-decoration {
+      -webkit-appearance: none
+    }
+
+    fieldset {
+      border: 1px solid silver;
+      margin: 0 2px;
+      padding: .35em .625em .75em
+    }
+
+    legend {
+      border: 0;
+      padding: 0
+    }
+
+    textarea {
+      overflow: auto
+    }
+
+    optgroup {
+      font-weight: 700
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    .debug {
+      background-color: #ffc0cb !important
+    }
+
+    .ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .ir {
+      background-color: transparent;
+      border: 0;
+      overflow: hidden
+    }
+
+    .ir::before {
+      content: '';
+      display: block;
+      height: 150%;
+      width: 0
+    }
+
+    html {
+      font-size: .875em;
+      background: #fff;
+      color: #373D49
+    }
+
+    html,
+    body {
+      font-family: Georgia, Cambria, serif;
+      height: 100%
+    }
+
+    body {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 2rem;
+    }
+
+    ul,
+    ol {
+      margin-bottom: .83999rem;
+      padding-top: .16001rem
+    }
+
+    li {
+      -webkit-font-feature-settings: 'kern'1, 'onum'1, 'liga'1;
+      font-feature-settings: 'kern'1, 'onum'1, 'liga'1;
+      margin-left: 1rem
+    }
+
+    li>ul,
+    li>ol {
+      margin-bottom: 0
+    }
+
+    p {
+      padding-top: .66001rem;
+      -webkit-font-feature-settings: 'kern'1, 'onum'1, 'liga'1;
+      font-feature-settings: 'kern'1, 'onum'1, 'liga'1;
+      margin-top: 0
+    }
+
+    p,
+    pre {
+      margin-bottom: 1.33999rem
+    }
+
+    pre {
+      font-size: 1rem;
+      padding: .66001rem 9.5px 9.5px;
+      line-height: 2rem;
+      background: -webkit-linear-gradient(top, #fff 0, #fff .75rem, #f5f7fa .75rem, #f5f7fa 2.75rem, #fff 2.75rem, #fff 4rem);
+      background: linear-gradient(to bottom, #fff 0, #fff .75rem, #f5f7fa .75rem, #f5f7fa 2.75rem, #fff 2.75rem, #fff 4rem);
+      background-size: 100% 4rem;
+      border-color: #D3DAEA
+    }
+
+    blockquote {
+      margin: 0
+    }
+
+    blockquote p {
+      font-size: 1rem;
+      margin-bottom: .33999rem;
+      font-style: italic;
+      padding: .66001rem 1rem 1rem;
+      border-left: 3px solid #A0AABF
+    }
+
+    th,
+    td {
+      padding: 12px
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-feature-settings: 'dlig'1, 'liga'1, 'lnum'1, 'kern'1;
+      font-feature-settings: 'dlig'1, 'liga'1, 'lnum'1, 'kern'1;
+      font-style: normal;
+      font-weight: 600;
+      margin-top: 0
+    }
+
+    h1 {
+      line-height: 3rem;
+      font-size: 2.0571429rem;
+      margin-bottom: .21999rem;
+      padding-top: .78001rem
+    }
+
+    h2 {
+      font-size: 1.953125rem;
+      margin-bottom: .1835837rem;
+      padding-top: .8164163rem
+    }
+
+    h2,
+    h3 {
+      line-height: 3rem
+    }
+
+    h3 {
+      font-size: 1.6457143rem;
+      margin-bottom: .07599rem;
+      padding-top: .92401rem
+    }
+
+    h4 {
+      font-size: 1.5625rem;
+      margin-bottom: .546865rem;
+      padding-top: .453135rem
+    }
+
+    h5 {
+      font-size: 1.25rem;
+      margin-bottom: -.56251rem;
+      padding-top: .56251rem
+    }
+
+    h6 {
+      font-size: 1rem;
+      margin-bottom: -.65001rem;
+      padding-top: .65001rem
+    }
+
+    a {
+      cursor: pointer;
+      color: #35D7BB;
+      text-decoration: none
+    }
+
+    a:hover,
+    a:focus {
+      border-bottom-color: #35D7BB;
+      color: #dff9f4
+    }
+
+    img {
+      height: auto;
+      max-width: 100%
+    }
+
+    .title {
+      line-height: 1rem;
+      font-size: .8rem;
+      margin-bottom: .77999rem;
+      padding-top: .22001rem;
+      font-weight: 500;
+      color: #A0AABF;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding-left: 16px;
+      padding-right: 16px;
+      margin-top: 1rem
+    }
+
+
+    @media screen and (min-width:46.25em) {
+      html {
+        font-size: .875em
+      }
+
+      body {
+        font-size: 1rem
+      }
+
+      ul,
+      ol {
+        margin-bottom: .83999rem;
+        padding-top: .16001rem
+      }
+
+      p {
+        padding-top: .66001rem
+      }
+
+      p,
+      pre {
+        margin-bottom: 1.33999rem
+      }
+
+      pre,
+      blockquote p {
+        font-size: 1rem;
+        padding-top: .66001rem
+      }
+
+      blockquote p {
+        margin-bottom: .33999rem
+      }
+
+      h1 {
+        font-size: 2.0571429rem;
+        margin-bottom: .21999rem;
+        padding-top: .78001rem
+      }
+
+      h2 {
+        font-size: 1.953125rem;
+        margin-bottom: .1835837rem;
+        padding-top: .8164163rem
+      }
+
+      h3 {
+        font-size: 1.6457143rem;
+        margin-bottom: .07599rem;
+        padding-top: .92401rem
+      }
+
+      h4 {
+        font-size: 1.5625rem;
+        margin-bottom: .546865rem;
+        padding-top: .453135rem
+      }
+
+      h5 {
+        font-size: 1.25rem;
+        margin-bottom: -.56251rem;
+        padding-top: .56251rem
+      }
+
+      h6 {
+        font-size: 1rem;
+        margin-bottom: -.65001rem;
+        padding-top: .65001rem
+      }
+    }
+
+    @media screen and (min-width:62.5em) {
+      html {
+        font-size: .875em
+      }
+
+      body {
+        font-size: 1rem
+      }
+
+      ul,
+      ol {
+        margin-bottom: .83999rem;
+        padding-top: .16001rem
+      }
+
+      p {
+        padding-top: .66001rem
+      }
+
+      p,
+      pre {
+        margin-bottom: 1.33999rem
+      }
+
+      pre,
+      blockquote p {
+        font-size: 1rem;
+        padding-top: .66001rem
+      }
+
+      blockquote p {
+        margin-bottom: .33999rem
+      }
+
+      h1 {
+        font-size: 2.0571429rem;
+        margin-bottom: .21999rem;
+        padding-top: .78001rem
+      }
+
+      h2 {
+        font-size: 1.953125rem;
+        margin-bottom: .1835837rem;
+        padding-top: .8164163rem
+      }
+
+      h3 {
+        font-size: 1.6457143rem;
+        margin-bottom: .07599rem;
+        padding-top: .92401rem
+      }
+
+      h4 {
+        font-size: 1.5625rem;
+        margin-bottom: .546865rem;
+        padding-top: .453135rem
+      }
+
+      h5 {
+        font-size: 1.25rem;
+        margin-bottom: -.56251rem;
+        padding-top: .56251rem
+      }
+
+      h6 {
+        font-size: 1rem;
+        margin-bottom: -.65001rem;
+        padding-top: .65001rem
+      }
+
+    }
+
+    @media screen and (min-width:87.5em) {
+      html {
+        font-size: .875em
+      }
+
+      body {
+        font-size: 1rem
+      }
+
+      ul,
+      ol {
+        margin-bottom: .83999rem;
+        padding-top: .16001rem
+      }
+
+      p {
+        padding-top: .66001rem
+      }
+
+      p,
+      pre {
+        margin-bottom: 1.33999rem
+      }
+
+      pre,
+      blockquote p {
+        font-size: 1rem;
+        padding-top: .66001rem
+      }
+
+      blockquote p {
+        margin-bottom: .33999rem
+      }
+
+      h1 {
+        font-size: 2.0571429rem;
+        margin-bottom: .21999rem;
+        padding-top: .78001rem
+      }
+
+      h2 {
+        font-size: 1.953125rem;
+        margin-bottom: .1835837rem;
+        padding-top: .8164163rem
+      }
+
+      h3 {
+        font-size: 1.6457143rem;
+        margin-bottom: .07599rem;
+        padding-top: .92401rem
+      }
+
+      h4 {
+        font-size: 1.5625rem;
+        margin-bottom: .546865rem;
+        padding-top: .453135rem
+      }
+
+      h5 {
+        font-size: 1.25rem;
+        margin-bottom: -.56251rem;
+        padding-top: .56251rem
+      }
+
+      h6 {
+        font-size: 1rem;
+        margin-bottom: -.65001rem;
+        padding-top: .65001rem
+      }
+
+      .splashscreen-dillinger {
+        width: 800px
+      }
+
+      .splashscreen p {
+        font-size: 1.25rem;
+        margin-bottom: 1.43749rem;
+        padding-top: .56251rem
+      }
+
+      .title {
+        font-size: .8rem;
+        margin-bottom: .77999rem;
+        padding-top: .22001rem
+      }
+
+      .title-document {
+        margin-bottom: .89999rem;
+        padding-top: .10001rem
+      }
+
+      .title-document,
+      .settings a {
+        font-size: 1.25rem
+      }
+
+      .words,
+      .characters {
+        font-size: .8rem;
+        margin-bottom: .77999rem;
+        padding-top: .22001rem
+      }
+
+      .modal--dillinger.about .modal-dialog,
+      #zen {
+        font-size: 1.25rem
+      }
+
+      #editor {
+        font-size: 1rem
+      }
+    }
+
+    @media (min-width:768px) {
+      .form-inline .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle
+      }
+
+      .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle
+      }
+
+      .form-inline .input-group {
+        display: inline-table;
+        vertical-align: middle
+      }
+
+      .form-inline .input-group .input-group-addon,
+      .form-inline .input-group .input-group-btn,
+      .form-inline .input-group .form-control {
+        width: auto
+      }
+
+      .form-inline .input-group>.form-control {
+        width: 100%
+      }
+
+      .form-inline .control-label {
+        margin-bottom: 0;
+        vertical-align: middle
+      }
+
+      .form-inline .radio,
+      .form-inline .checkbox {
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+        vertical-align: middle
+      }
+
+      .form-inline .radio label,
+      .form-inline .checkbox label {
+        padding-left: 0
+      }
+
+      .form-inline .radio input[type="radio"],
+      .form-inline .checkbox input[type="checkbox"] {
+        position: relative;
+        margin-left: 0
+      }
+
+      .form-inline .has-feedback .form-control-feedback {
+        top: 0
+      }
+
+      .form-horizontal .control-label {
+        text-align: right;
+        margin-bottom: 0;
+        padding-top: 7px
+      }
+
+      .form-horizontal .form-group-lg .control-label {
+        padding-top: 14.3px
+      }
+
+      .form-horizontal .form-group-sm .control-label {
+        padding-top: 6px
+      }
+
+      .modal-dialog {
+        width: 600px;
+        margin: 30px auto
+      }
+
+      .modal-content {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5)
+      }
+
+      .modal-sm {
+        width: 300px
+      }
+    }
+
+    @media (min-width:992px) {
+      .modal-lg {
+        width: 900px
+      }
+    }
+
+  </style>
 
   <script type="text/javascript">
     var trackOutboundLink = function (url) {
@@ -7312,12 +9828,12 @@
   <body class="view-pages">
     <div id="wrap">
 
-      <div class="header">
+      <div class="">
         <div class="container">
           <div class="row">
             <div class="col-md-12">
-              <h1>
-                Dillinger
+              <h1 style="color: #35D7BB;">
+                <a href="/">Dillinger</a>
               </h1>
               <p>
                 Privacy Policy of https://dillinger.io
@@ -7327,63 +9843,48 @@
         </div>
       </div>
 
-      <div class="policy">
+      <div class="">
         <div class="container">
           <div class="row">
             <div class="col-md-12">
 
               <div class="content">
-                <h1>Privacy Policy</h1>
-
-
+                <h1><a id="Privacy_Policy_4"></a>Privacy Policy</h1>
                 <p>Effective date: August 07, 2018</p>
-
-
-                <p>Dillinger ("us", "we", or "our") operates the https://dillinger.io website (the "Service").</p>
-
-                <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data
-                  when you use our Service and the choices you have associated with that data. Our Privacy Policy for
+                <p>Dillinger (“us”, “we”, or “our”) operates the <a href="https://dillinger.io">https://dillinger.io</a>
+                  website (the “Service”).</p>
+                <p>This page informs you of our policies regarding the collection, use, and disclosure of personal data<br>
+                  when you use our Service and the choices you have associated with that data. Our Privacy Policy for<br>
                   Dillinger is managed through <a href="https://www.freeprivacypolicy.com/free-privacy-policy-generator.php">Free
                     Privacy Policy</a>.</p>
-
-                <p>We use your data to provide and improve the Service. By using the Service, you agree to the
-                  collection and use of information in accordance with this policy. Unless otherwise defined in this
-                  Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and
-                  Conditions, accessible from https://dillinger.io</p>
-
-
-                <h2>Information Collection And Use</h2>
-
-                <p>We collect several different types of information for various purposes to provide and improve our
+                <p>We use your data to provide and improve the Service. By using the Service, you agree to the<br>
+                  collection and use of information in accordance with this policy. Unless otherwise defined in this<br>
+                  Privacy Policy, terms used in this Privacy Policy have the same meanings as in our Terms and<br>
+                  Conditions, accessible from <a href="https://dillinger.io">https://dillinger.io</a></p>
+                <h2><a id="Information_Collection_And_Use_19"></a>Information Collection And Use</h2>
+                <p>We collect several different types of information for various purposes to provide and improve our<br>
                   Service to you.</p>
-
-                <h3>Types of Data Collected</h3>
-
-                <h4>Personal Data</h4>
-
-                <p>While using our Service, we may ask you to provide us with certain personally identifiable
-                  information that can be used to contact or identify you ("Personal Data"). Personally identifiable
+                <h3><a id="Types_of_Data_Collected_24"></a>Types of Data Collected</h3>
+                <h4><a id="Personal_Data_26"></a>Personal Data</h4>
+                <p>While using our Service, we may ask you to provide us with certain personally identifiable<br>
+                  information that can be used to contact or identify you (“Personal Data”). Personally identifiable<br>
                   information may include, but is not limited to:</p>
-
                 <ul>
                   <li>Cookies and Usage Data</li>
                 </ul>
-
-                <h4>Usage Data</h4>
-
-                <p>We may also collect information how the Service is accessed and used ("Usage Data"). This Usage Data
-                  may include information such as your computer's Internet Protocol address (e.g. IP address), browser
-                  type, browser version, the pages of our Service that you visit, the time and date of your visit, the
+                <h4><a id="Usage_Data_34"></a>Usage Data</h4>
+                <p>We may also collect information how the Service is accessed and used (“Usage Data”). This Usage Data<br>
+                  may include information such as your computer’s Internet Protocol address (e.g. IP address), browser<br>
+                  type, browser version, the pages of our Service that you visit, the time and date of your visit, the<br>
                   time spent on those pages, unique device identifiers and other diagnostic data.</p>
-
-                <h4>Tracking &amp; Cookies Data</h4>
-                <p>We use cookies and similar tracking technologies to track the activity on our Service and hold
+                <h4><a id="Tracking__Cookies_Data_41"></a>Tracking &amp; Cookies Data</h4>
+                <p>We use cookies and similar tracking technologies to track the activity on our Service and hold<br>
                   certain information.</p>
-                <p>Cookies are files with small amount of data which may include an anonymous unique identifier.
-                  Cookies are sent to your browser from a website and stored on your device. Tracking technologies also
-                  used are beacons, tags, and scripts to collect and track information and to improve and analyze our
+                <p>Cookies are files with small amount of data which may include an anonymous unique identifier.<br>
+                  Cookies are sent to your browser from a website and stored on your device. Tracking technologies also<br>
+                  used are beacons, tags, and scripts to collect and track information and to improve and analyze our<br>
                   Service.</p>
-                <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+                <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.<br>
                   However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>
                 <p>Examples of Cookies we use:</p>
                 <ul>
@@ -7392,9 +9893,7 @@
                     various settings.</li>
                   <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>
                 </ul>
-
-                <h2>Use of Data</h2>
-
+                <h2><a id="Use_of_Data_60"></a>Use of Data</h2>
                 <p>Dillinger uses the collected data for various purposes:</p>
                 <ul>
                   <li>To provide and maintain the Service</li>
@@ -7405,23 +9904,20 @@
                   <li>To monitor the usage of the Service</li>
                   <li>To detect, prevent and address technical issues</li>
                 </ul>
-
-                <h2>Transfer Of Data</h2>
-                <p>Your information, including Personal Data, may be transferred to — and maintained on — computers
-                  located outside of your state, province, country or other governmental jurisdiction where the data
+                <h2><a id="Transfer_Of_Data_72"></a>Transfer Of Data</h2>
+                <p>Your information, including Personal Data, may be transferred to — and maintained on — computers<br>
+                  located outside of your state, province, country or other governmental jurisdiction where the data<br>
                   protection laws may differ than those from your jurisdiction.</p>
-                <p>If you are located outside United States and choose to provide information to us, please note that
+                <p>If you are located outside United States and choose to provide information to us, please note that<br>
                   we transfer the data, including Personal Data, to United States and process it there.</p>
-                <p>Your consent to this Privacy Policy followed by your submission of such information represents your
+                <p>Your consent to this Privacy Policy followed by your submission of such information represents your<br>
                   agreement to that transfer.</p>
-                <p>Dillinger will take all steps reasonably necessary to ensure that your data is treated securely and
-                  in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an
-                  organization or a country unless there are adequate controls in place including the security of your
+                <p>Dillinger will take all steps reasonably necessary to ensure that your data is treated securely and<br>
+                  in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an<br>
+                  organization or a country unless there are adequate controls in place including the security of your<br>
                   data and other personal information.</p>
-
-                <h2>Disclosure Of Data</h2>
-
-                <h3>Legal Requirements</h3>
+                <h2><a id="Disclosure_Of_Data_89"></a>Disclosure Of Data</h2>
+                <h3><a id="Legal_Requirements_91"></a>Legal Requirements</h3>
                 <p>Dillinger may disclose your Personal Data in the good faith belief that such action is necessary to:</p>
                 <ul>
                   <li>To comply with a legal obligation</li>
@@ -7430,68 +9926,54 @@
                   <li>To protect the personal safety of users of the Service or the public</li>
                   <li>To protect against legal liability</li>
                 </ul>
-
-                <h2>Security Of Data</h2>
-                <p>The security of your data is important to us, but remember that no method of transmission over the
-                  Internet, or method of electronic storage is 100% secure. While we strive to use commercially
+                <h2><a id="Security_Of_Data_101"></a>Security Of Data</h2>
+                <p>The security of your data is important to us, but remember that no method of transmission over the<br>
+                  Internet, or method of electronic storage is 100% secure. While we strive to use commercially<br>
                   acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>
-
-                <h2>Service Providers</h2>
-                <p>We may employ third party companies and individuals to facilitate our Service ("Service Providers"),
-                  to provide the Service on our behalf, to perform Service-related services or to assist us in
+                <h2><a id="Service_Providers_107"></a>Service Providers</h2>
+                <p>We may employ third party companies and individuals to facilitate our Service (“Service Providers”),<br>
+                  to provide the Service on our behalf, to perform Service-related services or to assist us in<br>
                   analyzing how our Service is used.</p>
-                <p>These third parties have access to your Personal Data only to perform these tasks on our behalf and
+                <p>These third parties have access to your Personal Data only to perform these tasks on our behalf and<br>
                   are obligated not to disclose or use it for any other purpose.</p>
-
-                <h3>Analytics</h3>
+                <h3><a id="Analytics_116"></a>Analytics</h3>
                 <p>We may use third-party Service Providers to monitor and analyze the use of our Service.</p>
                 <ul>
-                  <li>
-                    <p><strong>Google Analytics</strong></p>
-                    <p>Google Analytics is a web analytics service offered by Google that tracks and reports website
-                      traffic. Google uses the data collected to track and monitor the use of our Service. This data is
-                      shared with other Google services. Google may use the collected data to contextualize and
-                      personalize the ads of its own advertising network.</p>
-                    <p>You can opt-out of having made your activity on the Service available to Google Analytics by
-                      installing the Google Analytics opt-out browser add-on. The add-on prevents the Google Analytics
-                      JavaScript (ga.js, analytics.js, and dc.js) from sharing information with Google Analytics about
-                      visits activity.</p>
-                    <p>For more information on the privacy practices of Google, please visit the Google Privacy &amp;
-                      Terms web page: <a href="https://policies.google.com/privacy?hl=en">https://policies.google.com/privacy?hl=en</a></p>
-                  </li>
+                  <li><strong>Google Analytics</strong> Google Analytics is a web analytics service offered by Google
+                    that tracks and reports website<br>
+                    traffic. Google uses the data collected to track and monitor the use of our Service. This data is<br>
+                    shared with other Google services. Google may use the collected data to contextualize and<br>
+                    personalize the ads of its own advertising network. You can opt-out of having made your activity on
+                    the Service available to Google Analytics by<br>
+                    installing the Google Analytics opt-out browser add-on. The add-on prevents the Google Analytics<br>
+                    JavaScript (ga.js, analytics.js, and dc.js) from sharing information with Google Analytics about<br>
+                    visits activity. For more information on the privacy practices of Google, please visit the Google
+                    Privacy &amp;<br>
+                    Terms web page: <a href="https://policies.google.com/privacy?hl=en">https://policies.google.com/privacy?hl=en</a></li>
                 </ul>
-
-
-                <h2>Links To Other Sites</h2>
-                <p>Our Service may contain links to other sites that are not operated by us. If you click on a third
-                  party link, you will be directed to that third party's site. We strongly advise you to review the
+                <h2><a id="Links_To_Other_Sites_129"></a>Links To Other Sites</h2>
+                <p>Our Service may contain links to other sites that are not operated by us. If you click on a third<br>
+                  party link, you will be directed to that third party’s site. We strongly advise you to review the<br>
                   Privacy Policy of every site you visit.</p>
-                <p>We have no control over and assume no responsibility for the content, privacy policies or practices
+                <p>We have no control over and assume no responsibility for the content, privacy policies or practices<br>
                   of any third party sites or services.</p>
-
-
-                <h2>Children's Privacy</h2>
-                <p>Our Service does not address anyone under the age of 18 ("Children").</p>
-                <p>We do not knowingly collect personally identifiable information from anyone under the age of 18. If
-                  you are a parent or guardian and you are aware that your Children has provided us with Personal Data,
-                  please contact us. If we become aware that we have collected Personal Data from children without
+                <h2><a id="Childrens_Privacy_138"></a>Children’s Privacy</h2>
+                <p>Our Service does not address anyone under the age of 18 (“Children”).</p>
+                <p>We do not knowingly collect personally identifiable information from anyone under the age of 18. If<br>
+                  you are a parent or guardian and you are aware that your Children has provided us with Personal Data,<br>
+                  please contact us. If we become aware that we have collected Personal Data from children without<br>
                   verification of parental consent, we take steps to remove that information from our servers.</p>
-
-
-                <h2>Changes To This Privacy Policy</h2>
-                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the
+                <h2><a id="Changes_To_This_Privacy_Policy_147"></a>Changes To This Privacy Policy</h2>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the<br>
                   new Privacy Policy on this page.</p>
-                <p>We will let you know via email and/or a prominent notice on our Service, prior to the change
-                  becoming effective and update the "effective date" at the top of this Privacy Policy.</p>
-                <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy
+                <p>We will let you know via email and/or a prominent notice on our Service, prior to the change<br>
+                  becoming effective and update the “effective date” at the top of this Privacy Policy.</p>
+                <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy<br>
                   Policy are effective when they are posted on this page.</p>
-
-
-                <h2>Contact Us</h2>
+                <h2><a id="Contact_Us_158"></a>Contact Us</h2>
                 <p>If you have any questions about this Privacy Policy, please contact us:</p>
                 <ul>
-                  <li>By email: joe@subprint.com</li>
-
+                  <li>By email: <a href="mailto:joe@subprint.com">joe@subprint.com</a></li>
                 </ul>
               </div>
 
