@@ -120,7 +120,7 @@ By default, the Docker will expose port 8080, so change this within the Dockerfi
 
 ```sh
 cd dillinger
-docker build -t joemccann/dillinger:${package.json.version}
+docker build -t joemccann/dillinger:${package.json.version} .
 ```
 This will create the dillinger image and pull in the necessary dependencies. Be sure to swap out `${package.json.version}` with the actual version of Dillinger.
 
