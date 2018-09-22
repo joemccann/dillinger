@@ -1,9 +1,12 @@
-'use strict';
+'use strict'
 
-var
-  path            = require('path'),
-  webpack         = require('webpack'),
-  nodeModulesPath = path.join(__dirname, 'node_modules');
+var path = require('path')
+
+var webpack = require('webpack')
+
+var nodeModulesPath = path.join(__dirname, 'node_modules')
+
+var HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 module.exports = {
   cache: true,
@@ -31,7 +34,7 @@ module.exports = {
   },
   resolve: {
     modulesDirectories: ['node_modules', 'plugins'],
-    extensions: ['', '.webpack.js', '.web.js', '.js'], 
+    extensions: ['', '.webpack.js', '.web.js', '.js'],
     alias: {
       'angular': 'angular/angular',
       'md': 'core/markdown-it'
@@ -43,6 +46,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       'angular': 'exports?angular!angular'
-    })
+    }),
+    new HardSourceWebpackPlugin()
   ]
-};
+}
