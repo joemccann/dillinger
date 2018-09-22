@@ -444,22 +444,16 @@ module.exports =
             image_name: name,
             fileContents: reader.result
           }).then(function (result) {
-            console.log('RESULT...')
-            console.dir(result)
-
             if (angular.isDefined(di.$scope)) {
               di.$scope.$close()
             }
-            if (result.data.error) {
+            if (result.data.data && result.data.data.error) {
               return diNotify({
                 message: 'An Error occured: ' + result.data.error,
                 duration: 5000
               })
             } else {
-              console.log('else')
-              var publicUrl = result.data.url
-              console.dir(result.data)
-              console.dir(result.data.url)
+              var publicUrl = result.data.data.url
               // Now take publicUrl and and wrap in markdown
               var template = '![' + name + '](' + publicUrl + ')'
               // Now take the ace editor cursor and make the current

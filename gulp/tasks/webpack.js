@@ -1,8 +1,7 @@
 
 'use strict'
 
-var
-  gulp = require('gulp')
+var gulp = require('gulp')
 
 var gulpif = require('gulp-if')
 
@@ -10,7 +9,7 @@ var gutil = require('gulp-util')
 
 var webpack = require('webpack')
 
-var webpackDevServer = require('webpack-dev-server')
+var WebpackDevServer = require('webpack-dev-server')
 
 var webpackConfig = require('../../webpack.config')
 
@@ -18,7 +17,7 @@ var bundleLogger = require('../util/bundleLogger')
 
 var handleErrors = require('../util/handleErrors')
 
-var ngAnnotatePlugin = require('ng-annotate-webpack-plugin')
+var NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
 
 gulp.task('webpack:dev', function (cb) {
   var
@@ -31,7 +30,7 @@ gulp.task('webpack:dev', function (cb) {
 
   devCompiler = webpack(webpackDevConfig)
 
-  return new webpackDevServer(devCompiler, {
+  return new WebpackDevServer(devCompiler, {
     proxy: {
       '*': {
         target: 'http://127.0.0.1:8080',
@@ -61,10 +60,13 @@ gulp.task('webpack:build', function (cb) {
     }
   }),
   new webpack.optimize.DedupePlugin(),
-  new ngAnnotatePlugin({
+  new NGAnnotatePlugin({
     add: true
   }),
-  new webpack.optimize.UglifyJsPlugin())
+  new webpack.optimize.UglifyJsPlugin({
+    cache: true,
+    parallel: true
+  }))
 
   return webpack(webpackProductionConfig, function (err, stats) {
     if (err) {
