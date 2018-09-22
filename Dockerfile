@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
     libfontconfig \
+    ttf-wqy-microhei \
+    ttf-wqy-zenhei \ 
     python-software-properties \
     && rm -rf /var/lib/apt/lists/*
 
