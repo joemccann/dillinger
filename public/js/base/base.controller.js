@@ -29,6 +29,7 @@ module['exports-loader'] =
       $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
       $rootScope.editor.setOption('minLines', 50)
       $rootScope.editor.setOption('maxLines', 90000)
+      $rootScope.editor.session.$selectLongWords = true
 
       var updateDocument = function () {
         $rootScope.currentDocument = documentsService.getCurrentDocument()

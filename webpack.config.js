@@ -4,8 +4,6 @@ const path = require('path')
 
 const webpack = require('webpack')
 
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
@@ -13,7 +11,7 @@ module.exports = {
   cache: true,
   entry: path.join(__dirname, 'public/js/app.js'),
   output: {
-    path: path.join(__dirname, 'public/js')
+    path: path.join(__dirname, 'public/js/bundle.js')
   },
   resolveLoader: {
     moduleExtensions: ['-loader']
