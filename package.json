@@ -88,6 +88,7 @@
     "morgan": "^1.9.1",
     "netjet": "^1.1.3",
     "parse-link-header": "0.4.1",
+    "phantom": "^6.0.3",
     "phantomjs-prebuilt": "^2.1.16",
     "rc": "0.3.0",
     "request": "^2.88.0",
@@ -96,7 +97,16 @@
     "temp": "^0.8.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "ajv": "^6.5.3",
+    "ajv-keywords": "^3.2.0",
     "angular-mocks": "^1.7.4",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^10.0.0",
     "balanced-match": "^0.2.0",
     "browser-sync": "^2.24.7",
     "cave": "^2.0.0",
@@ -145,7 +155,7 @@
     "style-loader": "^0.8.1",
     "uglify-js": "^3.4.9",
     "walkdir": ">=0.0.7",
-    "webpack": "^1.14.0",
+    "webpack": "^4.19.1",
     "webpack-dev-server": "^1.12.0",
     "yargs": "^1.3.2"
   }

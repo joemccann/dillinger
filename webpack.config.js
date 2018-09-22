@@ -1,18 +1,22 @@
 'use strict'
 
-var path = require('path')
+const path = require('path')
 
-var webpack = require('webpack')
+const webpack = require('webpack')
 
-var nodeModulesPath = path.join(__dirname, 'node_modules')
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
-var HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
+  mode: 'production',
   cache: true,
-  entry: './public/js/app.js',
+  entry: path.join(__dirname, 'public/js/app.js'),
   output: {
     path: path.join(__dirname, 'public/js')
+  },
+  resolveLoader: {
+    moduleExtensions: ['-loader']
   },
   module: {
     noParse: [
@@ -20,33 +24,59 @@ module.exports = {
       /angular/,
       /autoit.js/
     ],
-    loaders: [
+    rules: [
       {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader',
-        exclude: /node_modules/
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: { presets: ['es2015'] }
+        }
       },
       {
-        test: /\.json$/,
-        loader: 'json-loader'
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader' // creates style nodes from JS strings
+          },
+          {
+            loader: 'css-loader' // translates CSS into CommonJS
+          },
+          {
+            loader: 'sass-loader' // compiles Sass to CSS
+          }
+        ]
       }
     ]
   },
+  optimization: {
+    minimizer: [
+      // we specify a custom UglifyJsPlugin here to get source maps in production
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          compress: false,
+          ecma: 6,
+          mangle: true
+        },
+        sourceMap: true
+      })
+    ]
+  },
   resolve: {
-    modulesDirectories: ['node_modules', 'plugins'],
-    extensions: ['', '.webpack.js', '.web.js', '.js'],
+    modules: ['node_modules', 'plugins'],
+    extensions: ['.webpack.js', '.web.js', '.js'],
     alias: {
       'angular': 'angular/angular',
       'md': 'core/markdown-it'
     }
   },
-  resolveLoader: {
-    root: nodeModulesPath
-  },
   plugins: [
     new webpack.ProvidePlugin({
-      'angular': 'exports?angular!angular'
+      'angular': 'exports-loader?angular!angular'
     }),
-    new HardSourceWebpackPlugin()
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    })
   ]
 }

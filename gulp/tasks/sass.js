@@ -1,19 +1,25 @@
-'use strict';
+'use strict'
 
-var
-  gulp = require('gulp'),
-  sass = require('gulp-sass'),
-  autoprefixer = require('gulp-autoprefixer'),
-  cmq = require('gulp-group-css-media-queries'),
-  csso = require('gulp-csso'),
-  size = require('gulp-size'),
-  gulpif = require('gulp-if'),
-  handleErrors = require('../util/handleErrors'),
-  browserSync = require('browser-sync');
+const gulp = require('gulp')
+
+const sass = require('gulp-sass')
+
+const autoprefixer = require('gulp-autoprefixer')
+
+const cmq = require('gulp-group-css-media-queries')
+
+const csso = require('gulp-csso')
+
+const size = require('gulp-size')
+
+const gulpif = require('gulp-if')
+
+const handleErrors = require('../util/handleErrors')
+
+const browserSync = require('browser-sync')
 
 gulp.task('sass', function () {
-
-  var dest = './public/css';
+  const dest = './public/css'
 
   console.log('app sass build')
 
@@ -32,7 +38,7 @@ gulp.task('sass', function () {
     .pipe(browserSync.reload({
       stream: true
     }))
-    .pipe(size());
+    .pipe(size())
 
   console.log('export sass build')
 
@@ -51,5 +57,5 @@ gulp.task('sass', function () {
     .pipe(browserSync.reload({
       stream: true
     }))
-    .pipe(size());
-});
+    .pipe(size())
+})

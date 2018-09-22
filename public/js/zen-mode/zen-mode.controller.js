@@ -1,55 +1,53 @@
 
-'use strict';
+'use strict'
 
 module.exports =
   angular
-  .module('diZenMode', ['diZenMode.directives'])
-  .controller('diZenMode', function($rootScope, $compile, documentsService) {
+    .module('diZenMode', ['diZenMode.directives'])
+    .controller('diZenMode', function ($rootScope, $compile, documentsService) {
+      var
+        vm = this
 
-  var
-    vm = this,
-    template;
+      var template
 
-  vm.isZen  = false;
-  vm.zen    = null;
+      vm.isZen = false
+      vm.zen = null
 
-  template  = require('raw!./zen-mode.directive.html');
+      template = require('raw!./zen-mode.directive.html')
 
-  vm.toggle = function() {
+      vm.toggle = function () {
+        var el, scope
 
-    var el, scope;
+        vm.isZen = !vm.isZen
 
-    vm.isZen = !vm.isZen;
+        if (vm.isZen === true) {
+          scope = $rootScope.$new()
+          el = $compile(template)(scope)
 
-    if (vm.isZen === true) {
+          angular.element(document.body).append(el)
 
-      scope = $rootScope.$new();
-      el    = $compile(template)(scope);
+          scope.$close = function () {
+            vm.isZen = !vm.isZen
+            documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue())
+            $rootScope.$emit('document.refresh')
+            el.remove()
+            scope.$destroy()
+            return false
+          }
 
-      angular.element(document.body).append(el);
+          require('brace/mode/markdown')
+          require('../documents/theme-dillinger')
 
-      scope.$close = function() {
-        vm.isZen = !vm.isZen;
-        documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue());
-        $rootScope.$emit('document.refresh');
-        el.remove();
-        scope.$destroy();
-        return false;
-      };
+          vm.zen = ace.edit('zen')
+          vm.zen.getSession().setMode('ace/mode/markdown')
+          vm.zen.setTheme('ace/theme/dillinger')
+          vm.zen.getSession().setUseWrapMode(true)
+          vm.zen.renderer.setShowGutter(false)
+          vm.zen.setShowPrintMargin(false)
+          vm.zen.getSession().setValue(documentsService.getCurrentDocumentBody())
 
-      require('brace/mode/markdown');
-      require('../documents/theme-dillinger');
-
-      vm.zen = ace.edit('zen');
-      vm.zen.getSession().setMode('ace/mode/markdown');
-      vm.zen.setTheme('ace/theme/dillinger');
-      vm.zen.getSession().setUseWrapMode(true);
-      vm.zen.renderer.setShowGutter(false);
-      vm.zen.setShowPrintMargin(false);
-      vm.zen.getSession().setValue(documentsService.getCurrentDocumentBody());
-
-      el.addClass('on');
-    }
-    return false;
-  };
-});
+          el.addClass('on')
+        }
+        return false
+      }
+    })

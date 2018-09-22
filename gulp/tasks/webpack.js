@@ -1,32 +1,25 @@
 
 'use strict'
 
-var gulp = require('gulp')
+const gulp = require('gulp')
 
-var gulpif = require('gulp-if')
+const gutil = require('gulp-util')
 
-var gutil = require('gulp-util')
+const webpack = require('webpack')
 
-var webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
 
-var WebpackDevServer = require('webpack-dev-server')
+const webpackConfig = require('../../webpack.config.js')
 
-var webpackConfig = require('../../webpack.config')
-
-var bundleLogger = require('../util/bundleLogger')
-
-var handleErrors = require('../util/handleErrors')
-
-var NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
+const NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
 
 gulp.task('webpack:dev', function (cb) {
-  var
+  const
     webpackDevConfig = Object.create(webpackConfig)
 
-  var devCompiler
+  let devCompiler = null
 
   webpackDevConfig.devtool = 'eval'
-  webpackDevConfig.debug = true
 
   devCompiler = webpack(webpackDevConfig)
 
@@ -52,21 +45,20 @@ gulp.task('webpack:dev', function (cb) {
 })
 
 gulp.task('webpack:build', function (cb) {
-  var webpackProductionConfig = Object.create(webpackConfig)
+  const webpackProductionConfig = Object.assign(webpackConfig, {})
 
   webpackProductionConfig.plugins = webpackProductionConfig.plugins.concat(new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify('production')
     }
   }),
-  new webpack.optimize.DedupePlugin(),
   new NGAnnotatePlugin({
     add: true
   }),
-  new webpack.optimize.UglifyJsPlugin({
-    cache: true,
-    parallel: true
-  }))
+  new webpack.LoaderOptionsPlugin({
+    debug: true
+  })
+  )
 
   return webpack(webpackProductionConfig, function (err, stats) {
     if (err) {

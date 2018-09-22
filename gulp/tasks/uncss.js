@@ -1,14 +1,14 @@
 'use strict'
-var gulp = require('gulp')
+const gulp = require('gulp')
 
-var uncss = require('gulp-postcss')
+const uncss = require('gulp-postcss')
 
-var size = require('gulp-size')
+const size = require('gulp-size')
 
-var handleErrors = require('../util/handleErrors')
+const handleErrors = require('../util/handleErrors')
 
 gulp.task('uncss', function () {
-  var dest = 'public/test'
+  const dest = 'public/test'
 
   return gulp.src('public/css/app.css')
     .pipe(uncss({
