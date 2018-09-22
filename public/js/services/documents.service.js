@@ -461,7 +461,7 @@ module.exports =
               console.dir(result.data)
               console.dir(result.data.url)
               // Now take publicUrl and and wrap in markdown
-              var template = `![${name}](${publicUrl})`
+              var template = '![' + name + '](' + publicUrl + ')'
               // Now take the ace editor cursor and make the current
               // value the template
               service.setCurrentCursorValue(template)
