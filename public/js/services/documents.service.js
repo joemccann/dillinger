@@ -444,6 +444,9 @@ module.exports =
             image_name: name,
             fileContents: reader.result
           }).then(function (result) {
+            console.log('RESULT...')
+            console.dir(result)
+
             if (angular.isDefined(di.$scope)) {
               di.$scope.$close()
             }
@@ -453,25 +456,30 @@ module.exports =
                 duration: 5000
               })
             } else {
+              console.log('else')
               var publicUrl = result.data.url
+              console.dir(result.data)
+              console.dir(result.data.url)
               // Now take publicUrl and and wrap in markdown
-              var template = '![' + name + '](' + publicUrl + ')'
+              var template = `![${name}](${publicUrl})`
               // Now take the ace editor cursor and make the current
               // value the template
               service.setCurrentCursorValue(template)
 
               // Track event in GA
-              // if (window.ga) {
-              //   ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
-              // }
+              if (window.ga) {
+                window.ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
+              }
               return diNotify({
                 message: 'Successfully uploaded image to Dropbox.',
                 duration: 4000
               })
             }
-          }).error(function (err) {
+          }, function (err) {
+            console.dir(err)
             return diNotify({
-              message: 'An Error occured: ' + err
+              message: 'An Error occured: ' + err.message,
+              duration: 5000
             })
           })
         }
