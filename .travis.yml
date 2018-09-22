@@ -3,7 +3,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - 8.x.x
+  - 8.9.0
 before_install:
   - npm install -g gulp
 script:
