@@ -1,14 +1,13 @@
 
-'use strict';
+'use strict'
 
-var
-  fs          = require('fs'),
-  argv        = require('yargs').argv,
-  onlyScripts = require('./util/scriptFilter'),
-  tasks       = fs.readdirSync('./gulp/tasks/').filter(onlyScripts);
+const fs = require('fs')
+const argv = require('yargs').argv
+const onlyScripts = require('./util/scriptFilter')
+const tasks = fs.readdirSync('./gulp/tasks/').filter(onlyScripts)
 
-global.isProduction = argv.production || argv.prod ? true : false;
+global.isProduction = !!(argv.production || argv.prod)
 
-tasks.forEach(function(task) {
-  require('./tasks/' + task);
-});
+tasks.forEach(function (task) {
+  require('./tasks/' + task)
+})
