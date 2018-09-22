@@ -1,51 +1,53 @@
 'use strict';
 
-var express = require('express')
-  , app = module.exports = express()
-  , fs = require('fs')
-  , path = require('path')
-  , md = require('./markdown-it.js').md
-  , temp = require('temp')
-  , phantom = require('phantom')
-  , breakdance = require('breakdance')
-  ;
+var express = require('express'),
+  app = module.exports = express(),
+  fs = require('fs'),
+  path = require('path'),
+  md = require('./markdown-it.js').md,
+  temp = require('temp'),
+  phantom = require('phantom'),
+  breakdance = require('breakdance');
 
 const phantomSession = phantom.create()
-  
-function getPhantomSession(){ return phantomSession }
 
-function _getFullHtml(name, str, style){
-  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'
-    + name + '</title><style>'
-    + ( ( style ) ? style : '' ) + '</style></head><body id="preview">\n'
-    + md.render(str) + '\n</body></html>';
+function getPhantomSession() {
+  return phantomSession
 }
 
-function _getHtml(str){ return md.render(str) }
+function _getFullHtml(name, str, style) {
+  return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
+    name + '</title><style>' +
+    ((style) ? style : '') + '</style></head><body id="preview">\n' +
+    md.render(str) + '\n</body></html>';
+}
+
+function _getHtml(str) {
+  return md.render(str)
+}
 
 // Move this into _getFormat() to reload the CSS without restarting node.
-var _format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8');
 
 function _getFormat() {
-    return _format;
+  const _format = fs.readFileSync(path.resolve(__dirname, '../../public/css/export.css')).toString('utf-8');
+  return _format;
 }
 
-var fetchMd = function(req, res) {
-  var unmd = req.body.unmd
-    , json_response =
-    {
-      data: ''
-    , error: false
+var fetchMd = function (req, res) {
+  var unmd = req.body.unmd,
+    json_response = {
+      data: '',
+      error: false
     }
 
   var name = req.body.name.trim()
 
-  if(!name.includes('.md')){
+  if (!name.includes('.md')) {
     name = name + '.md'
   }
 
   if (req.body.preview === 'false') {
-    res.attachment( name );
+    res.attachment(name);
   } else {
     // We don't use text/markdown because my "favorite" browser
     // (IE) ignores the Content-Disposition: inline; and prompts
@@ -57,15 +59,14 @@ var fetchMd = function(req, res) {
     res.set('Content-Disposition', `inline; filename="${name}"`);
   }
 
-  res.end( unmd );
+  res.end(unmd);
 }
 
-var fetchHtml = function(req, res) {
-  var unmd = req.body.unmd
-    , json_response =
-    {
-      data: ''
-    , error: false
+var fetchHtml = function (req, res) {
+  var unmd = req.body.unmd,
+    json_response = {
+      data: '',
+      error: false
     }
 
   // For formatted HTML or not...
@@ -75,34 +76,35 @@ var fetchHtml = function(req, res) {
 
   var name = req.body.name.trim() + '.html'
 
-  var filename = path.resolve(__dirname, '../../downloads/files/html/' + name )
+  var filename = path.resolve(__dirname, '../../downloads/files/html/' + name)
 
   if (req.body.preview === 'false') {
-    res.attachment( name );
+    res.attachment(name);
   } else {
     res.type('html');
     res.set('Content-Disposition', `inline; filename="${name}"`);
   }
 
-  res.end( html );
+  res.end(html);
 }
 
-var fetchPdf = function(req, res) {
-  var unmd = req.body.unmd
-    , json_response =
-  {
-    data: ''
-  , error: false
-  }
+var fetchPdf = function (req, res) {
+  var unmd = req.body.unmd,
+    json_response = {
+      data: '',
+      error: false
+    }
 
   var html = _getFullHtml(req.body.name, unmd, _getFormat())
-  var tempPath = temp.path({suffix: '.htm'})
-  fs.writeFile( tempPath, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
-    if(err) {
+  var tempPath = temp.path({
+    suffix: '.htm'
+  })
+  fs.writeFile(tempPath, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
+    if (err) {
       console.error(err);
       res.end("Something wrong with the pdf conversion.");
     } else {
-       _createPdf(req, res, tempPath);
+      _createPdf(req, res, tempPath);
     }
   });
 }
@@ -111,27 +113,36 @@ function _createPdf(req, res, tempFilename) {
   getPhantomSession().then(phantom => {
     return phantom.createPage();
   }).then(page => {
-    page.open( tempFilename ).then(status => {
+    page.open(tempFilename).then(status => {
       _renderPage(page);
     });
   });
 
   function _renderPage(page) {
     var name = req.body.name.trim() + '.pdf'
-    var filename = temp.path({suffix: '.pdf'})
+    var filename = temp.path({
+      suffix: '.pdf'
+    })
 
-    page.property('paperSize', { format: 'A4', orientation: 'portrait', margin: '1cm' })
-    page.property('viewportSize', { width: 1024, height: 768 })
+    page.property('paperSize', {
+      format: 'A4',
+      orientation: 'portrait',
+      margin: '1cm'
+    })
+    page.property('viewportSize', {
+      width: 1024,
+      height: 768
+    })
 
-    page.render(filename).then(function() {
+    page.render(filename).then(function () {
       if (req.body.preview === 'false') {
-        res.attachment( name )
+        res.attachment(name)
       } else {
         res.type('pdf')
         res.set('Content-Disposition', `inline; filename="${name}"`)
       }
 
-      res.sendFile( filename, {}, function() {
+      res.sendFile(filename, {}, function () {
         // Cleanup.
         fs.unlink(filename)
         fs.unlink(tempFilename)
@@ -143,17 +154,23 @@ function _createPdf(req, res, tempFilename) {
 }
 
 // Convert HTML to MD
-function htmlToMd(req,res){
- 
+function htmlToMd(req, res) {
+
   var md = ''
 
-  try{
+  try {
     md = breakdance(req.body.html)
-  }catch(e){
-    return res.status(400).json({error: {message: 'Something went wrong with the HTML to Markdown conversion.'} }) 
+  } catch (e) {
+    return res.status(400).json({
+      error: {
+        message: 'Something went wrong with the HTML to Markdown conversion.'
+      }
+    })
   }
 
-  return res.status(200).json({convertedMd: md})
+  return res.status(200).json({
+    convertedMd: md
+  })
 
 }
 
