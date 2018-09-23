@@ -6,7 +6,7 @@ var ace = require('brace')
 require('brace/mode/markdown')
 require('../documents/theme-dillinger')
 
-module['exports-loader'] =
+module.exports =
   angular
     .module('diBase', [
       'diBase.controllers.about',

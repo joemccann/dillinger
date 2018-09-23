@@ -7,7 +7,7 @@ module.exports =
     .directive('documentTitle', function () {
       var directive = {
         restrict: 'E',
-        template: require('raw-loader!./document-title.directive.html')
+        template: require('raw!./document-title.directive.html')
       }
 
       return directive

@@ -15,7 +15,7 @@ const NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
 
 gulp.task('webpack:dev', function (cb) {
   const
-    webpackDevConfig = Object.create(webpackConfig)
+    webpackDevConfig = Object.assign(webpackConfig, {})
 
   let devCompiler = null
 

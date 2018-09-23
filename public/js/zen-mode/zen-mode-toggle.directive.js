@@ -12,7 +12,7 @@ module.exports =
         replace: true,
         controller: 'diZenMode',
         controllerAs: 'zenmode',
-        template: require('raw-loader!./zen-mode-toggle.directive.html')
+        template: require('raw!./zen-mode-toggle.directive.html')
       }
 
       return directive

@@ -11,7 +11,8 @@ module.exports = {
   cache: true,
   entry: path.join(__dirname, 'public/js/app.js'),
   output: {
-    path: path.join(__dirname, 'public/js/bundle.js')
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'public/js')
   },
   resolveLoader: {
     moduleExtensions: ['-loader']
