@@ -10,6 +10,7 @@ module.exports =
       enableAutoSave:        true,
       enableWordsCount:      true,
       enableCharactersCount: true,
+      enablePrintMargin:     false,
       enableScrollSync:      false,
       enableNightMode:       false,
       enableGitHubComment:   true

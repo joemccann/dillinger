@@ -18,6 +18,12 @@
     </a>
   </li>
   <li>
+    <a ng-click="user.togglePrintMargin($event)">
+      <span class="has-checkbox">Print Margin</span>
+      <switch class="toggle-print-margin" value="user.profile.enablePrintMargin"></switch>
+    </a>
+  </li>
+  <li>
     <a ng-click="user.toggleScrollSync($event)">
       <span class="has-checkbox">Scroll Sync</span>
       <switch class="toggle-scroll-sync" value="user.profile.enableScrollSync"></switch>

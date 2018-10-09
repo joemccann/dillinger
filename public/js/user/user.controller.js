@@ -46,11 +46,13 @@ module.exports =
   vm.toggleAutoSave        = toggleAutoSave;
   vm.toggleWordsCount      = toggleWordsCount;
   vm.toggleCharactersCount = toggleCharactersCount;
+  vm.togglePrintMargin     = togglePrintMargin;
   vm.toggleNightMode       = toggleNightMode;
   vm.toggleScrollSync      = toggleScrollSync;
   vm.resetProfile          = resetProfile;
   vm.showAbout             = showAbout;
 
+  setPrintMargin();
   doSync();
 
   // ------------------------------
@@ -82,6 +84,15 @@ module.exports =
   function toggleCharactersCount(e) {
     e.preventDefault();
     vm.profile.enableCharactersCount = !vm.profile.enableCharactersCount;
+    userService.save(vm.profile);
+
+    return false;
+  }
+
+  function togglePrintMargin(e) {
+    e.preventDefault();
+    vm.profile.enablePrintMargin = !vm.profile.enablePrintMargin;
+    setPrintMargin();
     userService.save(vm.profile);
 
     return false;
@@ -126,6 +137,10 @@ module.exports =
     return $timeout(function() {
       return $rootScope.$apply();
     }, 0);
+  }
+
+  function setPrintMargin() {
+    $rootScope.editor.setShowPrintMargin(vm.profile.enablePrintMargin);
   }
 
   function doSync() {
