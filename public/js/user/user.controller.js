@@ -8,7 +8,7 @@ module.exports =
     'diDocuments.service.wordcount',
     'diDocuments.service.charactercount'
   ])
-  .controller('User', function($rootScope, $timeout, $modal, userService, wordsCountService, charactersCountService) {
+  .controller('User', function($rootScope, $scope, $timeout, $modal, userService, wordsCountService, charactersCountService) {
 
   var vm = this;
 
@@ -46,11 +46,13 @@ module.exports =
   vm.toggleAutoSave        = toggleAutoSave;
   vm.toggleWordsCount      = toggleWordsCount;
   vm.toggleCharactersCount = toggleCharactersCount;
+  vm.storeTabSize          = storeTabSize;
   vm.toggleNightMode       = toggleNightMode;
   vm.toggleScrollSync      = toggleScrollSync;
   vm.resetProfile          = resetProfile;
   vm.showAbout             = showAbout;
 
+  setTabSize();
   doSync();
 
   // ------------------------------
@@ -96,6 +98,14 @@ module.exports =
     return false;
   }
 
+  function storeTabSize() {
+    vm.profile.tabSize = $scope.tabsize;
+    userService.save(vm.profile);
+    setTabSize();
+
+    return false;
+  }
+
   function toggleNightMode(e) {
     e.preventDefault();
     vm.profile.enableNightMode = !vm.profile.enableNightMode;
@@ -126,6 +136,13 @@ module.exports =
     return $timeout(function() {
       return $rootScope.$apply();
     }, 0);
+  }
+
+  function setTabSize() {
+    $scope.tabsize = vm.profile.tabSize;
+    $rootScope.editor.session.setTabSize($scope.tabsize);
+
+    return false;
   }
 
   function doSync() {
