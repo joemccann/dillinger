@@ -8,7 +8,7 @@ module.exports =
     'diDocuments.service.wordcount',
     'diDocuments.service.charactercount'
   ])
-  .controller('User', function($rootScope, $timeout, $modal, userService, wordsCountService, charactersCountService) {
+  .controller('User', function($rootScope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService) {
 
   var vm = this;
 
@@ -40,6 +40,7 @@ module.exports =
 
   $rootScope.$on('preview.updated', updateWords);
   $rootScope.$on('preview.updated', updateCharacters);
+  $rootScope.editor.on('paste', pasteDetected);
 
   // Methods on the Controller
   vm.toggleGitHubComment   = toggleGitHubComment;
@@ -126,6 +127,28 @@ module.exports =
     return $timeout(function() {
       return $rootScope.$apply();
     }, 0);
+  }
+
+  function pasteDetected() {
+    // only change if the title if still set to the default
+    if (documentsService.getCurrentDocumentTitle() == 'Untitled Document.md') {
+      // wait for preview to process Markdown, but only run once then destroy
+      var destroyListener = $rootScope.$on('preview.updated', function() {
+        setDocumentTitleToFirstHeader();
+
+        destroyListener();
+      });
+    }
+  }
+
+  function setDocumentTitleToFirstHeader() {
+    // set the document's name to the first header if there is one
+    try {
+      documentsService.setCurrentDocumentTitle(angular.element(document).find('#preview').find('h1')[0].textContent);
+    }
+    // don't do anything if there's no header
+    catch(err) {}
+    return;
   }
 
   function doSync() {
