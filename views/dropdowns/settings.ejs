@@ -31,6 +31,12 @@
     </a>
   </li>
   <% } %>
+  <li>
+    <a><form>
+      <span>Tab Size</span>
+      <input type="number" ng-model="tabsize" min="1" ng-change="user.storeTabSize()"></input>
+    </form></a>
+  </li>
   <!--
   <li>
     <a ng-click="user.toggleNightMode()">

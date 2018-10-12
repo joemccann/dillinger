@@ -11,6 +11,7 @@ module.exports =
       enableWordsCount:      true,
       enableCharactersCount: true,
       enableScrollSync:      false,
+      tabSize:               4,
       enableNightMode:       false,
       enableGitHubComment:   true
     },

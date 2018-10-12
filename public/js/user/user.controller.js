@@ -10,6 +10,7 @@ module.exports =
   ])
   .controller('User', function($rootScope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService) {
 
+
   var vm = this;
 
   vm.profile = userService.profile;
@@ -47,11 +48,13 @@ module.exports =
   vm.toggleAutoSave        = toggleAutoSave;
   vm.toggleWordsCount      = toggleWordsCount;
   vm.toggleCharactersCount = toggleCharactersCount;
+  vm.storeTabSize          = storeTabSize;
   vm.toggleNightMode       = toggleNightMode;
   vm.toggleScrollSync      = toggleScrollSync;
   vm.resetProfile          = resetProfile;
   vm.showAbout             = showAbout;
 
+  setTabSize();
   doSync();
 
   // ------------------------------
@@ -97,6 +100,14 @@ module.exports =
     return false;
   }
 
+  function storeTabSize() {
+    vm.profile.tabSize = $scope.tabsize;
+    userService.save(vm.profile);
+    setTabSize();
+
+    return false;
+  }
+
   function toggleNightMode(e) {
     e.preventDefault();
     vm.profile.enableNightMode = !vm.profile.enableNightMode;
@@ -129,6 +140,14 @@ module.exports =
     }, 0);
   }
 
+
+  function setTabSize() {
+    $scope.tabsize = vm.profile.tabSize;
+    $rootScope.editor.session.setTabSize($scope.tabsize);
+
+    return false;
+  }
+
   function pasteDetected() {
     // only change if the title if still set to the default
     if (documentsService.getCurrentDocumentTitle() == 'Untitled Document.md') {
@@ -149,6 +168,7 @@ module.exports =
     // don't do anything if there's no header
     catch(err) {}
     return;
+
   }
 
   function doSync() {
