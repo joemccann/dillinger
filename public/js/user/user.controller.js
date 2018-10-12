@@ -144,7 +144,7 @@ module.exports =
   function setDocumentTitleToFirstHeader() {
     // set the document's name to the first header if there is one
     try {
-      documentsService.setCurrentDocumentTitle(angular.element(document).find('#preview').find('h1')[0].textContent);
+      documentsService.setCurrentDocumentTitle(angular.element(document).find('#preview').find('h1')[0].textContent + ".md");
     }
     // don't do anything if there's no header
     catch(err) {}
