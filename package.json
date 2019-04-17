@@ -154,6 +154,7 @@
     "run-sequence": "^1.0.1",
     "style-loader": "^0.8.1",
     "uglify-js": "^3.4.9",
+    "uglifyjs-webpack-plugin": "^2.1.2",
     "walkdir": ">=0.0.7",
     "webpack": "^4.19.1",
     "webpack-dev-server": "^1.12.0",
