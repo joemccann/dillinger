@@ -19,9 +19,10 @@ COPY package.json ./package.json
 RUN npm install --devDependencies \
   && npm cache verify
 # Copy source over and create configs dir
-COPY . .
+
 RUN rm -rf /configs
 RUN mkdir -p /configs
+COPY . .
 
 EXPOSE 8080
 ENV NODE_ENV=production

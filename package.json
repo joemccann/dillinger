@@ -39,7 +39,7 @@
     "url": "git://github.com/joemccann/dillinger"
   },
   "engines": {
-    "node": "8.x.x",
+    "node": "10.x.x",
     "nsolid": "3.x.x"
   },
   "dependencies": {
