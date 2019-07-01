@@ -94,7 +94,7 @@ app.use(netjet({
 
 // May not need to use serveStatic if using nginx for serving
 // static assets. Just comment it out below.
-app.use(serveStatic(__dirname + '/public'))
+// app.use(serveStatic(__dirname + '/public'))
 
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'
@@ -124,7 +124,7 @@ if ('development' == env) {
 }
 
 app.get('/', routes.index)
-app.get('/privacy', routes.privacy)
+// app.get('/privacy', routes.privacy)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
@@ -135,7 +135,11 @@ app.use(medium)
 app.use(googledrive)
 app.use(onedrive)
 
-app.listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'))
-  console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
-})
+if (!process.env.NOW_REGION) {
+  app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'))
+    console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
+  })
+}
+
+module.exports = app
