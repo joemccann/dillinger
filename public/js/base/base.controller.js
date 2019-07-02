@@ -2,6 +2,7 @@
 'use strict'
 
 var ace = require('brace')
+var bodyScrollLock = require('body-scroll-lock');
 
 require('brace/mode/markdown')
 require('../documents/theme-dillinger')
@@ -43,4 +44,18 @@ module.exports =
       }
 
       $rootScope.$on('document.refresh', updateDocument)
+
+      var editorElement = document.getElementById("editor1")
+      var previewElement = document.getElementById("preview1")
+      var sidebarElement = document.getElementsByClassName("sidebar")[0]
+      bodyScrollLock.disableBodyScroll(editorElement);
+      bodyScrollLock.disableBodyScroll(previewElement);
+      bodyScrollLock.disableBodyScroll(sidebarElement);
+
+      var setEditorHeight = function() {
+        editorElement.style.setProperty("height", window.innerHeight - 172 + "px")
+        previewElement.style.setProperty("height", window.innerHeight - 172 + "px")
+      }
+      window.addEventListener("resize", setEditorHeight)
+      setEditorHeight()
     })
