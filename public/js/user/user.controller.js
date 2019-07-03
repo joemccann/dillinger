@@ -8,12 +8,66 @@ module.exports =
       'diDocuments.service.wordcount',
       'diDocuments.service.charactercount'
     ])
-    .controller('User', function ($rootScope, $scope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService) {
+    .controller('User', function ($rootScope, $scope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService, debounce) {
       var vm = this
 
       vm.profile = userService.profile
 
       // TODO: Move this to out of here (perhaps to its own directive).
+      var $editor = jQuery('.split-editor')
+      var getPreviewElements = (function () {
+        var elements
+        return function (recalculate) {
+          if (!elements || recalculate) {
+            elements = Array.prototype.map.call(
+              document.getElementsByClassName('has-line-data'),
+              function (element) {
+                var startLine = +element.getAttribute('data-line-start')
+                var endLine = +element.getAttribute('data-line-end')
+                return { element: element, startLine: startLine, endLine: endLine }
+              })
+              .filter(function (x) { return !isNaN(x.startLine) && !isNaN(x.endLine) })
+          }
+          return elements
+        }
+      })()
+
+      var getSourceLines = (function () {
+        var elements
+        return function (recalculate) {
+          if (!elements || recalculate) {
+            var nextLineNumber = 0
+            var nextStartLine = 0
+            elements = Array.prototype.map.call(
+              document.getElementsByClassName('ace_gutter-cell'),
+              function (element) {
+                var startLine = nextStartLine
+                var lineSpan = Math.round(Number(element.style.getPropertyValue('height').slice(0, -2)) / 28)
+                var endLine = startLine + lineSpan
+                var lineNumber = nextLineNumber
+
+                nextStartLine = endLine
+                nextLineNumber++
+                return { lineNumber: lineNumber, startOffsetLine: startLine, endOffsetLine: endLine }
+              })
+          }
+          return elements
+        }
+      })()
+
+      $rootScope.editor.on('change', debounce(function () {
+        // re-calculate source lines
+        getSourceLines(true)
+      }, 200))
+      $rootScope.$on('preview.updated', function () {
+        // re-calculate preview elements
+        getPreviewElements(true)
+      })
+      window.addEventListener('resize', function () {
+        // re-calculate source lines
+        getSourceLines(true)
+      })
+
       var $divs = jQuery('.split-editor, .split-preview')
       var $allowed = $divs
       var sync = function (e) {
@@ -26,10 +80,12 @@ module.exports =
           var
             other = $divs.not(this)[0]
 
-          var percentage = this.scrollTop / (this.scrollHeight - this.offsetHeight)
 
-          other.scrollTop = Math.round(percentage * (other.scrollHeight - other.offsetHeight))
-
+          if ($this.is($editor)) {
+            scrollPreviewWithEditor(this, other)
+          } else {
+            scrollEditorWithPreview(this, other)
+          }
           $allowed = $this
         } else {
           $allowed = $divs
@@ -184,5 +240,114 @@ module.exports =
         })
 
         return false
+      }
+
+      function scrollPreviewWithEditor ($editor, $preview) {
+        var offset = $editor.scrollTop
+        if (offset <= 0) {
+          $preview.scrollTop = 0
+          return false
+        }
+
+        var currentSourceLine = getSourceLineForEditorOffset(offset)
+        var lineNumber = currentSourceLine.lineNumber
+        var elements = getPreviewElementsForLineNumber(lineNumber)
+        var current = elements.current
+        var next = elements.next
+        if (!current || !next) {
+          return false
+        }
+
+        var currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
+        var nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
+        var currentTop = current.element.offsetTop
+        var editorOffsetLine = offset / 28
+
+        var betweenProgress =
+          (editorOffsetLine - currentStartSourceLine.startOffsetLine) /
+          (nextStartSourceLine.startOffsetLine -
+            currentStartSourceLine.startOffsetLine)
+        var elementAndSpanOffset = next.element.offsetTop - currentTop
+        var scrollTop = currentTop + betweenProgress * elementAndSpanOffset
+
+        $preview.scrollTop = scrollTop
+      }
+
+      function scrollEditorWithPreview ($preview, $editor) {
+        var previewOffset = $preview.scrollTop
+        if (previewOffset <= 0) {
+          $editor.scrollTop = 0
+          return false
+        }
+
+        var elements = getPreviewElementsForOffset(previewOffset)
+        var current = elements.current
+        var next = elements.next
+        if (!current || !next) {
+          return false
+        }
+
+        var betweenProgress =
+          (previewOffset - current.element.offsetTop) /
+          (next.element.offsetTop - current.element.offsetTop)
+        var currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
+        var nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
+        var sourceLinesOffset = nextStartSourceLine.startOffsetLine - currentStartSourceLine.startOffsetLine
+        var scrollTop = (currentStartSourceLine.startOffsetLine + betweenProgress * sourceLinesOffset) * 28
+
+        $editor.scrollTop = scrollTop
+      }
+
+      function getPreviewElementsForLineNumber (lineNumber) {
+        var elements = getPreviewElements()
+        var current = elements[0] || null
+        for (var i = 0; i < elements.length; i++) {
+          var entry = elements[i]
+          if (entry.startLine === lineNumber) {
+            return { current: entry, next: elements[i + 1] }
+          } else if (entry.startLine > lineNumber) {
+            return { current: current, next: entry }
+          }
+          current = entry
+        }
+
+        return { current: current }
+      }
+
+      function getPreviewElementsForOffset (offset) {
+        var previewElements = getPreviewElements()
+
+        // binary search find current preview elements in view
+        var low = -1
+        var high = previewElements.length - 1
+        while (low + 1 < high) {
+          var mid = Math.floor((low + high) / 2)
+          var midElement = previewElements[mid].element
+          var midElementHeight = midElement.getBoundingClientRect().height
+          if (midElement.offsetTop + midElementHeight >= offset) {
+            high = mid
+          } else {
+            low = mid
+          }
+        }
+
+        var currentIndex = previewElements[high].element.offsetTop < offset ? high : low
+        return { current: previewElements[currentIndex], next: previewElements[currentIndex + 1] }
+      }
+
+      function getSourceLineForEditorOffset (offset) {
+        var offsetLineNumber = Math.floor(offset / 28)
+        var lines = getSourceLines()
+        var lastIndex = lines.length - 1
+        for (var i = offsetLineNumber < lastIndex ? offsetLineNumber : lastIndex; i > -1; i--) {
+          var entry = lines[i]
+          if (entry.startOffsetLine <= offsetLineNumber) {
+            return entry
+          }
+        }
+      }
+
+      function getSourceLineForLineNumber (lineNumber) {
+        return getSourceLines()[lineNumber]
       }
     })
