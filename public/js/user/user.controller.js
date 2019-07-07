@@ -42,18 +42,26 @@ module.exports =
       $rootScope.$on('preview.updated', updateCharacters)
       $rootScope.editor.on('paste', pasteDetected)
 
+      $scope.allKeybindings = {
+        "Ace": '',
+        "Vim": 'ace/keyboard/vim',
+        "Emacs": 'ace/keyboard/emacs'
+      }
+
       // Methods on the Controller
       vm.toggleGitHubComment = toggleGitHubComment
       vm.toggleAutoSave = toggleAutoSave
       vm.toggleWordsCount = toggleWordsCount
       vm.toggleCharactersCount = toggleCharactersCount
       vm.storeTabSize = storeTabSize
+      vm.storeKeybindings = storeKeybindings
       vm.toggleNightMode = toggleNightMode
       vm.toggleScrollSync = toggleScrollSync
       vm.resetProfile = resetProfile
       vm.showAbout = showAbout
 
       setTabSize()
+      setKeybindings()
       doSync()
 
       // ------------------------------
@@ -107,6 +115,14 @@ module.exports =
         return false
       }
 
+      function storeKeybindings () {
+        vm.profile.keybindings = $scope.keybindings
+        userService.save(vm.profile)
+        setKeybindings()
+
+        return false
+      }
+
       function toggleNightMode (e) {
         e.preventDefault()
         vm.profile.enableNightMode = !vm.profile.enableNightMode
@@ -142,6 +158,13 @@ module.exports =
       function setTabSize () {
         $scope.tabsize = vm.profile.tabSize
         $rootScope.editor.session.setTabSize($scope.tabsize)
+
+        return false
+      }
+
+      function setKeybindings () {
+        $scope.keybindings = vm.profile.keybindings
+        $rootScope.editor.setKeyboardHandler( $scope.allKeybindings[ $scope.keybindings ] )
 
         return false
       }

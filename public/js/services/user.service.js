@@ -12,6 +12,7 @@ module.exports =
       enableCharactersCount: true,
       enableScrollSync:      false,
       tabSize:               4,
+      keybindings:           'Ace',
       enableNightMode:       false,
       enableGitHubComment:   true
     },

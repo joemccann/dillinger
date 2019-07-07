@@ -2,6 +2,8 @@
 'use strict'
 
 var ace = require('brace')
+require('brace/keybinding/vim')
+require('brace/keybinding/emacs')
 
 require('brace/mode/markdown')
 require('../documents/theme-dillinger')
