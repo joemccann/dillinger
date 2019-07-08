@@ -15,6 +15,7 @@
 .split {
   overflow: scroll;
   padding: 0 !important;
+  -webkit-overflow-scrolling: touch;
 
 // -------------------------------------
 //   Modifiers
@@ -53,8 +54,6 @@
     @include from('tablet') {
       border-right: 1px solid $c-border;
       float: left;
-      height: calc(100vh - 172px);
-      -webkit-overflow-scrolling: touch;
       padding-right: 16px;
       width: 50%;
 
@@ -78,8 +77,6 @@
     @include from('tablet') {
       display: block;
       float: right;
-      height: calc(100vh - 172px);
-      -webkit-overflow-scrolling: touch;
       position: relative;
       top: 0;
       width: 50%;
