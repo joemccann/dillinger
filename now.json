@@ -1,3 +1,15 @@
 {
-  "version": 2
+  "version": 2,
+  "builds": [
+    {"src": "public/**", "use": "@now/static"},
+    {"src": "app.js", "use": "@now/node"}
+  ],
+  "routes": [
+    {"src": "/(css|js|img|files|js|scss)/(.+)", "dest": "/public/$1/$2"},
+    {"src": "/favicon.ico", "dest": "/public/favicon.ico"},
+    {"src": "/apple-touch-icon.png", "dest": "/public/apple-touch-icon.png"},
+    {"src": "/privacy.html", "dest": "/public/privacy.html"},
+    {"src": "/robots.txt", "dest": "/public/robots.txt"},
+    {"src": "/(.*)", "dest": "/app.js"}
+  ]
 }
