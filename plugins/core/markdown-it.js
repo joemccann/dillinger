@@ -53,4 +53,52 @@ md.renderer.rules.table_open = function(tokens, idx, options, env, self) {
   return self.renderToken(tokens, idx, options);
 };
 
+var lineNumberRendererRuleNames = ['paragraph_open', 'image', 'code_block', 'fence', 'list_item_open'];
+
+lineNumberRendererRuleNames.forEach(function (ruleName) {
+  var original = md.renderer.rules[ruleName];
+  md.renderer.rules[ruleName] = function (tokens, idx, options, env, self) {
+    var token = tokens[idx];
+    if (token.map && token.map.length) {
+      token.attrPush([ 'class', 'has-line-data' ]);
+      if (ruleName === 'fence') {
+        token.attrPush([ 'data-line-start', token.map[0] + 1 ]);
+      } else {
+        token.attrPush([ 'data-line-start', token.map[0] ]);
+      }
+      token.attrPush([ 'data-line-end', token.map[1] ]);
+    }
+
+    if (original) {
+      return original(tokens, idx, options, env, self);
+    } else {
+      return self.renderToken(tokens, idx, options, env, self);
+    }
+  };
+});
+
+/**
+ * Override markdown-it-toc heading_open rule, add line count attributes
+ * See: https://unpkg.com/markdown-it-toc@1.1.0/index.js#L69-78
+ */
+md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
+  var token = tokens[idx];
+  var level = token.tag;
+  var label = tokens[idx + 1];
+  var makeSafe = function (label) {
+    return label.replace(/[^\w\s]/gi, '').split(' ').join('_');
+  };
+  if (label.type === 'inline') {
+    var anchor = makeSafe(label.content) + '_' + label.map[0];
+    return '<' + level +
+      ' ' + 'class="code-line"' +
+      ' ' + 'data-line-start=' + token.map[0] +
+      ' ' + 'data-line-end=' + token.map[1] +
+      ' ' + '>' +
+      '<a id="' + anchor + '"></a>';
+  } else {
+    return '</h1>';
+  }
+};
+
 exports.md = md

@@ -3,7 +3,8 @@
 
 var ace = require('brace')
 var bodyScrollLock = require('body-scroll-lock');
-
+require('brace/keybinding/vim')
+require('brace/keybinding/emacs')
 require('brace/mode/markdown')
 require('../documents/theme-dillinger')
 
