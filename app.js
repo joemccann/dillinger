@@ -5,53 +5,28 @@
 'use strict'
 
 const config = require('./config')()
-
-const connect = require('connect')
-
 const methodOverride = require('method-override')
-
 const logger = require('morgan')
-
 const favicon = require('serve-favicon')
-
 const compress = require('compression')
-
 const bodyParser = require('body-parser')
-
 const cookieParser = require('cookie-parser')
-
 const cookieSession = require('cookie-session')
-
 const express = require('express')
-
 const netjet = require('netjet')
-
 const routes = require('./routes')
-
 const serveStatic = require('serve-static')
-
 const errorHandler = require('errorhandler')
-
 const path = require('path')
-
 const fs = require('fs')
-
 const app = express()
-
 const core = require('./plugins/core/server.js')
-
 const dropbox = require('./plugins/dropbox/server.js')
-
 const bitbucket = require('./plugins/bitbucket/server.js')
-
 const github = require('./plugins/github/server.js')
-
 const medium = require('./plugins/medium/server.js')
-
 const googledrive = require('./plugins/googledrive/server.js')
-
 const onedrive = require('./plugins/onedrive/server.js')
-
 const env = process.env.NODE_ENV || 'development'
 
 require('isomorphic-fetch') /* patch global fetch for dropbox module */
@@ -59,11 +34,10 @@ require('isomorphic-fetch') /* patch global fetch for dropbox module */
 app.set('port', process.env.PORT || 8080)
 app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
 
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'ejs')
 
-// // Required to trust GCP proxy for the
-// x-forwarded-by heading
+// Required to trust GCP proxy for the x-forwarded-by heading
 app.set('trust proxy', true)
 
 // May not need to use favicon if using nginx for serving
@@ -116,9 +90,8 @@ app.use(netjet({
   }
 }))
 
-// May not need to use serveStatic if using nginx for serving
-// static assets. Just comment it out below.
-// app.use(serveStatic(__dirname + '/public'))
+// We do need this in any environment that is not Now/Zeit
+app.use(serveStatic(path.join(__dirname, '/public')))
 
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'
