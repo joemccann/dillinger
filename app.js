@@ -76,7 +76,7 @@ app.use(cookieSession({
 
 // Let's 301 redirect to simply dillinger.io
 app.use(function forceLiveDomain (req, res, next) {
-  let host = req.get('Host')
+  const host = req.get('Host')
   if (host === 'www.dillinger.io') {
     return res.redirect(301, 'http://dillinger.io' + req.originalUrl)
   }
