@@ -1,6 +1,7 @@
 {
   "name": "dillinger.io",
   "version": 1,
+  "type": "npm",
   "alias": [
     "dillinger.io",
     "www.dillinger.io"
