@@ -121,7 +121,7 @@ if (env === 'development') {
 }
 
 app.get('/', routes.index)
-// app.get('/privacy', routes.privacy)
+app.get('/privacy', routes.privacy)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
@@ -132,11 +132,7 @@ app.use(medium)
 app.use(googledrive)
 app.use(onedrive)
 
-if (!process.env.NOW_REGION) {
-  app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'))
-    console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
-  })
-}
-
-module.exports = app
+app.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'))
+  console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
+})
