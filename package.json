@@ -1,5 +1,5 @@
 {
-  "name": "Dillinger",
+  "name": "dillinger",
   "description": "Dillinger, the last Markdown editor you'll ever need, by yours truly, Joe McCann.",
   "version": "3.34.0",
   "author": {
@@ -22,7 +22,8 @@
     "test": "gulp test",
     "preversion": "gulp build --prod",
     "postversion": "bin/build.js",
-    "build": "gulp build --prod"
+    "build": "gulp build --prod",
+    "deploy": "now --docker"
   },
   "keywords": [
     "dillinger",
