@@ -1,44 +1,44 @@
-'use strict';
+'use strict'
 
-var express = require('express'),
-  app = module.exports = express(),
-  fs = require('fs'),
-  path = require('path'),
-  md = require('./markdown-it.js').md,
-  temp = require('temp'),
-  phantom = require('phantom'),
-  breakdance = require('breakdance');
+var express = require('express')
+var app = module.exports = express()
+var fs = require('fs')
+var path = require('path')
+var md = require('./markdown-it.js').md
+var temp = require('temp')
+var phantom = require('phantom')
+var breakdance = require('breakdance')
 
 const phantomSession = phantom.create()
 
-function getPhantomSession() {
+function getPhantomSession () {
   return phantomSession
 }
 
-function _getFullHtml(name, str, style) {
+function _getFullHtml (name, str, style) {
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
     name + '</title><style>' +
-    ((style) ? style : '') + '</style></head><body id="preview">\n' +
-    md.render(str) + '\n</body></html>';
+    ((style) || '') + '</style></head><body id="preview">\n' +
+    md.render(str) + '\n</body></html>'
 }
 
-function _getHtml(str) {
+function _getHtml (str) {
   return md.render(str)
 }
 
 // Move this into _getFormat() to reload the CSS without restarting node.
 
-function _getFormat() {
-  const _format = fs.readFileSync(path.resolve(__dirname, '../../public/css/export.css')).toString('utf-8');
-  return _format;
+function _getFormat () {
+  const _format = fs.readFileSync(path.resolve(__dirname, '../../public/css/export.css')).toString('utf-8')
+  return _format
 }
 
 var fetchMd = function (req, res) {
-  var unmd = req.body.unmd,
-    json_response = {
-      data: '',
-      error: false
-    }
+  var unmd = req.body.unmd
+  var json_response = {
+    data: '',
+    error: false
+  }
 
   var name = req.body.name.trim()
 
@@ -47,78 +47,78 @@ var fetchMd = function (req, res) {
   }
 
   if (req.body.preview === 'false') {
-    res.attachment(name);
+    res.attachment(name)
   } else {
     // We don't use text/markdown because my "favorite" browser
     // (IE) ignores the Content-Disposition: inline; and prompts
     // the user to download the file.
-    res.type('text');
+    res.type('text')
 
     // For some reason IE and Chrome ignore the filename
     // field when Content-Type: text/plain;
-    res.set('Content-Disposition', `inline; filename="${name}"`);
+    res.set('Content-Disposition', `inline; filename="${name}"`)
   }
 
-  res.end(unmd);
+  res.end(unmd)
 }
 
 var fetchHtml = function (req, res) {
-  var unmd = req.body.unmd,
-    json_response = {
-      data: '',
-      error: false
-    }
+  var unmd = req.body.unmd
+  var json_response = {
+    data: '',
+    error: false
+  }
 
   // For formatted HTML or not...
-  var format = req.body.formatting ? _getFormat() : "";
+  var format = req.body.formatting ? _getFormat() : ''
 
-  var html = _getFullHtml(req.body.name, unmd, format);
+  var html = _getFullHtml(req.body.name, unmd, format)
 
   var name = req.body.name.trim() + '.html'
 
   var filename = path.resolve(__dirname, '../../downloads/files/html/' + name)
 
   if (req.body.preview === 'false') {
-    res.attachment(name);
+    res.attachment(name)
   } else {
-    res.type('html');
-    res.set('Content-Disposition', `inline; filename="${name}"`);
+    res.type('html')
+    res.set('Content-Disposition', `inline; filename="${name}"`)
   }
 
-  res.end(html);
+  res.end(html)
 }
 
 var fetchPdf = function (req, res) {
-  var unmd = req.body.unmd,
-    json_response = {
-      data: '',
-      error: false
-    }
+  var unmd = req.body.unmd
+  var json_response = {
+    data: '',
+    error: false
+  }
 
   var html = _getFullHtml(req.body.name, unmd, _getFormat())
   var tempPath = temp.path({
     suffix: '.htm'
   })
-  fs.writeFile(tempPath, html, 'utf8', function fetchPdfWriteFileCb(err, data) {
+  fs.writeFile(tempPath, html, 'utf8', function fetchPdfWriteFileCb (err, data) {
     if (err) {
-      console.error(err);
-      res.end("Something wrong with the pdf conversion.");
+      console.error(err)
+      res.end('Something wrong with the pdf conversion.')
     } else {
-      _createPdf(req, res, tempPath);
+      _createPdf(req, res, tempPath)
     }
-  });
+  })
 }
 
-function _createPdf(req, res, tempFilename) {
+function _createPdf (req, res, tempFilename) {
   getPhantomSession().then(phantom => {
-    return phantom.createPage();
+    return phantom.createPage()
   }).then(page => {
     page.open(tempFilename).then(status => {
-      _renderPage(page);
-    });
-  });
+      _renderPage(page)
+    })
+  })
 
-  function _renderPage(page) {
+  function _renderPage (page) {
     var name = req.body.name.trim() + '.pdf'
     var filename = temp.path({
       suffix: '.pdf'
@@ -144,18 +144,17 @@ function _createPdf(req, res, tempFilename) {
 
       res.sendFile(filename, {}, function () {
         // Cleanup.
-        fs.unlink(filename)
-        fs.unlink(tempFilename)
-      });
+        fs.unlinkSync(filename)
+        fs.unlinkSync(tempFilename)
+      })
 
       page.close()
-    });
+    })
   }
 }
 
 // Convert HTML to MD
-function htmlToMd(req, res) {
-
+function htmlToMd (req, res) {
   var md = ''
 
   try {
@@ -171,7 +170,6 @@ function htmlToMd(req, res) {
   return res.status(200).json({
     convertedMd: md
   })
-
 }
 
 /* Start Dillinger Routes */
