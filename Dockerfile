@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libfontconfig \
   ttf-wqy-microhei \
   ttf-wqy-zenhei \ 
-  python-software-properties \
+  software-properties-common \
   && rm -rf /var/lib/apt/lists/*
 
 # this is faster via npm run build-docker
