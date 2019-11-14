@@ -157,7 +157,6 @@ const markdown2Pdf = async (md, name) => {
   }
 
   if (pdf) {
-    console.dir(pdf)
     return { data: pdf }
   } else {
     console.log('no pdf file')
