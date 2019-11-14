@@ -4,7 +4,7 @@ const express = require('express')
 const app = module.exports = express()
 const fs = require('fs')
 const path = require('path')
-const md = require('./markdown-it.js').md
+const md = require('./markdown-it.js')
 const breakdance = require('breakdance')
 const mdToPdf = require('md-to-pdf')
 
