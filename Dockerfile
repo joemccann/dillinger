@@ -1,6 +1,6 @@
 FROM nodesource/nsolid:latest
 
-LABEL maintainer "Joe McCann <joe@nodesource.com>"
+LABEL maintainer "Joe McCann <joe@subprint.com>"
 
 # Install our dependencies (libfontconfig for phantomjs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
