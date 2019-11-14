@@ -39,11 +39,11 @@ items:
             app: web
         spec:
           containers:
-          - image: joemccann/dillinger:3.36.3
+          - image: joemccann/dillinger:3.36.4
             name: web
             env:
               - name: NSOLID_APPNAME
-                value: app-dillinger:3.36.3
+                value: app-dillinger:3.36.4
               - name: NSOLID_COMMAND
                 value: "storage.nsolid:9001"
               - name: NSOLID_DATA
