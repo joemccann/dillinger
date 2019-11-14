@@ -1,46 +1,34 @@
 'use strict'
 
-var express = require('express')
-var app = module.exports = express()
-var fs = require('fs')
-var path = require('path')
-var md = require('./markdown-it.js').md
-var temp = require('temp')
-var phantom = require('phantom')
-var breakdance = require('breakdance')
+const express = require('express')
+const app = module.exports = express()
+const fs = require('fs')
+const path = require('path')
+const md = require('./markdown-it.js').md
+const breakdance = require('breakdance')
+const mdToPdf = require('md-to-pdf')
 
-const phantomSession = phantom.create()
+const { promisify } = require('util')
 
-function getPhantomSession () {
-  return phantomSession
-}
+const writeFileAsync = promisify(fs.writeFile)
 
-function _getFullHtml (name, str, style) {
+const _getFullHtml = (name, str, style) => {
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
     name + '</title><style>' +
     ((style) || '') + '</style></head><body id="preview">\n' +
     md.render(str) + '\n</body></html>'
 }
 
-function _getHtml (str) {
-  return md.render(str)
-}
-
 // Move this into _getFormat() to reload the CSS without restarting node.
 
-function _getFormat () {
+const _getFormat = () => {
   const _format = fs.readFileSync(path.resolve(__dirname, '../../public/css/export.css')).toString('utf-8')
   return _format
 }
 
-var fetchMd = function (req, res) {
-  var unmd = req.body.unmd
-  var json_response = {
-    data: '',
-    error: false
-  }
-
-  var name = req.body.name.trim()
+const fetchMd = (req, res) => {
+  const unmd = req.body.unmd
+  let name = req.body.name.trim()
 
   if (!name.includes('.md')) {
     name = name + '.md'
@@ -62,12 +50,8 @@ var fetchMd = function (req, res) {
   res.end(unmd)
 }
 
-var fetchHtml = function (req, res) {
+const fetchHtml = (req, res) => {
   var unmd = req.body.unmd
-  var json_response = {
-    data: '',
-    error: false
-  }
 
   // For formatted HTML or not...
   var format = req.body.formatting ? _getFormat() : ''
@@ -75,8 +59,6 @@ var fetchHtml = function (req, res) {
   var html = _getFullHtml(req.body.name, unmd, format)
 
   var name = req.body.name.trim() + '.html'
-
-  var filename = path.resolve(__dirname, '../../downloads/files/html/' + name)
 
   if (req.body.preview === 'false') {
     res.attachment(name)
@@ -88,73 +70,42 @@ var fetchHtml = function (req, res) {
   res.end(html)
 }
 
-var fetchPdf = function (req, res) {
-  var unmd = req.body.unmd
-  var json_response = {
-    data: '',
-    error: false
+const fetchPdf = async (req, res) => {
+  const { name = '', unmd = '' } = req.body
+
+  const { err, data } = await markdown2Pdf(unmd, name)
+
+  if (err) {
+    return res.end(err.message)
   }
 
-  var html = _getFullHtml(req.body.name, unmd, _getFormat())
-  var tempPath = temp.path({
-    suffix: '.htm'
-  })
-  fs.writeFile(tempPath, html, 'utf8', function fetchPdfWriteFileCb (err, data) {
-    if (err) {
-      console.error(err)
-      res.end('Something wrong with the pdf conversion.')
-    } else {
-      _createPdf(req, res, tempPath)
-    }
-  })
-}
+  const { filename = '' } = data
 
-function _createPdf (req, res, tempFilename) {
-  getPhantomSession().then(phantom => {
-    return phantom.createPage()
-  }).then(page => {
-    page.open(tempFilename).then(status => {
-      _renderPage(page)
-    })
-  })
+  if (!filename) return res.end('No PDF Filename exists in the data')
 
-  function _renderPage (page) {
-    var name = req.body.name.trim() + '.pdf'
-    var filename = temp.path({
-      suffix: '.pdf'
-    })
-
-    page.property('paperSize', {
-      format: 'A4',
-      orientation: 'portrait',
-      margin: '1cm'
-    })
-    page.property('viewportSize', {
-      width: 1024,
-      height: 768
-    })
-
-    page.render(filename).then(function () {
-      if (req.body.preview === 'false') {
-        res.attachment(name)
-      } else {
-        res.type('pdf')
-        res.set('Content-Disposition', `inline; filename="${name}"`)
-      }
-
-      res.sendFile(filename, {}, function () {
-        // Cleanup.
-        fs.unlinkSync(filename)
-        fs.unlinkSync(tempFilename)
-      })
-
-      page.close()
-    })
+  if (req.body.preview === 'false') {
+    res.attachment(filename)
+  } else {
+    res.type('pdf')
+    res.set('Content-Disposition', `inline; filename="${filename}"`)
   }
+
+  const pdf = fs.readFileSync(filename)
+
+  res.contentType('application/pdf')
+  res.send(pdf)
+  res.end('The PDF file was sent')
+
+  //
+  // Cleanup
+  //
+  const mdPath = filename.replace('.pdf', '.md')
+  fs.unlinkSync(filename)
+  fs.unlinkSync(mdPath)
 }
 
 // Convert HTML to MD
-function htmlToMd (req, res) {
+const htmlToMd = (req, res) => {
   var md = ''
 
   try {
@@ -170,6 +121,48 @@ function htmlToMd (req, res) {
   return res.status(200).json({
     convertedMd: md
   })
+}
+
+const writeTempMdFile = async (md, name) => {
+  const tempMdPath = path.resolve(
+    __dirname, '../../', 'public', 'files', `${name}`
+  )
+
+  try {
+    await writeFileAsync(tempMdPath, md, 'utf8')
+    return tempMdPath
+  } catch (err) {
+    console.error(err)
+    return false
+  }
+}
+
+const markdown2Pdf = async (md, name) => {
+  const tempMdPath = await writeTempMdFile(md, name)
+
+  if (!tempMdPath) {
+    return {
+      err: new Error('Something wrong with writing the temp MD file.')
+    }
+  }
+
+  let pdf = null
+
+  try {
+    pdf = await mdToPdf(tempMdPath, {
+      dest: tempMdPath.replace('.md', '.pdf')
+    })
+  } catch (err) {
+    return { err }
+  }
+
+  if (pdf) {
+    console.dir(pdf)
+    return { data: pdf }
+  } else {
+    console.log('no pdf file')
+    return { err: new Error('No pdf file.') }
+  }
 }
 
 /* Start Dillinger Routes */
