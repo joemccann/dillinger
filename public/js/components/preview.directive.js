@@ -1,7 +1,7 @@
 
 'use strict'
 
-var md = require('md').md
+const md = require('md')
 
 module.exports =
   angular
