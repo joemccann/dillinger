@@ -4,13 +4,13 @@
   "version": "3.35.0",
   "author": {
     "name": "Joe McCann",
-    "email": "joe@nodesource.com"
+    "email": "joe@subprint.com"
   },
   "license": "MIT",
   "contributors": [
     {
       "name": "Joe McCann",
-      "email": "joe@nodesource.com"
+      "email": "joe@subprint.com"
     },
     {
       "name": "Martin Broder",
@@ -130,7 +130,7 @@
     "gulp-postcss": "^8.0.0",
     "gulp-rev": "^8.1.1",
     "gulp-rimraf": "0.2.0",
-    "gulp-sass": "^2.0.4",
+    "gulp-sass": "^4.0.2",
     "gulp-size": "^1.1.0",
     "gulp-util": "^3.0.6",
     "gulp-zip": "^3.2.0",
