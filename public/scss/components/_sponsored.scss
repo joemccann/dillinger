@@ -72,6 +72,7 @@ $break-mid-4: 460px;
 }
 
 #_default_ .default-title,
+#_default_ .default-text,
 #_default_ .default-description {
   display: inline;
 }
@@ -161,7 +162,7 @@ $break-mid-4: 460px;
   }
   @media screen and (max-width: $break-large-4) {
   }
- 
+
   @media screen and (max-width: $break-mid) {
 	  font-size: .75rem;
 	  line-height: 1rem;
