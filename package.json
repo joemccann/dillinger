@@ -85,7 +85,7 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc": "^1.1.0",
-    "md-to-pdf": "^2.8.1",
+    "md-to-pdf": "git+https://github.com/joemccann/md-to-pdf.git",
     "medium-sdk": "0.0.4",
     "method-override": "^2.3.5",
     "morgan": "^1.9.1",
