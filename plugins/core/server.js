@@ -150,7 +150,8 @@ const markdown2Pdf = async (md, name) => {
 
   try {
     pdf = await mdToPdf(tempMdPath, {
-      dest: tempMdPath.replace('.md', '.pdf')
+      dest: tempMdPath.replace('.md', '.pdf'),
+      launch_options: ['--no-sandbox', '--disable-setuid-sandbox']
     })
   } catch (err) {
     return { err }
