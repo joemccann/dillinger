@@ -10,8 +10,6 @@ const OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
 const Sponsored = require('../plugins/sponsored/sponsored.js')
 const GoogleAnalytics = require('../plugins/googleanalytics/googleanalytics.js')
 
-console.dir(Sponsored)
-
 // Show the home page
 exports.index = function (req, res) {
   // Some flags to be set for client-side logic.
