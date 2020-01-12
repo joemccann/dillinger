@@ -1,8 +1,6 @@
 'use strict'
 
 const path = require('path')
-const request = require('request')
-const qs = require('querystring')
 const Dropbox = require(path.resolve(__dirname, '../plugins/dropbox/dropbox.js')).Dropbox
 const Bitbucket = require(path.resolve(__dirname, '../plugins/bitbucket/bitbucket.js')).Bitbucket
 const Github = require(path.resolve(__dirname, '../plugins/github/github.js')).Github
@@ -11,6 +9,8 @@ const GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
 const OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
 const Sponsored = require('../plugins/sponsored/sponsored.js')
 const GoogleAnalytics = require('../plugins/googleanalytics/googleanalytics.js')
+
+console.dir(Sponsored)
 
 // Show the home page
 exports.index = function (req, res) {
@@ -29,7 +29,7 @@ exports.index = function (req, res) {
     isMediumConfigured: Medium.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
     isOneDriveConfigured: OneDrive.isConfigured,
-    isSponsoredConfigured: Sponsored.isConfigEnabled,
+    isSponsoredConfigured: Sponsored.key,
     isGoogleAnalyticsConfigured: GoogleAnalytics.isConfigEnabled
   }
 
