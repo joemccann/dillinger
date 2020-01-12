@@ -55,7 +55,8 @@ exports.index = function (req, res) {
     req.session.medium.oauth.token &&
     req.session.medium.oauth.token.access_token) {
     // Set the access token on the medium client
-    Medium.setAccessTokenFromSession(req.session.medium.oauth.token.access_token)
+    Medium
+      .setAccessTokenFromSession(req.session.medium.oauth.token.access_token)
   } else {
     req.session.isMediumSynced = false
   }
