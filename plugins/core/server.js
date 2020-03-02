@@ -6,11 +6,7 @@ const fs = require('fs')
 const path = require('path')
 const md = require('./markdown-it.js')
 const breakdance = require('breakdance')
-const mdToPdf = require('md-to-pdf')
-
-const { promisify } = require('util')
-
-const writeFileAsync = promisify(fs.writeFile)
+const { mdToPdf } = require('md-to-pdf')
 
 const _getFullHtml = (name, str, style) => {
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
@@ -73,15 +69,17 @@ const fetchHtml = (req, res) => {
 const fetchPdf = async (req, res) => {
   const { name = '', unmd = '' } = req.body
 
-  const { err, data } = await markdown2Pdf(unmd, name)
+  const { err, data } = await markdown2Pdf(unmd)
 
   if (err) {
     return res.end(err.message)
   }
 
-  const { filename = '' } = data
+  const { content = '' } = data
 
-  if (!filename) return res.end('No PDF Filename exists in the data')
+  if (!content) return res.end('No PDF content exists in the data')
+
+  const filename = name.replace(/\.md$/, '') + '.pdf';
 
   if (req.body.preview === 'false') {
     res.attachment(filename)
@@ -90,18 +88,9 @@ const fetchPdf = async (req, res) => {
     res.set('Content-Disposition', `inline; filename="${filename}"`)
   }
 
-  const pdf = fs.readFileSync(filename)
-
   res.contentType('application/pdf')
-  res.send(pdf)
+  res.send(content)
   res.end('The PDF file was sent')
-
-  //
-  // Cleanup
-  //
-  const mdPath = filename.replace('.pdf', '.md')
-  fs.unlinkSync(filename)
-  fs.unlinkSync(mdPath)
 }
 
 // Convert HTML to MD
@@ -123,45 +112,22 @@ const htmlToMd = (req, res) => {
   })
 }
 
-const writeTempMdFile = async (md, name) => {
-  const tempMdPath = path.resolve(
-    __dirname, '../../', 'public', 'files', `${name}`
-  )
-
-  try {
-    await writeFileAsync(tempMdPath, md, 'utf8')
-    return tempMdPath
-  } catch (err) {
-    console.error(err)
-    return false
-  }
-}
-
-const markdown2Pdf = async (md, name) => {
-  const tempMdPath = await writeTempMdFile(md, name)
-
-  if (!tempMdPath) {
-    return {
-      err: new Error('Something wrong with writing the temp MD file.')
-    }
-  }
-
+const markdown2Pdf = async (md) => {
   let pdf = null
 
   try {
-    pdf = await mdToPdf(tempMdPath, {
-      dest: tempMdPath.replace('.md', '.pdf'),
+    pdf = await mdToPdf({ content: md }, {
       launch_options: ['--no-sandbox', '--disable-setuid-sandbox']
     })
   } catch (err) {
     return { err }
   }
 
-  if (pdf) {
+  if (pdf && pdf.content) {
     return { data: pdf }
   } else {
-    console.log('no pdf file')
-    return { err: new Error('No pdf file.') }
+    console.log('no pdf content')
+    return { err: new Error('No pdf content.') }
   }
 }
 
