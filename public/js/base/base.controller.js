@@ -1,8 +1,6 @@
 
-'use strict'
-
-var ace = require('brace')
-var bodyScrollLock = require('body-scroll-lock');
+const ace = require('brace')
+const bodyScrollLock = require('body-scroll-lock')
 require('brace/keybinding/vim')
 require('brace/keybinding/emacs')
 require('brace/mode/markdown')
@@ -19,13 +17,13 @@ module.exports =
       'diBase.directives.previewToggle',
       'diBase.directives.preview'
     ])
-    .controller('Base', function ($scope, $rootScope, userService, documentsService) {
+    .controller('Base', ($scope, $rootScope, userService, documentsService) => {
       $scope.profile = userService.profile
       $rootScope.currentDocument = documentsService.getCurrentDocument()
       $rootScope.editor = ace.edit('editor')
       $rootScope.viewSrcMode = false
       $rootScope.editor.getSession().setMode('ace/mode/markdown')
-      $rootScope.editor.setTheme('ace/theme/dillinger')
+      $rootScope.editor.setTheme('ace/theme/github')
       $rootScope.editor.getSession().setUseWrapMode(true)
       $rootScope.editor.setShowPrintMargin(false)
       $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
@@ -33,9 +31,12 @@ module.exports =
       $rootScope.editor.setOption('maxLines', 90000)
       $rootScope.editor.session.$selectLongWords = true
 
-      var updateDocument = function () {
+      const updateDocument = function () {
         $rootScope.currentDocument = documentsService.getCurrentDocument()
-        return $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
+        return $rootScope
+          .editor
+          .getSession()
+          .setValue($rootScope.currentDocument.body)
       }
 
       $scope.updateDocument = updateDocument
@@ -46,17 +47,20 @@ module.exports =
 
       $rootScope.$on('document.refresh', updateDocument)
 
-      var editorElement = document.getElementById("editor1")
-      var previewElement = document.getElementById("preview1")
-      var sidebarElement = document.getElementsByClassName("sidebar")[0]
-      bodyScrollLock.disableBodyScroll(editorElement);
-      bodyScrollLock.disableBodyScroll(previewElement);
-      bodyScrollLock.disableBodyScroll(sidebarElement);
+      const editorElement = document.getElementById('editor1')
+      const previewElement = document.getElementById('preview1')
+      const sidebarElement = document.getElementsByClassName('sidebar')[0]
 
-      var setEditorHeight = function() {
-        editorElement.style.setProperty("height", window.innerHeight - 172 + "px")
-        previewElement.style.setProperty("height", window.innerHeight - 172 + "px")
+      bodyScrollLock.disableBodyScroll(editorElement)
+      bodyScrollLock.disableBodyScroll(previewElement)
+      bodyScrollLock.disableBodyScroll(sidebarElement)
+
+      const setEditorHeight = function () {
+        editorElement.style
+          .setProperty('height', window.innerHeight - 172 + 'px')
+        previewElement.style
+          .setProperty('height', window.innerHeight - 172 + 'px')
       }
-      window.addEventListener("resize", setEditorHeight)
+      window.addEventListener('resize', setEditorHeight)
       setEditorHeight()
     })

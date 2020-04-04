@@ -66,13 +66,13 @@ module.exports = {
     modules: ['node_modules', 'plugins'],
     extensions: ['.webpack.js', '.web.js', '.js'],
     alias: {
-      'angular': 'angular/angular',
-      'md': 'core/markdown-it'
+      angular: 'angular/angular',
+      md: 'core/markdown-it'
     }
   },
   plugins: [
     new webpack.ProvidePlugin({
-      'angular': 'exports-loader?angular!angular'
+      angular: 'exports-loader?angular!angular'
     }),
     new webpack.LoaderOptionsPlugin({
       debug: true
