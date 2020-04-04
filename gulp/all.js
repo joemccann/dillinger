@@ -7,9 +7,6 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const webpackConfig = require('../webpack.config.js')
 const NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
-const sequence = require('run-sequence')
-// const devTasks = ['webpack:dev', 'sass']
-const buildTasks = ['webpack:build', 'sass']
 const critical = require('critical')
 const csso = require('gulp-csso')
 const size = require('gulp-size')
@@ -25,8 +22,11 @@ const Server = require('karma').Server
 const path = require('path')
 const uncss = require('gulp-postcss')
 
-global.isProduction = !!(argv.production || argv.prod)
-const watch = argv.watch || null
+const {
+  prod = false
+} = argv
+
+const isProduction = prod
 
 const globs = [
   './**',
@@ -132,24 +132,10 @@ gulp.task('critical', function () {
 /** cssminify ************************************************** */
 
 gulp.task('cssminify', function () {
-  var dest
-  dest = './public/css'
+  const dest = './public/css'
   return gulp.src('./public/css/app.css').on('error', handleErrors)
     .pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
 })
-
-gulp.task('cssminify', function () {
-  var dest
-  dest = './public/css'
-  return gulp.src('./public/css/export.css').on('error', handleErrors)
-    .pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
-})
-
-// /** default ************************************************** */
-
-// gulp.task('default', gulp.series('build', (done) => {
-//   done()
-// }))
 
 /** dist ************************************************** */
 
@@ -180,7 +166,7 @@ gulp.task('sass', function () {
     }))
     .on('error', handleErrors)
     .pipe(autoprefixer())
-    .pipe(gulpif(global.isProduction, cmq({
+    .pipe(gulpif(isProduction, cmq({
       log: true
     })))
     .pipe(csso())
@@ -199,7 +185,7 @@ gulp.task('sass', function () {
     }))
     .on('error', handleErrors)
     .pipe(autoprefixer())
-    .pipe(gulpif(global.isProduction, cmq({
+    .pipe(gulpif(isProduction, cmq({
       log: true
     })))
     .pipe(csso())
@@ -208,12 +194,6 @@ gulp.task('sass', function () {
       stream: true
     }))
     .pipe(size())
-})
-
-/** setWatch ************************************************** */
-
-gulp.task('setWatch', function () {
-  global.isWatching = true
 })
 
 /** test ************************************************** */
@@ -245,25 +225,23 @@ gulp.task('uncss', function () {
     .pipe(size())
 })
 
-/** watch ************************************************** */
-
-if (watch) {
-  gulp.task('watch', gulp.series('setWatch', 'build', 'browserSync', function () {
-    gulp.watch('public/scss/**/*.{scss,sass,css}', ['sass'])
-  }))
-}
-
 /** build ************************************************** */
 
-if (global.isProduction) {
-  gulp.task('build', function () {
-    return sequence(buildTasks)
-  })
-} else {
-  // gulp.task('build', devTasks)
-  gulp.task('default', gulp.series('webpack:dev', 'sass', function (done) {
-    // default task code here
+gulp.task('build', gulp.series('webpack:build', 'sass'))
+
+/** default aka dev *********************************** */
+gulp.task('default', gulp.series('webpack:dev', 'sass'))
+
+/** watch ************************************************** */
+
+gulp.task('setWatch', function (done) {
+  global.isWatching = true
+  done()
+})
+
+gulp.task('watch', gulp.series('setWatch', 'build', 'browserSync',
+  (done) => {
+    gulp.watch('public/scss/**/*.{scss,sass,css}', ['sass'])
     done()
   })
-  )
-}
+)
