@@ -1,8 +1,8 @@
 
-'use strict';
+'use strict'
 
-var path = require('path');
+var path = require('path')
 
-module.exports = function(name) {
-  return /(\.(js|coffee)$)/i.test(path.extname(name));
-};
+module.exports = (name) => {
+  return /(\.(js|coffee)$)/i.test(path.extname(name))
+}

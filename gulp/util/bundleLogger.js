@@ -1,23 +1,22 @@
 
-'use strict';
+'use strict'
 
-var
-  gutil        = require('gulp-util'),
-  prettyHrtime = require('pretty-hrtime'),
-  startTime    = void 0;
+const gutil = require('gulp-util')
+const prettyHrtime = require('pretty-hrtime')
+let startTime = null
 
 module.exports = {
 
-  start: function() {
-    startTime = process.hrtime();
-    gutil.log('Running', gutil.colors.green('bundle') + '...');
+  start: function () {
+    startTime = process.hrtime()
+    gutil.log('Running', gutil.colors.green('bundle') + '...')
   },
 
-  end: function() {
-    var prettyTime, taskTime;
-    taskTime = process.hrtime(startTime);
-    prettyTime = prettyHrtime(taskTime);
-    gutil.log('Finished', gutil.colors.green('bundle'), 'in', gutil.colors.magenta(prettyTime));
+  end: function () {
+    const taskTime = process.hrtime(startTime)
+    const prettyTime = prettyHrtime(taskTime)
+    gutil.log('Finished', gutil.colors.green('bundle'), 'in',
+      gutil.colors.magenta(prettyTime))
   }
 
-};
+}
