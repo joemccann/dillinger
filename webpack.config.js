@@ -27,7 +27,7 @@ module.exports = {
       {
         test: /\.js$/,
         use: {
-          loader: 'babel-loader',
+          loader: '@babel/loader',
           options: { presets: ['es2015'] }
         }
       },
@@ -49,7 +49,8 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      // we specify a custom UglifyJsPlugin here to get source maps in production
+      // we specify a custom UglifyJsPlugin here to get
+      // source maps in production
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
