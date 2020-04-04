@@ -1,4 +1,5 @@
 # Dillinger
+
 ## _The Last Markdown Editor, Ever_
 
 [![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
@@ -114,7 +115,7 @@ gulp watch
 karma test
 ```
 
-#### Building for source
+### Building From Source
 
 For production release:
 
@@ -128,7 +129,7 @@ Generating pre-built zip archives for distribution:
 gulp build dist --prod
 ```
 
-## Docker
+### Docker
 
 Dillinger is very easy to install and deploy in a Docker container.
 
