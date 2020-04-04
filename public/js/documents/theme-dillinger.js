@@ -1,8 +1,9 @@
-ace.define("ace/theme/dillinger",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
-
-exports.isDark = false;
-exports.cssClass = "ace-dillinger";
-exports.cssText = ".ace-dillinger .ace_gutter {\
+ace.define('ace/theme/dillinger',
+  ['require', 'exports', 'module', 'ace/lib/dom'],
+  (acequire, exports, module) => {
+    exports.isDark = false
+    exports.cssClass = 'ace-dillinger'
+    exports.cssText = '.ace-dillinger .ace_gutter {\
 background: #F5F7FA;\
 color: #A0AABF;\
 overflow : hidden;\
@@ -128,10 +129,10 @@ color: rgb(255, 0, 0)\
 color: #994409;\
 }\
 .ace-dillinger .ace_indent-guide {\
-background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
+background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==") right repeat-y;\
 }\
-";
+'
 
-var dom = acequire("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass);
-});
+    const dom = acequire('../lib/dom')
+    dom.importCssString(exports.cssText, exports.cssClass)
+  })
