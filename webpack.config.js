@@ -1,9 +1,5 @@
-'use strict'
-
 const path = require('path')
-
 const webpack = require('webpack')
-
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
@@ -27,8 +23,8 @@ module.exports = {
       {
         test: /\.js$/,
         use: {
-          loader: '@babel/loader',
-          options: { presets: ['es2015'] }
+          loader: 'babel-loader',
+          options: { presets: ['@babel/preset-env'] }
         }
       },
       {
