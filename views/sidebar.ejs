@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper">
   <div class="sidebar" ng-controller="Documents as document">
     <h2 class="sidebar-branding">
-      <%- include icons/branding %>
+      <%- include('icons/branding') %>
     </h2>
 
     <nav class="nav nav-sidebar">
@@ -12,7 +12,7 @@
           <span>Services</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.linkUnlink">
-            <%- include dropdowns/link_unlink %>
+            <%- include('dropdowns/link_unlink') %>
           </ul>
         </li>
 
@@ -21,7 +21,7 @@
           <span>Save to</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.save">
-            <%- include dropdowns/save_to %>
+            <%- include('dropdowns/save_to') %>
           </ul>
         </li>
         <li class="menu-item menu-item--import-from in-sidebar">
@@ -29,7 +29,7 @@
           <span>Import from</span> <span class="caret"></span></a>
 
           <ul class="sidebar-list" collapse="document.status.import">
-            <%- include dropdowns/import_from %>
+            <%- include('dropdowns/import_from') %>
           </ul>
         </li>
         <li class="menu-item menu-item--documents in-sidebar">
@@ -37,7 +37,7 @@
           <span>Documents</span> <span class="caret"></span></a>
 
           <ul class="documents sidebar-list" collapse="document.status.document" role="menu">
-            <%- include dropdowns/documents %>
+            <%- include('dropdowns/documents') %>
           </ul>
         </li>
       </ul>

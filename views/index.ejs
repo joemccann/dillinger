@@ -41,8 +41,14 @@
   <meta name="MobileOptimized" content="320">
   <meta http-equiv="cleartype" content="on">
 
-  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link
+    href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700'
+    rel='stylesheet'
+    type='text/css'>
+  <link
+    href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic'
+    rel='stylesheet'
+    type='text/css'>
 
   <% if(env === 'production') { %>
     <%- css('app.css') %>
@@ -54,7 +60,7 @@
   <script type="text/javascript">
    <%- GATrackSponsoredLinksHTML %>
   </script>
-  <% } %> 
+  <% } %>
 
 </head>
 <body ng-controller="Base" file-import-drop-target>
@@ -68,25 +74,26 @@
     <input type="hidden" name="preview">
   </form>
 
-  <%- include splashscreen %>
+  <%- include('splashscreen') %>
 
-  <%- include dropdowns/settings %>
+
+  <%- include('dropdowns/settings') %>
 
   <div class="wrapper">
-    <%- include sidebar %>
-    <%- include notification %>
+    <%- include('sidebar') %>
+    <%- include('notification') %>
     <div class="page">
-      <%- include navbar %>
-      <%- include overlay %>
-      <%- include title %>
+      <%- include('navbar') %>
+      <%- include('overlay') %>
+      <%- include('title') %>
       <div class="g mnone">
-        <%- include editor-headers %>
-        <%- include editor %>
-        <%- include preview %>
+        <%- include('editor-headers') %>
+        <%- include('editor') %>
+        <%- include('preview') %>
       </div>
     </div>
   </div>
 
-  <%- include footer %>
+  <%- include('footer') %>
 </body>
 </html>

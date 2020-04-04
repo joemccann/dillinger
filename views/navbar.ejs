@@ -3,7 +3,7 @@
   <menu-toggle></menu-toggle>
 
   <h1 class="navbar-brand">
-    <a class="brand" href="/"><%- include icons/branding %></a>
+    <a class="brand" href="/"><%- include('icons/branding') %></a>
   </h1>
 
   <div class="ad-container">
@@ -14,36 +14,36 @@
       <li class="menu-item menu-item--export-as has-dropdown" dropdown>
         <a class="dropdown-toggle" dropdown-toggle>Preview as <span class="caret"></span></a>
         <% var exportTarget = 'preview'; %>
-        <%- include dropdowns/export_as %>
+        <%- include('dropdowns/export_as') %>
       </li>
       <li class="menu-item menu-item--export-as has-dropdown" dropdown>
         <a class="dropdown-toggle" dropdown-toggle>Export as <span class="caret"></span></a>
         <% var exportTarget = '_top'; %>
-        <%- include dropdowns/export_as %>
+        <%- include('dropdowns/export_as') %>
       </li>
       <li class="menu-item menu-item--save-to has-dropdown" dropdown>
         <a class="dropdown-toggle" dropdown-toggle>Save to <span class="caret"></span></a>
 
         <ul class="dropdown dropdown-menu" role="menu">
-          <%- include dropdowns/save_to %>
+          <%- include('dropdowns/save_to') %>
         </ul>
       </li>
       <li class="menu-item menu-item--import-from has-dropdown" dropdown>
         <a class="dropdown-toggle" dropdown-toggle>Import from <span class="caret"></span></a>
 
         <ul class="dropdown dropdown-menu" role="menu">
-          <%- include dropdowns/import_from %>
+          <%- include('dropdowns/import_from') %>
         </ul>
       </li>
       <li class="menu-item menu-item-icon menu-item--preview">
         <a class="menu-link menu-link-preview" preview-toggle>
-          <i class="icon icon-preview"><%- include icons/preview %></i>
+          <i class="icon icon-preview"><%- include('icons/preview') %></i>
           <span class="sr-only">Preview</span>
         </a>
       </li>
       <li class="menu-item menu-item-icon menu-item--settings">
         <a class="menu-link menu-link-settings" settings-toggle>
-          <i class="icon icon-settings"><%- include icons/settings %></i>
+          <i class="icon icon-settings"><%- include('icons/settings') %></i>
           <span class="sr-only">Settings</span>
         </a>
       </li>
