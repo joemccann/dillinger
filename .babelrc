@@ -5,5 +5,8 @@
     "/node_modules/brace/index.js",
     "/node_modules/katex/dist/katex.js",
     "/node_modules"
+  ],
+  "presets": [
+    "@babel/preset-env"
   ]
 }
