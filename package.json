@@ -136,6 +136,7 @@
     "gulp-util": "^3.0.8",
     "gulp-zip": "^5.0.1",
     "hard-source-webpack-plugin": "^0.13.1",
+    "html-loader": "^1.1.0",
     "htmlparser2": "^4.1.0",
     "jasmine-core": "^3.5.0",
     "jasmine-jquery": "^2.1.1",
