@@ -1,29 +1,25 @@
 
-'use strict';
+'use strict'
 module.exports =
   angular
-  .module('diDebounce.service', [])
-  .factory('debounce', function($timeout) {
+    .module('diDebounce.service', [])
+    .factory('debounce', ($timeout) => {
+      return (cb, delay) => {
+        let timer = null
 
-    return debounce;
+        return function () {
+          const context = this
+          const args = arguments
 
-    function debounce(cb, delay) {
-      var timer;
+          // create a function that will clear the timer and call
+          // the original callback function
+          const later = function () {
+            timer = null
+            cb.apply(context, args)
+          }
 
-      return function() {
-        var context = this;
-        var args = arguments;
-
-        // create a function that will clear the timer and call
-        // the original callback function
-        var later = function() {
-          timer = null;
-          cb.apply(context, args);
-        };
-
-        $timeout.cancel(timer);
-        timer = $timeout(later, delay);
-      };
-    }
-
-  });
+          $timeout.cancel(timer)
+          timer = $timeout(later, delay)
+        }
+      }
+    })

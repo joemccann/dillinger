@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  *    Documents Service.
  */
@@ -7,47 +5,13 @@
 module.exports =
   angular
     .module('diDocuments.service', ['diDocuments.sheet'])
-    .factory('documentsService', function ($rootScope, $http, Sheet, diNotify) {
-      var service = {
-        currentDocument: {},
-        files: [],
-
-        getItem: getItem,
-        getItemByIndex: getItemByIndex,
-        getItemById: getItemById,
-        addItem: addItem,
-        removeItem: removeItem,
-        createItem: createItem,
-        size: size,
-        getItems: getItems,
-        removeItems: removeItems,
-        importFile: importFile,
-        setCurrentDocument: setCurrentDocument,
-        getCurrentDocument: getCurrentDocument,
-        setCurrentDocumentTitle: setCurrentDocumentTitle,
-        getCurrentDocumentTitle: getCurrentDocumentTitle,
-        setCurrentDocumentBody: setCurrentDocumentBody,
-        getCurrentDocumentBody: getCurrentDocumentBody,
-        setCurrentDocumentId: setCurrentDocumentId,
-        setCurrentDocumentSHA: setCurrentDocumentSHA,
-        getCurrentDocumentSHA: getCurrentDocumentSHA,
-        setCurrentCursorValue: setCurrentCursorValue,
-        save: save,
-        init: init
-      }
-
-      service.init()
-
-      return service
-
-      /// ///////////////////////////
-
+    .factory('documentsService', ($rootScope, $http, Sheet, diNotify) => {
       /**
      *    Get item from the files array.
      *
      *    @param  {Object}  item  The actual item.
      */
-      function getItem (item) {
+      const getItem = (item) => {
         return service.files[service.files.indexOf(item)]
       }
 
@@ -56,7 +20,7 @@ module.exports =
      *
      *    @param  {Integer}  index  The index number.
      */
-      function getItemByIndex (index) {
+      const getItemByIndex = (index) => {
         return service.files[index]
       }
 
@@ -66,10 +30,10 @@ module.exports =
      *    @param  {Integer}  id  The id of the file (which is actually
      *                           Date().getTime())
      */
-      function getItemById (id) {
+      const getItemById = (id) => {
         var tmp = null
 
-        angular.forEach(service.files, function (file) {
+        angular.forEach(service.files, (file) => {
           if (file.id === id) {
             tmp = file
             return false
@@ -84,7 +48,7 @@ module.exports =
      *
      *    @param  {Object}  item  The item to add.
      */
-      function addItem (item) {
+      const addItem = (item) => {
         return service.files.push(item)
       }
 
@@ -93,7 +57,7 @@ module.exports =
      *
      *    @param  {Object}  item  The item to remove.
      */
-      function removeItem (item) {
+      const removeItem = (item) => {
         return service.files.splice(service.files.indexOf(item), 1)
       }
 
@@ -102,28 +66,28 @@ module.exports =
      *
      *    @param  {Object}  props  Item properties (`title`, `body`, `id`).
      */
-      function createItem (props) {
+      const createItem = (props) => {
         return new Sheet(props)
       }
 
       /**
      *    Get the files array length.
      */
-      function size () {
+      const size = () => {
         return service.files.length
       }
 
       /**
      *    Get all files.
      */
-      function getItems () {
+      const getItems = () => {
         return service.files
       }
 
       /**
      *    Remove all items frm the files array.
      */
-      function removeItems () {
+      const removeItems = () => {
         service.files = []
         service.currentDocument = {}
         return false
@@ -136,7 +100,7 @@ module.exports =
      *                            Must have a `title`, `body` and `id` property
      *                            to work.
      */
-      function setCurrentDocument (item) {
+      const setCurrentDocument = (item) => {
         service.currentDocument = item
         return item
       }
@@ -144,7 +108,7 @@ module.exports =
       /**
      *    Get the current document.
      */
-      function getCurrentDocument () {
+      const getCurrentDocument = () => {
         return service.currentDocument
       }
 
@@ -153,7 +117,7 @@ module.exports =
      *
      *    @param  {String}  title  The document title.
      */
-      function setCurrentDocumentTitle (title) {
+      const setCurrentDocumentTitle = (title) => {
         service.currentDocument.title = title
         return title
       }
@@ -163,7 +127,7 @@ module.exports =
      *
      *    @param  {Boolean}  skipCI  Weather or not to skip CI
      */
-      // function setCurrentDocumentCI (skipCI) {
+      // const setCurrentDocumentCI (skipCI) {
       //   service.currentDocument.skipCI = skipCI
       //   return skipCI
       // }
@@ -173,7 +137,7 @@ module.exports =
      *
      *    @param  {Boolean}  fileId  DocumentID
      */
-      function setCurrentDocumentId (fileId) {
+      const setCurrentDocumentId = (fileId) => {
         service.currentDocument.fileId = fileId
         return fileId
       }
@@ -182,7 +146,7 @@ module.exports =
      *
      *    @param  {String}  githubCommitMessage  Github Commit Message
      */
-      // function setCurrentDocumentGithubCommitMessage (message) {
+      // const setCurrentDocumentGithubCommitMessage (message) {
       //   service.currentDocument.githubCommitMessage = message
       //   return message
       // }
@@ -190,7 +154,7 @@ module.exports =
       /**
      *    Get the current document title.
      */
-      function getCurrentDocumentTitle () {
+      const getCurrentDocumentTitle = () => {
         return service.currentDocument.title.replace(/(\\|\/)/g, '_')
       }
 
@@ -199,7 +163,7 @@ module.exports =
      *
      *    @param  {String}  body  The document body.
      */
-      function setCurrentDocumentBody (body) {
+      const setCurrentDocumentBody = (body) => {
         service.currentDocument.body = body
         return body
       }
@@ -207,7 +171,7 @@ module.exports =
       /**
      *    Get the current document body.
      */
-      function getCurrentDocumentBody () {
+      const getCurrentDocumentBody = () => {
         service.setCurrentDocumentBody($rootScope.editor.getSession().getValue())
         return service.currentDocument.body
       }
@@ -215,7 +179,7 @@ module.exports =
       /**
      *    Append current value to cursor location.
      */
-      function setCurrentCursorValue (value) {
+      const setCurrentCursorValue = (value) => {
         var position = $rootScope.editor.getCursorPosition()
         $rootScope.editor.getSession().insert(position, value)
         return value
@@ -226,7 +190,7 @@ module.exports =
      *    @param  {String}  text  Supposedly the text of a file.
      *
      */
-      function isBinaryFile (text) {
+      const isBinaryFile = (text) => {
         var len = text.length
         var column = 0
 
@@ -247,10 +211,10 @@ module.exports =
      *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
      *
      */
-      function mdFileReader (file) {
+      const mdFileReader = (file) => {
         var reader = new window.FileReader()
 
-        reader.onload = function (event) {
+        reader.onload = (event) => {
           var text = event.target.result
 
           if (isBinaryFile(text)) {
@@ -283,10 +247,10 @@ module.exports =
      *            (see: https://developer.mozilla.org/en/docs/Web/API/File).
      *
      */
-      function htmlFileReader (file) {
+      const htmlFileReader = (file) => {
         var reader = new window.FileReader()
 
-        reader.onload = function (event) {
+        reader.onload = (event) => {
           var text = event.target.result
 
           // Create a new document.
@@ -310,7 +274,7 @@ module.exports =
      *    @param  {text}  string  The html text to be converted
      *
      */
-      function convertHTMLtoMD (text) {
+      const convertHTMLtoMD = (text) => {
       // Add page title
         var di = diNotify({
           message: 'Converting HTML to Markdown...',
@@ -318,7 +282,7 @@ module.exports =
         })
         return $http.post('factory/html_to_md', {
           html: text
-        }).then(function successCallback (result) {
+        }).then((result) => {
           if (angular.isDefined(di.$scope)) {
             di.$scope.$close()
           }
@@ -340,7 +304,7 @@ module.exports =
               window.ga('send', 'event', 'click', 'Convert HTML to Markdown', 'Convert To...')
             }
           }
-        }, function errorCallback (err) {
+        }, (err) => {
           if (angular.isDefined(di.$scope)) {
             di.$scope.$close()
           }
@@ -361,15 +325,15 @@ module.exports =
      *                      about dragging and dropping files.
      */
 
-      function importFile (file, showTip, isHTML) {
+      const importFile = (file, showTip, isHTML) => {
         if (!file) {
-          return console.log('No file passed to importFile function.')
+          return console.log('No file passed to importFile const.')
         }
 
         var reader = new window.FileReader()
 
         // If it is text or image or something else
-        reader.onloadend = function (event) {
+        reader.onloadend = (event) => {
           var data = event.target.result
 
           var firstFourBitsArray = (new Uint8Array(data)).subarray(0, 4)
@@ -430,12 +394,12 @@ module.exports =
      *
      */
 
-      function imageUploader (file) {
+      const imageUploader = (file) => {
         var reader = new window.window.FileReader()
 
         var name = file.name
 
-        reader.onloadend = function () {
+        reader.onloadend = () => {
           var di = diNotify({
             message: 'Uploading Image to Dropbox...',
             duration: 5000
@@ -443,7 +407,7 @@ module.exports =
           return $http.post('save/dropbox/image', {
             image_name: name,
             fileContents: reader.result
-          }).then(function (result) {
+          }).then((result) => {
             if (angular.isDefined(di.$scope)) {
               di.$scope.$close()
             }
@@ -462,15 +426,15 @@ module.exports =
 
               // Track event in GA
               if (window.ga) {
-                window.ga('send', 'event', 'click', 'Upload Image To Dropbox', 'Upload To...')
+                window.ga('send', 'event', 'click',
+                  'Upload Image To Dropbox', 'Upload To...')
               }
               return diNotify({
                 message: 'Successfully uploaded image to Dropbox.',
                 duration: 4000
               })
             }
-          }, function (err) {
-            console.dir(err)
+          }, (err) => {
             return diNotify({
               message: 'An Error occured: ' + err.message,
               duration: 5000
@@ -485,7 +449,7 @@ module.exports =
      *
      *    @param  {String}  sha  The document SHA.
      */
-      function setCurrentDocumentSHA (sha) {
+      const setCurrentDocumentSHA = (sha) => {
         service.currentDocument.github.sha = sha
         return sha
       }
@@ -493,11 +457,11 @@ module.exports =
       /**
      *    Get the current document SHA.
      */
-      function getCurrentDocumentSHA () {
+      const getCurrentDocumentSHA = () => {
         return service.currentDocument.github.sha
       }
 
-      function save (manual) {
+      const save = (manual) => {
         if (!angular.isDefined(manual)) {
           manual = false
         }
@@ -510,15 +474,46 @@ module.exports =
         return window.localStorage.setItem('currentDocument', angular.toJson(service.currentDocument))
       }
 
-      function init () {
+      const init = () => {
         var item, _ref
         service.files = angular.fromJson(window.localStorage.getItem('files')) || []
         service.currentDocument = angular.fromJson(window.localStorage.getItem('currentDocument')) || {}
-        if (!((_ref = service.files) != null ? _ref.length : void 0)) {
+        if (!((_ref = service.files) != null ? _ref.length : undefined)) {
           item = this.createItem()
           this.addItem(item)
           this.setCurrentDocument(item)
           return this.save()
         }
       }
+      const service = {
+        currentDocument: {},
+        files: [],
+
+        getItem: getItem,
+        getItemByIndex: getItemByIndex,
+        getItemById: getItemById,
+        addItem: addItem,
+        removeItem: removeItem,
+        createItem: createItem,
+        size: size,
+        getItems: getItems,
+        removeItems: removeItems,
+        importFile: importFile,
+        setCurrentDocument: setCurrentDocument,
+        getCurrentDocument: getCurrentDocument,
+        setCurrentDocumentTitle: setCurrentDocumentTitle,
+        getCurrentDocumentTitle: getCurrentDocumentTitle,
+        setCurrentDocumentBody: setCurrentDocumentBody,
+        getCurrentDocumentBody: getCurrentDocumentBody,
+        setCurrentDocumentId: setCurrentDocumentId,
+        setCurrentDocumentSHA: setCurrentDocumentSHA,
+        getCurrentDocumentSHA: getCurrentDocumentSHA,
+        setCurrentCursorValue: setCurrentCursorValue,
+        save: save,
+        init: init
+      }
+
+      service.init()
+
+      return service
     }) // end factory

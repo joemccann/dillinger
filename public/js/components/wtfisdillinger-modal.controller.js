@@ -1,15 +1,13 @@
-
-'use strict'
-
 module.exports =
   angular
     .module('diBase.controllers.about', [])
-    .controller('WTFisDillingerModalInstance', function ($scope, $modalInstance) {
-      $scope.ok = function () {
+    .controller('WTFisDillingerModalInstance', (
+      $scope, $modalInstance) => {
+      $scope.ok = () => {
         return $modalInstance.close()
       }
 
-      $scope.cancel = function () {
+      $scope.cancel = () => {
         return $modalInstance.dismiss('cancel')
       }
     })

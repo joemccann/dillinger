@@ -1,19 +1,14 @@
-
-'use strict'
+const template = require('./zen-mode-toggle.directive.html')
 
 module.exports =
   angular
     .module('diZenMode.directives', [])
-    .directive('toggleZenMode', function () {
-      var directive
-
-      directive = {
+    .directive('toggleZenMode', () => {
+      return {
         restrict: 'E',
         replace: true,
         controller: 'diZenMode',
         controllerAs: 'zenmode',
-        template: require('raw!./zen-mode-toggle.directive.html')
+        template
       }
-
-      return directive
     })

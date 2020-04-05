@@ -1,20 +1,17 @@
 
-'use strict';
+const body = require('../../../README.md')
 
 module.exports =
   angular
-  .module('diDocuments.sheet', [])
-  .factory('Sheet', function() {
+    .module('diDocuments.sheet', [])
+    .factory('Sheet', () => {
+      return (sheetData) => {
+        angular.extend(this, {
+          id: new Date().getTime(),
+          title: 'Untitled Document.md',
+          body
+        })
 
-  return function(sheetData) {
-
-    angular.extend(this, {
-      id: new Date().getTime(),
-      title: 'Untitled Document.md',
-      body: require('raw!../../../README.md')
-    });
-
-    return angular.extend(this, sheetData);
-  };
-
-});
+        return angular.extend(this, sheetData)
+      }
+    })

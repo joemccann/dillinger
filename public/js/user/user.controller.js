@@ -1,5 +1,7 @@
+/* global localStorage */
+/* global jQuery */
 
-'use strict'
+const template = require('../components/wtfisdillinger-modal.directive.html')
 
 module.exports =
   angular
@@ -8,78 +10,96 @@ module.exports =
       'diDocuments.service.wordcount',
       'diDocuments.service.charactercount'
     ])
-    .controller('User', function ($rootScope, $scope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService, debounce) {
-      var vm = this
-
+    .controller('User', (
+      $rootScope,
+      $scope,
+      $timeout,
+      $modal,
+      userService,
+      documentsService,
+      wordsCountService,
+      charactersCountService,
+      debounce) => {
+      const vm = this
       vm.profile = userService.profile
 
+      //
       // TODO: Move this to out of here (perhaps to its own directive).
-      var $editor = jQuery('.split-editor')
-      var getPreviewElements = (function () {
-        var elements
-        return function (recalculate) {
+      //
+      const $editor = jQuery('.split-editor')
+
+      const getPreviewElements = (() => {
+        let elements = null
+        return (recalculate) => {
           if (!elements || recalculate) {
             elements = Array.prototype.map.call(
               document.getElementsByClassName('has-line-data'),
-              function (element) {
-                var startLine = +element.getAttribute('data-line-start')
-                var endLine = +element.getAttribute('data-line-end')
-                return { element: element, startLine: startLine, endLine: endLine }
+              (element) => {
+                const startLine = +element.getAttribute('data-line-start')
+                const endLine = +element.getAttribute('data-line-end')
+                return { element, startLine, endLine }
               })
-              .filter(function (x) { return !isNaN(x.startLine) && !isNaN(x.endLine) })
+              .filter((x) => {
+                return !isNaN(x.startLine) && !isNaN(x.endLine)
+              })
           }
           return elements
         }
       })()
 
-      var getSourceLines = (function () {
-        var elements
-        return function (recalculate) {
+      const getSourceLines = (() => {
+        let elements = null
+        return (recalculate) => {
           if (!elements || recalculate) {
-            var nextLineNumber = 0
-            var nextStartLine = 0
+            let nextLineNumber = 0
+            let nextStartLine = 0
             elements = Array.prototype.map.call(
               document.getElementsByClassName('ace_gutter-cell'),
-              function (element) {
-                var startLine = nextStartLine
-                var lineSpan = Math.round(Number(element.style.getPropertyValue('height').slice(0, -2)) / 28)
-                var endLine = startLine + lineSpan
-                var lineNumber = nextLineNumber
+              (element) => {
+                const startLine = nextStartLine
+                const lineSpan = Math.round(Number(
+                  element.style.getPropertyValue('height').slice(0, -2)) / 28)
+                const endLine = startLine + lineSpan
+                const lineNumber = nextLineNumber
 
                 nextStartLine = endLine
                 nextLineNumber++
-                return { lineNumber: lineNumber, startOffsetLine: startLine, endOffsetLine: endLine }
+                const sourceLines = {
+                  lineNumber,
+                  startOffsetLine: startLine,
+                  endOffsetLine: endLine
+                }
+                return sourceLines
               })
           }
           return elements
         }
       })()
 
-      $rootScope.editor.on('change', debounce(function () {
+      $rootScope.editor.on('change', debounce(() => {
         // re-calculate source lines
         getSourceLines(true)
       }, 200))
-      $rootScope.$on('preview.updated', function () {
+      $rootScope.$on('preview.updated', () => {
         // re-calculate preview elements
         getPreviewElements(true)
       })
-      window.addEventListener('resize', function () {
+      window.addEventListener('resize', () => {
         // re-calculate source lines
         getSourceLines(true)
       })
 
-      var $divs = jQuery('.split-editor, .split-preview')
-      var $allowed = $divs
-      var sync = function (e) {
-        var $this = jQuery(this)
+      const $divs = jQuery('.split-editor, .split-preview')
+      let $allowed = $divs
+      const sync = (e) => {
+        const $this = jQuery(this)
 
         // Prevents slow scrolling by only allows subsequent callbacks
         // on the element that the first scroll event was triggered on.
         // See #516 for details.
         if ($this.is($allowed)) {
-          var
+          const
             other = $divs.not(this)[0]
-
 
           if ($this.is($editor)) {
             scrollPreviewWithEditor(this, other)
@@ -94,14 +114,269 @@ module.exports =
         return false
       }
 
+      // ------------------------------
+
+      const toggleGitHubComment = (e) => {
+        e.preventDefault()
+        vm.profile.enableGitHubComment = !vm.profile.enableGitHubComment
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const toggleAutoSave = (e) => {
+        e.preventDefault()
+        vm.profile.enableAutoSave = !vm.profile.enableAutoSave
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const toggleWordsCount = (e) => {
+        e.preventDefault()
+        vm.profile.enableWordsCount = !vm.profile.enableWordsCount
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const toggleCharactersCount = (e) => {
+        e.preventDefault()
+        vm.profile.enableCharactersCount = !vm.profile.enableCharactersCount
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const toggleScrollSync = (e) => {
+        e.preventDefault()
+        vm.profile.enableScrollSync = !vm.profile.enableScrollSync
+        doSync()
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const storeTabSize = () => {
+        vm.profile.tabSize = $scope.tabsize
+        userService.save(vm.profile)
+        setTabSize()
+
+        return false
+      }
+
+      const storeKeybindings = () => {
+        vm.profile.keybindings = $scope.keybindings
+        userService.save(vm.profile)
+        setKeybindings()
+
+        return false
+      }
+
+      const toggleNightMode = (e) => {
+        e.preventDefault()
+        vm.profile.enableNightMode = !vm.profile.enableNightMode
+        userService.save(vm.profile)
+
+        return false
+      }
+
+      const resetProfile = (e) => {
+        e.preventDefault()
+        localStorage.clear()
+        window.location.reload()
+
+        return false
+      }
+
+      const updateWords = () => {
+        $rootScope.words = wordsCountService.count()
+
+        return $timeout(() => {
+          return $rootScope.$apply()
+        }, 0)
+      }
+
+      const updateCharacters = () => {
+        $rootScope.characters = charactersCountService.count()
+
+        return $timeout(() => {
+          return $rootScope.$apply()
+        }, 0)
+      }
+
+      const setTabSize = () => {
+        $scope.tabsize = vm.profile.tabSize
+        $rootScope.editor.session.setTabSize($scope.tabsize)
+
+        return false
+      }
+
+      const setKeybindings = () => {
+        $scope.keybindings = vm.profile.keybindings
+        $rootScope.editor.setKeyboardHandler($scope.allKeybindings[$scope.keybindings])
+
+        return false
+      }
+
+      const pasteDetected = () => {
+        // only change if the title if still set to the default
+        if (documentsService.getCurrentDocumentTitle() ===
+        'Untitled Document.md') {
+          // wait for preview to process Markdown, but only run once then destroy
+          const destroyListener = $rootScope.$on('preview.updated', () => {
+            setDocumentTitleToFirstHeader()
+
+            destroyListener()
+          })
+        }
+      }
+
+      const setDocumentTitleToFirstHeader = () => {
+        // set the document's name to the first header if there is one
+        try {
+          documentsService.setCurrentDocumentTitle(angular.element(document).find('#preview').find('h1')[0].textContent + '.md')
+        } catch (err) {} // don't do anything if there's no header
+      }
+
+      const doSync = () => {
+        if (vm.profile.enableScrollSync) {
+          $divs.on('scroll', sync)
+        } else {
+          $divs.off('scroll', sync)
+        }
+
+        return false
+      }
+
+      const showAbout = (e) => {
+        e.preventDefault()
+        $modal.open({
+          template,
+          controller: 'WTFisDillingerModalInstance',
+          windowClass: 'modal--dillinger about'
+        })
+
+        return false
+      }
+
+      const scrollPreviewWithEditor = ($editor, $preview) => {
+        const offset = $editor.scrollTop
+        if (offset <= 0) {
+          $preview.scrollTop = 0
+          return false
+        }
+
+        const currentSourceLine = getSourceLineForEditorOffset(offset)
+        const lineNumber = currentSourceLine.lineNumber
+        const elements = getPreviewElementsForLineNumber(lineNumber)
+        const current = elements.current
+        const next = elements.next
+        if (!current || !next) {
+          return false
+        }
+
+        const currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
+        const nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
+        const currentTop = current.element.offsetTop
+        const editorOffsetLine = offset / 28
+
+        const betweenProgress =
+          (editorOffsetLine - currentStartSourceLine.startOffsetLine) /
+          (nextStartSourceLine.startOffsetLine -
+            currentStartSourceLine.startOffsetLine)
+        const elementAndSpanOffset = next.element.offsetTop - currentTop
+        const scrollTop = currentTop + betweenProgress * elementAndSpanOffset
+
+        $preview.scrollTop = scrollTop
+      }
+
+      const scrollEditorWithPreview = ($preview, $editor) => {
+        const previewOffset = $preview.scrollTop
+        if (previewOffset <= 0) {
+          $editor.scrollTop = 0
+          return false
+        }
+
+        const elements = getPreviewElementsForOffset(previewOffset)
+        const current = elements.current
+        const next = elements.next
+        if (!current || !next) {
+          return false
+        }
+
+        const betweenProgress =
+          (previewOffset - current.element.offsetTop) /
+          (next.element.offsetTop - current.element.offsetTop)
+        const currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
+        const nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
+        const sourceLinesOffset = nextStartSourceLine.startOffsetLine - currentStartSourceLine.startOffsetLine
+        const scrollTop = (currentStartSourceLine.startOffsetLine + betweenProgress * sourceLinesOffset) * 28
+
+        $editor.scrollTop = scrollTop
+      }
+
+      const getPreviewElementsForLineNumber = (lineNumber) => {
+        const elements = getPreviewElements()
+        let current = elements[0] || null
+        for (let i = 0; i < elements.length; i++) {
+          const entry = elements[i]
+          if (entry.startLine === lineNumber) {
+            return { current: entry, next: elements[i + 1] }
+          } else if (entry.startLine > lineNumber) {
+            return { current: current, next: entry }
+          }
+          current = entry
+        }
+
+        return { current: current }
+      }
+
+      const getPreviewElementsForOffset = (offset) => {
+        const previewElements = getPreviewElements()
+
+        // binary search find current preview elements in view
+        let low = -1
+        let high = previewElements.length - 1
+        while (low + 1 < high) {
+          const mid = Math.floor((low + high) / 2)
+          const midElement = previewElements[mid].element
+          const midElementHeight = midElement.getBoundingClientRect().height
+          if (midElement.offsetTop + midElementHeight >= offset) {
+            high = mid
+          } else {
+            low = mid
+          }
+        }
+
+        const currentIndex = previewElements[high].element.offsetTop < offset ? high : low
+        return { current: previewElements[currentIndex], next: previewElements[currentIndex + 1] }
+      }
+
+      const getSourceLineForEditorOffset = (offset) => {
+        const offsetLineNumber = Math.floor(offset / 28)
+        const lines = getSourceLines()
+        const lastIndex = lines.length - 1
+        for (let i = offsetLineNumber < lastIndex ? offsetLineNumber : lastIndex; i > -1; i--) {
+          const entry = lines[i]
+          if (entry.startOffsetLine <= offsetLineNumber) {
+            return entry
+          }
+        }
+      }
+
+      const getSourceLineForLineNumber = (lineNumber) => {
+        return getSourceLines()[lineNumber]
+      }
+
       $rootScope.$on('preview.updated', updateWords)
       $rootScope.$on('preview.updated', updateCharacters)
       $rootScope.editor.on('paste', pasteDetected)
 
       $scope.allKeybindings = {
-        "Ace": '',
-        "Vim": 'ace/keyboard/vim',
-        "Emacs": 'ace/keyboard/emacs'
+        Ace: '',
+        Vim: 'ace/keyboard/vim',
+        Emacs: 'ace/keyboard/emacs'
       }
 
       // Methods on the Controller
@@ -119,258 +394,4 @@ module.exports =
       setTabSize()
       setKeybindings()
       doSync()
-
-      // ------------------------------
-
-      function toggleGitHubComment (e) {
-        e.preventDefault()
-        vm.profile.enableGitHubComment = !vm.profile.enableGitHubComment
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function toggleAutoSave (e) {
-        e.preventDefault()
-        vm.profile.enableAutoSave = !vm.profile.enableAutoSave
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function toggleWordsCount (e) {
-        e.preventDefault()
-        vm.profile.enableWordsCount = !vm.profile.enableWordsCount
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function toggleCharactersCount (e) {
-        e.preventDefault()
-        vm.profile.enableCharactersCount = !vm.profile.enableCharactersCount
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function toggleScrollSync (e) {
-        e.preventDefault()
-        vm.profile.enableScrollSync = !vm.profile.enableScrollSync
-        doSync()
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function storeTabSize () {
-        vm.profile.tabSize = $scope.tabsize
-        userService.save(vm.profile)
-        setTabSize()
-
-        return false
-      }
-
-      function storeKeybindings () {
-        vm.profile.keybindings = $scope.keybindings
-        userService.save(vm.profile)
-        setKeybindings()
-
-        return false
-      }
-
-      function toggleNightMode (e) {
-        e.preventDefault()
-        vm.profile.enableNightMode = !vm.profile.enableNightMode
-        userService.save(vm.profile)
-
-        return false
-      }
-
-      function resetProfile (e) {
-        e.preventDefault()
-        localStorage.clear()
-        window.location.reload()
-
-        return false
-      }
-
-      function updateWords () {
-        $rootScope.words = wordsCountService.count()
-
-        return $timeout(function () {
-          return $rootScope.$apply()
-        }, 0)
-      }
-
-      function updateCharacters () {
-        $rootScope.characters = charactersCountService.count()
-
-        return $timeout(function () {
-          return $rootScope.$apply()
-        }, 0)
-      }
-
-      function setTabSize () {
-        $scope.tabsize = vm.profile.tabSize
-        $rootScope.editor.session.setTabSize($scope.tabsize)
-
-        return false
-      }
-
-      function setKeybindings () {
-        $scope.keybindings = vm.profile.keybindings
-        $rootScope.editor.setKeyboardHandler( $scope.allKeybindings[ $scope.keybindings ] )
-
-        return false
-      }
-
-      function pasteDetected () {
-        // only change if the title if still set to the default
-        if (documentsService.getCurrentDocumentTitle() == 'Untitled Document.md') {
-          // wait for preview to process Markdown, but only run once then destroy
-          var destroyListener = $rootScope.$on('preview.updated', function () {
-            setDocumentTitleToFirstHeader()
-
-            destroyListener()
-          })
-        }
-      }
-
-      function setDocumentTitleToFirstHeader () {
-        // set the document's name to the first header if there is one
-        try {
-          documentsService.setCurrentDocumentTitle(angular.element(document).find('#preview').find('h1')[0].textContent + '.md')
-        } catch (err) {} // don't do anything if there's no header
-      }
-
-      function doSync () {
-        if (vm.profile.enableScrollSync) {
-          $divs.on('scroll', sync)
-        } else {
-          $divs.off('scroll', sync)
-        }
-
-        return false
-      }
-
-      function showAbout (e) {
-        e.preventDefault()
-        $modal.open({
-          template: require('raw!../components/wtfisdillinger-modal.directive.html'),
-          controller: 'WTFisDillingerModalInstance',
-          windowClass: 'modal--dillinger about'
-        })
-
-        return false
-      }
-
-      function scrollPreviewWithEditor ($editor, $preview) {
-        var offset = $editor.scrollTop
-        if (offset <= 0) {
-          $preview.scrollTop = 0
-          return false
-        }
-
-        var currentSourceLine = getSourceLineForEditorOffset(offset)
-        var lineNumber = currentSourceLine.lineNumber
-        var elements = getPreviewElementsForLineNumber(lineNumber)
-        var current = elements.current
-        var next = elements.next
-        if (!current || !next) {
-          return false
-        }
-
-        var currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
-        var nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
-        var currentTop = current.element.offsetTop
-        var editorOffsetLine = offset / 28
-
-        var betweenProgress =
-          (editorOffsetLine - currentStartSourceLine.startOffsetLine) /
-          (nextStartSourceLine.startOffsetLine -
-            currentStartSourceLine.startOffsetLine)
-        var elementAndSpanOffset = next.element.offsetTop - currentTop
-        var scrollTop = currentTop + betweenProgress * elementAndSpanOffset
-
-        $preview.scrollTop = scrollTop
-      }
-
-      function scrollEditorWithPreview ($preview, $editor) {
-        var previewOffset = $preview.scrollTop
-        if (previewOffset <= 0) {
-          $editor.scrollTop = 0
-          return false
-        }
-
-        var elements = getPreviewElementsForOffset(previewOffset)
-        var current = elements.current
-        var next = elements.next
-        if (!current || !next) {
-          return false
-        }
-
-        var betweenProgress =
-          (previewOffset - current.element.offsetTop) /
-          (next.element.offsetTop - current.element.offsetTop)
-        var currentStartSourceLine = getSourceLineForLineNumber(current.startLine)
-        var nextStartSourceLine = getSourceLineForLineNumber(next.startLine)
-        var sourceLinesOffset = nextStartSourceLine.startOffsetLine - currentStartSourceLine.startOffsetLine
-        var scrollTop = (currentStartSourceLine.startOffsetLine + betweenProgress * sourceLinesOffset) * 28
-
-        $editor.scrollTop = scrollTop
-      }
-
-      function getPreviewElementsForLineNumber (lineNumber) {
-        var elements = getPreviewElements()
-        var current = elements[0] || null
-        for (var i = 0; i < elements.length; i++) {
-          var entry = elements[i]
-          if (entry.startLine === lineNumber) {
-            return { current: entry, next: elements[i + 1] }
-          } else if (entry.startLine > lineNumber) {
-            return { current: current, next: entry }
-          }
-          current = entry
-        }
-
-        return { current: current }
-      }
-
-      function getPreviewElementsForOffset (offset) {
-        var previewElements = getPreviewElements()
-
-        // binary search find current preview elements in view
-        var low = -1
-        var high = previewElements.length - 1
-        while (low + 1 < high) {
-          var mid = Math.floor((low + high) / 2)
-          var midElement = previewElements[mid].element
-          var midElementHeight = midElement.getBoundingClientRect().height
-          if (midElement.offsetTop + midElementHeight >= offset) {
-            high = mid
-          } else {
-            low = mid
-          }
-        }
-
-        var currentIndex = previewElements[high].element.offsetTop < offset ? high : low
-        return { current: previewElements[currentIndex], next: previewElements[currentIndex + 1] }
-      }
-
-      function getSourceLineForEditorOffset (offset) {
-        var offsetLineNumber = Math.floor(offset / 28)
-        var lines = getSourceLines()
-        var lastIndex = lines.length - 1
-        for (var i = offsetLineNumber < lastIndex ? offsetLineNumber : lastIndex; i > -1; i--) {
-          var entry = lines[i]
-          if (entry.startOffsetLine <= offsetLineNumber) {
-            return entry
-          }
-        }
-      }
-
-      function getSourceLineForLineNumber (lineNumber) {
-        return getSourceLines()[lineNumber]
-      }
     })

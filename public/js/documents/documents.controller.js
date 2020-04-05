@@ -1,5 +1,6 @@
 
-'use strict'
+const template = require('../documents/delete-modal.directive.html')
+
 module.exports =
   angular
     .module('diDocuments', [
@@ -9,94 +10,96 @@ module.exports =
       'diDocuments.service.wordcount',
       'diDocuments.service.charactercount'
     ])
-    .controller('Documents', function ($scope, $timeout, $rootScope, $modal, userService, documentsService, debounce, wordsCountService, charactersCountService) {
-      var vm = this
+    .controller('Documents', (
+      $scope,
+      $timeout,
+      $rootScope,
+      $modal,
+      userService,
+      documentsService,
+      debounce,
+      wordsCountService,
+      charactersCountService) => {
+      let vm = this
 
-  vm.status = {
+      vm.status = {
         import: true,
         save: true,
         linkUnlink: true,
         document: false
       }
 
-  $scope.profile = userService.profile
-  $scope.saveDocument = save
-  $scope.createDocument = createDocument
-  $scope.removeDocument = removeDocument
-  $scope.selectDocument = selectDocument
+      const save = (manuel) => {
+        const item = documentsService.getCurrentDocument()
+        item.body = $rootScope.editor.getSession().getValue()
 
-  $rootScope.documents = documentsService.getItems()
+        documentsService.setCurrentDocument(item)
 
-  $rootScope.editor.on('change', debounce(doAutoSave, 2000))
-  $rootScope.$on('autosave', doAutoSave)
+        return documentsService.save(manuel)
+      }
 
-  function save (manuel) {
-        var item
+      const initDocument = () => {
+        const item = documentsService.getItemById($rootScope.currentDocument.id)
+        documentsService.setCurrentDocument(item)
 
-    item = documentsService.getCurrentDocument()
-    item.body = $rootScope.editor.getSession().getValue()
+        return $rootScope.$emit('document.refresh')
+      }
 
-    documentsService.setCurrentDocument(item)
-
-    return documentsService.save(manuel)
-  }
-
-      function initDocument () {
-        var item
-
-    item = documentsService.getItemById($rootScope.currentDocument.id)
-    documentsService.setCurrentDocument(item)
-
-    return $rootScope.$emit('document.refresh')
-  }
-
-      function selectDocument (item) {
+      const selectDocument = (item) => {
         item = documentsService.getItem(item)
-    documentsService.setCurrentDocument(item)
+        documentsService.setCurrentDocument(item)
 
-    return $rootScope.$emit('document.refresh')
-  }
+        return $rootScope.$emit('document.refresh')
+      }
 
-      function removeDocument (item) {
-        var modalScope = $rootScope.$new()
-    modalScope.item = item
-    modalScope.wordCount = wordsCountService.count()
-    modalScope.characterCount = charactersCountService.count()
+      const removeDocument = (item) => {
+        const modalScope = $rootScope.$new()
+        modalScope.item = item
+        modalScope.wordCount = wordsCountService.count()
+        modalScope.characterCount = charactersCountService.count()
 
-    $modal.open({
-          template: require('raw!../documents/delete-modal.directive.html'),
+        $modal.open({
+          template,
           scope: modalScope,
           controller: 'DeleteDialog',
           windowClass: 'modal--dillinger'
         })
-  }
+      }
 
-      function createDocument () {
-        var item
+      const createDocument = () => {
+        const item = documentsService.createItem()
 
-    item = documentsService.createItem()
+        documentsService.addItem(item)
+        documentsService.setCurrentDocument(item)
 
-    documentsService.addItem(item)
-    documentsService.setCurrentDocument(item)
+        return $rootScope.$emit('document.refresh')
+      }
 
-    return $rootScope.$emit('document.refresh')
-  }
-
-      function doAutoSave () {
+      const doAutoSave = () => {
         if ($scope.profile.enableAutoSave) {
           return save()
-    }
+        }
 
         return false
-  }
+      }
 
-      $scope.$on('$destroy', function () {
+      $scope.profile = userService.profile
+      $scope.saveDocument = save
+      $scope.createDocument = createDocument
+      $scope.removeDocument = removeDocument
+      $scope.selectDocument = selectDocument
+
+      $rootScope.documents = documentsService.getItems()
+
+      $rootScope.editor.on('change', debounce(doAutoSave, 2000))
+      $rootScope.$on('autosave', doAutoSave)
+
+      $scope.$on('$destroy', () => {
         vm = null
-    $scope = null
+        $scope = null
 
-    return false
-  })
+        return false
+      })
 
-  initDocument()
-
-})
+      initDocument()
+    })

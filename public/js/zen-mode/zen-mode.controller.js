@@ -1,19 +1,16 @@
+/* global ace */
 
-'use strict'
+const template = require('./zen-mode.directive.html')
 
 module.exports =
   angular
     .module('diZenMode', ['diZenMode.directives'])
-    .controller('diZenMode', function ($rootScope, $compile, documentsService) {
+    .controller('diZenMode', ($rootScope, $compile, documentsService) => {
       var
         vm = this
 
-      var template
-
       vm.isZen = false
       vm.zen = null
-
-      template = require('raw!./zen-mode.directive.html')
 
       vm.toggle = function () {
         var el, scope
@@ -28,7 +25,8 @@ module.exports =
 
           scope.$close = function () {
             vm.isZen = !vm.isZen
-            documentsService.setCurrentDocumentBody(vm.zen.getSession().getValue())
+            documentsService.setCurrentDocumentBody(
+              vm.zen.getSession().getValue())
             $rootScope.$emit('document.refresh')
             el.remove()
             scope.$destroy()
@@ -44,7 +42,8 @@ module.exports =
           vm.zen.getSession().setUseWrapMode(true)
           vm.zen.renderer.setShowGutter(false)
           vm.zen.setShowPrintMargin(false)
-          vm.zen.getSession().setValue(documentsService.getCurrentDocumentBody())
+          vm.zen.getSession().setValue(
+            documentsService.getCurrentDocumentBody())
 
           el.addClass('on')
         }

@@ -1,47 +1,38 @@
 
-'use strict';
+'use strict'
 module.exports =
   angular
-  .module('diDocuments.service.charactercount', [])
-  .factory('charactersCountService', function($rootScope) {
+    .module('diDocuments.service.charactercount', [])
+    .factory('charactersCountService', ($rootScope) => {
+      const $preview = angular.element(document).find('#preview')
 
-  var
-    characters = 0,
-    $preview   = angular.element(document).find('#preview'),
-
-    service = {
-      count: function() {
-        characters = countCharacters(getTextInElement($preview[0]));
-        return characters;
+      const service = {
+        count: () => countCharacters(getTextInElement($preview[0]))
       }
-    };
 
-  //////////////////////////////
+      /// ///////////////////////////
 
-  function countCharacters(str) {
-    var chrcs;
-    chrcs = str.length;
-    return chrcs;
-  }
+      const countCharacters = (str) => {
+        return str.length
+      }
 
-  function getTextInElement(node) {
-    var txt;
-    if (node.nodeType === 3) {
-      return node.data;
-    }
-    txt = '';
-    if (node.firstChild) {
-      node = node.firstChild;
-      while (true) {
-        txt += getTextInElement(node);
-        if (!(node.nextSibling)) {
-          break;
+      const getTextInElement = (node) => {
+        let txt = ''
+        if (node.nodeType === 3) {
+          return node.data
         }
-        node = node.nextSibling;
+        if (node.firstChild) {
+          node = node.firstChild
+          while (true) {
+            txt += getTextInElement(node)
+            if (!(node.nextSibling)) {
+              break
+            }
+            node = node.nextSibling
+          }
+        }
+        return txt
       }
-    }
-    return txt;
-  }
 
-  return service;
-});
+      return service
+    })

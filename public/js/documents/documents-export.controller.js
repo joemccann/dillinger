@@ -1,23 +1,20 @@
+
+/* global ga, jQuery */
+
 module.exports =
   angular
     .module('diDocuments.export', [
       'diDocuments.service'
     ])
-    .controller('DocumentsExport', function ($scope, $attrs, documentsService) {
-      var vm = this
-      var $ = jQuery
-      var $downloader = $('#downloader')
-      var $name = $downloader.find('[name=name]')
-      var $unmd = $downloader.find('[name=unmd]')
-      var $formatting = $downloader.find('[name=formatting]')
-      var $preview = $downloader.find('[name=preview]')
-
-      vm.asHTML = asHTML
-      vm.asStyledHTML = asStyledHTML
-      vm.asMarkdown = asMarkdown
-      vm.asPDF = asPDF
-
-      function initDownload (action, styled) {
+    .controller('DocumentsExport', ($scope, $attrs, documentsService) => {
+      let vm = this
+      const $ = jQuery
+      const $downloader = $('#downloader')
+      const $name = $downloader.find('[name=name]')
+      const $unmd = $downloader.find('[name=unmd]')
+      const $formatting = $downloader.find('[name=formatting]')
+      const $preview = $downloader.find('[name=preview]')
+      const initDownload = (action, styled) => {
         $downloader[0].action = action
         $downloader[0].target = $attrs.diTarget
 
@@ -29,40 +26,48 @@ module.exports =
         $downloader.submit()
       }
 
-      function asHTML (styled) {
+      const asHTML = (styled) => {
         if (window.ga) {
-          var previewOrExport = ($attrs.diTarget === 'preview')
+          const previewOrExport = ($attrs.diTarget === 'preview')
             ? 'Preview'
             : 'Export'
-          ga('send', 'event', 'click', styled ? (previewOrExport + ' As Styled HTML')
+          ga('send', 'event', 'click', styled
+            ? (previewOrExport + ' As Styled HTML')
             : (previewOrExport + ' As Plain HTML'), previewOrExport + ' As...')
         }
         initDownload('factory/fetch_html', styled)
       }
 
-      function asStyledHTML () {
+      const asStyledHTML = () => {
         asHTML(true)
       }
 
-      function asMarkdown () {
+      const asMarkdown = () => {
         if (window.ga) {
-          var previewOrExport = ($attrs.diTarget === 'preview')
+          const previewOrExport = ($attrs.diTarget === 'preview')
             ? 'Preview' : 'Export'
-          ga('send', 'event', 'click', previewOrExport + ' As Markdown', previewOrExport + ' As...')
+          ga('send', 'event', 'click', previewOrExport + ' As Markdown',
+            previewOrExport + ' As...')
         }
         initDownload('factory/fetch_markdown')
       }
 
-      function asPDF () {
+      const asPDF = () => {
         if (window.ga) {
-          var previewOrExport = ($attrs.diTarget === 'preview')
+          const previewOrExport = ($attrs.diTarget === 'preview')
             ? 'Preview' : 'Export'
-          ga('send', 'event', 'click', previewOrExport + ' As PDF', previewOrExport + ' As...')
+          ga('send', 'event', 'click', previewOrExport + ' As PDF',
+            previewOrExport + ' As...')
         }
         initDownload('factory/fetch_pdf')
       }
 
-      $scope.$on('$destroy', function () {
+      vm.asHTML = asHTML
+      vm.asStyledHTML = asStyledHTML
+      vm.asMarkdown = asMarkdown
+      vm.asPDF = asPDF
+
+      $scope.$on('$destroy', () => {
         vm = null
         $scope = null
 

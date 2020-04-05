@@ -1,6 +1,3 @@
-
-'use strict';
-
 (function (window, document) {
   var angular
 

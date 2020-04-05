@@ -1,35 +1,29 @@
 
-'use strict';
+const template = require('./toggle-menu.directive.html')
+
 module.exports =
   angular
-  .module('diBase.directives.menuToggle', [])
-  .directive('menuToggle', function() {
+    .module('diBase.directives.menuToggle', [])
+    .directive('menuToggle', () => {
+      return {
+        restrict: 'E',
+        replace: true,
+        template,
+        link: (scope, el, attrs) => {
+          const $body = angular.element(document).find('body')
+          const $editor = angular.element(document).find('#editor')
 
-  var directive = {
-    restrict: 'E',
-    replace: true,
-    template: require('raw!./toggle-menu.directive.html'),
-    link: function(scope, el, attrs) {
+          el.bind('click', function () {
+            $body.toggleClass('open-menu')
+            return false
+          })
 
-      var
-        $body = angular.element(document).find('body'),
-        $editor = angular.element(document).find('#editor');
-
-      el.bind('click', function() {
-        $body.toggleClass('open-menu');
-        return false;
-      });
-
-      $editor.bind('click', function() {
-        if ($body.hasClass('open-menu')) {
-          $body.toggleClass('open-menu');
+          $editor.bind('click', function () {
+            if ($body.hasClass('open-menu')) {
+              $body.toggleClass('open-menu')
+            }
+            return false
+          })
         }
-        return false;
-      });
-
-      return;
-    }
-  };
-
-  return directive;
-});
+      }
+    })

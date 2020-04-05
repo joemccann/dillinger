@@ -23,7 +23,7 @@ module.exports =
       $rootScope.editor = ace.edit('editor')
       $rootScope.viewSrcMode = false
       $rootScope.editor.getSession().setMode('ace/mode/markdown')
-      $rootScope.editor.setTheme('ace/theme/github')
+      $rootScope.editor.setTheme('ace/theme/dillinger')
       $rootScope.editor.getSession().setUseWrapMode(true)
       $rootScope.editor.setShowPrintMargin(false)
       $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)

@@ -1,14 +1,10 @@
-
-'use strict'
-
+const template = require('./document-title.directive.html')
 module.exports =
   angular
     .module('diBase.directives.documentTitle', [])
-    .directive('documentTitle', function () {
-      var directive = {
+    .directive('documentTitle', () => {
+      return {
         restrict: 'E',
-        template: require('raw!./document-title.directive.html')
+        template
       }
-
-      return directive
     })
