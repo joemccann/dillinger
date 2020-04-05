@@ -21,6 +21,14 @@ module.exports = {
     ],
     rules: [
       {
+        test: /\.md$/i, // for importing the README.md
+        use: 'raw-loader'
+      },
+      {
+        test: /\.html$/i,
+        loader: 'html-loader'
+      },
+      {
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
