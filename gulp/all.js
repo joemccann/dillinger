@@ -137,6 +137,12 @@ gulp.task('cssminify', function () {
     .pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
 })
 
+gulp.task('cssminify', function () {
+  const dest = './public/css'
+  return gulp.src('./public/css/export.css').on('error', handleErrors)
+    .pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
+})
+
 /** dist ************************************************** */
 
 gulp.task('dist', function () {
@@ -157,8 +163,6 @@ gulp.task('dist', function () {
 gulp.task('sass', function () {
   const dest = './public/css'
 
-  console.log('app sass build')
-
   gulp.src('./public/scss/app.{scss,sass}')
     .pipe(sass({
       precision: 7,
@@ -175,8 +179,6 @@ gulp.task('sass', function () {
       stream: true
     }))
     .pipe(size())
-
-  console.log('export sass build')
 
   return gulp.src('./public/scss/export.{scss,sass}')
     .pipe(sass({
