@@ -8,7 +8,7 @@ module.exports = {
   entry: path.join(__dirname, 'public/js/app.js'),
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public/js')
+    path: path.resolve(__dirname, 'public/dist/')
   },
   resolveLoader: {
     moduleExtensions: ['-loader']
