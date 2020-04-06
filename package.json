@@ -99,10 +99,9 @@
     "temp": "^0.9.1"
   },
   "devDependencies": {
-    "@babel/babelify": "^10.0.0",
+    "babelify": "^10.0.0",
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
-    "@babel/preset-es2015": "^6.24.1",
     "ajv": "^6.12.0",
     "ajv-keywords": "^3.4.1",
     "angular-mocks": "^1.7.9",
