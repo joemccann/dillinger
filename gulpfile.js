@@ -1,69 +1,32 @@
-// require('es6-promise').polyfill()
-// require('./gulp/all')
-
+// Load plugins
+const browsersync = require('browser-sync').create()
 const del = require('del')
 const gulp = require('gulp')
-const browserSync = require('browser-sync')
+const plumber = require('gulp-plumber')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.js')
-const NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
-const gutil = require('gulp-util')
+const webpackconfig = require('./webpack.config.js')
+const webpackstream = require('webpack-stream')
 
-const wp = (done) => {
-  const webpackProductionConfig = Object.assign(webpackConfig, {})
-
-  webpackProductionConfig.plugins = webpackProductionConfig
-    .plugins.concat(new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    new NGAnnotatePlugin({
-      add: true
-    }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true
-    })
-    )
-
-  return webpack(webpackProductionConfig, function (err, stats) {
-    if (err) {
-      throw new gutil.PluginError('webpack:dev', err)
-    }
-
-    gutil.log('[webpack:build]', stats.toString({
-      colors: true
-    }))
-
-    done()
-  })
+// Clean assets
+function clean () {
+  return del(['./public/dist/'])
 }
 
-const server = browserSync.create()
-
-const paths = {
-  scripts: {
-    src: 'public/',
-    dest: 'public/dist/'
-  }
+// Transpile, concatenate and minify scripts
+function scripts () {
+  return (
+    gulp
+      .src(['./public/js/**/*'])
+      .pipe(plumber())
+      .pipe(webpackstream(webpackconfig, webpack))
+      // folder only, filename is specified in webpack config
+      .pipe(gulp.dest('./public/dist/'))
+      .pipe(browsersync.stream())
+  )
 }
 
-const clean = () => del(['public/dist'])
+// define complex tasks
+const js = gulp.series(scripts)
+const build = gulp.series(clean, js)
 
-function reload (done) {
-  server.reload()
-  done()
-}
-
-function serve (done) {
-  server.init({
-    proxy: '127.0.0.1:8080'
-  })
-  done()
-}
-
-const watch = () => gulp.watch(paths.scripts.src, gulp.series(wp, reload))
-
-const dev = gulp.series(clean, wp, serve, watch)
-
-gulp.task('default', dev)
+gulp.task('default', build)
