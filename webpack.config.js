@@ -1,24 +1,20 @@
 const path = require('path')
 const webpack = require('webpack')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const NGAnnotatePlugin = require('ng-annotate-webpack-plugin')
 
 module.exports = {
   mode: 'production',
   cache: true,
-  entry: path.join(__dirname, 'public/js/app.js'),
+  entry: path.resolve(__dirname, './public/js/app.js'),
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public/dist/')
+    path: path.resolve(__dirname, './public/dist/')
   },
   resolveLoader: {
     moduleExtensions: ['-loader']
   },
   module: {
-    noParse: [
-      /brace/,
-      /angular/,
-      /autoit.js/
-    ],
+    noParse: (content) => /jquery|brace|angular|katek|autoit.js/.test(content),
     rules: [
       {
         test: /\.md$/i, // for importing the README.md
@@ -32,7 +28,7 @@ module.exports = {
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
-          options: { presets: ['@babel/preset-env'] }
+          options: { presets: ['@babel/preset-env'], compact: false }
         }
       },
       {
@@ -51,25 +47,8 @@ module.exports = {
       }
     ]
   },
-  optimization: {
-    minimizer: [
-      // we specify a custom UglifyJsPlugin here to get
-      // source maps in production
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        uglifyOptions: {
-          compress: false,
-          ecma: 6,
-          mangle: true
-        },
-        sourceMap: true
-      })
-    ]
-  },
   resolve: {
     modules: ['node_modules', 'plugins'],
-    extensions: ['.webpack.js', '.web.js', '.js'],
     alias: {
       angular: 'angular/angular',
       md: 'core/markdown-it'
@@ -81,6 +60,9 @@ module.exports = {
     }),
     new webpack.LoaderOptionsPlugin({
       debug: true
+    }),
+    new NGAnnotatePlugin({
+      add: true
     })
   ]
 }
