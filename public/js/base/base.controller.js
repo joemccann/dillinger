@@ -19,24 +19,29 @@ module.exports =
     ])
     .controller('Base', ($scope, $rootScope, userService, documentsService) => {
       $scope.profile = userService.profile
+
       $rootScope.currentDocument = documentsService.getCurrentDocument()
       $rootScope.editor = ace.edit('editor')
       $rootScope.viewSrcMode = false
-      $rootScope.editor.getSession().setMode('ace/mode/markdown')
       $rootScope.editor.setTheme('ace/theme/dillinger')
-      $rootScope.editor.getSession().setUseWrapMode(true)
       $rootScope.editor.setShowPrintMargin(false)
-      $rootScope.editor.getSession().setValue($rootScope.currentDocument.body)
       $rootScope.editor.setOption('minLines', 50)
       $rootScope.editor.setOption('maxLines', 90000)
       $rootScope.editor.session.$selectLongWords = true
 
+      const body = $rootScope.currentDocument.body.default ||
+      $rootScope.currentDocument.body
+
+      const session = $rootScope.editor.getSession()
+
+      session.setUseWrapMode(true)
+      session.setMode('ace/mode/markdown')
+
+      session.setValue(body)
+
       const updateDocument = function () {
-        $rootScope.currentDocument = documentsService.getCurrentDocument()
-        return $rootScope
-          .editor
-          .getSession()
-          .setValue($rootScope.currentDocument.body)
+        return session
+          .setValue(body)
       }
 
       $scope.updateDocument = updateDocument
