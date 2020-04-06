@@ -31,7 +31,7 @@ module.exports =
      *                           Date().getTime())
      */
       const getItemById = (id) => {
-        var tmp = null
+        let tmp = null
 
         angular.forEach(service.files, (file) => {
           if (file.id === id) {
@@ -180,7 +180,7 @@ module.exports =
      *    Append current value to cursor location.
      */
       const setCurrentCursorValue = (value) => {
-        var position = $rootScope.editor.getCursorPosition()
+        const position = $rootScope.editor.getCursorPosition()
         $rootScope.editor.getSession().insert(position, value)
         return value
       }
@@ -191,10 +191,10 @@ module.exports =
      *
      */
       const isBinaryFile = (text) => {
-        var len = text.length
-        var column = 0
+        const len = text.length
+        let column = 0
 
-        for (var i = 0; i < len; i++) {
+        for (let i = 0; i < len; i++) {
           column = (text.charAt(i) === '\n' ? 0 : column + 1)
           if (column > 500) {
             return true
@@ -212,10 +212,10 @@ module.exports =
      *
      */
       const mdFileReader = (file) => {
-        var reader = new window.FileReader()
+        const reader = new window.FileReader()
 
         reader.onload = (event) => {
-          var text = event.target.result
+          const text = event.target.result
 
           if (isBinaryFile(text)) {
             return diNotify({
@@ -225,7 +225,7 @@ module.exports =
           }
 
           // Create a new document.
-          var item = createItem()
+          const item = createItem()
           addItem(item)
           setCurrentDocument(item)
 
@@ -248,13 +248,13 @@ module.exports =
      *
      */
       const htmlFileReader = (file) => {
-        var reader = new window.FileReader()
+        const reader = new window.FileReader()
 
         reader.onload = (event) => {
-          var text = event.target.result
+          const text = event.target.result
 
           // Create a new document.
-          var item = createItem()
+          const item = createItem()
           addItem(item)
           setCurrentDocument(item)
 
@@ -276,7 +276,7 @@ module.exports =
      */
       const convertHTMLtoMD = (text) => {
       // Add page title
-        var di = diNotify({
+        const di = diNotify({
           message: 'Converting HTML to Markdown...',
           duration: 2500
         })
@@ -330,20 +330,20 @@ module.exports =
           return console.log('No file passed to importFile const.')
         }
 
-        var reader = new window.FileReader()
+        const reader = new window.FileReader()
 
         // If it is text or image or something else
         reader.onloadend = (event) => {
-          var data = event.target.result
+          const data = event.target.result
 
-          var firstFourBitsArray = (new Uint8Array(data)).subarray(0, 4)
+          const firstFourBitsArray = (new Uint8Array(data)).subarray(0, 4)
 
-          var type = ''
+          let type = ''
 
-          var header = ''
+          let header = ''
 
           // Snag hex value
-          for (var i = 0; i < firstFourBitsArray.length; i++) {
+          for (let i = 0; i < firstFourBitsArray.length; i++) {
             header += firstFourBitsArray[i].toString(16)
           }
 
@@ -395,12 +395,12 @@ module.exports =
      */
 
       const imageUploader = (file) => {
-        var reader = new window.window.FileReader()
+        const reader = new window.window.FileReader()
 
-        var name = file.name
+        const name = file.name
 
         reader.onloadend = () => {
-          var di = diNotify({
+          const di = diNotify({
             message: 'Uploading Image to Dropbox...',
             duration: 5000
           })
@@ -417,9 +417,9 @@ module.exports =
                 duration: 5000
               })
             } else {
-              var publicUrl = result.data.data.url
+              const publicUrl = result.data.data.url
               // Now take publicUrl and and wrap in markdown
-              var template = '![' + name + '](' + publicUrl + ')'
+              const template = '![' + name + '](' + publicUrl + ')'
               // Now take the ace editor cursor and make the current
               // value the template
               service.setCurrentCursorValue(template)
@@ -475,14 +475,15 @@ module.exports =
       }
 
       const init = () => {
-        var item, _ref
+        let item = null
+        let _ref = null
         service.files = angular.fromJson(window.localStorage.getItem('files')) || []
         service.currentDocument = angular.fromJson(window.localStorage.getItem('currentDocument')) || {}
         if (!((_ref = service.files) != null ? _ref.length : undefined)) {
-          item = this.createItem()
-          this.addItem(item)
-          this.setCurrentDocument(item)
-          return this.save()
+          item = createItem()
+          addItem(item)
+          setCurrentDocument(item)
+          return save()
         }
       }
       const service = {
