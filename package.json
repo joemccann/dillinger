@@ -44,7 +44,7 @@
     "nsolid": "3.x.x"
   },
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "angular-bootstrap": "^0.12.0",
     "body-parser": "^1.18.3",
     "body-scroll-lock": "^2.6.3",
