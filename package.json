@@ -148,7 +148,7 @@
     "karma-webpack": "^1.8.1",
     "memory-fs": "^0.2.0",
     "ng-annotate-webpack-plugin": "^0.1.3",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "pretty-hrtime": "^0.2.2",
     "raw-loader": "^0.5.1",
     "reaver": "^1.2.0",
