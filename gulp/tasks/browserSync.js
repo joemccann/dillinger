@@ -1,18 +1,17 @@
 
-'use strict';
+'use strict'
 
-var
-  browserSync = require('browser-sync'),
-  gulp        = require('gulp');
+const browserSync = require('browser-sync')
 
-gulp.task('browserSync', function() {
+const gulp = require('gulp')
+
+gulp.task('browserSync', function () {
   browserSync({
     files: ['views/**', 'public/**'],
-    proxy: 'dillinger.io:8090',
+    proxy: '127.0.0.1:8090',
     notify: true,
-    port: 80,
-    host: 'dillinger.io',
+    port: 8090,
+    host: '127.0.0.1',
     open: 'external'
-  });
-});
-
+  })
+})

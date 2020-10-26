@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "/node_modules/jquery-ui-bundle/jquery-ui.js",
+    "/node_modules/angular/angular.js",
+    "/node_modules/brace/index.js",
+    "/node_modules/katex/dist/katex.js",
+    "/node_modules"
+  ]
+}

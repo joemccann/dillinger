@@ -5,61 +5,67 @@
 'use strict'
 
 const config = require('./config')()
-  , connect = require('connect')
-  , methodOverride = require('method-override')
-  , logger = require('morgan')
-  , favicon = require('serve-favicon')
-  , compress = require('compression')
-  , bodyParser = require('body-parser')
-  , cookieParser = require('cookie-parser')
-  , cookieSession = require('cookie-session')
-  , express = require('express')
-  , netjet = require('netjet')
-  , routes = require('./routes')
-  , serveStatic = require('serve-static')
-  , errorHandler = require('errorhandler')
-  , path = require('path')
-  , fs = require('fs')
-  , app = express()
-  , core = require('./plugins/core/server.js')
-  , dropbox = require('./plugins/dropbox/server.js')
-  , bitbucket = require('./plugins/bitbucket/server.js')
-  , github = require('./plugins/github/server.js')
-  , medium = require('./plugins/medium/server.js')
-  , googledrive = require('./plugins/googledrive/server.js')
-  , onedrive = require('./plugins/onedrive/server.js')
-  , env = process.env.NODE_ENV || 'development';
+const methodOverride = require('method-override')
+const logger = require('morgan')
+const favicon = require('serve-favicon')
+const compress = require('compression')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
+const express = require('express')
+const netjet = require('netjet')
+const routes = require('./routes')
+const serveStatic = require('serve-static')
+const errorHandler = require('errorhandler')
+const path = require('path')
+const fs = require('fs')
+const app = express()
+const core = require('./plugins/core/server.js')
+const dropbox = require('./plugins/dropbox/server.js')
+const bitbucket = require('./plugins/bitbucket/server.js')
+const github = require('./plugins/github/server.js')
+const medium = require('./plugins/medium/server.js')
+const googledrive = require('./plugins/googledrive/server.js')
+const onedrive = require('./plugins/onedrive/server.js')
+const env = process.env.NODE_ENV || 'development'
 
-require('isomorphic-fetch') /* patch global fetch for dropbox module*/
+require('isomorphic-fetch') /* patch global fetch for dropbox module */
 
 app.set('port', process.env.PORT || 8080)
 app.set('bind-address', process.env.BIND_ADDRESS || 'localhost')
 
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'ejs')
 
-// // Required to trust GCP proxy for the
-// x-forwarded-by heading
-app.set('trust proxy', true) 
+// Required to trust GCP proxy for the x-forwarded-by heading
+app.set('trust proxy', true)
 
 // May not need to use favicon if using nginx for serving
 // static assets. Just comment it out below.
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')))
 
-if(env === 'development'){
+if (env === 'development') {
   app.use(logger('dev'))
-}
-else{
+} else {
   app.use(logger('short'))
 }
-if(env === 'production'){
-  app.use(require('connect-assets')({paths: ['public/js', 'public/css'], fingerprinting: true, build: false }));
+if (env === 'production') {
+  app.use(require('connect-assets')({
+    paths: ['public/js', 'public/css'],
+    fingerprinting: true,
+    build: false
+  }))
 }
 
 app.use(compress())
 
-app.use(bodyParser.json({limit: '512mb'}));
-app.use(bodyParser.urlencoded({limit: '512mb', extended: true}));
+app.use(bodyParser.json({
+  limit: '512mb'
+}))
+app.use(bodyParser.urlencoded({
+  limit: '512mb',
+  extended: true
+}))
 
 app.use(methodOverride())
 app.use(cookieParser('1337 h4x0r'))
@@ -69,8 +75,8 @@ app.use(cookieSession({
 }))
 
 // Let's 301 redirect to simply dillinger.io
-app.use(function forceLiveDomain(req, res, next) {
-  let host = req.get('Host');
+app.use(function forceLiveDomain (req, res, next) {
+  const host = req.get('Host')
   if (host === 'www.dillinger.io') {
     return res.redirect(301, 'http://dillinger.io' + req.originalUrl)
   }
@@ -79,12 +85,13 @@ app.use(function forceLiveDomain(req, res, next) {
 
 // Support for HTTP/2 Server Push
 app.use(netjet({
-  cache: { max: 100 }
+  cache: {
+    max: 100
+  }
 }))
 
-// May not need to use serveStatic if using nginx for serving
-// static assets. Just comment it out below.
-app.use(serveStatic(__dirname + '/public'))
+// We do need this in any environment that is not Now/Zeit
+app.use(serveStatic(path.join(__dirname, '/public')))
 
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'
@@ -109,11 +116,12 @@ app.locals.env = process.env.NODE_ENV
 // At startup time so sync is ok.
 app.locals.readme = fs.readFileSync(path.resolve(__dirname, './README.md'), 'utf-8')
 
-if ('development' == env) {
+if (env === 'development') {
   app.use(errorHandler())
 }
 
 app.get('/', routes.index)
+app.get('/privacy', routes.privacy)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
@@ -124,7 +132,7 @@ app.use(medium)
 app.use(googledrive)
 app.use(onedrive)
 
-app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + app.get('port'))
-    console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
+app.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'))
+  console.log('\nhttp://' + app.get('bind-address') + ':' + app.get('port') + '\n')
 })

@@ -1,16 +1,21 @@
+var csso, gulp, handleErrors, size
 
-var csso, gulp, handleErrors, size;
+gulp = require('gulp')
 
-gulp = require("gulp");
+csso = require('gulp-csso')
 
-csso = require("gulp-csso");
+size = require('gulp-size')
 
-size = require("gulp-size");
+handleErrors = require('../util/handleErrors')
 
-handleErrors = require("../util/handleErrors");
+gulp.task('cssminify', function () {
+  var dest
+  dest = './public/css'
+  return gulp.src('./public/css/app.css').on('error', handleErrors).pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
+})
 
-gulp.task("cssminify", function() {
-  var dest;
-  dest = "./public/css";
-  return gulp.src("./public/css/app.css").on("error", handleErrors).pipe(csso()).pipe(gulp.dest(dest)).pipe(size());
-});
+gulp.task('cssminify', function () {
+  var dest
+  dest = './public/css'
+  return gulp.src('./public/css/export.css').on('error', handleErrors).pipe(csso()).pipe(gulp.dest(dest)).pipe(size())
+})

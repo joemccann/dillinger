@@ -1,21 +1,21 @@
+'use strict'
+const gulp = require('gulp')
 
-var
-  gulp         = require("gulp"),
-  uncss        = require("gulp-uncss"),
-  size         = require("gulp-size"),
-  gulpif       = require("gulp-if"),
-  handleErrors = require("../util/handleErrors");
+const uncss = require('gulp-postcss')
 
-gulp.task("uncss", function() {
+const size = require('gulp-size')
 
-  var dest  = "public/test";
+const handleErrors = require('../util/handleErrors')
 
-  return gulp.src("public/css/app.css")
+gulp.task('uncss', function () {
+  const dest = 'public/test'
+
+  return gulp.src('public/css/app.css')
     .pipe(uncss({
-      html: ["http://localhost:8080"],
+      html: ['http://localhost:8080'],
       ignore: [/zen/, /document/, /modal/, /settings/, /button/, /btn/, /toggle/, /menu/, /sidebar/, /dropdown/, /ace/, /editor/, /sr/, /form/, /di/, /not/]
     }))
-    .on("error", handleErrors)
+    .on('error', handleErrors)
     .pipe(gulp.dest(dest))
-    .pipe(size());
-});
+    .pipe(size())
+})

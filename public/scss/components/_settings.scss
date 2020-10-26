@@ -48,6 +48,16 @@
   .has-checkbox {
     float: left;
   }
+  
+  form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  input {
+    width: 20%;
+  }
 
 // -------------------------------------
 //   Scaffolding

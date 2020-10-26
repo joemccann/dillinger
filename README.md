@@ -2,6 +2,8 @@
 
 [![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
 
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+
 Dillinger is a cloud-enabled, mobile-ready, offline-storage, AngularJS powered HTML5 Markdown editor.
 
   - Type some Markdown on the left
@@ -42,7 +44,7 @@ Dillinger uses a number of open source projects to work properly:
 * [node.js] - evented I/O for the backend
 * [Express] - fast node.js network app framework [@tjholowaychuk]
 * [Gulp] - the streaming build system
-* [Breakdance](http://breakdance.io) - HTML to Markdown converter
+* [Breakdance](https://breakdance.github.io/breakdance/) - HTML to Markdown converter
 * [jQuery] - duh
 
 And of course Dillinger itself is open source with a [public repository][dill]
@@ -74,7 +76,7 @@ Dillinger is currently extended with the following plugins. Instructions on how 
 | Plugin | README |
 | ------ | ------ |
 | Dropbox | [plugins/dropbox/README.md][PlDb] |
-| Github | [plugins/github/README.md][PlGh] |
+| GitHub | [plugins/github/README.md][PlGh] |
 | Google Drive | [plugins/googledrive/README.md][PlGd] |
 | OneDrive | [plugins/onedrive/README.md][PlOd] |
 | Medium | [plugins/medium/README.md][PlMe] |
@@ -86,7 +88,7 @@ Dillinger is currently extended with the following plugins. Instructions on how 
 Want to contribute? Great!
 
 Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantanously see your updates!
+Make a change in your file and instantaneously see your updates!
 
 Open your favorite Terminal and run these commands.
 
@@ -120,14 +122,14 @@ By default, the Docker will expose port 8080, so change this within the Dockerfi
 
 ```sh
 cd dillinger
-docker build -t joemccann/dillinger:${package.json.version}
+docker build -t <youruser>/dillinger:${package.json.version} .
 ```
 This will create the dillinger image and pull in the necessary dependencies. Be sure to swap out `${package.json.version}` with the actual version of Dillinger.
 
 Once done, run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8000 of the host to port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
 
 ```sh
-docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:${package.json.version}
+docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
 ```
 
 Verify the deployment by navigating to your server address in your preferred browser.

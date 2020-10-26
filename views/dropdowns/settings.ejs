@@ -31,6 +31,20 @@
     </a>
   </li>
   <% } %>
+  <li>
+    <a><form>
+      <span>Tab Size</span>
+      <input type="number" ng-model="tabsize" min="1" ng-change="user.storeTabSize()"></input>
+    </form></a>
+  </li>
+  <li>
+    <a><form>
+      <span>Keybindings</span>
+      <select ng-model="keybindings" ng-change="user.storeKeybindings()">
+        <option ng-repeat="(key, value) in allKeybindings" value="{{key}}">{{key}}</option>
+      </select>
+    </form></a>
+  </li>
   <!--
   <li>
     <a ng-click="user.toggleNightMode()">

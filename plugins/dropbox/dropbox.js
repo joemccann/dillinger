@@ -58,8 +58,8 @@ exports.Dropbox = (function() {
       })
 
     }, // end getRemoteAccessToken()
-    getAccountInfo: function(dropboxObj, cb) {
-      dbx.setAccessToken(dropboxObj);
+    getAccountInfo: function(token, cb) {
+      dbx.setAccessToken(token)
       dbx.usersGetCurrentAccount().then(function(user) {
         cb(null, user)
       }).catch(function(err) {
@@ -68,12 +68,11 @@ exports.Dropbox = (function() {
 
     }, // end getAccountInfo()
     fetchDropboxFile: function(req, res) {
-
       if (!req.session.isDropboxSynced) {
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
-
+      dbx.setAccessToken(req.session.dropbox.oauthtoken)
       var pathToMdFile = req.body.mdFile
       dbx.filesDownload({path: pathToMdFile}).then(function(doc) {
         // https://github.com/joemccann/dillinger/issues/64
@@ -83,8 +82,8 @@ exports.Dropbox = (function() {
         })
 
     },
-    searchForMdFiles: function(opts, cb) {
-      
+    searchForMdFiles: function(token, opts, cb) {
+      dbx.setAccessToken(token)
       var fileExts = opts.fileExts.split('|')
       , regExp = arrayToRegExp(fileExts)
       ;
@@ -115,7 +114,7 @@ exports.Dropbox = (function() {
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
-
+      dbx.setAccessToken(req.session.dropbox.oauthtoken)
       // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
       var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
       if (!path.extname(pathToMdFile))
@@ -133,7 +132,7 @@ exports.Dropbox = (function() {
         res.type('text/plain')
         return res.status(403).send("You are not authenticated with Dropbox.")
       }
-
+      dbx.setAccessToken(req.session.dropbox.oauthtoken)
         var pathToImage = '/Dillinger/_images/' + req.body.image_name
         , base64_data = req.body.fileContents.split(',')[1] // Is this thorough enough?
         , buffer = new Buffer(base64_data, 'base64')

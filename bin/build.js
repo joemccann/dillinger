@@ -3,42 +3,35 @@
 'use strict'
 
 const exec = require('child_process').execSync
-	, path = require('path')
-	, fs = require('fs')
-	, pkg = require('../package.json')
-	;
+const path = require('path')
+const fs = require('fs')
+const pkg = require('../package.json')
 
-let build = `docker build -t joemccann/dillinger:${pkg.version} . && \
-	docker push joemccann/dillinger:${pkg.version} `;
+const build = `docker build -t joemccann/dillinger:${pkg.version} . && \
+docker push joemccann/dillinger:${pkg.version} `
 
-let exec_opts = {
+const exec_opts = {
   cwd: path.join(__dirname, '..'),
   stdio: 'inherit'
 }
 
 const filenameProd = path.join(__dirname, '..', 'dillinger.k8s.production.yml')
 
-function updateKubeFile(filename){
+function updateKubeFile (filename) {
+  fs.readFile(filename, 'utf8',
+    function readfileCB (err, data) {
+      if (err) return console.error(err)
 
-	fs.readFile( filename, 'utf8', 
-		function readfileCB(err,data){
+      const pattern = /dillinger:([^\s]+)/ig
 
-		if(err) return console.error(err)
+      data = data.replace(pattern, `dillinger:${pkg.version}`)
 
-			let pattern = /dillinger:([^\s]+)/ig; 
+      fs.writeFile(filename, data, function writeFileCb (err, d) {
+        if (err) return console.error(err)
 
-			data = data.replace(pattern, `dillinger:${pkg.version}`)
-		
-			fs.writeFile(filename, data, function writeFileCb(err,d){
-
-			if(err) return console.error(err)
-
-			console.log(`\nUpdated Kubernetes deploy file: ${filename} to dillinger:${pkg.version}\n`)
-
-		}) // end write
-
-	}) // end read
-
+        console.log(`\nUpdated Kubernetes deploy file: ${filename} to dillinger:${pkg.version}\n`)
+      }) // end write
+    }) // end read
 }
 
 // Build the docker image...

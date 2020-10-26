@@ -1,13 +1,12 @@
 
-'use strict';
+'use strict'
 
-var
-  critical = require('critical'),
-  gulp = require('gulp');
+const critical = require('critical')
 
-gulp.task('critical', function() {
+const gulp = require('gulp')
 
-  var dest = './public';
+gulp.task('critical', function () {
+  const dest = './public'
 
   return critical.generateInline({
     base: dest,
@@ -17,6 +16,5 @@ gulp.task('critical', function() {
     width: 320,
     height: 480,
     minify: true
-  });
-  
-});
+  })
+})
