@@ -66,7 +66,7 @@
     "googleapis": "^2.1.5",
     "gulp-gzip": "^1.4.0",
     "gulp-tar": "^1.9.0",
-    "highlight.js": "^8.8.0",
+    "highlight.js": "^10.1.2",
     "inverseresize": "git+https://github.com/CCole/alsoResizeInverse.git",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.3.1",
