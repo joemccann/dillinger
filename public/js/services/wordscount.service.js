@@ -10,7 +10,6 @@ module.exports =
     words    = 0,
     time     = '',
     $preview = angular.element(document).find('#preview'),
-    text     = getTextInElement($preview[0]),
 
     service = {
       count: function() {
