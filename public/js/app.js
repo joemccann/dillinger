@@ -39,7 +39,6 @@
   require('./documents/documents.controller')
   require('./documents/delete-modal.controller')
   require('./services/wordscount.service')
-  require('./services/characterscount.service')
 
   // Plugin: Bitbucket
   require('./plugins/bitbucket/bitbucket.service')

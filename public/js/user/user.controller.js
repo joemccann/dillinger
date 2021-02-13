@@ -6,9 +6,8 @@ module.exports =
     .module('diUser', [
       'diUser.service',
       'diDocuments.service.wordcount',
-      'diDocuments.service.charactercount'
     ])
-    .controller('User', function ($rootScope, $scope, $timeout, $modal, userService, documentsService, wordsCountService, charactersCountService, debounce) {
+    .controller('User', function ($rootScope, $scope, $timeout, $modal, userService, documentsService, wordsCountService, debounce) {
       var vm = this
 
       vm.profile = userService.profile
@@ -95,7 +94,6 @@ module.exports =
       }
 
       $rootScope.$on('preview.updated', updateWords)
-      $rootScope.$on('preview.updated', updateCharacters)
       $rootScope.editor.on('paste', pasteDetected)
 
       $scope.allKeybindings = {
@@ -196,15 +194,10 @@ module.exports =
       }
 
       function updateWords () {
-        $rootScope.words = wordsCountService.count()
-
-        return $timeout(function () {
-          return $rootScope.$apply()
-        }, 0)
-      }
-
-      function updateCharacters () {
-        $rootScope.characters = charactersCountService.count()
+        var stat = wordsCountService.count()
+        $rootScope.words = stat.wordCount
+        $rootScope.readingTime = stat.readingTime
+        $rootScope.characters = stat.characterCount
 
         return $timeout(function () {
           return $rootScope.$apply()
