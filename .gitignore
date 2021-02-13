@@ -49,3 +49,5 @@ npm-debug.log
 
 # Vim
 *.swp
+
+.vercel
