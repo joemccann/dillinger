@@ -23,7 +23,7 @@
     "preversion": "gulp build --prod",
     "postversion": "bin/build.js",
     "build": "gulp build --prod",
-    "deploy": "vercel --docker",
+    "deploy": "ssh azure",
     "preinstall": "npx npm-force-resolutions"
   },
   "keywords": [
