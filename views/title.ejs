@@ -1,6 +1,9 @@
 <div class="header">
   <h2 class="title">Document Name</h2>
   <document-title></document-title>
-  <p ng-if="profile.enableWordsCount && !viewSrcMode" class="words">Words: <span class="counter" ng-bind="words"></span></p>
+  <p ng-if="profile.enableWordsCount && !viewSrcMode" class="words">
+      <span class="mr10">Reading Time: <span class="counter" ng-bind="readingTime"></span></span>
+      <span>Words: <span class="counter" ng-bind="words"></span></span>
+  </p>
   <p ng-if="profile.enableCharactersCount && !viewSrcMode" class="characters">Characters: <span class="counter" ng-bind="characters"></span></p>
 </div>

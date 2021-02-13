@@ -7,9 +7,8 @@ module.exports =
     'diDocuments.export',
     'diDocuments.controllers',
     'diDocuments.service.wordcount',
-    'diDocuments.service.charactercount'
   ])
-  .controller('Documents', function($scope, $timeout, $rootScope, $modal, userService, documentsService, debounce, wordsCountService, charactersCountService) {
+  .controller('Documents', function($scope, $timeout, $rootScope, $modal, userService, documentsService, debounce, wordsCountService) {
 
   var vm = this;
 
@@ -61,8 +60,11 @@ module.exports =
   function removeDocument(item) {
     var modalScope = $rootScope.$new();
     modalScope.item = item;
-    modalScope.wordCount = wordsCountService.count();
-    modalScope.characterCount = charactersCountService.count();
+    var stats = wordsCountService.count();
+
+    modalScope.wordCount = stats.wordCount;
+    modalScope.readingTime = stats.readingTime;
+    modalScope.characterCount = stats.characterCount;
 
     $modal.open({
       template: require('raw!../documents/delete-modal.directive.html'),

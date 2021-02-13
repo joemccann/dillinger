@@ -1,28 +1,26 @@
-
 'use strict';
 module.exports =
   angular
   .module('diDocuments.service.wordcount', [])
   .factory('wordsCountService', function($rootScope) {
 
+  var readingTime = require('reading-time');
+
   var
     words    = 0,
+    time     = '',
     $preview = angular.element(document).find('#preview'),
 
     service = {
       count: function() {
-        words = countWords(getTextInElement($preview[0]));
-        return words;
+        var stat = readingTime(text);
+        words = stat.words;
+        time = stat.text;
+        return { wordCount: words, readingTime: time, characterCount: text.length };
       }
     };
 
   //////////////////////////////
-
-  function countWords(str) {
-    var wrds;
-    wrds = str.replace(/W+/g, ' ').match(/\S+/g);
-    return wrds && wrds.length || 0;
-  }
 
   function getTextInElement(node) {
     var txt;
