@@ -13,6 +13,7 @@ module.exports =
 
     service = {
       count: function() {
+        var text = getTextInElement($preview[0]);
         var stat = readingTime(text);
         words = stat.words;
         time = stat.text;
