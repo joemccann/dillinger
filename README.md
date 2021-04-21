@@ -32,7 +32,7 @@ As [John Gruber] writes on the [Markdown site][df1]
 > looking like it's been marked up with tags
 > or formatting instructions.
 
-This text you see here is *actually- written in Markdown! To get a feel
+This text you see here is *actually* written in Markdown! To get a feel
 for Markdown's syntax, type some text into the left window and
 watch the results in the right.
 
