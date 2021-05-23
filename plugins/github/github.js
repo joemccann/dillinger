@@ -48,7 +48,7 @@ exports.Github = (function() {
 
   // String builder for auth url...
   function _buildAuthUrl(scope) {
-    return  'https://github.com/login/oauth/authorize?scope=' + scope + 
+    return  'https://github.com/login/oauth/authorize?scope=' + scope +
             '&redirect_uri=' + githubConfig.callback_url
   }
 
@@ -58,23 +58,26 @@ exports.Github = (function() {
       "Authorization" : "token " + req.session.github.oauth
     }
   }
-  
+
   function _buildAuth() {
     return {
       'user': githubConfig.client_id,
       'pass': githubConfig.client_secret,
       'sendImmediately': true
-    } 
-  }
-  
-  function _buildOptions(req,uri) {
-    return {
-        headers: _buildHeaders(req),
-        auth: _buildAuth(),
-        uri: uri
     }
   }
-  
+
+  function _buildOptions(req,uri) {
+    const options = {
+        headers: _buildHeaders(req),
+        uri: uri
+    }
+    if ( githubConfig.client_id && githubConfig.client_secret ) {
+      options.auth = _buildAuth();
+    }
+    return options
+  }
+
   return {
     isConfigured: isConfigEnabled,
     githubConfig: githubConfig,
@@ -313,7 +316,7 @@ exports.Github = (function() {
 
           if (isPrivateRepo) {
             d = JSON.parse(d)
-            jsonResp.data.content = (new Buffer(d.content, 'base64').toString('utf-8'))
+            jsonResp.data.content = (Buffer.from(d.content, 'base64').toString('utf-8'))
           }
 
           res.json(jsonResp)
@@ -354,7 +357,7 @@ exports.Github = (function() {
           message: message // Better commit messages?
         , path: path
         , branch: branch
-        , content: new Buffer(data.data).toString('base64')
+        , content: Buffer.from(data.data).toString('base64')
         , sha: sha
       };
 
@@ -368,7 +371,7 @@ exports.Github = (function() {
           // 200 = Updated
           // 201 = Created
           // 409 = Conflict
-          var data 
+          var data
           try{
             data = JSON.parse(d)
           }catch(e){
