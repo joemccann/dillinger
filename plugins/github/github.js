@@ -44,10 +44,7 @@ function arrayToRegExp(arr) {
 
 exports.Github = (function() {
 
-  var githubApi = 'https://api.github.com/'
-    , headers = {
-      "User-Agent": "X-Dillinger-App"
-    }
+  const githubApi = 'https://api.github.com/';
 
   // String builder for auth url...
   function _buildAuthUrl(scope) {
@@ -57,6 +54,13 @@ exports.Github = (function() {
             + githubConfig.callback_url
   }
 
+  function _buildHeaders(req) {
+    return {
+      "User-Agent"    : "X-Dillinger-App",
+      "Authorization" : "token " + req.session.github.oauth
+    }
+  }
+  
   return {
     isConfigured: isConfigEnabled,
     githubConfig: githubConfig,
@@ -72,11 +76,11 @@ exports.Github = (function() {
     },
     getUsername: function(req, res, cb) {
 
-      var uri = githubApi + 'user?access_token=' + req.session.github.oauth
+      var uri = githubApi + 'user';
 
       var options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req),
+        uri: uri
       }
 
       console.log('getting username from github')
@@ -99,7 +103,7 @@ exports.Github = (function() {
       if(req.session.github.scope == 'repo') {
         // If private access given, then can list all organization memberships.
         // https://developer.github.com/v3/orgs/#list-your-organizations
-        uri = githubApi + 'user/orgs?access_token=' + req.session.github.oauth
+        uri = githubApi + 'user/orgs'
       } else {
         // can only list public organization memberships.
         // https://developer.github.com/v3/orgs/#list-user-organizations
@@ -107,8 +111,8 @@ exports.Github = (function() {
       }
 
       var options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req),
+        uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -151,14 +155,13 @@ exports.Github = (function() {
       var uri;
 
       if (req.body.owner !== req.session.github.username) {
-        uri = githubApi + 'orgs/' + req.body.owner + '/repos?access_token=' + req.session.github.oauth
-      }
-      else {
-        uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
+        uri = githubApi + 'orgs/' + req.body.owner + '/repos?'
+      } else {
+        uri = githubApi + 'user/repos?'
       }
 
       if (isFinite(req.body.page) && +req.body.page > 1) {
-        uri += "&page=" + req.body.page
+        uri += "page=" + req.body.page
       }
 
       if (isFinite(req.body.per_page) && +req.body.per_page > 1) {
@@ -168,8 +171,8 @@ exports.Github = (function() {
       uri += "&type=owner"
 
       var options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req),
+        uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -215,11 +218,11 @@ exports.Github = (function() {
         + req.body.owner
         + '/'
         + req.body.repo
-        +'/branches?access_token=' + req.session.github.oauth
+        + '/branches'
 
       var options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req),
+        uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -249,12 +252,12 @@ exports.Github = (function() {
         + '/'
         + req.body.repo
         + '/git/trees/'
-        + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
+        + req.body.sha + '?recursive=1'
         ;
 
       options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req),
+        uri: uri
       };
 
       fileExts = req.body.fileExts.split("|");
@@ -290,13 +293,13 @@ exports.Github = (function() {
 
       // https://api.github.com/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132
       // If it is a private repo, we need to make an API call, because otherwise it is the raw file.
-      if (isPrivateRepo) {
-        uri += '?access_token=' + req.session.github.oauth
-      }
+      // if (isPrivateRepo) {
+      //   uri += '?access_token=' + req.session.github.oauth
+      // }
 
       var options = {
-        headers: headers
-      , uri: uri
+        headers: _buildHeaders(req), // TODO remove token for public repo?
+        uri: uri
       }
 
       request(options, function(e, r, d) {
@@ -351,7 +354,7 @@ exports.Github = (function() {
         message = data.message;
 
         uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path;
-        uri += '?access_token=' + req.session.github.oauth;
+        // uri += '?access_token=' + req.session.github.oauth;
 
         commit = {
           message: message // Better commit messages?
@@ -362,10 +365,10 @@ exports.Github = (function() {
       };
 
         options = {
-          headers: headers
-        , uri: uri
-        , method: "PUT"
-        , body: JSON.stringify(commit)
+          headers: _buildHeaders(req),
+          uri: uri,
+          method: "PUT",
+          body: JSON.stringify(commit)
         }
 
         request(options, function(e, r, d) {
