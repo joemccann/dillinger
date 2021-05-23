@@ -48,16 +48,30 @@ exports.Github = (function() {
 
   // String builder for auth url...
   function _buildAuthUrl(scope) {
-    return  'https://github.com/login/oauth/authorize?client_id='
-            + githubConfig.client_id
-            + '&scope=' + scope + '&redirect_uri='
-            + githubConfig.callback_url
+    return  'https://github.com/login/oauth/authorize?scope=' + scope + 
+            '&redirect_uri=' + githubConfig.callback_url
   }
 
   function _buildHeaders(req) {
     return {
       "User-Agent"    : "X-Dillinger-App",
       "Authorization" : "token " + req.session.github.oauth
+    }
+  }
+  
+  function _buildAuth() {
+    return {
+      'user': githubConfig.client_id,
+      'pass': githubConfig.client_secret,
+      'sendImmediately': true
+    } 
+  }
+  
+  function _buildOptions(req,uri) {
+    return {
+        headers: _buildHeaders(req),
+        auth: _buildAuth(),
+        uri: uri
     }
   }
   
@@ -77,11 +91,7 @@ exports.Github = (function() {
     getUsername: function(req, res, cb) {
 
       var uri = githubApi + 'user';
-
-      var options = {
-        headers: _buildHeaders(req),
-        uri: uri
-      }
+      const options = _buildOptions(req,uri);
 
       console.log('getting username from github')
 
@@ -110,10 +120,7 @@ exports.Github = (function() {
         uri = githubApi + 'users/' + req.session.github.username + '/orgs'
       }
 
-      var options = {
-        headers: _buildHeaders(req),
-        uri: uri
-      }
+      const options = _buildOptions(req,uri);
 
       request(options, function(e, r, d) {
         if (e) {
@@ -169,11 +176,7 @@ exports.Github = (function() {
       }
 
       uri += "&type=owner"
-
-      var options = {
-        headers: _buildHeaders(req),
-        uri: uri
-      }
+      const options = _buildOptions(req,uri)
 
       request(options, function(e, r, d) {
         if (e) {
@@ -220,10 +223,7 @@ exports.Github = (function() {
         + req.body.repo
         + '/branches'
 
-      var options = {
-        headers: _buildHeaders(req),
-        uri: uri
-      }
+      const options = _buildOptions(req,uri)
 
       request(options, function(e, r, d) {
         if (e) {
@@ -244,7 +244,7 @@ exports.Github = (function() {
     fetchTreeFiles: function(req, res) {
       // /repos/:user/:repo/git/trees/:sha
 
-      var uri, options, fileExts, regExp
+      var uri, fileExts, regExp
 
       uri = githubApi
         + 'repos/'
@@ -255,10 +255,7 @@ exports.Github = (function() {
         + req.body.sha + '?recursive=1'
         ;
 
-      options = {
-        headers: _buildHeaders(req),
-        uri: uri
-      };
+      const options = _buildOptions(req,uri);
 
       fileExts = req.body.fileExts.split("|");
       regExp = arrayToRegExp(fileExts);
@@ -297,10 +294,7 @@ exports.Github = (function() {
       //   uri += '?access_token=' + req.session.github.oauth
       // }
 
-      var options = {
-        headers: _buildHeaders(req), // TODO remove token for public repo?
-        uri: uri
-      }
+      const options = _buildOptions(req,uri); // TODO remove token for public repo?
 
       request(options, function(e, r, d) {
         if (e) {
@@ -365,8 +359,7 @@ exports.Github = (function() {
       };
 
         options = {
-          headers: _buildHeaders(req),
-          uri: uri,
+          ..._buildOptions(req,uri),
           method: "PUT",
           body: JSON.stringify(commit)
         }
