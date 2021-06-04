@@ -44,17 +44,38 @@ function arrayToRegExp(arr) {
 
 exports.Github = (function() {
 
-  var githubApi = 'https://api.github.com/'
-    , headers = {
-      "User-Agent": "X-Dillinger-App"
-    }
+  const githubApi = 'https://api.github.com/';
 
   // String builder for auth url...
   function _buildAuthUrl(scope) {
-    return  'https://github.com/login/oauth/authorize?client_id='
-            + githubConfig.client_id
-            + '&scope=' + scope + '&redirect_uri='
-            + githubConfig.callback_url
+    return  'https://github.com/login/oauth/authorize?scope=' + scope +
+            '&redirect_uri=' + githubConfig.callback_url
+  }
+
+  function _buildHeaders(req) {
+    return {
+      "User-Agent"    : "X-Dillinger-App",
+      "Authorization" : "token " + req.session.github.oauth
+    }
+  }
+
+  function _buildAuth() {
+    return {
+      'user': githubConfig.client_id,
+      'pass': githubConfig.client_secret,
+      'sendImmediately': true
+    }
+  }
+
+  function _buildOptions(req,uri) {
+    const options = {
+        headers: _buildHeaders(req),
+        uri: uri
+    }
+    if ( githubConfig.client_id && githubConfig.client_secret ) {
+      options.auth = _buildAuth();
+    }
+    return options
   }
 
   return {
@@ -72,12 +93,8 @@ exports.Github = (function() {
     },
     getUsername: function(req, res, cb) {
 
-      var uri = githubApi + 'user?access_token=' + req.session.github.oauth
-
-      var options = {
-        headers: headers
-      , uri: uri
-      }
+      var uri = githubApi + 'user';
+      const options = _buildOptions(req,uri);
 
       console.log('getting username from github')
 
@@ -99,17 +116,14 @@ exports.Github = (function() {
       if(req.session.github.scope == 'repo') {
         // If private access given, then can list all organization memberships.
         // https://developer.github.com/v3/orgs/#list-your-organizations
-        uri = githubApi + 'user/orgs?access_token=' + req.session.github.oauth
+        uri = githubApi + 'user/orgs'
       } else {
         // can only list public organization memberships.
         // https://developer.github.com/v3/orgs/#list-user-organizations
         uri = githubApi + 'users/' + req.session.github.username + '/orgs'
       }
 
-      var options = {
-        headers: headers
-      , uri: uri
-      }
+      const options = _buildOptions(req,uri);
 
       request(options, function(e, r, d) {
         if (e) {
@@ -151,14 +165,13 @@ exports.Github = (function() {
       var uri;
 
       if (req.body.owner !== req.session.github.username) {
-        uri = githubApi + 'orgs/' + req.body.owner + '/repos?access_token=' + req.session.github.oauth
-      }
-      else {
-        uri = githubApi + 'user/repos?access_token=' + req.session.github.oauth
+        uri = githubApi + 'orgs/' + req.body.owner + '/repos?'
+      } else {
+        uri = githubApi + 'user/repos?'
       }
 
       if (isFinite(req.body.page) && +req.body.page > 1) {
-        uri += "&page=" + req.body.page
+        uri += "page=" + req.body.page
       }
 
       if (isFinite(req.body.per_page) && +req.body.per_page > 1) {
@@ -166,11 +179,7 @@ exports.Github = (function() {
       }
 
       uri += "&type=owner"
-
-      var options = {
-        headers: headers
-      , uri: uri
-      }
+      const options = _buildOptions(req,uri)
 
       request(options, function(e, r, d) {
         if (e) {
@@ -215,12 +224,9 @@ exports.Github = (function() {
         + req.body.owner
         + '/'
         + req.body.repo
-        +'/branches?access_token=' + req.session.github.oauth
+        + '/branches'
 
-      var options = {
-        headers: headers
-      , uri: uri
-      }
+      const options = _buildOptions(req,uri)
 
       request(options, function(e, r, d) {
         if (e) {
@@ -241,7 +247,7 @@ exports.Github = (function() {
     fetchTreeFiles: function(req, res) {
       // /repos/:user/:repo/git/trees/:sha
 
-      var uri, options, fileExts, regExp
+      var uri, fileExts, regExp
 
       uri = githubApi
         + 'repos/'
@@ -249,13 +255,10 @@ exports.Github = (function() {
         + '/'
         + req.body.repo
         + '/git/trees/'
-        + req.body.sha + '?recursive=1&access_token=' + req.session.github.oauth
+        + req.body.sha + '?recursive=1'
         ;
 
-      options = {
-        headers: headers
-      , uri: uri
-      };
+      const options = _buildOptions(req,uri);
 
       fileExts = req.body.fileExts.split("|");
       regExp = arrayToRegExp(fileExts);
@@ -290,14 +293,11 @@ exports.Github = (function() {
 
       // https://api.github.com/octocat/Hello-World/git/blobs/44b4fc6d56897b048c772eb4087f854f46256132
       // If it is a private repo, we need to make an API call, because otherwise it is the raw file.
-      if (isPrivateRepo) {
-        uri += '?access_token=' + req.session.github.oauth
-      }
+      // if (isPrivateRepo) {
+      //   uri += '?access_token=' + req.session.github.oauth
+      // }
 
-      var options = {
-        headers: headers
-      , uri: uri
-      }
+      const options = _buildOptions(req,uri); // TODO remove token for public repo?
 
       request(options, function(e, r, d) {
         if (e) {
@@ -316,7 +316,7 @@ exports.Github = (function() {
 
           if (isPrivateRepo) {
             d = JSON.parse(d)
-            jsonResp.data.content = (new Buffer(d.content, 'base64').toString('utf-8'))
+            jsonResp.data.content = (Buffer.from(d.content, 'base64').toString('utf-8'))
           }
 
           res.json(jsonResp)
@@ -351,28 +351,27 @@ exports.Github = (function() {
         message = data.message;
 
         uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path;
-        uri += '?access_token=' + req.session.github.oauth;
+        // uri += '?access_token=' + req.session.github.oauth;
 
         commit = {
           message: message // Better commit messages?
         , path: path
         , branch: branch
-        , content: new Buffer(data.data).toString('base64')
+        , content: Buffer.from(data.data).toString('base64')
         , sha: sha
       };
 
         options = {
-          headers: headers
-        , uri: uri
-        , method: "PUT"
-        , body: JSON.stringify(commit)
+          ..._buildOptions(req,uri),
+          method: "PUT",
+          body: JSON.stringify(commit)
         }
 
         request(options, function(e, r, d) {
           // 200 = Updated
           // 201 = Created
           // 409 = Conflict
-          var data 
+          var data
           try{
             data = JSON.parse(d)
           }catch(e){
