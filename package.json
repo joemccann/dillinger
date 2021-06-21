@@ -74,7 +74,7 @@
     "jquery-ui-bundle": "^1.12.1",
     "katex": "^0.9.0",
     "keymaster": "^1.6.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "markdown-it": "^4.4.0",
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-checkbox": "^1.1.0",
