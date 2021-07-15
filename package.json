@@ -45,7 +45,7 @@
     "nsolid": "3.x.x"
   },
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "angular-bootstrap": "^0.12.0",
     "body-parser": "^1.18.3",
     "body-scroll-lock": "^2.6.3",
@@ -71,7 +71,7 @@
     "highlight.js": "^10.4.1",
     "inverseresize": "git+https://github.com/CCole/alsoResizeInverse.git",
     "isomorphic-fetch": "^2.2.1",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "jquery-ui-bundle": "^1.12.1",
     "katex": "^0.9.0",
     "keymaster": "^1.6.2",
