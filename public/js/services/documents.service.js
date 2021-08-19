@@ -227,14 +227,8 @@ module.exports =
      *
      */
       function isBinaryFile (text) {
-        var len = text.length
-        var column = 0
-
-        for (var i = 0; i < len; i++) {
-          column = (text.charAt(i) === '\n' ? 0 : column + 1)
-          if (column > 500) {
-            return true
-          }
+        if (/[\x00-\x09\x0E-\x1F]/.test(text)) {
+          return true
         }
 
         return false
