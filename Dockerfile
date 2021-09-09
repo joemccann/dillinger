@@ -3,7 +3,7 @@ FROM nodesource/nsolid:latest
 LABEL maintainer "Joe McCann <joe@subprint.com>"
 
 # Install our dependencies (libfontconfig for phantomjs)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
   bzip2 \
   ca-certificates \
   curl \
