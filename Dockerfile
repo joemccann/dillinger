@@ -1,7 +1,7 @@
 FROM nodesource/nsolid:latest
 
 LABEL maintainer "Joe McCann <joe@subprint.com>"
-
+WORKDIR /dillinger
 # Install our dependencies (libfontconfig for phantomjs)
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
   bzip2 \
@@ -64,7 +64,7 @@ COPY . .
 
 RUN echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
 RUN adduser --disabled-password --gecos '' dillinger
-RUN chown -R dillinger:dillinger /public
+RUN chown -R dillinger:dillinger public
 USER dillinger
 
 EXPOSE 8080
