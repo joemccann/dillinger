@@ -21,7 +21,7 @@ if (fs.existsSync(githubConfigFile)) {
     "callback_url": process.env.github_callback_url
   };
   isConfigEnabled = true;
-  console.log('Github config found in environment. Plugin enabled. (Key: "' + githubConfig.client_id +'")');
+  console.log('Github config found in environment. Plugin enabled. (Key: "' + githubConfig.client_id + '")');
 } else if (process.env.github_access_token !== undefined) {
   githubConfig = {
     "access_token": process.env.github_access_token
@@ -31,31 +31,31 @@ if (fs.existsSync(githubConfigFile)) {
 } else {
   githubConfig = {
     "client_id": "YOUR_ID"
-  , "redirect_uri": "http://dillinger.io/"
-  , "client_secret": "YOUR_SECRET"
-  , "callback_url": "http://dillinger.io/oauth/github"
+    , "redirect_uri": "http://dillinger.io/"
+    , "client_secret": "YOUR_SECRET"
+    , "callback_url": "http://dillinger.io/oauth/github"
   }
   console.warn('Github config not found at ' + githubConfigFile + '. Plugin disabled.')
 }
 
 function arrayToRegExp(arr) {
-  return new RegExp("(" + arr.map(function(e) { return e.replace('.','\\.'); }).join('|') + ")$", 'i');
+  return new RegExp("(" + arr.map(function (e) { return e.replace('.', '\\.'); }).join('|') + ")$", 'i');
 }
 
-exports.Github = (function() {
+exports.Github = (function () {
 
   const githubApi = 'https://api.github.com/';
 
   // String builder for auth url...
   function _buildAuthUrl(scope) {
-    return  'https://github.com/login/oauth/authorize?scope=' + scope +
-            '&redirect_uri=' + githubConfig.callback_url
+    return 'https://github.com/login/oauth/authorize?client_id=' + githubConfig.client_id + '&scope=' + scope +
+      '&redirect_uri=' + githubConfig.callback_url
   }
 
   function _buildHeaders(req) {
     return {
-      "User-Agent"    : "X-Dillinger-App",
-      "Authorization" : "token " + req.session.github.oauth
+      "User-Agent": "X-Dillinger-App",
+      "Authorization": "token " + req.session.github.oauth
     }
   }
 
@@ -67,13 +67,10 @@ exports.Github = (function() {
     }
   }
 
-  function _buildOptions(req,uri) {
+  function _buildOptions(req, uri) {
     const options = {
-        headers: _buildHeaders(req),
-        uri: uri
-    }
-    if ( githubConfig.client_id && githubConfig.client_secret ) {
-      options.auth = _buildAuth();
+      headers: _buildHeaders(req),
+      uri: uri
     }
     return options
   }
@@ -81,24 +78,24 @@ exports.Github = (function() {
   return {
     isConfigured: isConfigEnabled,
     githubConfig: githubConfig,
-    generateAuthUrl: function(req, res) {
+    generateAuthUrl: function (req, res) {
 
       var scope = 'public_repo' // Default scope.
-      if(req.query.scope === 'repo') {
+      if (req.query.scope === 'repo') {
         scope = 'repo';
       }
 
       return _buildAuthUrl(scope)
 
     },
-    getUsername: function(req, res, cb) {
+    getUsername: function (req, res, cb) {
 
       var uri = githubApi + 'user';
-      const options = _buildOptions(req,uri);
+      const options = _buildOptions(req, uri);
 
       console.log('getting username from github')
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
         if (e) {
           console.error(e)
           return res.redirect(r.statusCode)
@@ -111,9 +108,9 @@ exports.Github = (function() {
       }) // end request.get()
 
     }, // end getUsername
-    fetchOrgs: function(req, res) {
+    fetchOrgs: function (req, res) {
       var uri;
-      if(req.session.github.scope == 'repo') {
+      if (req.session.github.scope == 'repo') {
         // If private access given, then can list all organization memberships.
         // https://developer.github.com/v3/orgs/#list-your-organizations
         uri = githubApi + 'user/orgs'
@@ -123,9 +120,9 @@ exports.Github = (function() {
         uri = githubApi + 'users/' + req.session.github.username + '/orgs'
       }
 
-      const options = _buildOptions(req,uri);
+      const options = _buildOptions(req, uri);
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
         if (e) {
           res.send({
             error: 'Request error.',
@@ -137,14 +134,14 @@ exports.Github = (function() {
 
           d = JSON.parse(d)
 
-          d.forEach(function(el) {
+          d.forEach(function (el) {
 
             // Right now GitHub does not display a "Company Name" in user/orgs API route
             // Hopefully they will add it in later, for now use "login" name.
 
             var item = {
               url: el.url
-            , name: el.login
+              , name: el.login
             }
 
             set.push(item)
@@ -160,7 +157,7 @@ exports.Github = (function() {
 
     }, // end fetchOrgs
 
-    fetchRepos: function(req, res) {
+    fetchRepos: function (req, res) {
 
       var uri;
 
@@ -179,9 +176,9 @@ exports.Github = (function() {
       }
 
       uri += "&type=owner"
-      const options = _buildOptions(req,uri)
+      const options = _buildOptions(req, uri)
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
         if (e) {
           res.send({
             error: 'Request error.',
@@ -193,14 +190,14 @@ exports.Github = (function() {
 
           d = JSON.parse(d)
 
-          d.forEach(function(el) {
+          d.forEach(function (el) {
 
             var item = {
               url: el.url
-            , name: el.name
-            , private: el.private
-            // future property we will need to pass so we can know whether we can "write" to repo
-            //, permissions: el.permissions
+              , name: el.name
+              , private: el.private
+              // future property we will need to pass so we can know whether we can "write" to repo
+              //, permissions: el.permissions
             }
 
             set.push(item)
@@ -217,7 +214,7 @@ exports.Github = (function() {
         }
       }) // end request callback
     }, // end fetchRepos
-    fetchBranches: function(req, res) {
+    fetchBranches: function (req, res) {
 
       var uri = githubApi
         + 'repos/'
@@ -226,13 +223,13 @@ exports.Github = (function() {
         + req.body.repo
         + '/branches'
 
-      const options = _buildOptions(req,uri)
+      const options = _buildOptions(req, uri)
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
         if (e) {
           res.send({
             error: 'Request error.'
-          , d: r.statusCode
+            , d: r.statusCode
           })
         }
         else if (!e && r.statusCode === 200) {
@@ -244,7 +241,7 @@ exports.Github = (function() {
       }) // end request callback
 
     }, // end fetchBranches
-    fetchTreeFiles: function(req, res) {
+    fetchTreeFiles: function (req, res) {
       // /repos/:user/:repo/git/trees/:sha
 
       var uri, fileExts, regExp
@@ -258,17 +255,17 @@ exports.Github = (function() {
         + req.body.sha + '?recursive=1'
         ;
 
-      const options = _buildOptions(req,uri);
+      const options = _buildOptions(req, uri);
 
       fileExts = req.body.fileExts.split("|");
       regExp = arrayToRegExp(fileExts);
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
 
         if (e) {
           res.send({
             error: 'Request error.'
-          , data: r.statusCode
+            , data: r.statusCode
           })
         }
         else if (!e && r.statusCode === 200) {
@@ -276,7 +273,7 @@ exports.Github = (function() {
           d.branch = req.body.branch // inject branch info
 
           // overwrite d.tree to only return items that match regexp
-          d.tree = d.tree.filter(function(item) { return regExp.test(item.path) });
+          d.tree = d.tree.filter(function (item) { return regExp.test(item.path) });
 
           res.json(d)
         } // end else if
@@ -286,7 +283,7 @@ exports.Github = (function() {
       }) // end request callback
 
     }, // end fetchTreeFiles
-    fetchFile: function(req, res) {
+    fetchFile: function (req, res) {
 
       var uri = req.body.url
         , isPrivateRepo = /blob/.test(uri)
@@ -297,15 +294,15 @@ exports.Github = (function() {
       //   uri += '?access_token=' + req.session.github.oauth
       // }
 
-      const options = _buildOptions(req,uri); // TODO remove token for public repo?
+      const options = _buildOptions(req, uri); // TODO remove token for public repo?
 
-      request(options, function(e, r, d) {
+      request(options, function (e, r, d) {
         if (e) {
           console.error(e)
 
           res.send({
             error: 'Request error.'
-          , data: r.statusCode
+            , data: r.statusCode
           })
         }
         else if (!e && r.statusCode === 200) {
@@ -329,7 +326,7 @@ exports.Github = (function() {
 
     }, // end fetchFile
 
-    saveToGithub: function(req, res) {
+    saveToGithub: function (req, res) {
       var data = req.body
       if (!data.uri) {
         res.json(400, { "error": "Requires Github URI" })
@@ -338,16 +335,16 @@ exports.Github = (function() {
         // uri = "https://api.github.com/repos/:owner/:repo/contents/:path"
         var
           commit, options, uri, owner,
-          repo,   branch,  sha, message,
+          repo, branch, sha, message,
           isPrivateRepo;
 
         isPrivateRepo = /blob/.test(data.uri);
 
-        branch  = data.branch;
-        path    = data.path;
-        sha     = data.sha;
-        repo    = data.repo;
-        owner   = data.owner;
+        branch = data.branch;
+        path = data.path;
+        sha = data.sha;
+        repo = data.repo;
+        owner = data.owner;
         message = data.message;
 
         uri = githubApi + "repos/" + owner + '/' + repo + '/contents/' + path;
@@ -355,26 +352,26 @@ exports.Github = (function() {
 
         commit = {
           message: message // Better commit messages?
-        , path: path
-        , branch: branch
-        , content: Buffer.from(data.data).toString('base64')
-        , sha: sha
-      };
+          , path: path
+          , branch: branch
+          , content: Buffer.from(data.data).toString('base64')
+          , sha: sha
+        };
 
         options = {
-          ..._buildOptions(req,uri),
+          ..._buildOptions(req, uri),
           method: "PUT",
           body: JSON.stringify(commit)
         }
 
-        request(options, function(e, r, d) {
+        request(options, function (e, r, d) {
           // 200 = Updated
           // 201 = Created
           // 409 = Conflict
           var data
-          try{
+          try {
             data = JSON.parse(d)
-          }catch(e){
+          } catch (e) {
             return res.status(400).json({ "error": "Unable to save file: " + (e || data.message) })
           }
           // In case the sha doesn't match...
