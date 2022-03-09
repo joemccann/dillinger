@@ -2,11 +2,10 @@ version: '3'
 services:
   dillinger:
     build: .
-    volumes:
-      - ./:/dillinger
+    container_name: dillinger
+    image: joemccann/dillinger
     ports:
       - "9000:9000"
     environment:
       - "BIND_ADDRESS=0.0.0.0"
       - "PORT=9000"
-    command: "tail -f /dev/null"
