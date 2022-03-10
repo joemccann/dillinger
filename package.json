@@ -24,7 +24,10 @@
     "postversion": "bin/build.js",
     "build": "gulp build --prod",
     "deploy": "ssh azure",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.9"
   },
   "keywords": [
     "dillinger",
@@ -41,7 +44,7 @@
     "url": "git://github.com/joemccann/dillinger"
   },
   "engines": {
-    "node": "14.x.x",
+    "node": "10.x.x",
     "nsolid": "3.x.x"
   },
   "dependencies": {
@@ -66,6 +69,7 @@
     "express": "^4.13.3",
     "googleapis": "^39.1.0",
     "graceful-fs": "4.2.2",
+    "gulp-cli": "^2.3.0",
     "gulp-gzip": "^1.4.0",
     "gulp-tar": "^1.9.0",
     "highlight.js": "^10.4.1",
