@@ -1,36 +1,4 @@
-#!/usr/bin/env node
-
-'use strict'
-
-const exec = require('child_process').execSync
-const path = require('path')
-const fs = require('fs')
-const pkg = require('../package.json')
-
-const build = `docker build -t joemccann/dillinger:${pkg.version} . && \
-docker push joemccann/dillinger:${pkg.version} `
-
-const exec_opts = {
-  cwd: path.join(__dirname, '..'),
-  stdio: 'inherit'
-}
-
-const filenameProd = path.join(__dirname, '..', 'dillinger.k8s.production.yml')
-
-function updateKubeFile (filename) {
-  fs.readFile(filename, 'utf8',
-    function readfileCB (err, data) {
-      if (err) return console.error(err)
-
-      const pattern = /dillinger:([^\s]+)/ig
-
-      data = data.replace(pattern, `dillinger:${pkg.version}`)
-
-      fs.writeFile(filename, data, function writeFileCb (err, d) {
-        if (err) return console.error(err)
-
-        console.log(`\nUpdated Kubernetes deploy file: ${filename} to dillinger:${pkg.version}\n`)
-     
+ 
 -        Department of the Treasury        Calendar Year                                                        Period Ending        9/29/2021                                                                                                                                        
 -        Internal Revenue Service        Due 04/18/2022                2022 Form 1040-ES Payment Voucher 1                                        Pay Day        1/30/2022                                                                                                                                        
 -        MOUNTAIN VIEW, C.A., 94043                                                                                                                                                                                                                
@@ -22171,9 +22139,3 @@ index e66f6d941d8c..804a12ec8f37 100644
  We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.- a padding to disable MSIE and Chrome friendly error page -->
 <!-- a padding to disable MSIE and Chrome friendly error page -->
 <!-- a padding to disable MSIE and Chrome friendly error page -->
-// Build the docker image...
-exec(build, exec_opts)
-
-// Now let's update our Kubernetes deployment files to the latest
-// version of the docker image
-updateKubeFile(filenameProd)
