@@ -12,25 +12,6 @@ const md = require('markdown-it')({
     }
   }
 })
-/*
-  change to Katex for math rendering
- */
-md.use(require('markdown-it-math'), {
-  inlineRenderer: function (str) {
-    try {
-      return '<span class="math inline">' + katex.renderToString(str) + '</span>'
-    } catch (e) {
-      return '<span class="math inline">' + e + '</span>'
-    }
-  },
-  blockRenderer: function (str) {
-    try {
-      return '<span class="math block">' + katex.renderToString(str) + '</span>'
-    } catch (e) {
-      return '<span class="math block">' + e + '</span>'
-    }
-  }
-})
 
 md
   .use(require('markdown-it-toc'))
@@ -42,6 +23,11 @@ md
   .use(require('markdown-it-ins'))
   .use(require('markdown-it-abbr'))
   .use(require('markdown-it-checkbox'))
+  .use(require('markdown-it-texmath'), { 
+    engine: require('katex'),
+    delimiters: 'dollars' 
+  })
+
 
 md.renderer.rules.table_open = function (
   tokens, idx, options, env, self
