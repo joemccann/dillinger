@@ -90,6 +90,7 @@
     "markdown-it-math": "^3.0.2",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "markdown-it-texmath": "^1.0.0",
     "markdown-it-toc": "^1.1.0",
     "md-to-pdf": "^5.0.0",
     "medium-sdk": "0.0.4",
