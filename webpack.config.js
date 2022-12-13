@@ -6,6 +6,7 @@ const webpack = require('webpack')
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
+// TODO - This generates files that should not necessarily be committed, move entry to dist/ ?
 module.exports = {
   mode: 'production',
   cache: true,

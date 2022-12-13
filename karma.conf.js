@@ -28,9 +28,10 @@ module.exports = function(config) {
     colors:    true,
     logLevel:  config.LOG_INFO,
     autoWatch: true,
-    browsers:  ['PhantomJS'],
+    browsers:  ['ChromeHeadless'],
+    autoWatch: false,
     plugins: [
-      'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
       'karma-jasmine-jquery',
       'karma-jasmine',
       'karma-webpack' 

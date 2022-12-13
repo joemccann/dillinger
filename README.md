@@ -56,14 +56,18 @@ And of course Dillinger itself is open source with a [public repository][dill]
 
 ## Installation
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
+Dillinger requires [Node.js](https://nodejs.org/) ^14.21.1 to run, and may not run correctly with Node 15+.
+
+It is recommended to use [Node Version Manager](https://github.com/nvm-sh/nvm) to manage multiple Node versions.
 
 Install the dependencies and devDependencies and start the server.
+
+Clone this repository, then...
 
 ```sh
 cd dillinger
 npm i
-node app
+npm run start
 ```
 
 For production environments...
@@ -99,20 +103,24 @@ Open your favorite Terminal and run these commands.
 First Tab:
 
 ```sh
-node app
+npm run start
 ```
 
 Second Tab:
 
 ```sh
-gulp watch
+npm run watch
 ```
 
-(optional) Third:
+### Testing
+
+To run tests:
 
 ```sh
-karma test
+npm run test
 ```
+
+(Note: At time of writing, I believe the DropBox, Google Drive, etc. services will fail their tests if not configured. TODO: ignore test if not configured?)
 
 #### Building for source
 
