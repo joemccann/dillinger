@@ -91,7 +91,11 @@ app.use(netjet({
 }))
 
 // We do need this in any environment that is not Now/Zeit
-app.use(serveStatic(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/dist', express.static(path.join(__dirname, 'public/dist')))
+
+// Add this line to serve node_modules/brace/theme directly
+app.use('/theme-github.js', express.static(path.join(__dirname, 'node_modules/brace/theme/github.js')))
 
 // Setup local variables to be available in the views.
 app.locals.title = config.title || 'Dillinger.'

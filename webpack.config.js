@@ -1,21 +1,18 @@
 'use strict'
 
 const path = require('path')
-
 const webpack = require('webpack')
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
 module.exports = {
-  mode: 'production',
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   cache: true,
-  entry: path.join(__dirname, 'public/js/app.js'),
-  output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public/js')
+  entry: {
+    app: './public/js/app.js'
   },
-  resolveLoader: {
-    moduleExtensions: ['-loader']
+  output: {
+    path: path.join(__dirname, 'public/dist'),
+    filename: '[name].js',
+    publicPath: '/'
   },
   module: {
     noParse: [
@@ -26,56 +23,41 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: { presets: ['es2015'] }
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015']
         }
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader' // creates style nodes from JS strings
-          },
-          {
-            loader: 'css-loader' // translates CSS into CommonJS
-          },
-          {
-            loader: 'sass-loader' // compiles Sass to CSS
-          }
-        ]
       }
     ]
   },
+  resolveLoader: {
+    moduleExtensions: ['-loader']
+  },
   optimization: {
-    minimizer: [
-      // we specify a custom UglifyJsPlugin here to get source maps in production
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        uglifyOptions: {
-          compress: false,
-          ecma: 6,
-          mangle: true
-        },
-        sourceMap: true
-      })
-    ]
+    minimize: false
   },
   resolve: {
     modules: ['node_modules', 'plugins'],
-    extensions: ['.webpack.js', '.web.js', '.js'],
+    extensions: ['.js'],
     alias: {
       angular: 'angular/angular',
-      md: 'core/markdown-it'
+      md: 'core/markdown-it',
+      ace: 'brace'
     }
   },
   plugins: [
     new webpack.ProvidePlugin({
-      angular: 'exports-loader?angular!angular'
+      angular: 'exports-loader?angular!angular',
+      ace: ['brace', 'ace']
     }),
     new webpack.LoaderOptionsPlugin({
       debug: true
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      }
     })
   ]
 }

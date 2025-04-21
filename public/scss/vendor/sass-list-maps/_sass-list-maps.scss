@@ -148,8 +148,7 @@
 }
 
 // new as of 0.9.9: map-pretty()
-$cr: '
-';
+$cr: '\n';
 $tab: '  ';
 @function map-pretty($list, $level: 1) {
   @if length($list) == 1 { $list: list-map-check($list...); }

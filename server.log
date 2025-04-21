@@ -1,0 +1,14 @@
+
+> dillinger@3.39.1 start
+> node app.js
+
+Dropbox config found in environment. Plugin enabled. (Key: "vzr6d2k948cjb92")
+Medium config found in environment. Plugin enabled.
+Sponsored config found in file. Plugin enabled. (URL: "CVADP53W")
+GoogleAnalytics config found in file. Plugin enabled. (UAID: "UA-3312370-15")
+(node:35534) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Express server listening on port 8080
+
+http://localhost:8080
+

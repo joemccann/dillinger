@@ -1,20 +1,35 @@
-
 'use strict'
 
+const gulp = require('gulp')
 const critical = require('critical')
 
-const gulp = require('gulp')
+function criticalTask(cb) {
+  // Skip critical CSS generation in development
+  if (!global.isProduction) {
+    return cb()
+  }
 
-gulp.task('critical', function () {
-  const dest = './public'
+  const dest = './public/dist'
 
-  return critical.generateInline({
-    base: dest,
-    src: 'index.html',
-    styleTarget: 'app.css',
-    htmlTarget: 'index.html',
-    width: 320,
-    height: 480,
-    minify: true
+  return critical.generate({
+    base: './public/',  // Changed base directory
+    src: 'views/index.ejs',  // Changed to look for the EJS template
+    css: ['css/app.css'],  // Updated CSS path
+    target: {
+      css: 'dist/critical.css',
+      html: 'dist/index.html'
+    },
+    width: 1300,
+    height: 900,
+    minify: true,
+    ignore: ['@font-face', /url\(/]  // Ignore font-face and url references
+  }).catch(err => {
+    console.error('Critical CSS error:', err)
+    // Don't fail the build on critical CSS error
+    cb()
   })
-})
+}
+
+gulp.task('critical', criticalTask)
+
+module.exports = criticalTask

@@ -1,18 +1,26 @@
-
 'use strict'
 
 const gulp = require('gulp')
 
-const sequence = require('run-sequence')
+// Define build task function
+function buildTask(cb) {
+  // Check if we're in production mode
+  const isProduction = global.isProduction
 
-const devTasks = ['webpack:dev', 'sass']
+  // Define the sequence of tasks
+  const buildTasks = gulp.series(
+    'clean',
+    gulp.parallel(
+      'sass',
+      isProduction ? 'webpack:build' : 'webpack:dev'
+    )
+  )
 
-const buildTasks = ['webpack:build', 'sass']
-
-if (global.isProduction) {
-  gulp.task('build', function () {
-    return sequence(buildTasks)
-  })
-} else {
-  gulp.task('build', devTasks)
+  // Run the build sequence
+  return buildTasks(cb)
 }
+
+// Register build task
+gulp.task('build', buildTask)
+
+module.exports = buildTask

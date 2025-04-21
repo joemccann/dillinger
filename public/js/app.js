@@ -1,5 +1,9 @@
-
 'use strict';
+
+// Set up ace/brace before anything else
+var ace = require('brace');
+require('brace/mode/markdown');
+window.ace = ace;  // Make ace globally available
 
 (function (window, document) {
   var angular
@@ -73,6 +77,9 @@
   // Notifications
   require('./services/notification.service')
 
+  // Ads
+  require('./services/ads.service')
+
   // Zen Mode
   require('./zen-mode/zen-mode.controller')
   require('./zen-mode/zen-mode-toggle.directive')
@@ -90,6 +97,7 @@
     'diUser',
     'diZenMode',
     'diFileImport',
+    'diAds.service',
     'plugins.bitbucket',
     'plugins.github',
     'plugins.dropbox',

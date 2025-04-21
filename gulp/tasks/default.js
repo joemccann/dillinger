@@ -1,6 +1,13 @@
-
 'use strict'
 
 const gulp = require('gulp')
 
-gulp.task('default', ['build'])
+// Update to Gulp 4 task syntax
+function defaultTask(cb) {
+  // Add your default task logic here
+  cb()
+}
+
+gulp.task('default', defaultTask)
+
+module.exports = defaultTask
