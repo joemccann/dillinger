@@ -89,8 +89,7 @@ const fetchPdf = async (req, res) => {
   }
 
   res.contentType('application/pdf')
-  res.send(content)
-  res.end('The PDF file was sent')
+  res.send(Buffer.from(content))
 }
 
 // Convert HTML to MD
