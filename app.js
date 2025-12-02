@@ -4,6 +4,8 @@
 
 'use strict'
 
+require('dotenv').config()
+
 const config = require('./config')()
 const methodOverride = require('method-override')
 const logger = require('morgan')

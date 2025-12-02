@@ -27,7 +27,7 @@
     "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions"
   },
   "resolutions": {
-    "graceful-fs": "^4.2.11"
+    "graceful-fs": "4.2.11"
   },
   "keywords": [
     "dillinger",
@@ -62,6 +62,7 @@
     "cookie-session": "^1.2.0",
     "debug": "^2.2.0",
     "depd": "^1.1.0",
+    "dotenv": "^17.2.3",
     "dropbox": "^3.0.5",
     "ejs": "^2.7.2",
     "errorhandler": "^1.4.2",

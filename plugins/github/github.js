@@ -4,16 +4,21 @@ var fs = require('fs')
   , url = require('url')
   , parse = require('parse-link-header')
 
-var githubConfigFile = path.resolve(__dirname, '../../configs/github/', 'github-config.json')
-  , githubConfig = {}
+var githubConfig = {}
   , isConfigEnabled = false
 
 // ^^^helps with the home page view; should we show the github dropdown?
 
-if (fs.existsSync(githubConfigFile)) {
-  githubConfig = require(githubConfigFile);
+if (process.env.GITHUB_CLIENT_ID) {
+  githubConfig = {
+    "client_id": process.env.GITHUB_CLIENT_ID,
+    "redirect_uri": process.env.GITHUB_REDIRECT_URI,
+    "client_secret": process.env.GITHUB_CLIENT_SECRET,
+    "callback_url": process.env.GITHUB_CALLBACK_URL
+  };
   isConfigEnabled = true;
-} else if (process.env.github_client_id !== undefined) {
+  console.log('Github config found in environment. Plugin enabled. (Key: "' + githubConfig.client_id + '")');
+} else if (process.env.github_client_id) {
   githubConfig = {
     "client_id": process.env.github_client_id,
     "redirect_uri": process.env.github_redirect_uri,
@@ -22,7 +27,7 @@ if (fs.existsSync(githubConfigFile)) {
   };
   isConfigEnabled = true;
   console.log('Github config found in environment. Plugin enabled. (Key: "' + githubConfig.client_id + '")');
-} else if (process.env.github_access_token !== undefined) {
+} else if (process.env.github_access_token) {
   githubConfig = {
     "access_token": process.env.github_access_token
   };
@@ -35,7 +40,7 @@ if (fs.existsSync(githubConfigFile)) {
     , "client_secret": "YOUR_SECRET"
     , "callback_url": "http://dillinger.io/oauth/github"
   }
-  console.warn('Github config not found at ' + githubConfigFile + '. Plugin disabled.')
+  console.warn('Github config not found. Plugin disabled.')
 }
 
 function arrayToRegExp(arr) {

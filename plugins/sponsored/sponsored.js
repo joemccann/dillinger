@@ -7,40 +7,36 @@ const { log, warn } = console
 //
 // Sponsored Object
 //
-function Sponsored () {
-  this.sponsoredConfigFile = path.resolve(
-    __dirname, '../../configs/sponsored/', 'sponsored-config.json')
-
+function Sponsored() {
   const self = this
 
-  function _isKeyExistent () {
+  function _isKeyExistent() {
     return self.key
   }
 
-  if (fs.existsSync(this.sponsoredConfigFile)) {
-    const { key } = require(this.sponsoredConfigFile)
-    this.key = key
+  if (process.env.SPONSORED_KEY) {
+    this.key = process.env.SPONSORED_KEY
 
     if (_isKeyExistent()) {
-      log('Sponsored config found in file. Plugin enabled. ' +
-`(URL: "${this.key}")`)
+      log('Sponsored config found in environment variables. ' +
+        `Plugin enabled. (KEY: "${this.key}")`)
     } else {
-      warn('Sponsored KEY not found in your config file. Plugin disabled.')
+      warn('Sponsored KEY not found in your environment variables. ' +
+        +'Plugin disabled.')
     }
   } else if (process.env.sponsored_key !== undefined) {
     this.key = process.env.sponsored_key
 
     if (_isKeyExistent()) {
       log('Sponsored config found in environment variables. ' +
-`Plugin enabled. (KEY: "${this.key}")`)
+        `Plugin enabled. (KEY: "${this.key}")`)
     } else {
       warn('Sponsored KEY not found in your environment variables. ' +
-+'Plugin disabled.')
+        +'Plugin disabled.')
     }
   } else {
     this.key = null
-    warn('Sponsored config not found at ' +
-`${this.sponsoredConfigFile}. Plugin disabled.`)
+    warn('Sponsored config not found. Plugin disabled.')
   }
 } // end Sponsored object
 

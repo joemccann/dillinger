@@ -4,13 +4,17 @@ const fs = require('fs')
 const path = require('path')
 const mediumSdk = require('medium-sdk')
 
-var mediumConfigFile = path.resolve(__dirname, '../../configs/medium/', 'medium-config.json')
 var mediumConfig = {}
 var isConfigEnabled = false
 
 // ^^^helps with the home page view should we show the medium dropdown?
-if (fs.existsSync(mediumConfigFile)) {
-  mediumConfig = require(mediumConfigFile)
+if (process.env.MEDIUM_CLIENT_ID) {
+  mediumConfig = {
+    client_id: process.env.MEDIUM_CLIENT_ID,
+    client_secret: process.env.MEDIUM_CLIENT_SECRET,
+    callback_url: process.env.MEDIUM_CALLBACK_URL,
+    redirect_url: process.env.MEDIUM_REDIRECT_URL
+  }
   isConfigEnabled = true
   console.log('Medium config found in environment. Plugin enabled.')
 } else if (process.env.medium_client_id !== undefined) {
@@ -29,7 +33,7 @@ if (fs.existsSync(mediumConfigFile)) {
     callback_url: 'YOUR_CALLBACK_URL',
     redirect_url: 'YOUR_REDIRECT_URL'
   }
-  console.warn('Medium config not found at ' + mediumConfigFile + '. Plugin disabled.')
+  console.warn('Medium config not found. Plugin disabled.')
 }
 
 exports.Medium = (function () {
@@ -48,7 +52,7 @@ exports.Medium = (function () {
       ])
     },
     getUser: function (req, res, cb) {
-      mediumApp.getUser(function getMediumUserCb (err, user) {
+      mediumApp.getUser(function getMediumUserCb(err, user) {
         if (err) return cb(err)
         else return cb(null, user)
       })

@@ -3,16 +3,21 @@ var path = require('path')
 var googleapis = require('googleapis')
 var request = require('request')
 
-var configFile = path.resolve(__dirname, '../../configs/googledrive/',
-  'googledrive-config.json')
 var config = {}
 var scopes = ['https://www.googleapis.com/auth/drive.file']
 var isConfigEnabled = false
 var drive = null
 
-if (fs.existsSync(configFile)) {
-  config = require(configFile)
+if (process.env.GOOGLEDRIVE_CLIENT_ID) {
+  config = {
+    client_id: process.env.GOOGLEDRIVE_CLIENT_ID,
+    client_secret: process.env.GOOGLEDRIVE_CLIENT_SECRET,
+    redirect_uri: process.env.GOOGLEDRIVE_REDIRECT_URI
+  }
+
   isConfigEnabled = true
+  console.log('Google Drive config found in environment. Plugin enabled.' +
+    ' (Key: "' + config.client_id + '")')
 } else if (process.env.googledrive_client_id !== undefined) {
   config = {
     client_id: process.env.googledrive_client_id,
@@ -22,14 +27,14 @@ if (fs.existsSync(configFile)) {
 
   isConfigEnabled = true
   console.log('Google Drive config found in environment. Plugin enabled.' +
-  ' (Key: "' + config.client_id + '")')
+    ' (Key: "' + config.client_id + '")')
 } else {
   config = {
     client_id: 'CLIENT_ID',
     client_secret: 'CLIENT_SECRET',
-    redirect_uri: 'http://dillinger.io/' }
-  console.warn('Google Drive config not found at ' + configFile +
-      '. Plugin disabled.')
+    redirect_uri: 'http://dillinger.io/'
+  }
+  console.warn('Google Drive config not found. Plugin disabled.')
 }
 
 var GoogleDrive = {
@@ -66,7 +71,8 @@ var GoogleDrive = {
       // TODO: handle pagination
       drive.files.list({
         q: 'mimeType = "text/x-markdown" and trashed = false',
-        auth: oauth2Client }, callback)
+        auth: oauth2Client
+      }, callback)
     })
   },
   get: function (tokens, fileId, callback) {
@@ -92,12 +98,12 @@ var GoogleDrive = {
 
     var boundaryTag = 'a_unique_boundary_tag'
     var body = '--' + boundaryTag + '\n' +
-               'Content-Type: application/json; charset=UTF-8\n\n' +
-               JSON.stringify({ title: title }) + '\n\n' +
-               '--' + boundaryTag + '\n' +
-               'Content-Type: text/x-markdown\n\n' +
-               content + '\n\n' +
-               '--' + boundaryTag + '--'
+      'Content-Type: application/json; charset=UTF-8\n\n' +
+      JSON.stringify({ title: title }) + '\n\n' +
+      '--' + boundaryTag + '\n' +
+      'Content-Type: text/x-markdown\n\n' +
+      content + '\n\n' +
+      '--' + boundaryTag + '--'
 
     var uploadUrl = 'https://www.googleapis.com/upload/drive/v2/files'
     var method = 'post'
