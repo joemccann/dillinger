@@ -79,7 +79,9 @@ const fetchPdf = async (req, res) => {
 
   if (!content) return res.end('No PDF content exists in the data')
 
-  const filename = name.replace(/\.md$/, '') + '.pdf';
+  // Sanitize filename for HTTP header
+  let filename = name.replace(/\.md$/, '') + '.pdf';
+  filename = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
 
   if (req.body.preview === 'false') {
     res.attachment(filename)
