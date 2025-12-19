@@ -1,5 +1,5 @@
 FROM nodesource/nsolid:latest
-
+USER root
 LABEL maintainer "Joe McCann <joe@subprint.com>"
 WORKDIR /dillinger
 # Install our dependencies (libfontconfig for phantomjs)
@@ -58,6 +58,9 @@ RUN npm install --devDependencies \
   && npm cache verify
 # Copy source over and create configs dir
 
+RUN apt-get update && apt-get install -y chromium \ 
+  && rm -rf /var/lib/apt/lists/*
+
 RUN rm -rf /configs
 RUN mkdir -p /configs
 COPY . .
@@ -69,5 +72,7 @@ USER dillinger
 
 EXPOSE 8080
 ENV NODE_ENV=production
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 CMD ["npm", "start"]
