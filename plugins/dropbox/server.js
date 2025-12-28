@@ -1,82 +1,91 @@
-var express = require('express')
-  , app = module.exports = express()
-  , Dropbox = require('./dropbox.js').Dropbox
-  , fs = require('fs')
-  , path = require('path')
+const express = require('express');
+const app = module.exports = express();
+const Dropbox = require('./dropbox.js').Dropbox;
+const fs = require('fs');
+const path = require('path');
 
 /* Dropbox Stuff */
 
-var oauth_dropbox_redirect = function(req, res) {
+const oauth_dropbox_redirect = function(req, res) {
   Dropbox.getAuthUrl(req, res, function(url) {
-
     // Create dropbox session object and stash for later.
-    req.session.dropbox = {}
-    req.session.dropbox.oauth = {}
+    req.session.dropbox = {};
+    req.session.dropbox.oauth = {};
 
-    res.redirect(url)
+    res.redirect(url);
+  });
+};
 
-  })
-}
-
-var oauth_dropbox = function(req, res) {
-
+const oauth_dropbox = function(req, res) {
     if (!req.session.dropbox) {
-      console.log('No dropbox session - browser bug')
-      req.session.dropbox = {}
-      req.session.dropbox.oauth = {}
+      console.log('No dropbox session - browser bug');
+      req.session.dropbox = {};
+      req.session.dropbox.oauth = {};
     }
 
     // We are now fetching the actual access token and stash in
     // session object values in callback.
 
-    Dropbox.getRemoteAccessToken(req.query.code,
-      function(status, access_token) {
-          req.session.dropbox.oauthtoken = access_token
-          req.session.isDropboxSynced = true
+    Dropbox.getRemoteAccessToken(req.query.code, function(status, access_token) {
+      if (status === 'error') {
+        console.error('OAuth error:', access_token);
+        return res.redirect('/?error=dropbox_auth_failed');
+      }
 
-          // Check to see it works by fetching account info
-          Dropbox.getAccountInfo(access_token, function(err, reply) {
-            if (!err) {
-              console.log("User %s is now authenticated.", reply.name.display_name)
-            } else {
-              console.log("Error retriving user details")
-            }
+      req.session.dropbox.oauthtoken = access_token;
+      req.session.isDropboxSynced = true;
 
-          })
+      // Check to see it works by fetching account info
+      Dropbox.getAccountInfo(access_token, function(err, reply) {
+        if (!err) {
+          console.log("User %s is now authenticated.", reply.name.display_name);
+        } else {
+          console.error("Error retrieving user details:", err);
+        }
+      });
 
-          // Now go back to home page with session data in tact.
-          res.redirect('/')
+      // Now go back to home page with session data in tact.
+      res.redirect('/');
+    });  // end Dropbox.getRemoteAccessToken()
+};
 
-    })  // end dbox.getRemoteAccessToken()
-}
-
-var unlink_dropbox = function(req, res) {
+const unlink_dropbox = function(req, res) {
   // Essentially remove the session for dropbox...
-  delete req.session.dropbox
-  req.session.isDropboxSynced = false
-  res.redirect('/')
-}
+  delete req.session.dropbox;
+  req.session.isDropboxSynced = false;
+  res.redirect('/');
+};
 
-var import_dropbox = function(req, res) {
-  var postBody = req.body || {}
+const import_dropbox = function(req, res) {
+  const postBody = req.body || {};
 
   Dropbox.searchForMdFiles(req.session.dropbox.oauthtoken, {fileExts: postBody.fileExts}, function(err, data) {
-
-    if (err === null) {
-      return res.json(data)
+    if (!err) {
+      return res.json(data);
     }
-    if (err.status === 401) return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.")
-    if (err.status === 400) return res.status(400).send("Bad request to Dropbox. Please unlink and link again.")
-    if (err.status > 399) return res.status(status).send("Something went wrong. Please refresh.")
-  })
 
-}
+    // DropboxResponseError has .status property
+    if (err.status === 401) {
+      return res.status(401).send("You are not authenticated with Dropbox. Please unlink and link again.");
+    }
+    if (err.status === 400) {
+      return res.status(400).send("Bad request to Dropbox. Please unlink and link again.");
+    }
+    if (err.status && err.status > 399) {
+      return res.status(err.status).send("Something went wrong. Please refresh.");
+    }
 
-var fetch_dropbox_file = function(req, res) { Dropbox.fetchDropboxFile(req, res) }
+    // Generic error
+    console.error('Dropbox import error:', err);
+    return res.status(500).send("An unexpected error occurred.");
+  });
+};
 
-var save_dropbox = function(req, res) { Dropbox.saveFileToDropbox(req, res) }
+const fetch_dropbox_file = function(req, res) { Dropbox.fetchDropboxFile(req, res); };
 
-var save_dropbox_image = function (req,res) { Dropbox.saveImageToDropbox(req, res) }
+const save_dropbox = function(req, res) { Dropbox.saveFileToDropbox(req, res); };
+
+const save_dropbox_image = function (req, res) { Dropbox.saveImageToDropbox(req, res); };
 
 /* End Dropbox stuff */
 
