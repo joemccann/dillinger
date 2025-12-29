@@ -25,24 +25,17 @@ const _getFormat = () => {
 const fetchMd = (req, res) => {
   const unmd = req.body.unmd
   let name = req.body.name.trim()
-
-  if (!name.includes('.md')) {
+  if (!name.endsWith('.md')) {
     name = name + '.md'
   }
-
+  // Sanitize filename for HTTP header
+  let filename = name.replace(/[^a-zA-Z0-9._-]/g, '_');
   if (req.body.preview === 'false') {
-    res.attachment(name)
+    res.attachment(filename)
   } else {
-    // We don't use text/markdown because my "favorite" browser
-    // (IE) ignores the Content-Disposition: inline; and prompts
-    // the user to download the file.
     res.type('text')
-
-    // For some reason IE and Chrome ignore the filename
-    // field when Content-Type: text/plain;
-    res.set('Content-Disposition', `inline; filename="${name}"`)
+    res.set('Content-Disposition', `inline; filename="${filename}"`)
   }
-
   res.end(unmd)
 }
 
@@ -53,16 +46,15 @@ const fetchHtml = (req, res) => {
   var format = req.body.formatting ? _getFormat() : ''
 
   var html = _getFullHtml(req.body.name, unmd, format)
-
   var name = req.body.name.trim() + '.html'
-
+  // Sanitize filename for HTTP header
+  let filename = name.replace(/[^a-zA-Z0-9._-]/g, '_');
   if (req.body.preview === 'false') {
-    res.attachment(name)
+    res.attachment(filename)
   } else {
     res.type('html')
-    res.set('Content-Disposition', `inline; filename="${name}"`)
+    res.set('Content-Disposition', `inline; filename="${filename}"`)
   }
-
   res.end(html)
 }
 
@@ -79,7 +71,9 @@ const fetchPdf = async (req, res) => {
 
   if (!content) return res.end('No PDF content exists in the data')
 
-  const filename = name.replace(/\.md$/, '') + '.pdf';
+  // Sanitize filename for HTTP header
+  let filename = name.replace(/\.md$/, '') + '.pdf';
+  filename = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
 
   if (req.body.preview === 'false') {
     res.attachment(filename)
