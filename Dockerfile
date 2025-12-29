@@ -1,6 +1,10 @@
 FROM nodesource/nsolid:latest
+
+LABEL maintainer="Joe McCann <joe@subprint.com>"
+
+# Ensure we're running as root for system package installations
 USER root
-LABEL maintainer "Joe McCann <joe@subprint.com>"
+
 WORKDIR /dillinger
 # Install our dependencies (libfontconfig for phantomjs)
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \

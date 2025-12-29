@@ -1,14 +1,12 @@
-var fs = require('fs')
-  , path = require('path')
-  , request = require('request')
-  , qs = require('querystring')
-  , url = require('url')
-  , DropboxSDK = require('dropbox').Dropbox;
-;
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
+const qs = require('querystring');
+const url = require('url');
+const { Dropbox, DropboxAuth } = require('dropbox');
 
-var dropbox_config = {}
-  , isConfigEnabled = false
-  ;
+let dropbox_config = {};
+let isConfigEnabled = false;
 // ^^^helps with the home page view; should we show the dropbox dropdown?
 
 if (process.env.DROPBOX_APP_KEY) {
@@ -41,8 +39,12 @@ if (process.env.DROPBOX_APP_KEY) {
 
 exports.Dropbox = (function () {
 
-  var dbx = new DropboxSDK({ accessToken: dropbox_config.app_key, clientId: dropbox_config.app_key });
-  dbx.setClientSecret(dropbox_config.app_secret);
+  const dbxAuth = new DropboxAuth({
+    clientId: dropbox_config.app_key,
+    clientSecret: dropbox_config.app_secret
+  });
+
+  const dbx = new Dropbox({ auth: dbxAuth });
 
   function arrayToRegExp(arr) {
     return new RegExp("(" + arr.map(function (e) { return e.replace('.', '\\.'); }).join('|') + ")$", 'i');
@@ -52,115 +54,167 @@ exports.Dropbox = (function () {
     isConfigured: isConfigEnabled,
     config: dropbox_config,
     // Get a URL that can be used to authenticate users for the Dropbox API.
-    getAuthUrl: function (req, res, cb) {
-      return cb(dbx.getAuthenticationUrl(dropbox_config.callback_url, null, 'code'));
+    getAuthUrl: async function (req, res, cb) {
+      try {
+        const authUrl = await dbxAuth.getAuthenticationUrl(dropbox_config.callback_url, null, 'code');
+        return cb(authUrl);
+      } catch (err) {
+        console.error('Error generating auth URL:', err);
+        return cb(null, err);
+      }
     },
     // Get an OAuth2 access token from an OAuth2 Code.
-    getRemoteAccessToken: function (code, cb) {
-      dbx.getAccessTokenFromCode(dropbox_config.callback_url, code).then(function (result) {
-        return cb('ok', result)
-      })
-
-    }, // end getRemoteAccessToken()
-    getAccountInfo: function (token, cb) {
-      dbx.setAccessToken(token)
-      dbx.usersGetCurrentAccount().then(function (user) {
-        cb(null, user)
-      }).catch(function (err) {
-        cb(err)
-      });
-
-    }, // end getAccountInfo()
-    fetchDropboxFile: function (req, res) {
-      if (!req.session.isDropboxSynced) {
-        res.type('text/plain')
-        return res.status(403).send("You are not authenticated with Dropbox.")
+    getRemoteAccessToken: async function (code, cb) {
+      try {
+        const response = await dbxAuth.getAccessTokenFromCode(dropbox_config.callback_url, code);
+        return cb('ok', response.result.access_token);
+      } catch (err) {
+        console.error('Error getting access token:', err);
+        return cb('error', err);
       }
-      dbx.setAccessToken(req.session.dropbox.oauthtoken)
-      var pathToMdFile = req.body.mdFile
-      dbx.filesDownload({ path: pathToMdFile }).then(function (doc) {
+    }, // end getRemoteAccessToken()
+    getAccountInfo: async function (token, cb) {
+      try {
+        dbxAuth.setAccessToken(token);
+        const response = await dbx.usersGetCurrentAccount();
+        cb(null, response.result);
+      } catch (err) {
+        console.error('Error getting account info:', err);
+        cb(err);
+      }
+    }, // end getAccountInfo()
+    fetchDropboxFile: async function (req, res) {
+      if (!req.session.isDropboxSynced) {
+        res.type('text/plain');
+        return res.status(403).send("You are not authenticated with Dropbox.");
+      }
+      try {
+        dbxAuth.setAccessToken(req.session.dropbox.oauthtoken);
+        const pathToMdFile = req.body.mdFile;
+        const response = await dbx.filesDownload({ path: pathToMdFile });
         // https://github.com/joemccann/dillinger/issues/64
         // In case of an empty file...
-        var reply = doc.fileBinary ? doc.fileBinary.toString() : ''
-        return res.json({ data: reply })
-      })
-
+        const reply = response.result.fileBinary ? response.result.fileBinary.toString() : '';
+        return res.json({ data: reply });
+      } catch (err) {
+        console.error('Error fetching Dropbox file:', err);
+        if (err.status) {
+          return res.status(err.status).json({ error: err.error || err.message });
+        }
+        return res.status(500).json({ error: 'Failed to fetch file' });
+      }
     },
-    searchForMdFiles: function (token, opts, cb) {
-      dbx.setAccessToken(token)
-      var fileExts = opts.fileExts.split('|')
-        , regExp = arrayToRegExp(fileExts)
-        ;
-      var queries = [];
-      fileExts.forEach(function (ext) {
-        queries.push(dbx.filesSearch({ path: '', query: ext, max_results: 500, mode: 'filename' }))
-      })
+    searchForMdFiles: async function (token, opts, cb) {
+      try {
+        dbxAuth.setAccessToken(token);
+        const fileExts = opts.fileExts.split('|');
+        const regExp = arrayToRegExp(fileExts);
 
-      Promise.all(queries).then(function (filetypes) {
-        var files = [];
+        const queries = fileExts.map(ext =>
+          dbx.filesSearch({ path: '', query: ext, max_results: 500, mode: { '.tag': 'filename' } })
+        );
 
-        filetypes.forEach(function (filetype) {
-          filetype.matches.forEach(function (item) {
+        const responses = await Promise.all(queries);
+        const files = [];
+
+        responses.forEach(response => {
+          response.result.matches.forEach(item => {
             if (regExp.test(item.metadata.path_lower)) {
-              files.push(item.metadata)
+              files.push(item.metadata);
             }
           });
-        })
-        cb(null, files)
-      }).catch(function (err) {
-        cb(err, null)
-      });
+        });
 
+        cb(null, files);
+      } catch (err) {
+        console.error('Error searching for files:', err);
+        cb(err, null);
+      }
     },
-    saveFileToDropbox: function (req, res) {
-
+    saveFileToDropbox: async function (req, res) {
       if (!req.session.isDropboxSynced) {
-        res.type('text/plain')
-        return res.status(403).send("You are not authenticated with Dropbox.")
+        res.type('text/plain');
+        return res.status(403).send("You are not authenticated with Dropbox.");
       }
-      dbx.setAccessToken(req.session.dropbox.oauthtoken)
-      // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
-      var pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md')
-      if (!path.extname(pathToMdFile))
-        pathToMdFile += ".md"
-      var contents = req.body.fileContents || 'Test Data from Dillinger.'
 
-      dbx.filesUpload({ path: pathToMdFile, contents: contents, autorename: true, mode: { '.tag': 'overwrite' } }).then(function (reply) {
-        return res.json({ data: reply })
-      })
+      try {
+        dbxAuth.setAccessToken(req.session.dropbox.oauthtoken);
+        // TODO: EXPOSE THE CORE MODULE SO WE CAN GENERATE RANDOM NAMES
+        let pathToMdFile = req.body.pathToMdFile || '/Dillinger/' + md.generateRandomMdFilename('md');
+        if (!path.extname(pathToMdFile)) {
+          pathToMdFile += ".md";
+        }
+        const contents = req.body.fileContents || 'Test Data from Dillinger.';
 
+        const response = await dbx.filesUpload({
+          path: pathToMdFile,
+          contents: contents,
+          autorename: true,
+          mode: { '.tag': 'overwrite' }
+        });
+
+        return res.json({ data: response.result });
+      } catch (err) {
+        console.error('Error saving file to Dropbox:', err);
+        if (err.status) {
+          return res.status(err.status).json({ error: err.error || err.message });
+        }
+        return res.status(500).json({ error: 'Failed to save file' });
+      }
     }, // end saveFileToDropbox
-    saveImageToDropbox: function (req, res) {
-
+    saveImageToDropbox: async function (req, res) {
       if (!req.session.isDropboxSynced) {
-        res.type('text/plain')
-        return res.status(403).send("You are not authenticated with Dropbox.")
+        res.type('text/plain');
+        return res.status(403).send("You are not authenticated with Dropbox.");
       }
-      dbx.setAccessToken(req.session.dropbox.oauthtoken)
-      var pathToImage = '/Dillinger/_images/' + req.body.image_name
-        , base64_data = req.body.fileContents.split(',')[1] // Is this thorough enough?
-        , buffer = new Buffer(base64_data, 'base64')
-        ;
 
-      // For local testing...
-      // var filepath = path.resolve(__dirname, '../../public/files/') + "/" + req.body.image_name
+      try {
+        dbxAuth.setAccessToken(req.session.dropbox.oauthtoken);
+        const pathToImage = '/Dillinger/_images/' + req.body.image_name;
+        const base64_data = req.body.fileContents.split(',')[1]; // Is this thorough enough?
+        const buffer = Buffer.from(base64_data, 'base64');  // FIX: deprecated new Buffer()
 
-      // console.log(filepath + " is the local path")
+        // For local testing...
+        // const filepath = path.resolve(__dirname, '../../public/files/') + "/" + req.body.image_name
+        // console.log(filepath + " is the local path")
+        // fs.writeFile(filepath, buffer, function (err) {
+        //   if(err) console.error(err)
+        //     console.log('wrote the file')
+        // });
+        // End local testing...
 
-      // fs.writeFile( filepath, buffer, function (err) {
-      //   if(err) console.error(err)
-      //     console.log('wrote the file')
-      // }); 
-      // End local testing...
-      dbx.filesUpload({ path: pathToImage, contents: buffer, mode: { '.tag': 'add' } })
-        .then(function () {
-          return dbx.sharingCreateSharedLink({ path: pathToImage })
-            .then(function (reply) {
-              reply.url = reply.url + '&raw=1'
-              return res.json({ data: reply })
-            })
-        })
+        // Upload image
+        await dbx.filesUpload({ path: pathToImage, contents: buffer, mode: { '.tag': 'add' } });
 
+        // Create shared link
+        const linkResponse = await dbx.sharingCreateSharedLink({ path: pathToImage });
+
+        // Response is wrapped - access via .result
+        const sharedLink = linkResponse.result;
+        sharedLink.url = sharedLink.url + '&raw=1';
+
+        return res.json({ data: sharedLink });
+      } catch (err) {
+        console.error('Error saving image to Dropbox:', err);
+
+        // Handle "shared link already exists" error gracefully
+        if (err.error && err.error.error_summary && err.error.error_summary.includes('shared_link_already_exists')) {
+          try {
+            const pathToImage = '/Dillinger/_images/' + req.body.image_name;
+            const linksResponse = await dbx.sharingListSharedLinks({ path: pathToImage });
+            const existingLink = linksResponse.result.links[0];
+            existingLink.url = existingLink.url + '&raw=1';
+            return res.json({ data: existingLink });
+          } catch (linkErr) {
+            console.error('Error getting existing shared link:', linkErr);
+          }
+        }
+
+        if (err.status) {
+          return res.status(err.status).json({ error: err.error || err.message });
+        }
+        return res.status(500).json({ error: 'Failed to save image' });
+      }
     }
 
   }

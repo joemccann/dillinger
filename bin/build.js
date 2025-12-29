@@ -35,7 +35,15 @@ function updateKubeFile (filename) {
 }
 
 // Build the docker image...
-exec(build, exec_opts)
+try {
+  exec(build, exec_opts)
+} catch (e) {
+  console.warn(`
+WARNING: Docker build failed. This is likely because the Docker daemon is not running or accessible.
+If you don't have Docker installed or running, you can ignore this, but the image won't be pushed to Docker Hub.
+Error: ${e.message}
+`)
+}
 
 // Now let's update our Kubernetes deployment files to the latest
 // version of the docker image
