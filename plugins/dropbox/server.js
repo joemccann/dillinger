@@ -7,11 +7,11 @@ const path = require('path');
 /* Dropbox Stuff */
 
 const oauth_dropbox_redirect = function(req, res) {
-  Dropbox.getAuthUrl(req, res, function(url) {
-    // Create dropbox session object and stash for later.
-    req.session.dropbox = {};
-    req.session.dropbox.oauth = {};
+  // Create dropbox session object and stash for later.
+  req.session.dropbox = {};
+  req.session.dropbox.oauth = {};
 
+  Dropbox.getAuthUrl(req, res, function(url) {
     res.redirect(url);
   });
 };
@@ -58,8 +58,9 @@ const unlink_dropbox = function(req, res) {
 
 const import_dropbox = function(req, res) {
   const postBody = req.body || {};
+  const oauthtoken = req.session.dropbox ? req.session.dropbox.oauthtoken : undefined;
 
-  Dropbox.searchForMdFiles(req.session.dropbox.oauthtoken, {fileExts: postBody.fileExts}, function(err, data) {
+  Dropbox.searchForMdFiles(oauthtoken, {fileExts: postBody.fileExts}, function(err, data) {
     if (!err) {
       return res.json(data);
     }

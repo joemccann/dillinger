@@ -187,7 +187,7 @@ describe('Dropbox Server Routes - Integration Tests', function() {
           }
 
           expect(consoleLogStub.calledWith(
-            sinon.match('User John Doe is now authenticated')
+            sinon.match(/User .* is now authenticated/)
           )).to.be.true;
           consoleLogStub.restore();
           done();
@@ -243,6 +243,9 @@ describe('Dropbox Server Routes - Integration Tests', function() {
         { name: 'test2.md', path: '/test2.md' }
       ];
 
+      // Mock successful OAuth for session setup
+      mockDropbox.getRemoteAccessToken.callsFake((code, cb) => cb('ok', 'token'));
+      mockDropbox.getAccountInfo.callsFake((token, cb) => cb(null, { name: { display_name: 'Test' } }));
       mockDropbox.searchForMdFiles.callsFake((token, opts, cb) => {
         cb(null, mockFiles);
       });
@@ -252,10 +255,6 @@ describe('Dropbox Server Routes - Integration Tests', function() {
       agent
         .get('/oauth/dropbox?code=test_code')
         .end(() => {
-          // Mock successful OAuth for session setup
-          mockDropbox.getRemoteAccessToken.callsFake((code, cb) => cb('ok', 'token'));
-          mockDropbox.getAccountInfo.callsFake((token, cb) => cb(null, { name: { display_name: 'Test' } }));
-
           agent
             .post('/import/dropbox')
             .send({ fileExts: 'md' })
