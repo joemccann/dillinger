@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "dropbox": "^10.34.0",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.562.0",
     "markdown-it": "^14.1.0",
