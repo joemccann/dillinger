@@ -5,9 +5,11 @@ import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { useGitHub } from "@/hooks/useGitHub";
 import { useDropbox } from "@/hooks/useDropbox";
+import { useGoogleDrive } from "@/hooks/useGoogleDrive";
 import { DocumentList } from "./DocumentList";
 import { GitHubModal } from "@/components/modals/GitHubModal";
 import { DropboxModal } from "@/components/modals/DropboxModal";
+import { GoogleDriveModal } from "@/components/modals/GoogleDriveModal";
 import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import {
   Plus,
@@ -15,6 +17,7 @@ import {
   Trash2,
   Github,
   Cloud,
+  HardDrive,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
@@ -30,6 +33,7 @@ export function Sidebar() {
 
   const github = useGitHub();
   const dropbox = useDropbox();
+  const googleDrive = useGoogleDrive();
 
   const [servicesOpen, setServicesOpen] = useState(true);
   const [importOpen, setImportOpen] = useState(false);
@@ -41,6 +45,10 @@ export function Sidebar() {
     mode: "import",
   });
   const [dropboxModal, setDropboxModal] = useState<{ open: boolean; mode: "import" | "save" }>({
+    open: false,
+    mode: "import",
+  });
+  const [googleDriveModal, setGoogleDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
     open: false,
     mode: "import",
   });
@@ -107,6 +115,13 @@ export function Sidebar() {
                   onConnect={dropbox.connect}
                   onDisconnect={dropbox.disconnect}
                 />
+                <ServiceButton
+                  icon={<HardDrive size={16} />}
+                  label="Google Drive"
+                  connected={googleDrive.isConnected}
+                  onConnect={googleDrive.connect}
+                  onDisconnect={googleDrive.disconnect}
+                />
               </div>
             )}
           </div>
@@ -141,6 +156,14 @@ export function Sidebar() {
                   <Cloud size={16} />
                   <span>Dropbox</span>
                 </button>
+                <button
+                  onClick={() => setGoogleDriveModal({ open: true, mode: "import" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <HardDrive size={16} />
+                  <span>Google Drive</span>
+                </button>
               </div>
             )}
           </div>
@@ -174,6 +197,14 @@ export function Sidebar() {
                 >
                   <Cloud size={16} />
                   <span>Dropbox</span>
+                </button>
+                <button
+                  onClick={() => setGoogleDriveModal({ open: true, mode: "save" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <HardDrive size={16} />
+                  <span>Google Drive</span>
                 </button>
               </div>
             )}
@@ -243,6 +274,11 @@ export function Sidebar() {
         isOpen={dropboxModal.open}
         onClose={() => setDropboxModal({ ...dropboxModal, open: false })}
         mode={dropboxModal.mode}
+      />
+      <GoogleDriveModal
+        isOpen={googleDriveModal.open}
+        onClose={() => setGoogleDriveModal({ ...googleDriveModal, open: false })}
+        mode={googleDriveModal.mode}
       />
       <DeleteConfirmModal
         isOpen={deleteModalOpen}
