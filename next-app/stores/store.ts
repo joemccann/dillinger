@@ -13,6 +13,8 @@ interface AppState {
   sidebarOpen: boolean;
   settingsOpen: boolean;
   previewVisible: boolean;
+  zenMode: boolean;
+  editorScrollPercent: number;
 
   // Document Actions
   createDocument: () => void;
@@ -28,6 +30,8 @@ interface AppState {
   toggleSidebar: () => void;
   toggleSettings: () => void;
   togglePreview: () => void;
+  setZenMode: (enabled: boolean) => void;
+  setEditorScrollPercent: (percent: number) => void;
 
   // Persistence
   hydrate: () => void;
@@ -49,6 +53,8 @@ export const useStore = create<AppState>((set, get) => ({
   sidebarOpen: true,
   settingsOpen: false,
   previewVisible: true,
+  zenMode: false,
+  editorScrollPercent: 0,
 
   // Document Actions
   createDocument: () => {
@@ -119,6 +125,8 @@ export const useStore = create<AppState>((set, get) => ({
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   toggleSettings: () => set((state) => ({ settingsOpen: !state.settingsOpen })),
   togglePreview: () => set((state) => ({ previewVisible: !state.previewVisible })),
+  setZenMode: (enabled) => set({ zenMode: enabled }),
+  setEditorScrollPercent: (percent) => set({ editorScrollPercent: percent }),
 
   // Persistence
   hydrate: () => {
