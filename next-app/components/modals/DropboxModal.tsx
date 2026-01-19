@@ -89,7 +89,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
   if (!dropbox.isConnected) {
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        className="fixed inset-0 z-modal flex items-center justify-center"
         role="dialog"
         aria-modal="true"
         aria-labelledby="dropbox-connect-title"
@@ -108,7 +108,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
 
           <div className="text-center">
             <Cloud size={48} className="mx-auto text-text-invert mb-4" aria-hidden="true" />
-            <h2 id="dropbox-connect-title" className="text-xl font-semibold text-text-invert mb-2">
+            <h2 id="dropbox-connect-title" className="text-xl font-semibold text-text-invert mb-2 text-balance">
               Connect to Dropbox
             </h2>
             <p className="text-text-muted mb-6">
@@ -130,7 +130,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-modal flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="dropbox-modal-title"
@@ -151,7 +151,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
               </button>
             )}
             <Cloud size={24} className="text-text-invert" aria-hidden="true" />
-            <h2 id="dropbox-modal-title" className="text-lg font-semibold text-text-invert">
+            <h2 id="dropbox-modal-title" className="text-lg font-semibold text-text-invert text-balance">
               {mode === "import" ? "Import from Dropbox" : "Save to Dropbox"}
             </h2>
           </div>

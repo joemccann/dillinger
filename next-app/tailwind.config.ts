@@ -42,6 +42,8 @@ const config: Config = {
         overlay: "5",
         navbar: "6",
         settings: "7",
+        modal: "50",
+        toast: "60",
       },
       keyframes: {
         "slide-in-from-right": {

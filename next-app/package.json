@@ -11,6 +11,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@types/dompurify": "^3.0.5",
+    "clsx": "^2.1.1",
     "dompurify": "^3.3.1",
     "dropbox": "^10.34.0",
     "highlight.js": "^11.11.1",
@@ -28,6 +29,7 @@
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
+    "tailwind-merge": "^3.4.0",
     "zustand": "^5.0.10"
   },
   "devDependencies": {

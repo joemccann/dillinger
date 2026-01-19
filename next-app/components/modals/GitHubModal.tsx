@@ -122,7 +122,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   if (!github.isConnected) {
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        className="fixed inset-0 z-modal flex items-center justify-center"
         role="dialog"
         aria-modal="true"
         aria-labelledby="github-connect-title"
@@ -141,7 +141,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
 
           <div className="text-center">
             <Github size={48} className="mx-auto text-text-invert mb-4" aria-hidden="true" />
-            <h2 id="github-connect-title" className="text-xl font-semibold text-text-invert mb-2">
+            <h2 id="github-connect-title" className="text-xl font-semibold text-text-invert mb-2 text-balance">
               Connect to GitHub
             </h2>
             <p className="text-text-muted mb-6">
@@ -163,7 +163,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-modal flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="github-modal-title"
@@ -184,7 +184,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
               </button>
             )}
             <Github size={24} className="text-text-invert" aria-hidden="true" />
-            <h2 id="github-modal-title" className="text-lg font-semibold text-text-invert">
+            <h2 id="github-modal-title" className="text-lg font-semibold text-text-invert text-balance">
               {mode === "import" ? "Import from GitHub" : "Save to GitHub"}
             </h2>
           </div>

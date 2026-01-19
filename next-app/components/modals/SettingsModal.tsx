@@ -48,7 +48,7 @@ export function SettingsModal() {
       {/* Modal */}
       <div className="absolute right-0 top-0 h-full w-80 bg-bg-navbar shadow-xl">
         <div className="flex items-center justify-between p-4 border-b border-border-settings">
-          <h2 id="settings-title" className="text-text-invert font-semibold">Settings</h2>
+          <h2 id="settings-title" className="text-text-invert font-semibold text-balance">Settings</h2>
           <button
             ref={closeButtonRef}
             onClick={toggleSettings}
@@ -159,7 +159,7 @@ function SettingToggle({
         }`}
       >
         <span
-          className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+          className={`absolute top-1 size-4 rounded-full bg-white transition-transform ${
             checked ? "left-7" : "left-1"
           }`}
         />

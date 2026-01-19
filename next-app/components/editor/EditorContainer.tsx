@@ -9,6 +9,7 @@ import { SettingsModal } from "@/components/modals/SettingsModal";
 import { StoreProvider } from "@/components/providers/StoreProvider";
 import { ToastProvider } from "@/components/ui/Toast";
 import { useStore } from "@/stores/store";
+import { EditorSkeleton } from "@/components/ui/Skeleton";
 
 // Dynamic import Sidebar to prevent SSR issues with GitHub/Dropbox hooks
 const Sidebar = dynamic(
@@ -20,17 +21,13 @@ function EditorContent() {
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
 
-  // Show loading state while hydrating
+  // Show structural skeleton while hydrating
   if (!currentDocument) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-bg-primary">
-        <div className="text-text-muted">Loading...</div>
-      </div>
-    );
+    return <EditorSkeleton />;
   }
 
   return (
-    <div className="h-screen flex overflow-hidden">
+    <div className="h-dvh flex overflow-hidden">
       {/* Sidebar */}
       <Sidebar />
 

@@ -71,10 +71,10 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="w-sidebar bg-bg-sidebar h-screen flex flex-col z-sidebar">
+      <aside className="w-sidebar bg-bg-sidebar h-dvh flex flex-col z-sidebar">
         {/* Logo */}
         <div className="p-4">
-          <h1 className="text-2xl font-bold text-plum">DILLINGER</h1>
+          <h1 className="text-2xl font-bold text-plum text-balance">DILLINGER</h1>
         </div>
 
         {/* Navigation */}

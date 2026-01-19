@@ -41,7 +41,7 @@ export function DeleteConfirmModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-modal flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="delete-modal-title"
@@ -57,13 +57,13 @@ export function DeleteConfirmModal({
       {/* Modal */}
       <div className="relative bg-bg-navbar rounded-lg shadow-xl w-full max-w-sm p-6">
         <div className="flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-full bg-red-600/20 flex items-center justify-center mb-4">
+          <div className="size-12 rounded-full bg-red-600/20 flex items-center justify-center mb-4">
             <AlertTriangle size={24} className="text-red-500" />
           </div>
 
           <h2
             id="delete-modal-title"
-            className="text-lg font-semibold text-text-invert mb-2"
+            className="text-lg font-semibold text-text-invert mb-2 text-balance"
           >
             Delete Document
           </h2>
