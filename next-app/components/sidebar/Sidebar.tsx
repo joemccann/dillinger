@@ -6,10 +6,12 @@ import { useToast } from "@/components/ui/Toast";
 import { useGitHub } from "@/hooks/useGitHub";
 import { useDropbox } from "@/hooks/useDropbox";
 import { useGoogleDrive } from "@/hooks/useGoogleDrive";
+import { useOneDrive } from "@/hooks/useOneDrive";
 import { DocumentList } from "./DocumentList";
 import { GitHubModal } from "@/components/modals/GitHubModal";
 import { DropboxModal } from "@/components/modals/DropboxModal";
 import { GoogleDriveModal } from "@/components/modals/GoogleDriveModal";
+import { OneDriveModal } from "@/components/modals/OneDriveModal";
 import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import {
   Plus,
@@ -18,6 +20,7 @@ import {
   Github,
   Cloud,
   HardDrive,
+  CloudCog,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
@@ -34,6 +37,7 @@ export function Sidebar() {
   const github = useGitHub();
   const dropbox = useDropbox();
   const googleDrive = useGoogleDrive();
+  const oneDrive = useOneDrive();
 
   const [servicesOpen, setServicesOpen] = useState(true);
   const [importOpen, setImportOpen] = useState(false);
@@ -49,6 +53,10 @@ export function Sidebar() {
     mode: "import",
   });
   const [googleDriveModal, setGoogleDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
+    open: false,
+    mode: "import",
+  });
+  const [oneDriveModal, setOneDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
     open: false,
     mode: "import",
   });
@@ -122,6 +130,13 @@ export function Sidebar() {
                   onConnect={googleDrive.connect}
                   onDisconnect={googleDrive.disconnect}
                 />
+                <ServiceButton
+                  icon={<CloudCog size={16} />}
+                  label="OneDrive"
+                  connected={oneDrive.isConnected}
+                  onConnect={oneDrive.connect}
+                  onDisconnect={oneDrive.disconnect}
+                />
               </div>
             )}
           </div>
@@ -164,6 +179,14 @@ export function Sidebar() {
                   <HardDrive size={16} />
                   <span>Google Drive</span>
                 </button>
+                <button
+                  onClick={() => setOneDriveModal({ open: true, mode: "import" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <CloudCog size={16} />
+                  <span>OneDrive</span>
+                </button>
               </div>
             )}
           </div>
@@ -205,6 +228,14 @@ export function Sidebar() {
                 >
                   <HardDrive size={16} />
                   <span>Google Drive</span>
+                </button>
+                <button
+                  onClick={() => setOneDriveModal({ open: true, mode: "save" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <CloudCog size={16} />
+                  <span>OneDrive</span>
                 </button>
               </div>
             )}
@@ -279,6 +310,11 @@ export function Sidebar() {
         isOpen={googleDriveModal.open}
         onClose={() => setGoogleDriveModal({ ...googleDriveModal, open: false })}
         mode={googleDriveModal.mode}
+      />
+      <OneDriveModal
+        isOpen={oneDriveModal.open}
+        onClose={() => setOneDriveModal({ ...oneDriveModal, open: false })}
+        mode={oneDriveModal.mode}
       />
       <DeleteConfirmModal
         isOpen={deleteModalOpen}
