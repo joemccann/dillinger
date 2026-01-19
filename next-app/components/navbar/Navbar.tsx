@@ -11,6 +11,7 @@ import {
   FileText,
   FileCode,
   FileType,
+  Maximize2,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -20,6 +21,7 @@ export function Navbar() {
   const togglePreview = useStore((state) => state.togglePreview);
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
+  const setZenMode = useStore((state) => state.setZenMode);
   const { notify } = useToast();
 
   const [exportOpen, setExportOpen] = useState(false);
@@ -159,6 +161,16 @@ export function Navbar() {
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           {previewVisible ? <Eye size={20} /> : <EyeOff size={20} />}
+        </button>
+
+        {/* Zen mode */}
+        <button
+          onClick={() => setZenMode(true)}
+          aria-label="Enter zen mode"
+          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
+        >
+          <Maximize2 size={20} />
         </button>
 
         {/* Settings */}
