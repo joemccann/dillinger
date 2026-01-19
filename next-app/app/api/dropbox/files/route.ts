@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { Dropbox } from "dropbox";
 
 // List markdown files
 export async function GET(request: NextRequest) {
@@ -13,25 +12,41 @@ export async function GET(request: NextRequest) {
 
   try {
     const { access_token } = JSON.parse(tokenCookie);
-    const dbx = new Dropbox({ accessToken: access_token });
-
     const searchParams = request.nextUrl.searchParams;
     const path = searchParams.get("path") || "";
 
-    const response = await dbx.filesListFolder({
-      path: path || "",
-      recursive: false,
+    // Use direct API call instead of SDK
+    const response = await fetch("https://api.dropboxapi.com/2/files/list_folder", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        path: path || "",
+        recursive: false,
+      }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Dropbox list folder error:", errorText);
+      return NextResponse.json({ error: "Failed to fetch files" }, { status: 500 });
+    }
+
+    const data = await response.json();
+
     // Filter for markdown files and folders
-    const items = response.result.entries
+    const items = data.entries
       .filter(
-        (entry) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (entry: any) =>
           entry[".tag"] === "folder" ||
           entry.name.endsWith(".md") ||
           entry.name.endsWith(".markdown")
       )
-      .map((entry) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((entry: any) => ({
         name: entry.name,
         path: entry.path_lower,
         isFolder: entry[".tag"] === "folder",
@@ -56,19 +71,30 @@ export async function POST(request: NextRequest) {
   try {
     const { path } = await request.json();
     const { access_token } = JSON.parse(tokenCookie);
-    const dbx = new Dropbox({ accessToken: access_token });
 
-    const response = await dbx.filesDownload({ path });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = response.result as Record<string, any>;
+    // Use direct API call instead of SDK
+    const response = await fetch("https://content.dropboxapi.com/2/files/download", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Dropbox-API-Arg": JSON.stringify({ path }),
+      },
+    });
 
-    // Get file content from the blob
-    const content = await (result.fileBlob as Blob).text();
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Dropbox download error:", errorText);
+      return NextResponse.json({ error: "Failed to fetch file" }, { status: 500 });
+    }
+
+    const content = await response.text();
+    const apiResult = response.headers.get("dropbox-api-result");
+    const metadata = apiResult ? JSON.parse(apiResult) : {};
 
     return NextResponse.json({
       content,
-      name: result.name,
-      path: result.path_lower,
+      name: metadata.name || path.split("/").pop(),
+      path: metadata.path_lower || path,
     });
   } catch (error) {
     console.error("Dropbox file fetch error:", error);

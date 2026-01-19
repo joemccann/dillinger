@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { DropboxAuth } from "dropbox";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -22,11 +21,28 @@ export async function GET(request: NextRequest) {
     const clientSecret = process.env.DROPBOX_APP_SECRET!;
     const redirectUri = `${baseUrl}/api/dropbox/callback`;
 
-    const dbxAuth = new DropboxAuth({ clientId, clientSecret });
-    const token = await dbxAuth.getAccessTokenFromCode(redirectUri, code);
+    // Exchange code for token using direct API call (Dropbox SDK has issues with fetch in Node.js)
+    const tokenResponse = await fetch("https://api.dropboxapi.com/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        code,
+        grant_type: "authorization_code",
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+      }),
+    });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = token.result as Record<string, any>;
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error("Dropbox token exchange failed:", errorText);
+      return NextResponse.redirect(`${baseUrl}?dropbox_error=token_exchange_failed`);
+    }
+
+    const result = await tokenResponse.json();
 
     // Store tokens in HTTP-only cookie
     const cookieStore = await cookies();

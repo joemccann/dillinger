@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { Dropbox } from "dropbox";
 
 export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
@@ -21,21 +20,36 @@ export async function POST(request: NextRequest) {
     }
 
     const { access_token } = JSON.parse(tokenCookie);
-    const dbx = new Dropbox({ accessToken: access_token });
 
     // Ensure path starts with /
     const filePath = path.startsWith("/") ? path : `/${path}`;
 
-    const response = await dbx.filesUpload({
-      path: filePath,
-      contents: content,
-      mode: { ".tag": "overwrite" },
+    // Use direct API call instead of SDK
+    const response = await fetch("https://content.dropboxapi.com/2/files/upload", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/octet-stream",
+        "Dropbox-API-Arg": JSON.stringify({
+          path: filePath,
+          mode: "overwrite",
+        }),
+      },
+      body: content,
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Dropbox upload error:", errorText);
+      return NextResponse.json({ error: "Failed to save file" }, { status: 500 });
+    }
+
+    const result = await response.json();
 
     return NextResponse.json({
       success: true,
-      path: response.result.path_lower,
-      name: response.result.name,
+      path: result.path_lower,
+      name: result.name,
     });
   } catch (error) {
     console.error("Dropbox save error:", error);

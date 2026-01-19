@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { Dropbox } from "dropbox";
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -13,14 +12,25 @@ export async function GET() {
   try {
     const { access_token } = JSON.parse(tokenCookie);
 
-    const dbx = new Dropbox({ accessToken: access_token });
-    const account = await dbx.usersGetCurrentAccount();
+    // Use direct API call instead of SDK (SDK has fetch issues in Node.js)
+    const response = await fetch("https://api.dropboxapi.com/2/users/get_current_account", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return NextResponse.json({ connected: false });
+    }
+
+    const account = await response.json();
 
     return NextResponse.json({
       connected: true,
       user: {
-        name: account.result.name.display_name,
-        email: account.result.email,
+        name: account.name?.display_name || "Unknown",
+        email: account.email || "",
       },
     });
   } catch {
