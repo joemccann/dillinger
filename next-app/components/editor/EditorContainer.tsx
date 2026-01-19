@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
+import { X } from "lucide-react";
 import { Navbar } from "@/components/navbar/Navbar";
 import { DocumentTitle } from "@/components/editor/DocumentTitle";
 import { MonacoEditor } from "@/components/editor/MonacoEditor";
@@ -20,10 +22,51 @@ const Sidebar = dynamic(
 function EditorContent() {
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
+  const zenMode = useStore((state) => state.zenMode);
+  const setZenMode = useStore((state) => state.setZenMode);
+
+  // Keyboard shortcuts for zen mode
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + Shift + Z for zen mode
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === "z") {
+        e.preventDefault();
+        setZenMode(!zenMode);
+      }
+      // Escape to exit zen mode
+      if (e.key === "Escape" && zenMode) {
+        setZenMode(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [zenMode, setZenMode]);
 
   // Show structural skeleton while hydrating
   if (!currentDocument) {
     return <EditorSkeleton />;
+  }
+
+  // Zen mode - fullscreen distraction-free editor
+  if (zenMode) {
+    return (
+      <div className="h-dvh bg-bg-primary flex items-center justify-center">
+        <div className="w-full max-w-3xl h-full py-12 px-4 relative">
+          <button
+            onClick={() => setZenMode(false)}
+            className="absolute top-4 right-4 text-text-muted hover:text-text-invert transition-colors rounded
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+            aria-label="Exit zen mode"
+          >
+            <X size={24} />
+          </button>
+          <div className="h-full border border-border-light rounded-lg overflow-hidden">
+            <MonacoEditor />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
