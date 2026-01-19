@@ -7,11 +7,13 @@ import { useGitHub } from "@/hooks/useGitHub";
 import { useDropbox } from "@/hooks/useDropbox";
 import { useGoogleDrive } from "@/hooks/useGoogleDrive";
 import { useOneDrive } from "@/hooks/useOneDrive";
+import { useBitbucket } from "@/hooks/useBitbucket";
 import { DocumentList } from "./DocumentList";
 import { GitHubModal } from "@/components/modals/GitHubModal";
 import { DropboxModal } from "@/components/modals/DropboxModal";
 import { GoogleDriveModal } from "@/components/modals/GoogleDriveModal";
 import { OneDriveModal } from "@/components/modals/OneDriveModal";
+import { BitbucketModal } from "@/components/modals/BitbucketModal";
 import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import {
   Plus,
@@ -21,6 +23,7 @@ import {
   Cloud,
   HardDrive,
   CloudCog,
+  GitBranch,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
@@ -38,6 +41,7 @@ export function Sidebar() {
   const dropbox = useDropbox();
   const googleDrive = useGoogleDrive();
   const oneDrive = useOneDrive();
+  const bitbucket = useBitbucket();
 
   const [servicesOpen, setServicesOpen] = useState(true);
   const [importOpen, setImportOpen] = useState(false);
@@ -57,6 +61,10 @@ export function Sidebar() {
     mode: "import",
   });
   const [oneDriveModal, setOneDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
+    open: false,
+    mode: "import",
+  });
+  const [bitbucketModal, setBitbucketModal] = useState<{ open: boolean; mode: "import" | "save" }>({
     open: false,
     mode: "import",
   });
@@ -137,6 +145,13 @@ export function Sidebar() {
                   onConnect={oneDrive.connect}
                   onDisconnect={oneDrive.disconnect}
                 />
+                <ServiceButton
+                  icon={<GitBranch size={16} />}
+                  label="Bitbucket"
+                  connected={bitbucket.isConnected}
+                  onConnect={bitbucket.connect}
+                  onDisconnect={bitbucket.disconnect}
+                />
               </div>
             )}
           </div>
@@ -187,6 +202,14 @@ export function Sidebar() {
                   <CloudCog size={16} />
                   <span>OneDrive</span>
                 </button>
+                <button
+                  onClick={() => setBitbucketModal({ open: true, mode: "import" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <GitBranch size={16} />
+                  <span>Bitbucket</span>
+                </button>
               </div>
             )}
           </div>
@@ -236,6 +259,14 @@ export function Sidebar() {
                 >
                   <CloudCog size={16} />
                   <span>OneDrive</span>
+                </button>
+                <button
+                  onClick={() => setBitbucketModal({ open: true, mode: "save" })}
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+                >
+                  <GitBranch size={16} />
+                  <span>Bitbucket</span>
                 </button>
               </div>
             )}
@@ -315,6 +346,11 @@ export function Sidebar() {
         isOpen={oneDriveModal.open}
         onClose={() => setOneDriveModal({ ...oneDriveModal, open: false })}
         mode={oneDriveModal.mode}
+      />
+      <BitbucketModal
+        isOpen={bitbucketModal.open}
+        onClose={() => setBitbucketModal({ ...bitbucketModal, open: false })}
+        mode={bitbucketModal.mode}
       />
       <DeleteConfirmModal
         isOpen={deleteModalOpen}
