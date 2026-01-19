@@ -2,14 +2,16 @@
 
 import { useRef, useCallback } from "react";
 import Editor, { OnMount, OnChange } from "@monaco-editor/react";
+import type * as Monaco from "monaco-editor";
 import { useStore } from "@/stores/store";
 
 export function MonacoEditor() {
-  const editorRef = useRef<unknown>(null);
+  const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
   const currentDocument = useStore((state) => state.currentDocument);
   const settings = useStore((state) => state.settings);
   const updateDocumentBody = useStore((state) => state.updateDocumentBody);
   const persist = useStore((state) => state.persist);
+  const setEditorScrollPercent = useStore((state) => state.setEditorScrollPercent);
 
   // Debounced persist for auto-save
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -17,6 +19,16 @@ export function MonacoEditor() {
   const handleMount: OnMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
+
+    // Add scroll sync listener
+    editor.onDidScrollChange(() => {
+      if (settings.enableScrollSync) {
+        const scrollTop = editor.getScrollTop();
+        const scrollHeight = editor.getScrollHeight() - editor.getLayoutInfo().height;
+        const percent = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+        setEditorScrollPercent(percent);
+      }
+    });
   };
 
   const handleChange: OnChange = useCallback(

@@ -1,11 +1,14 @@
 "use client";
 
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 import { useStore } from "@/stores/store";
 import { renderMarkdown } from "@/lib/markdown";
 
 export function MarkdownPreview() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const currentDocument = useStore((state) => state.currentDocument);
+  const settings = useStore((state) => state.settings);
+  const editorScrollPercent = useStore((state) => state.editorScrollPercent);
   const [sanitizedHtml, setSanitizedHtml] = useState("");
 
   const rawHtml = useMemo(() => {
@@ -31,8 +34,18 @@ export function MarkdownPreview() {
     });
   }, [rawHtml]);
 
+  // Scroll sync with editor
+  useEffect(() => {
+    if (!settings.enableScrollSync || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const scrollHeight = container.scrollHeight - container.clientHeight;
+    container.scrollTop = scrollHeight * editorScrollPercent;
+  }, [editorScrollPercent, settings.enableScrollSync]);
+
   return (
     <div
+      ref={containerRef}
       id="preview"
       className="preview-html h-full overflow-auto p-6 bg-bg-primary"
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
