@@ -49,7 +49,8 @@ export async function GET(request: NextRequest) {
     const repos = await response.json();
 
     return NextResponse.json({
-      items: repos.map((repo: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      items: repos.map((repo: Record<string, any>) => ({
         name: repo.name,
         full_name: repo.full_name,
         private: repo.private,

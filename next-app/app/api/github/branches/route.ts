@@ -35,7 +35,8 @@ export async function GET(request: NextRequest) {
     const branches = await response.json();
 
     return NextResponse.json(
-      branches.map((branch: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      branches.map((branch: Record<string, any>) => ({
         name: branch.name,
         sha: branch.commit.sha,
       }))

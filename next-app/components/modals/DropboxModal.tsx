@@ -35,6 +35,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
       dropbox.fetchFiles("");
       setNewFileName(currentDocument?.title || "document");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, dropbox.isConnected]);
 
   if (!isOpen) return null;

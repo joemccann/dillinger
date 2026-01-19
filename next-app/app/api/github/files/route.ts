@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
   const owner = searchParams.get("owner");
   const repo = searchParams.get("repo");
   const branch = searchParams.get("branch");
-  const path = searchParams.get("path") || "";
 
   if (!owner || !repo || !branch) {
     return NextResponse.json(
@@ -40,14 +39,16 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     // Filter for markdown files
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const markdownFiles = data.tree.filter(
-      (item: any) =>
+      (item: Record<string, string>) =>
         item.type === "blob" &&
         (item.path.endsWith(".md") || item.path.endsWith(".markdown"))
     );
 
     return NextResponse.json(
-      markdownFiles.map((file: any) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      markdownFiles.map((file: Record<string, string>) => ({
         path: file.path,
         sha: file.sha,
         url: file.url,

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Source_Sans_3 } from "next/font/google";
-import { StoreProvider } from "@/components/providers/StoreProvider";
-import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -22,9 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${sourceSans.variable} font-sans`}>
-        <StoreProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </StoreProvider>
+        {children}
       </body>
     </html>
   );

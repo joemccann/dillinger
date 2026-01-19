@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
     // Encode content to base64
     const encodedContent = Buffer.from(content).toString("base64");
 
-    const body: any = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body: Record<string, any> = {
       message: message || `Update ${path}`,
       content: encodedContent,
       branch,
@@ -61,10 +62,11 @@ export async function POST(request: NextRequest) {
         sha: data.content.sha,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("GitHub save error:", error);
+    const message = error instanceof Error ? error.message : "Failed to save file";
     return NextResponse.json(
-      { error: error.message || "Failed to save file" },
+      { error: message },
       { status: 500 }
     );
   }

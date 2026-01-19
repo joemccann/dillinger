@@ -23,7 +23,7 @@ export async function GET() {
         email: account.result.email,
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ connected: false });
   }
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Dropbox } from "dropbox";
+import { DropboxAuth } from "dropbox";
 
 export async function GET() {
   const clientId = process.env.DROPBOX_APP_KEY;
@@ -14,8 +14,8 @@ export async function GET() {
 
   const redirectUri = `${baseUrl}/api/dropbox/callback`;
 
-  const dbx = new Dropbox({ clientId });
-  const authUrl = await dbx.auth.getAuthenticationUrl(
+  const dbxAuth = new DropboxAuth({ clientId });
+  const authUrl = await dbxAuth.getAuthenticationUrl(
     redirectUri,
     undefined,
     "code",

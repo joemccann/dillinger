@@ -59,7 +59,8 @@ export async function POST(request: NextRequest) {
     const dbx = new Dropbox({ accessToken: access_token });
 
     const response = await dbx.filesDownload({ path });
-    const result = response.result as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = response.result as Record<string, any>;
 
     // Get file content from the blob
     const content = await (result.fileBlob as Blob).text();

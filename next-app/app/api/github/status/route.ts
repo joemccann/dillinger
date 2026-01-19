@@ -32,7 +32,7 @@ export async function GET() {
         avatar_url: user.avatar_url,
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ connected: false });
   }
 }

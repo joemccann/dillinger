@@ -42,6 +42,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
       setCommitMessage("");
       setNewFileName(currentDocument?.title || "document");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, github.isConnected]);
 
   if (!isOpen) return null;

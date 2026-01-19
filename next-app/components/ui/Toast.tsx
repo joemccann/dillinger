@@ -62,10 +62,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useToast() {
+export function useToast(): ToastContextType {
   const context = useContext(ToastContext);
+  // Return no-op during SSR or when outside provider
   if (!context) {
-    throw new Error("useToast must be used within ToastProvider");
+    return { notify: () => {} };
   }
   return context;
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { Dropbox } from "dropbox";
+import { DropboxAuth } from "dropbox";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -22,10 +22,11 @@ export async function GET(request: NextRequest) {
     const clientSecret = process.env.DROPBOX_APP_SECRET!;
     const redirectUri = `${baseUrl}/api/dropbox/callback`;
 
-    const dbx = new Dropbox({ clientId, clientSecret });
-    const token = await dbx.auth.getAccessTokenFromCode(redirectUri, code);
+    const dbxAuth = new DropboxAuth({ clientId, clientSecret });
+    const token = await dbxAuth.getAccessTokenFromCode(redirectUri, code);
 
-    const result = token.result as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = token.result as Record<string, any>;
 
     // Store tokens in HTTP-only cookie
     const cookieStore = await cookies();
@@ -45,8 +46,8 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.redirect(`${baseUrl}?dropbox_connected=true`);
-  } catch (error) {
-    console.error("Dropbox OAuth error:", error);
+  } catch (err) {
+    console.error("Dropbox OAuth error:", err);
     return NextResponse.redirect(`${baseUrl}?dropbox_error=token_exchange_failed`);
   }
 }
