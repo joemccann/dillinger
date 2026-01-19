@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
 
 interface GitHubUser {
@@ -69,12 +69,11 @@ export function useGitHub() {
     current: initialCurrent,
   });
 
-  const { notify } = useToast();
+  // Use ref to access current state in callbacks without stale closures
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
-  // Check connection status on mount
-  useEffect(() => {
-    checkStatus();
-  }, []);
+  const { notify } = useToast();
 
   const checkStatus = useCallback(async () => {
     try {
@@ -87,10 +86,15 @@ export function useGitHub() {
         user: data.user || null,
         isLoading: false,
       }));
-    } catch (error) {
+    } catch {
       setState((s) => ({ ...s, isLoading: false }));
     }
   }, []);
+
+  // Check connection status on mount
+  useEffect(() => {
+    checkStatus();
+  }, [checkStatus]);
 
   const connect = useCallback(() => {
     window.location.href = "/api/github/oauth";
@@ -154,7 +158,8 @@ export function useGitHub() {
 
   const fetchBranches = useCallback(
     async (repo: string) => {
-      const { owner } = state.current;
+      // Use ref to avoid stale closure
+      const { owner } = stateRef.current.current;
       try {
         notify("Fetching branches...", 2000);
         const response = await fetch(
@@ -170,16 +175,17 @@ export function useGitHub() {
             current: { ...s.current, repo, branch: "", path: "", sha: "" },
           }));
         }
-      } catch (error) {
+      } catch {
         notify("Failed to fetch branches");
       }
     },
-    [state.current.owner, notify]
+    [notify]
   );
 
   const fetchFiles = useCallback(
     async (branch: string) => {
-      const { owner, repo } = state.current;
+      // Use ref to avoid stale closure
+      const { owner, repo } = stateRef.current.current;
       try {
         notify("Fetching files...", 2000);
         const response = await fetch(
@@ -194,16 +200,17 @@ export function useGitHub() {
             current: { ...s.current, branch, path: "", sha: "" },
           }));
         }
-      } catch (error) {
+      } catch {
         notify("Failed to fetch files");
       }
     },
-    [state.current.owner, state.current.repo, notify]
+    [notify]
   );
 
   const fetchFileContent = useCallback(
     async (path: string): Promise<{ content: string; sha: string } | null> => {
-      const { owner, repo } = state.current;
+      // Use ref to avoid stale closure
+      const { owner, repo } = stateRef.current.current;
       try {
         notify("Fetching file...", 2000);
         const response = await fetch("/api/github/files", {
@@ -221,17 +228,18 @@ export function useGitHub() {
           return { content: data.content, sha: data.sha };
         }
         return null;
-      } catch (error) {
+      } catch {
         notify("Failed to fetch file");
         return null;
       }
     },
-    [state.current.owner, state.current.repo, notify]
+    [notify]
   );
 
   const saveFile = useCallback(
     async (content: string, message?: string): Promise<boolean> => {
-      const { owner, repo, branch, path, sha } = state.current;
+      // Use ref to avoid stale closure
+      const { owner, repo, branch, path, sha } = stateRef.current.current;
 
       if (!owner || !repo || !branch || !path) {
         notify("No file selected for saving");
@@ -266,12 +274,13 @@ export function useGitHub() {
         } else {
           throw new Error(data.error);
         }
-      } catch (error: any) {
-        notify(`Failed to save: ${error.message}`);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        notify(`Failed to save: ${errorMessage}`);
         return false;
       }
     },
-    [state.current, notify]
+    [notify]
   );
 
   const setCurrent = useCallback(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { useGitHub } from "@/hooks/useGitHub";
@@ -8,6 +8,7 @@ import { useDropbox } from "@/hooks/useDropbox";
 import { DocumentList } from "./DocumentList";
 import { GitHubModal } from "@/components/modals/GitHubModal";
 import { DropboxModal } from "@/components/modals/DropboxModal";
+import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
 import {
   Plus,
   Save,
@@ -43,21 +44,28 @@ export function Sidebar() {
     open: false,
     mode: "import",
   });
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     persist();
     notify("Documents saved");
-  };
+  }, [persist, notify]);
 
-  const handleDelete = () => {
+  const handleDeleteClick = useCallback(() => {
     if (!currentDocument) return;
     if (documents.length <= 1) {
       notify("Cannot delete the last document");
       return;
     }
+    setDeleteModalOpen(true);
+  }, [currentDocument, documents.length, notify]);
+
+  const handleDeleteConfirm = useCallback(() => {
+    if (!currentDocument) return;
     deleteDocument(currentDocument.id);
     notify("Document deleted");
-  };
+    setDeleteModalOpen(false);
+  }, [currentDocument, deleteDocument, notify]);
 
   if (!sidebarOpen) return null;
 
@@ -75,13 +83,16 @@ export function Sidebar() {
           <div className="mb-2">
             <button
               onClick={() => setServicesOpen(!servicesOpen)}
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm"
+              aria-expanded={servicesOpen}
+              aria-controls="services-panel"
+              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >
               <span>Services</span>
               {servicesOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </button>
             {servicesOpen && (
-              <div className="ml-2 space-y-1">
+              <div id="services-panel" className="ml-2 space-y-1">
                 <ServiceButton
                   icon={<Github size={16} />}
                   label="GitHub"
@@ -104,23 +115,28 @@ export function Sidebar() {
           <div className="mb-2">
             <button
               onClick={() => setImportOpen(!importOpen)}
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm"
+              aria-expanded={importOpen}
+              aria-controls="import-panel"
+              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >
               <span>Import from</span>
               {importOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </button>
             {importOpen && (
-              <div className="ml-2 space-y-1">
+              <div id="import-panel" className="ml-2 space-y-1">
                 <button
                   onClick={() => setGithubModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight"
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
                 >
                   <Github size={16} />
                   <span>GitHub</span>
                 </button>
                 <button
                   onClick={() => setDropboxModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight"
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
                 >
                   <Cloud size={16} />
                   <span>Dropbox</span>
@@ -133,23 +149,28 @@ export function Sidebar() {
           <div className="mb-2">
             <button
               onClick={() => setSaveOpen(!saveOpen)}
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm"
+              aria-expanded={saveOpen}
+              aria-controls="save-panel"
+              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >
               <span>Save to</span>
               {saveOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </button>
             {saveOpen && (
-              <div className="ml-2 space-y-1">
+              <div id="save-panel" className="ml-2 space-y-1">
                 <button
                   onClick={() => setGithubModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight"
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
                 >
                   <Github size={16} />
                   <span>GitHub</span>
                 </button>
                 <button
                   onClick={() => setDropboxModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight"
+                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
                 >
                   <Cloud size={16} />
                   <span>Dropbox</span>
@@ -162,13 +183,16 @@ export function Sidebar() {
           <div className="mb-2">
             <button
               onClick={() => setDocumentsOpen(!documentsOpen)}
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm"
+              aria-expanded={documentsOpen}
+              aria-controls="documents-panel"
+              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >
               <span>Documents</span>
               {documentsOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </button>
             {documentsOpen && (
-              <div className="ml-2">
+              <div id="documents-panel" className="ml-2">
                 <DocumentList />
               </div>
             )}
@@ -180,7 +204,8 @@ export function Sidebar() {
           <button
             onClick={createDocument}
             className="w-full bg-plum text-bg-sidebar py-2 px-4 rounded font-medium
-                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Plus size={18} />
             New Document
@@ -188,16 +213,18 @@ export function Sidebar() {
           <button
             onClick={handleSave}
             className="w-full bg-bg-button-save text-text-invert py-2 px-4 rounded font-medium
-                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Save size={18} />
             Save Session
           </button>
           {documents.length > 1 && (
             <button
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
               className="w-full bg-red-600 text-text-invert py-2 px-4 rounded font-medium
-                         hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                         hover:opacity-90 transition-opacity flex items-center justify-center gap-2
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
             >
               <Trash2 size={18} />
               Delete Document
@@ -217,11 +244,18 @@ export function Sidebar() {
         onClose={() => setDropboxModal({ ...dropboxModal, open: false })}
         mode={dropboxModal.mode}
       />
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        documentTitle={currentDocument?.title || ""}
+      />
     </>
   );
 }
 
-function ServiceButton({
+// Memoized to prevent unnecessary re-renders when parent state changes
+const ServiceButton = memo(function ServiceButton({
   icon,
   label,
   connected,
@@ -243,18 +277,22 @@ function ServiceButton({
       {connected ? (
         <button
           onClick={onDisconnect}
-          className="text-xs text-red-400 hover:text-red-300"
+          aria-label={`Unlink ${label}`}
+          className="text-xs text-red-400 hover:text-red-300 rounded px-1
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
         >
           Unlink
         </button>
       ) : (
         <button
           onClick={onConnect}
-          className="text-xs text-plum hover:opacity-80"
+          aria-label={`Link ${label}`}
+          className="text-xs text-plum hover:opacity-80 rounded px-1
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
         >
           Link
         </button>
       )}
     </div>
   );
-}
+});

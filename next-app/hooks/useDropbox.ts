@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
 
 interface DropboxUser {
@@ -33,11 +33,11 @@ export function useDropbox() {
     pathHistory: [],
   });
 
-  const { notify } = useToast();
+  // Use ref to access current state in callbacks without stale closures
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
-  useEffect(() => {
-    checkStatus();
-  }, []);
+  const { notify } = useToast();
 
   const checkStatus = useCallback(async () => {
     try {
@@ -50,10 +50,14 @@ export function useDropbox() {
         user: data.user || null,
         isLoading: false,
       }));
-    } catch (error) {
+    } catch {
       setState((s) => ({ ...s, isLoading: false }));
     }
   }, []);
+
+  useEffect(() => {
+    checkStatus();
+  }, [checkStatus]);
 
   const connect = useCallback(() => {
     window.location.href = "/api/dropbox/oauth";
@@ -71,7 +75,7 @@ export function useDropbox() {
         pathHistory: [],
       }));
       notify("Disconnected from Dropbox");
-    } catch (error) {
+    } catch {
       notify("Failed to disconnect");
     }
   }, [notify]);
@@ -90,7 +94,7 @@ export function useDropbox() {
             currentPath: path,
           }));
         }
-      } catch (error) {
+      } catch {
         notify("Failed to fetch files");
       }
     },
@@ -109,9 +113,12 @@ export function useDropbox() {
   );
 
   const navigateBack = useCallback(async () => {
+    // Use ref to avoid stale closure
+    const previousPath = stateRef.current.pathHistory[stateRef.current.pathHistory.length - 1] || "";
+
     setState((s) => {
       const newHistory = [...s.pathHistory];
-      const previousPath = newHistory.pop() || "";
+      newHistory.pop();
       return {
         ...s,
         pathHistory: newHistory,
@@ -119,9 +126,8 @@ export function useDropbox() {
       };
     });
 
-    const previousPath = state.pathHistory[state.pathHistory.length - 1] || "";
     await fetchFiles(previousPath);
-  }, [fetchFiles, state.pathHistory]);
+  }, [fetchFiles]);
 
   const fetchFileContent = useCallback(
     async (path: string): Promise<{ content: string; name: string } | null> => {
@@ -138,7 +144,7 @@ export function useDropbox() {
           return { content: data.content, name: data.name };
         }
         return null;
-      } catch (error) {
+      } catch {
         notify("Failed to fetch file");
         return null;
       }
@@ -163,8 +169,9 @@ export function useDropbox() {
           const data = await response.json();
           throw new Error(data.error);
         }
-      } catch (error: any) {
-        notify(`Failed to save: ${error.message}`);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        notify(`Failed to save: ${errorMessage}`);
         return false;
       }
     },
