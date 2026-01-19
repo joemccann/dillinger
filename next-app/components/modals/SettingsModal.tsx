@@ -93,6 +93,14 @@ export function SettingsModal() {
             onChange={(v) => updateSettings({ enableNightMode: v })}
           />
 
+          {/* Scroll Sync */}
+          <SettingToggle
+            id="scroll-sync"
+            label="Scroll Sync"
+            checked={settings.enableScrollSync}
+            onChange={(v) => updateSettings({ enableScrollSync: v })}
+          />
+
           {/* Tab Size */}
           <div className="flex items-center justify-between">
             <label htmlFor="tab-size" className="text-text-invert text-sm">Tab Size</label>
