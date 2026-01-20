@@ -21,10 +21,36 @@ export async function POST(request: NextRequest) {
   try {
     const { name, content, folderId, fileId } = await request.json();
 
+    const fileName = name.endsWith(".md") ? name : `${name}.md`;
+    let targetFileId = fileId;
+
+    // If no fileId provided, check if file with same name exists in the folder
+    if (!targetFileId) {
+      const parentId = folderId || "root";
+      const query = `name = '${fileName.replace(/'/g, "\\'")}' and '${parentId}' in parents and trashed = false`;
+
+      const searchResponse = await fetch(
+        `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id)`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (searchResponse.ok) {
+        const searchData = await searchResponse.json();
+        if (searchData.files && searchData.files.length > 0) {
+          // File exists, use its ID to update it
+          targetFileId = searchData.files[0].id;
+        }
+      }
+    }
+
     const metadata = {
-      name: name.endsWith(".md") ? name : `${name}.md`,
+      name: fileName,
       mimeType: "text/markdown",
-      ...(folderId && !fileId ? { parents: [folderId] } : {}),
+      ...(!targetFileId && folderId ? { parents: [folderId] } : {}),
     };
 
     // Use multipart upload
@@ -44,9 +70,9 @@ export async function POST(request: NextRequest) {
     let url = "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart";
     let method = "POST";
 
-    // If fileId provided, update existing file
-    if (fileId) {
-      url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=multipart`;
+    // If targetFileId exists (either provided or found), update existing file
+    if (targetFileId) {
+      url = `https://www.googleapis.com/upload/drive/v3/files/${targetFileId}?uploadType=multipart`;
       method = "PATCH";
     }
 
