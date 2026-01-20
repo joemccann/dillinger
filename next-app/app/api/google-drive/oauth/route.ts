@@ -16,7 +16,7 @@ export async function GET() {
     client_id: clientId,
     redirect_uri: redirectUri,
     response_type: "code",
-    scope: "openid email https://www.googleapis.com/auth/drive.file",
+    scope: "openid email https://www.googleapis.com/auth/drive",
     access_type: "offline",
     prompt: "consent",
   });
