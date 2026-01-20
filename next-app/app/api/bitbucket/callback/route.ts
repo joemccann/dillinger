@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.BITBUCKET_CLIENT_ID;
   const clientSecret = process.env.BITBUCKET_CLIENT_SECRET;
+  const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/bitbucket/callback`;
 
   try {
     // Exchange code for tokens
@@ -24,6 +25,7 @@ export async function GET(request: NextRequest) {
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
+        redirect_uri: redirectUri,
       }),
     });
 
