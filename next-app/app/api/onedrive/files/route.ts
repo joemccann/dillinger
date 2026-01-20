@@ -27,28 +27,35 @@ export async function GET(request: NextRequest) {
       ? "https://graph.microsoft.com/v1.0/me/drive/root/children"
       : `https://graph.microsoft.com/v1.0/me/drive/items/${folderId}/children`;
 
-    const response = await fetch(
-      `${endpoint}?$filter=folder ne null or (file ne null and endswith(name, '.md'))`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    console.log("OneDrive: Fetching files from", endpoint);
+
+    // Note: Personal OneDrive accounts don't support $filter, so we fetch all and filter server-side
+    const response = await fetch(endpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    console.log("OneDrive files API response status:", response.status);
 
     if (!response.ok) {
       const error = await response.text();
-      console.error("OneDrive list files error:", error);
+      console.error("OneDrive list files error:", response.status, error);
       return NextResponse.json({ error: "Failed to list files" }, { status: 500 });
     }
 
     const data = await response.json();
 
-    const files = data.value.map((item: { id: string; name: string; folder?: object }) => ({
-      id: item.id,
-      name: item.name,
-      isFolder: !!item.folder,
-    }));
+    // Filter for folders and .md files on the server side
+    const files = data.value
+      .filter((item: { folder?: object; name: string }) => {
+        return item.folder || item.name.toLowerCase().endsWith('.md');
+      })
+      .map((item: { id: string; name: string; folder?: object }) => ({
+        id: item.id,
+        name: item.name,
+        isFolder: !!item.folder,
+      }));
 
     return NextResponse.json({ files });
   } catch (error) {
