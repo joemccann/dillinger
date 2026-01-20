@@ -47,7 +47,9 @@ export function MarkdownPreview() {
     <div
       ref={containerRef}
       id="preview"
-      className="preview-html h-full overflow-auto p-6 bg-bg-primary"
+      className={`preview-html h-full overflow-auto p-6 ${
+        settings.enableNightMode ? 'dark bg-[#1e1e1e]' : 'bg-bg-primary'
+      }`}
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />
   );

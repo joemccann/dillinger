@@ -117,3 +117,48 @@ body {
 .preview-html input[type="checkbox"] {
   margin-right: 0.5em;
 }
+
+/* Dark Mode Styles */
+.dark.preview-html {
+  color: #d4d4d4;
+}
+
+.dark.preview-html h1,
+.dark.preview-html h2,
+.dark.preview-html h3,
+.dark.preview-html h4,
+.dark.preview-html h5,
+.dark.preview-html h6 {
+  color: #e8e8e8;
+}
+
+.dark.preview-html a {
+  color: #35D7BB;
+}
+
+.dark.preview-html code {
+  background: #2d2d2d;
+  color: #d4d4d4;
+}
+
+.dark.preview-html pre {
+  background: #2d2d2d;
+}
+
+.dark.preview-html blockquote {
+  border-left-color: #555;
+  color: #aaa;
+}
+
+.dark.preview-html th,
+.dark.preview-html td {
+  border-color: #444;
+}
+
+.dark.preview-html th {
+  background: #2d2d2d;
+}
+
+.dark.preview-html hr {
+  border-top-color: #444;
+}
