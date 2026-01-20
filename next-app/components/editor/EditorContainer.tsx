@@ -8,8 +8,7 @@ import { DocumentTitle } from "@/components/editor/DocumentTitle";
 import { MonacoEditor } from "@/components/editor/MonacoEditor";
 import { MarkdownPreview } from "@/components/preview/MarkdownPreview";
 import { SettingsModal } from "@/components/modals/SettingsModal";
-import { StoreProvider } from "@/components/providers/StoreProvider";
-import { ToastProvider, useToast } from "@/components/ui/Toast";
+import { useToast } from "@/components/ui/Toast";
 import { useStore } from "@/stores/store";
 import { EditorSkeleton } from "@/components/ui/Skeleton";
 
@@ -229,11 +228,5 @@ function EditorContent() {
 }
 
 export function EditorContainer() {
-  return (
-    <StoreProvider>
-      <ToastProvider>
-        <EditorContent />
-      </ToastProvider>
-    </StoreProvider>
-  );
+  return <EditorContent />;
 }
