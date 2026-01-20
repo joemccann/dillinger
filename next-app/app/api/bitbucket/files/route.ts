@@ -30,15 +30,19 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiPath = path ? `/${path}` : "";
-    const response = await fetch(
-      `https://api.bitbucket.org/2.0/repositories/${workspace}/${repo}/src/${branch}${apiPath}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    // For listing directory contents, we need to add trailing slash if no path
+    const apiPath = path ? `/${path}/` : "/";
+    const url = `https://api.bitbucket.org/2.0/repositories/${workspace}/${repo}/src/${branch}${apiPath}`;
+
+    console.log("Bitbucket: Fetching files from", url);
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    console.log("Bitbucket files API response status:", response.status);
 
     if (!response.ok) {
       const error = await response.text();
