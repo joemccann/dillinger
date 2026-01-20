@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import Editor, { OnMount, OnChange } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import { useStore } from "@/stores/store";
@@ -19,9 +19,14 @@ export function MonacoEditor() {
   const handleMount: OnMount = (editor) => {
     editorRef.current = editor;
     editor.focus();
+  };
 
-    // Add scroll sync listener
-    editor.onDidScrollChange(() => {
+  // Set up scroll sync listener (recreates when settings change)
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const disposable = editor.onDidScrollChange(() => {
       if (settings.enableScrollSync) {
         const scrollTop = editor.getScrollTop();
         const scrollHeight = editor.getScrollHeight() - editor.getLayoutInfo().height;
@@ -29,7 +34,9 @@ export function MonacoEditor() {
         setEditorScrollPercent(percent);
       }
     });
-  };
+
+    return () => disposable.dispose();
+  }, [settings.enableScrollSync, setEditorScrollPercent]);
 
   const handleChange: OnChange = useCallback(
     (value: string | undefined) => {
