@@ -19,7 +19,9 @@ export async function GET() {
     scope: "Files.ReadWrite.All offline_access",
   });
 
-  const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${params.toString()}`;
+  // Use /consumers/ for personal Microsoft accounts (outlook.com, live.com, hotmail.com)
+  // Use /common/ if your Azure AD app supports both work/school AND personal accounts
+  const authUrl = `https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?${params.toString()}`;
 
   return NextResponse.redirect(authUrl);
 }
