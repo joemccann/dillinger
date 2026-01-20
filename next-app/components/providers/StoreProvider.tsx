@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useStore } from "@/stores/store";
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
-  const hydrate = useStore((state) => state.hydrate);
+  const hasHydrated = useRef(false);
 
   useEffect(() => {
-    hydrate();
-  }, [hydrate]);
+    if (!hasHydrated.current) {
+      useStore.getState().hydrate();
+      hasHydrated.current = true;
+    }
+  }, []);
 
   return <>{children}</>;
 }
