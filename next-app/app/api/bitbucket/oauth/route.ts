@@ -16,6 +16,7 @@ export async function GET() {
     client_id: clientId,
     redirect_uri: redirectUri,
     response_type: "code",
+    scope: "account repository",
   });
 
   const authUrl = `https://bitbucket.org/site/oauth2/authorize?${params.toString()}`;

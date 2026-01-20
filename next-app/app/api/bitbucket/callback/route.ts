@@ -37,6 +37,12 @@ export async function GET(request: NextRequest) {
 
     const tokens = await tokenResponse.json();
 
+    console.log("Bitbucket tokens received:", {
+      has_access_token: !!tokens.access_token,
+      has_refresh_token: !!tokens.refresh_token,
+      expires_in: tokens.expires_in,
+    });
+
     // Store tokens in HTTP-only cookie
     const cookieStore = await cookies();
     cookieStore.set("bitbucket_token", JSON.stringify({
@@ -49,6 +55,8 @@ export async function GET(request: NextRequest) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
+
+    console.log("Bitbucket cookie set successfully");
 
     return NextResponse.redirect(new URL("/?bitbucket_connected=true", request.url));
   } catch (error) {
