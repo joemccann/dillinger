@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
