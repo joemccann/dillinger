@@ -16,7 +16,7 @@ export async function GET() {
     client_id: clientId,
     redirect_uri: redirectUri,
     response_type: "code",
-    scope: "Files.ReadWrite.All offline_access",
+    scope: "User.Read Files.ReadWrite.All offline_access",
   });
 
   // Use /consumers/ for personal Microsoft accounts (outlook.com, live.com, hotmail.com)
