@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #ffffff;
+  color: #373D49;
+}
+
+/* Preview Styles */
+.preview-html {
+  font-family: Georgia, Cambria, serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #373D49;
+}
+
+.preview-html h1,
+.preview-html h2,
+.preview-html h3,
+.preview-html h4,
+.preview-html h5,
+.preview-html h6 {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.preview-html h1 { font-size: 2em; }
+.preview-html h2 { font-size: 1.5em; }
+.preview-html h3 { font-size: 1.25em; }
+.preview-html h4 { font-size: 1em; }
+
+.preview-html p {
+  margin-bottom: 1em;
+}
+
+.preview-html a {
+  color: #35D7BB;
+  text-decoration: none;
+}
+
+.preview-html a:hover {
+  text-decoration: underline;
+}
+
+.preview-html code {
+  font-family: "Ubuntu Mono", Monaco, monospace;
+  background: #F5F7FA;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.preview-html pre {
+  background: #F5F7FA;
+  padding: 1em;
+  border-radius: 3px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+.preview-html pre code {
+  background: none;
+  padding: 0;
+}
+
+.preview-html blockquote {
+  border-left: 3px solid #A0AABF;
+  padding-left: 1em;
+  margin-left: 0;
+  font-style: italic;
+  color: #666;
+}
+
+.preview-html ul,
+.preview-html ol {
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.preview-html li {
+  margin-bottom: 0.25em;
+}
+
+.preview-html table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.preview-html th,
+.preview-html td {
+  border: 1px solid #E8E8E8;
+  padding: 0.5em;
+  text-align: left;
+}
+
+.preview-html th {
+  background: #F5F7FA;
+  font-weight: 600;
+}
+
+.preview-html img {
+  max-width: 100%;
+  height: auto;
+}
+
+.preview-html hr {
+  border: none;
+  border-top: 1px solid #E8E8E8;
+  margin: 2em 0;
+}
+
+/* Checkbox styling */
+.preview-html input[type="checkbox"] {
+  margin-right: 0.5em;
+}
+
+/* Dark Mode Styles */
+.dark.preview-html {
+  color: #d4d4d4;
+}
+
+.dark.preview-html h1,
+.dark.preview-html h2,
+.dark.preview-html h3,
+.dark.preview-html h4,
+.dark.preview-html h5,
+.dark.preview-html h6 {
+  color: #e8e8e8;
+}
+
+.dark.preview-html a {
+  color: #35D7BB;
+}
+
+.dark.preview-html code {
+  background: #2d2d2d;
+  color: #d4d4d4;
+}
+
+.dark.preview-html pre {
+  background: #2d2d2d;
+}
+
+.dark.preview-html blockquote {
+  border-left-color: #555;
+  color: #aaa;
+}
+
+.dark.preview-html th,
+.dark.preview-html td {
+  border-color: #444;
+}
+
+.dark.preview-html th {
+  background: #2d2d2d;
+}
+
+.dark.preview-html hr {
+  border-top-color: #444;
+}
