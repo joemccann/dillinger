@@ -13,6 +13,8 @@
   line-height: 2rem;
   width: 100%;
   height: 100%;
+  background: light-dark(#fff, $c-background-sidebar);
+  color: light-dark(#000, $c-border);
   // position: absolute;
   // top: 0;
   // left: 0;
@@ -42,14 +44,32 @@
 
   .ace_gutter {
     -webkit-font-smoothing: antialiased;
+    background: light-dark($c-border, darken($c-background-sidebar, 5%));
+
+    .ace_gutter-active-line {
+      background: light-dark(#00000012, #00000030)
+    }
   }
 
+  .ace_marker-layer {
+    .ace_active-line {
+      background: light-dark(lighten($c-border, 5%), lighten($c-background-sidebar, 5%));
+    }
+
+    .ace_selection {
+      background: light-dark(#B5D5FF, #5E6F86);
+    }
+  }
+
+  .ace_cursor {
+    color: currentColor;
+  }
 }
 
 .editor-header {
   width: 50%;
   float: left;
-  border-bottom: 1px solid $c-border;
+  border-bottom: 1px solid light-dark($c-border, $c-border-settings);
   position: relative;
 
   @include to('tablet') {
@@ -57,7 +77,8 @@
   }
 
   &--first {
-    border-right: 1px solid $c-border;
+    border-right: 1px solid light-dark($c-border, $c-border-settings);
+
     @include to('tablet') {
       display: block;
       width: 100%;

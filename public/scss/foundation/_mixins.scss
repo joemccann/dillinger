@@ -302,3 +302,9 @@ $widths: map-values($maxwidths);
     @warn "#{$breakpoint} is not valid to use as a breakpoint";
   }
 }
+
+@mixin prefers-dark() {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}

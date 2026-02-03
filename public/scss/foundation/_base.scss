@@ -5,10 +5,14 @@
 //
 // *************************************
 
+:root {
+  color-scheme: light dark;
+}
+
 html {
   @include rootsize;
   background: $c-background;
-  color: $c-text;
+  color: light-dark($c-text, $c-border);
   font-family: $base-font-family;
   height: 100%;
 }

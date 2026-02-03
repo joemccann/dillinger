@@ -39,6 +39,10 @@
   @include from('tablet') {
     display: block;
   }
+
+  @include prefers-dark {
+    background-image: url('../img/icons/enter-zen-dark.svg');
+  }
 }
 
 .close-zen-mode {

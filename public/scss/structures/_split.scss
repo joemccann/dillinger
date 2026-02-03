@@ -52,7 +52,7 @@
     }
 
     @include from('tablet') {
-      border-right: 1px solid $c-border;
+      border-right: 1px solid light-dark($c-border, $c-border-settings);
       float: left;
       padding-right: 16px;
       width: 50%;
@@ -64,7 +64,7 @@
   }
 
   &-preview {
-    background-color: #fff;
+    background-color: light-dark(#fff, $c-background-sidebar);
     display: none;
     top: 0;
     position: relative;

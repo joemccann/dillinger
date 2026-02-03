@@ -1,5 +1,5 @@
 .header {
-  border-bottom: 1px solid $c-border;
+  border-bottom: 1px solid light-dark($c-border, $c-border-settings);
   position: relative;
 }
 
@@ -19,7 +19,7 @@
   }
 
   .counter {
-    color: #000;
+    color: light-dark(#000, $c-border);
   }
 }
 

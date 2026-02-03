@@ -48,12 +48,13 @@
     @include sp(epsilon, $monospacetype, 1, 1, all);
     font-weight: map-get($monospacetype, regular);
     font-family: map-get($monospacetype, font-family);
-    color: $c-text;
+    color: light-dark($c-text, $c-text-invert);
     padding-left: 16px;
     padding-right: 16px;
     width: 80%;
     min-width: 300px;
     outline: 0;
     border: none;
+    background: light-dark($c-background, $c-background-sidebar);
   }
 }
