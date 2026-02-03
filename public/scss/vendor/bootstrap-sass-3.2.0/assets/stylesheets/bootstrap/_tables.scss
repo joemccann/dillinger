@@ -2,6 +2,8 @@
 // Tables
 // --------------------------------------------------
 
+$theme-table-border-color: light-dark(#{$table-border-color}, #43474D);
+
 
 table {
   background-color: $table-bg;
@@ -27,14 +29,14 @@ th {
         padding: $table-cell-padding;
         line-height: $line-height-base;
         vertical-align: top;
-        border-top: 1px solid $table-border-color;
+        border-top: 1px solid $theme-table-border-color;
       }
     }
   }
   // Bottom align for column headings
   > thead > tr > th {
     vertical-align: bottom;
-    border-bottom: 2px solid $table-border-color;
+    border-bottom: 2px solid $theme-table-border-color;
   }
   // Remove top border from thead by default
   > caption + thead,
@@ -49,7 +51,7 @@ th {
   }
   // Account for multiple tbody instances
   > tbody + tbody {
-    border-top: 2px solid $table-border-color;
+    border-top: 2px solid $theme-table-border-color;
   }
 
   // Nesting
@@ -80,14 +82,14 @@ th {
 // Add borders all around the table and between all the columns.
 
 .table-bordered {
-  border: 1px solid $table-border-color;
+  border: 1px solid $theme-table-border-color;
   > thead,
   > tbody,
   > tfoot {
     > tr {
       > th,
       > td {
-        border: 1px solid $table-border-color;
+        border: 1px solid $theme-table-border-color;
       }
     }
   }
@@ -108,7 +110,7 @@ th {
   > tbody > tr:nth-child(odd) {
     > td,
     > th {
-      background-color: $table-bg-accent;
+      background-color: light-dark($table-bg-accent, #43474D);
     }
   }
 }
@@ -175,7 +177,7 @@ table {
     overflow-y: hidden;
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid $table-border-color;
+    border: 1px solid $theme-table-border-color;
     -webkit-overflow-scrolling: touch;
 
     // Tighten up spacing

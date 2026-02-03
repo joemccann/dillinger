@@ -56,15 +56,21 @@ pre {
   line-height: 2rem;
   background: linear-gradient(
     to bottom,
-    rgba(#fff, 1) 0,
-    rgba(#fff, 1) .75rem,
-    rgba(#F5F7FA, 1) .75rem,
-    rgba(#F5F7FA, 1) 2.75rem,
-    rgba(#fff, 1) 2.75rem,
-    rgba(#fff, 1) 4rem
+    light-dark(#fff, $c-border-settings) 0,
+    light-dark(#fff, $c-border-settings) .75rem,
+    light-dark(rgba(#F5F7FA, 1), darken($c-border-settings, 5%)) .75rem,
+    light-dark(rgba(#F5F7FA, 1), darken($c-border-settings, 5%)) 2.75rem,
+    light-dark(#fff, $c-border-settings) 2.75rem,
+    light-dark(#fff, $c-border-settings) 4rem
   );
   background-size: 100% 4rem;
-  border-color: #D3DAEA;
+  border-color: light-dark(#D3DAEA, darken($c-border-settings, 5%));
+  color: light-dark($c-text, $c-border);
+}
+
+code {
+  background: light-dark($code-bg, darken($c-border-settings, 5%));
+  color: light-dark($code-color, lighten($code-color, 10%));
 }
 
 blockquote {
