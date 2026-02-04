@@ -1,18 +1,18 @@
-.ui-resizable { 
-  
-   
+.ui-resizable {
+
+
     position: relative;
 }
 .ui-resizable-handle { position: absolute;font-size: 0.1px;z-index: 99999; display: block; }
 /*.ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }*/
 .ui-resizable-e {
 	background-color: #666;
-	border-right: 8px solid #e8e8e8;
+	border-right: 8px solid light-dark($c-border, $c-border-settings);
 	border-left: 1px solid #222;
 	/*box-shadow: inset 0 1px 0 #6e6e6e,0 2px 2px rgba(0,0,0,0.4);*/
     width:10px;
     z-index: 88 !important;
-    position: relative; 
+    position: relative;
 }
 
 .ui-resizable-e:after {
@@ -28,8 +28,8 @@
 }
 
 #editor{
-    cursor: ew-resize; 
+    cursor: ew-resize;
     position: relative;
-    z-index: auto; 
+    z-index: auto;
 }
 

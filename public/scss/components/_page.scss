@@ -25,7 +25,7 @@
   height: 100%;
   z-index: map-get($z-index, page);
   transition: map-get($transitions, menu);
-  background-color: #fff;
+  background-color: light-dark(#fff, $c-background-sidebar);
   padding-top: 51px;
   will-change: left;
 
