@@ -8,6 +8,13 @@ const md = require('./markdown-it.js')
 const breakdance = require('breakdance')
 const { mdToPdf } = require('md-to-pdf')
 
+let chromium
+try {
+  chromium = require('@sparticuz/chromium')
+} catch (e) {
+  chromium = null
+}
+
 const _getFullHtml = (name, str, style) => {
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
     name + '</title><style>' +
@@ -109,8 +116,18 @@ const markdown2Pdf = async (md) => {
   let pdf = null
 
   try {
-    pdf = await mdToPdf({ content: md }, {
-      launch_options: {
+    let launchOptions
+
+    if (chromium) {
+      // Serverless environment (Vercel, AWS Lambda, etc.)
+      launchOptions = {
+        args: chromium.args,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless
+      }
+    } else {
+      // Docker/traditional server environment
+      launchOptions = {
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
         args: [
           '--no-sandbox',
@@ -121,6 +138,10 @@ const markdown2Pdf = async (md) => {
           '--no-zygote'
         ]
       }
+    }
+
+    pdf = await mdToPdf({ content: md }, {
+      launch_options: launchOptions
     })
   } catch (err) {
     return { err }
