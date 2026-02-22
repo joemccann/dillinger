@@ -9,3 +9,7 @@ services:
     environment:
       - "BIND_ADDRESS=0.0.0.0"
       - "PORT=9000"
+    security_opt:
+      - seccomp=unconfined
+    cap_add:
+      - SYS_ADMIN

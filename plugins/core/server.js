@@ -110,7 +110,17 @@ const markdown2Pdf = async (md) => {
 
   try {
     pdf = await mdToPdf({ content: md }, {
-      launch_options: ['--no-sandbox', '--disable-setuid-sandbox']
+      launch_options: {
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--single-process',
+          '--no-zygote'
+        ]
+      }
     })
   } catch (err) {
     return { err }
