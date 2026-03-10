@@ -1,4 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "functions": {
+    "app/api/export/pdf/route.ts": {
+      "includeFiles": "node_modules/@sparticuz/chromium/bin/**/*"
+    }
+  }
 }
