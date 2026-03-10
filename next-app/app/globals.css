@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "katex/dist/katex.min.css";
 
 body {
   background: #ffffff;
@@ -90,6 +91,15 @@ body {
   margin-bottom: 1em;
 }
 
+.preview-html .table {
+  width: 100%;
+}
+
+.preview-html .table-striped tbody tr:nth-child(odd) td,
+.preview-html .table-striped tbody tr:nth-child(odd) th {
+  background: #f9f9f9;
+}
+
 .preview-html th,
 .preview-html td {
   border: 1px solid #E8E8E8;
@@ -105,6 +115,18 @@ body {
 .preview-html img {
   max-width: 100%;
   height: auto;
+}
+
+.preview-html .toc {
+  padding: 1rem 1.25rem;
+  border: 1px solid #E8E8E8;
+  border-radius: 6px;
+  background: #F5F7FA;
+  margin-bottom: 1.5rem;
+}
+
+.preview-html .toc ul {
+  margin: 0.5rem 0 0;
 }
 
 .preview-html hr {
@@ -157,6 +179,16 @@ body {
 
 .dark.preview-html th {
   background: #2d2d2d;
+}
+
+.dark.preview-html .table-striped tbody tr:nth-child(odd) td,
+.dark.preview-html .table-striped tbody tr:nth-child(odd) th {
+  background: #252525;
+}
+
+.dark.preview-html .toc {
+  background: #2d2d2d;
+  border-color: #444;
 }
 
 .dark.preview-html hr {

@@ -25,8 +25,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
   const oneDrive = useOneDrive();
   const { notify } = useToast();
   const currentDocument = useStore((state) => state.currentDocument);
-  const updateDocumentBody = useStore((state) => state.updateDocumentBody);
-  const updateDocumentTitle = useStore((state) => state.updateDocumentTitle);
+  const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const [newFileName, setNewFileName] = useState("");
@@ -67,8 +66,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
     } else if (mode === "import") {
       const file = await oneDrive.fetchFileContent(item.id);
       if (file) {
-        updateDocumentBody(file.content);
-        updateDocumentTitle(file.name.replace(/\.md$/, ""));
+        createImportedDocument(file.name, file.content);
         notify("File imported from OneDrive");
         onClose();
       }

@@ -1,12 +1,13 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET() {
   const clientId = process.env.GITHUB_CLIENT_ID;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = getAppUrl();
 
-  if (!clientId || !baseUrl) {
+  if (!clientId) {
     return NextResponse.json(
       { error: "GitHub OAuth not configured" },
       { status: 500 }

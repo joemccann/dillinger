@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.MEDIUM_CLIENT_ID;
   const clientSecret = process.env.MEDIUM_CLIENT_SECRET;
-  const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/medium/callback`;
+  const redirectUri = `${getAppUrl()}/api/medium/callback`;
 
   try {
     // Exchange code for tokens
@@ -34,8 +35,6 @@ export async function GET(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.text();
-      console.error("Medium token exchange failed:", errorData);
       return NextResponse.redirect(new URL("/?error=medium_token_failed", request.url));
     }
 

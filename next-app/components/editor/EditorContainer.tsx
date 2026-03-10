@@ -11,6 +11,8 @@ import { SettingsModal } from "@/components/modals/SettingsModal";
 import { useToast } from "@/components/ui/Toast";
 import { useStore } from "@/stores/store";
 import { EditorSkeleton } from "@/components/ui/Skeleton";
+import { useImageUpload } from "@/hooks/useImageUpload";
+import { importDocumentFile } from "@/lib/import";
 
 // Dynamic import Sidebar to prevent SSR issues with GitHub/Dropbox hooks
 const Sidebar = dynamic(
@@ -21,11 +23,12 @@ const Sidebar = dynamic(
 function EditorContent() {
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
-  const updateDocumentBody = useStore((state) => state.updateDocumentBody);
-  const updateDocumentTitle = useStore((state) => state.updateDocumentTitle);
+  const createImportedDocument = useStore((state) => state.createImportedDocument);
+  const insertMarkdownAtCursor = useStore((state) => state.insertMarkdownAtCursor);
   const zenMode = useStore((state) => state.zenMode);
   const setZenMode = useStore((state) => state.setZenMode);
   const { notify } = useToast();
+  const { upload } = useImageUpload();
 
   const [isDragging, setIsDragging] = useState(false);
   const [, setDragCounter] = useState(0);
@@ -42,27 +45,29 @@ function EditorContent() {
       if (files.length === 0) return;
 
       const file = files[0];
-      const validExtensions = [".md", ".txt", ".markdown"];
-      const hasValidExtension = validExtensions.some((ext) =>
-        file.name.toLowerCase().endsWith(ext)
-      );
+      const isImage = file.type.startsWith("image/");
 
-      if (!hasValidExtension) {
-        notify("Please drop a .md, .txt, or .markdown file");
+      if (isImage) {
+        const result = await upload(file);
+        if (result) {
+          insertMarkdownAtCursor(`\n${result.markdown}\n`);
+        }
         return;
       }
 
       try {
-        const content = await file.text();
-        const title = file.name.replace(/\.(md|txt|markdown)$/i, "");
-        updateDocumentTitle(title);
-        updateDocumentBody(content);
+        const imported = await importDocumentFile(file);
+        createImportedDocument(file.name, imported.body);
         notify(`Imported "${file.name}"`);
-      } catch {
-        notify("Failed to read file");
+      } catch (error) {
+        notify(
+          error instanceof Error
+            ? error.message
+            : "Failed to import file"
+        );
       }
     },
-    [notify, updateDocumentTitle, updateDocumentBody]
+    [createImportedDocument, insertMarkdownAtCursor, notify, upload]
   );
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
@@ -139,7 +144,7 @@ function EditorContent() {
                   Drop your file here
                 </p>
                 <p className="text-text-muted mt-1">
-                  Supports .md, .txt, and .markdown files
+                  Supports markdown, HTML, and image files
                 </p>
               </div>
             </div>
@@ -186,7 +191,7 @@ function EditorContent() {
                 Drop your file here
               </p>
               <p className="text-text-muted mt-1">
-                Supports .md, .txt, and .markdown files
+                Supports markdown, HTML, and image files
               </p>
             </div>
           </div>

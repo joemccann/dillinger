@@ -28,8 +28,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   const github = useGitHub();
   const { notify } = useToast();
   const currentDocument = useStore((state) => state.currentDocument);
-  const updateDocumentBody = useStore((state) => state.updateDocumentBody);
-  const updateDocumentTitle = useStore((state) => state.updateDocumentTitle);
+  const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const [step, setStep] = useState<Step>("orgs");
@@ -85,8 +84,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
     if (mode === "import") {
       const file = await github.fetchFileContent(path);
       if (file) {
-        updateDocumentBody(file.content);
-        updateDocumentTitle(path.split("/").pop()?.replace(/\.md$/, "") || "Untitled");
+        createImportedDocument(path.split("/").pop() || "Untitled.md", file.content);
         notify("File imported from GitHub");
         onClose();
       }

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/google-drive/callback`;
+  const redirectUri = `${getAppUrl()}/api/google-drive/callback`;
 
   try {
     // Exchange code for tokens
@@ -33,18 +34,10 @@ export async function GET(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.text();
-      console.error("Google token exchange failed:", errorData);
       return NextResponse.redirect(new URL("/?error=google_token_failed", request.url));
     }
 
     const tokens = await tokenResponse.json();
-
-    console.log("Google Drive tokens received:", {
-      has_access_token: !!tokens.access_token,
-      has_refresh_token: !!tokens.refresh_token,
-      expires_in: tokens.expires_in,
-    });
 
     // Store tokens in HTTP-only cookie
     const cookieStore = await cookies();
@@ -58,8 +51,6 @@ export async function GET(request: NextRequest) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
-
-    console.log("Google Drive cookie set successfully");
 
     return NextResponse.redirect(new URL("/?google_connected=true", request.url));
   } catch (error) {

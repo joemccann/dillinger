@@ -2,12 +2,13 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { DropboxAuth } from "dropbox";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET() {
   const clientId = process.env.DROPBOX_APP_KEY;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = getAppUrl();
 
-  if (!clientId || !baseUrl) {
+  if (!clientId) {
     return NextResponse.json(
       { error: "Dropbox OAuth not configured" },
       { status: 500 }

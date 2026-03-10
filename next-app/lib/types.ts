@@ -27,7 +27,7 @@ export const DEFAULT_SETTINGS: UserSettings = {
   enableAutoSave: true,
   enableWordsCount: true,
   enableCharactersCount: true,
-  enableScrollSync: false,
+  enableScrollSync: true,
   tabSize: 4,
   keybindings: "default",
   enableNightMode: false,

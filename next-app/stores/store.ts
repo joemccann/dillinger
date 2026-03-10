@@ -1,10 +1,13 @@
 import { create } from "zustand";
+import type * as Monaco from "monaco-editor";
 import { Document, UserSettings, DEFAULT_SETTINGS, DEFAULT_DOCUMENT_BODY } from "@/lib/types";
+import { DEFAULT_DOCUMENT_TITLE } from "@/lib/document";
 
 interface AppState {
   // Documents
   documents: Document[];
   currentDocument: Document | null;
+  editorInstance: Monaco.editor.IStandaloneCodeEditor | null;
 
   // Settings
   settings: UserSettings;
@@ -15,13 +18,17 @@ interface AppState {
   previewVisible: boolean;
   zenMode: boolean;
   editorScrollPercent: number;
+  editorTopLine: number;
 
   // Document Actions
   createDocument: () => void;
+  createImportedDocument: (title: string, body: string) => void;
   selectDocument: (id: string) => void;
   deleteDocument: (id: string) => void;
   updateDocumentBody: (body: string) => void;
   updateDocumentTitle: (title: string) => void;
+  setEditorInstance: (editor: Monaco.editor.IStandaloneCodeEditor | null) => void;
+  insertMarkdownAtCursor: (markdown: string) => void;
 
   // Settings Actions
   updateSettings: (settings: Partial<UserSettings>) => void;
@@ -32,6 +39,7 @@ interface AppState {
   togglePreview: () => void;
   setZenMode: (enabled: boolean) => void;
   setEditorScrollPercent: (percent: number) => void;
+  setEditorTopLine: (line: number) => void;
 
   // Persistence
   hydrate: () => void;
@@ -40,7 +48,7 @@ interface AppState {
 
 const createDefaultDocument = (): Document => ({
   id: Date.now().toString(),
-  title: "Untitled Document",
+  title: DEFAULT_DOCUMENT_TITLE,
   body: DEFAULT_DOCUMENT_BODY,
   createdAt: new Date().toISOString(),
 });
@@ -49,16 +57,32 @@ export const useStore = create<AppState>((set, get) => ({
   // Initial State
   documents: [],
   currentDocument: null,
+  editorInstance: null,
   settings: DEFAULT_SETTINGS,
   sidebarOpen: true,
   settingsOpen: false,
   previewVisible: true,
   zenMode: false,
   editorScrollPercent: 0,
+  editorTopLine: 1,
 
   // Document Actions
   createDocument: () => {
     const newDoc = createDefaultDocument();
+    set((state) => ({
+      documents: [...state.documents, newDoc],
+      currentDocument: newDoc,
+    }));
+    get().persist();
+  },
+
+  createImportedDocument: (title: string, body: string) => {
+    const newDoc = {
+      ...createDefaultDocument(),
+      title,
+      body,
+    };
+
     set((state) => ({
       documents: [...state.documents, newDoc],
       currentDocument: newDoc,
@@ -113,6 +137,37 @@ export const useStore = create<AppState>((set, get) => ({
     get().persist();
   },
 
+  setEditorInstance: (editor) => set({ editorInstance: editor }),
+
+  insertMarkdownAtCursor: (markdown: string) => {
+    const { editorInstance, currentDocument, documents } = get();
+
+    if (editorInstance) {
+      const selection = editorInstance.getSelection();
+      if (selection) {
+        editorInstance.executeEdits("dillinger-inline-insert", [
+          {
+            range: selection,
+            text: markdown,
+            forceMoveMarkers: true,
+          },
+        ]);
+        editorInstance.focus();
+        return;
+      }
+    }
+
+    if (!currentDocument) return;
+
+    const updated = { ...currentDocument, body: `${currentDocument.body}${markdown}` };
+    const updatedDocs = documents.map((doc) =>
+      doc.id === currentDocument.id ? updated : doc
+    );
+
+    set({ currentDocument: updated, documents: updatedDocs });
+    get().persist();
+  },
+
   // Settings Actions
   updateSettings: (newSettings: Partial<UserSettings>) => {
     set((state) => ({
@@ -127,6 +182,7 @@ export const useStore = create<AppState>((set, get) => ({
   togglePreview: () => set((state) => ({ previewVisible: !state.previewVisible })),
   setZenMode: (enabled) => set({ zenMode: enabled }),
   setEditorScrollPercent: (percent) => set({ editorScrollPercent: percent }),
+  setEditorTopLine: (line) => set({ editorTopLine: line }),
 
   // Persistence
   hydrate: () => {

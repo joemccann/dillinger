@@ -2,13 +2,14 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = getAppUrl();
 
   if (error) {
     return NextResponse.redirect(`${baseUrl}?github_error=${error}`);
@@ -55,8 +56,7 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.redirect(`${baseUrl}?github_connected=true`);
-  } catch (error) {
-    console.error("GitHub OAuth error:", error);
+  } catch {
     return NextResponse.redirect(`${baseUrl}?github_error=token_exchange_failed`);
   }
 }

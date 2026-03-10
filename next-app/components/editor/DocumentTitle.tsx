@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/stores/store";
 import { Edit2, Check } from "lucide-react";
+import { DEFAULT_DOCUMENT_TITLE } from "@/lib/document";
 
 export function DocumentTitle() {
   const currentDocument = useStore((state) => state.currentDocument);
@@ -28,7 +29,7 @@ export function DocumentTitle() {
     if (title.trim()) {
       updateDocumentTitle(title.trim());
     } else {
-      setTitle(currentDocument?.title || "Untitled");
+      setTitle(currentDocument?.title || DEFAULT_DOCUMENT_TITLE);
     }
     setIsEditing(false);
   };
@@ -73,7 +74,7 @@ export function DocumentTitle() {
       ) : (
         <div className="flex items-center gap-2 flex-1">
           <h2 className="text-text-primary font-medium truncate">
-            {currentDocument.title}
+            {currentDocument.title || DEFAULT_DOCUMENT_TITLE}
           </h2>
           <button
             onClick={() => setIsEditing(true)}

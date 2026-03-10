@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET() {
   const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -12,7 +13,7 @@ export async function GET() {
     );
   }
 
-  const redirectUri = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/google-drive/callback`;
+  const redirectUri = `${getAppUrl()}/api/google-drive/callback`;
 
   const params = new URLSearchParams({
     client_id: clientId,

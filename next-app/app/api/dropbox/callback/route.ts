@@ -2,13 +2,14 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getAppUrl } from "@/lib/env";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = getAppUrl();
 
   if (error) {
     return NextResponse.redirect(`${baseUrl}?dropbox_error=${error}`);
@@ -39,8 +40,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-      console.error("Dropbox token exchange failed:", errorText);
+      await tokenResponse.text();
       return NextResponse.redirect(`${baseUrl}?dropbox_error=token_exchange_failed`);
     }
 
@@ -64,8 +64,7 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.redirect(`${baseUrl}?dropbox_connected=true`);
-  } catch (err) {
-    console.error("Dropbox OAuth error:", err);
+  } catch {
     return NextResponse.redirect(`${baseUrl}?dropbox_error=token_exchange_failed`);
   }
 }

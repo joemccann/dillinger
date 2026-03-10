@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
+import { getExportFilename } from "@/lib/export";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,11 +14,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const filename = `${title || "document"}.md`;
+    const filename = getExportFilename(title, "md");
 
     return new NextResponse(markdown, {
       headers: {
-        "Content-Type": "text/markdown",
+        "Content-Type": "text/markdown; charset=utf-8",
         "Content-Disposition": `attachment; filename="${filename}"`,
       },
     });

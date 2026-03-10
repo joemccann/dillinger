@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { mdToPdf } from "md-to-pdf";
+import { getExportFilename } from "@/lib/export";
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
       throw new Error("PDF generation failed");
     }
 
-    const filename = `${title || "document"}.pdf`;
+    const filename = getExportFilename(title, "pdf");
 
     // Convert Buffer to Uint8Array for NextResponse
     const uint8Array = new Uint8Array(pdf.content);
@@ -39,8 +40,7 @@ export async function POST(request: NextRequest) {
         "Content-Disposition": `attachment; filename="${filename}"`,
       },
     });
-  } catch (error) {
-    console.error("PDF export error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to export PDF" },
       { status: 500 }

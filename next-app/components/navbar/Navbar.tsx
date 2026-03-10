@@ -1,8 +1,11 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { MediumPublishModal } from "@/components/modals/MediumPublishModal";
+import { useImageUpload } from "@/hooks/useImageUpload";
+import { importDocumentFile } from "@/lib/import";
 import {
   Menu,
   Eye,
@@ -14,8 +17,17 @@ import {
   FileType,
   Maximize2,
   Pencil,
+  Upload,
+  ImagePlus,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+
+type ExportFormat = "markdown" | "html" | "pdf";
+
+function getDownloadFilename(response: Response, fallback: string): string {
+  const contentDisposition = response.headers.get("Content-Disposition");
+  const match = contentDisposition?.match(/filename="?([^"]+)"?/i);
+  return match?.[1] || fallback;
+}
 
 export function Navbar() {
   const toggleSidebar = useStore((state) => state.toggleSidebar);
@@ -23,12 +35,17 @@ export function Navbar() {
   const togglePreview = useStore((state) => state.togglePreview);
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
+  const createImportedDocument = useStore((state) => state.createImportedDocument);
+  const insertMarkdownAtCursor = useStore((state) => state.insertMarkdownAtCursor);
   const setZenMode = useStore((state) => state.setZenMode);
   const { notify } = useToast();
+  const { upload } = useImageUpload();
 
   const [exportOpen, setExportOpen] = useState(false);
   const [mediumModalOpen, setMediumModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   // Close dropdown on Escape key or click outside
   useEffect(() => {
@@ -52,7 +69,10 @@ export function Navbar() {
     };
   }, [exportOpen]);
 
-  const handleExport = async (format: "markdown" | "html" | "pdf") => {
+  const handleExport = async (
+    format: ExportFormat,
+    options?: { styled?: boolean }
+  ) => {
     if (!currentDocument) return;
     setExportOpen(false);
 
@@ -63,6 +83,7 @@ export function Navbar() {
         body: JSON.stringify({
           markdown: currentDocument.body,
           title: currentDocument.title,
+          styled: options?.styled,
         }),
       });
 
@@ -72,14 +93,62 @@ export function Navbar() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${currentDocument.title}.${format === "markdown" ? "md" : format}`;
+      a.download = getDownloadFilename(
+        response,
+        `${currentDocument.title}.${format === "markdown" ? "md" : format}`
+      );
       a.click();
       URL.revokeObjectURL(url);
 
-      notify(`Exported as ${format.toUpperCase()}`);
+      notify(
+        format === "html" && options?.styled === true
+          ? "Exported as styled HTML"
+          : `Exported as ${format.toUpperCase()}`
+      );
     } catch {
       notify("Export failed");
     }
+  };
+
+  const handleImportSelection = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const imported = await importDocumentFile(file);
+      createImportedDocument(file.name, imported.body);
+      notify(`Imported "${file.name}"`);
+    } catch (error) {
+      notify(
+        error instanceof Error
+          ? error.message
+          : "Failed to import file"
+      );
+    }
+  };
+
+  const handleImageSelection = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    const result = await upload(file);
+    if (!result) {
+      return;
+    }
+
+    insertMarkdownAtCursor(`\n${result.markdown}\n`);
   };
 
   return (
@@ -101,6 +170,28 @@ export function Navbar() {
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        <button
+          onClick={() => importInputRef.current?.click()}
+          aria-label="Import file"
+          className="text-text-invert hover:text-plum transition-colors px-3 py-2
+                     flex items-center gap-1 text-sm rounded
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
+        >
+          <Upload size={18} />
+          <span className="hidden sm:inline">Import</span>
+        </button>
+
+        <button
+          onClick={() => imageInputRef.current?.click()}
+          aria-label="Insert image"
+          className="text-text-invert hover:text-plum transition-colors px-3 py-2
+                     flex items-center gap-1 text-sm rounded
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
+        >
+          <ImagePlus size={18} />
+          <span className="hidden sm:inline">Image</span>
+        </button>
+
         {/* Export dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
@@ -133,13 +224,23 @@ export function Navbar() {
               </button>
               <button
                 role="menuitem"
-                onClick={() => handleExport("html")}
+                onClick={() => handleExport("html", { styled: false })}
                 className="w-full px-4 py-2 text-left text-text-invert hover:bg-bg-highlight
                            flex items-center gap-2 text-sm
                            focus-visible:outline-none focus-visible:bg-bg-highlight"
               >
                 <FileCode size={16} />
                 HTML
+              </button>
+              <button
+                role="menuitem"
+                onClick={() => handleExport("html", { styled: true })}
+                className="w-full px-4 py-2 text-left text-text-invert hover:bg-bg-highlight
+                           flex items-center gap-2 text-sm
+                           focus-visible:outline-none focus-visible:bg-bg-highlight"
+              >
+                <FileCode size={16} />
+                Styled HTML
               </button>
               <button
                 role="menuitem"
@@ -205,6 +306,22 @@ export function Navbar() {
       <MediumPublishModal
         isOpen={mediumModalOpen}
         onClose={() => setMediumModalOpen(false)}
+      />
+      <input
+        ref={importInputRef}
+        type="file"
+        accept=".md,.markdown,.txt,.html,.htm,text/plain,text/markdown,text/html"
+        data-testid="document-import-input"
+        className="hidden"
+        onChange={handleImportSelection}
+      />
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        data-testid="image-import-input"
+        className="hidden"
+        onChange={handleImageSelection}
       />
     </nav>
   );
