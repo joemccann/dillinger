@@ -1,213 +1,133 @@
 # Dillinger
 ## _The Last Markdown Editor, Ever_
 
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/joemccann/dillinger/ci.yml?branch=master)](https://github.com/joemccann/dillinger)
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
+Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible
+Markdown editor built with Next.js and React.
 
 - Type some Markdown on the left
 - See HTML in the right
-- ✨Magic ✨
+- Magic
 
 ## Features
 
-- Import a HTML file and watch it magically convert to Markdown
-- Drag and drop images (requires your Dropbox account be linked)
-- Import and save files from GitHub, Dropbox, Google Drive and One Drive
-- Drag and drop markdown and HTML files into Dillinger
-- Export documents as Markdown, HTML and PDF
-
-Markdown is a lightweight markup language based on the formatting conventions
-that people naturally use in email.
-As [John Gruber] writes on the [Markdown site][df1]
-
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
-
-This text you see here is *actually* written in Markdown! To get a feel
-for Markdown's syntax, type some text into the left window and
-watch the results in the right.
+- **Monaco Editor** with markdown syntax highlighting and Vim/Emacs keybindings
+- **Live Preview** with real-time markdown rendering and scroll sync
+- **Zen Mode** for distraction-free fullscreen editing
+- **Cloud Integrations** — import and save files from GitHub, Dropbox, Google Drive, OneDrive, and Bitbucket
+- **Export** documents as Markdown, HTML, and PDF
+- **Import** markdown, HTML, and text files via drag and drop or file picker
+- **Image Paste** — paste images directly into the editor
+- **Local Storage** — documents persist automatically in your browser
+- **Dark Mode** — night mode for comfortable editing
 
 ## Tech
 
-Dillinger uses a number of open source projects to work properly:
+Dillinger is built with:
 
-- [AngularJS] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-to Markdown converter
-- [jQuery] - duh
+- [Next.js 14](https://nextjs.org/) — React framework with App Router
+- [React 18](https://react.dev/) — UI components
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/) — VS Code's editor
+- [markdown-it](https://github.com/markdown-it/markdown-it) — Markdown parser with plugins
+- [Zustand](https://zustand-demo.pmnd.rs/) — State management with localStorage persistence
+- [Tailwind CSS](https://tailwindcss.com/) — Styling
+- [TypeScript](https://www.typescriptlang.org/) — Type safety
+- [Lucide React](https://lucide.dev/) — Icons
 
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
+Deployed on [Vercel](https://vercel.com/).
 
-## Installation
+## Getting Started
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
-
-Install the dependencies and devDependencies and start the server.
+Dillinger requires [Node.js](https://nodejs.org/) v18+ to run.
 
 ```sh
-cd dillinger
-npm i
-node app
+cd next-app
+npm install
+npm run dev
 ```
 
-For production environments...
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+For production:
 
 ```sh
-npm install --production
-NODE_ENV=production node app
+npm run build
+npm start
 ```
 
 ## Configuration
 
-Dillinger requires a few environment variables to work properly.
-
-Create a `.env` file in the root directory and add the following:
+Create a `.env.local` file in the `next-app` directory to enable cloud integrations:
 
 ```sh
-# Bitbucket
-BITBUCKET_CLIENT_ID=...
-BITBUCKET_CLIENT_SECRET=...
-BITBUCKET_REDIRECT_URI=...
-BITBUCKET_CALLBACK_URL=...
+# App URL (used for all OAuth redirects)
+NEXT_PUBLIC_APP_URL=https://dillinger.io
+
+# GitHub
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 
 # Dropbox
-DROPBOX_APP_KEY=...
-DROPBOX_APP_SECRET=...
-DROPBOX_CALLBACK_URL=...
-DROPBOX_AUTH_URL=...
-
-# Github
-GITHUB_CLIENT_ID=...
-GITHUB_CLIENT_SECRET=...
-GITHUB_CALLBACK_URL=...
-GITHUB_REDIRECT_URI=...
-
-# Google Analytics
-GOOGLE_ANALYTICS_UAID=...
+DROPBOX_APP_KEY=
+DROPBOX_APP_SECRET=
 
 # Google Drive
-GOOGLEDRIVE_CLIENT_ID=...
-GOOGLEDRIVE_CLIENT_SECRET=...
-GOOGLEDRIVE_REDIRECT_URI=...
-
-# Medium
-MEDIUM_CLIENT_ID=...
-MEDIUM_CLIENT_SECRET=...
-MEDIUM_CALLBACK_URL=...
-MEDIUM_REDIRECT_URL=...
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 # OneDrive
-ONEDRIVE_CLIENT_ID=...
-ONEDRIVE_CLIENT_SECRET=...
-ONEDRIVE_REDIRECT_URI=...
+ONEDRIVE_CLIENT_ID=
+ONEDRIVE_CLIENT_SECRET=
 
-# Sponsored
-SPONSORED_KEY=...
+# Bitbucket
+BITBUCKET_CLIENT_ID=
+BITBUCKET_CLIENT_SECRET=
 ```
 
-## Plugins
+## Cloud Integrations
 
-Dillinger is currently extended with the following plugins.
-Instructions on how to use them in your own application are linked below.
+| Service | Features |
+| ------- | -------- |
+| GitHub | Browse orgs/repos/branches, import and save files |
+| Dropbox | Browse folders, import and save files |
+| Google Drive | Browse folders, import and save files |
+| OneDrive | Browse folders, import and save files |
+| Bitbucket | Browse workspaces/repos/branches, import and save files |
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+Each integration uses OAuth 2.0 with tokens stored in HTTP-only cookies.
 
 ## Development
 
-Want to contribute? Great!
-
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
-
-Open your favorite Terminal and run these commands.
-
-First Tab:
-
 ```sh
-node app
+cd next-app
+npm run dev       # Start dev server
+npm run lint      # Run ESLint
+npm run typecheck # Run TypeScript checks
+npm run test:unit # Run Vitest unit tests
+npm run build     # Production build
 ```
 
-Second Tab:
+## Project Structure
 
-```sh
-gulp watch
 ```
-
-(optional) Third:
-
-```sh
-karma test
-```
-
-#### Building for source
-
-For production release:
-
-```sh
-gulp build --prod
-```
-
-Generating pre-built zip archives for distribution:
-
-```sh
-gulp build dist --prod
-```
-
-## Docker
-
-Dillinger is very easy to install and deploy in a Docker container.
-
-By default, the Docker will expose port 8080, so change this within the
-Dockerfile if necessary. When ready, simply use the Dockerfile to
-build the image.
-
-```sh
-cd dillinger
-docker build -t <youruser>/dillinger:${package.json.version} .
-```
-
-This will create the dillinger image and pull in the necessary dependencies.
-Be sure to swap out `${package.json.version}` with the actual
-version of Dillinger.
-
-Once done, run the Docker image and map the port to whatever you wish on
-your host. In this example, we simply map port 8000 of the host to
-port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
-
-```sh
-docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
-```
-
-> Note: `--cap-add=SYS_ADMIN` is required for PDF rendering.
-
-Verify the deployment by navigating to your server address in
-your preferred browser.
-
-```sh
-127.0.0.1:8000
+next-app/
+├── app/                    # Next.js App Router
+│   ├── api/               # API route handlers (OAuth, export, upload)
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Main editor page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── editor/            # Monaco editor, document title
+│   ├── preview/           # Markdown preview pane
+│   ├── navbar/            # Top navigation bar
+│   ├── sidebar/           # Document list + cloud integrations
+│   ├── modals/            # OAuth and settings dialogs
+│   └── ui/                # Toast, skeleton loaders
+├── hooks/                 # Custom hooks (useGitHub, useDropbox, etc.)
+├── stores/                # Zustand store
+├── lib/                   # Utilities (markdown, export, import)
+└── tests/                 # Vitest + Playwright tests
 ```
 
 ## License
@@ -215,26 +135,3 @@ your preferred browser.
 MIT
 
 **Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
