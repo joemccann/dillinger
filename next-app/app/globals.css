@@ -117,6 +117,12 @@ body {
   height: auto;
 }
 
+.preview-html p > a > img {
+  display: inline;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
 .preview-html .toc {
   padding: 1rem 1.25rem;
   border: 1px solid #E8E8E8;
