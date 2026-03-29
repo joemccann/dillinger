@@ -59,7 +59,7 @@ export const useStore = create<AppState>((set, get) => ({
   currentDocument: null,
   editorInstance: null,
   settings: DEFAULT_SETTINGS,
-  sidebarOpen: true,
+  sidebarOpen: false,
   settingsOpen: false,
   previewVisible: true,
   zenMode: false,
