@@ -40,7 +40,7 @@
     "markdown-it-toc": "^1.1.0",
     "monaco-emacs": "^0.3.0",
     "monaco-vim": "^0.4.4",
-    "next": "14.2.35",
+    "next": "15.5.14",
     "puppeteer-core": "^24.39.0",
     "react": "^18",
     "react-dom": "^18",
