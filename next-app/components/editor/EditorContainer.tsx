@@ -205,7 +205,6 @@ function EditorContent() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
         <Navbar />
-        <LogoBar />
         <DocumentTitle />
 
         {/* Editor + Preview */}
@@ -226,6 +225,7 @@ function EditorContent() {
             </div>
           )}
         </div>
+        <LogoBar />
       </main>
 
       {/* Settings Modal */}
