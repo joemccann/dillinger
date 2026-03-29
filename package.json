@@ -109,7 +109,7 @@
     "request": "^2.88.0",
     "serve-favicon": "^2.5.0",
     "serve-static": "^1.10.0",
-    "standard": "^14.3.1",
+    "standard": "^17.1.2",
     "temp": "^0.8.4"
   },
   "devDependencies": {
