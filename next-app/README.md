@@ -37,7 +37,6 @@ npm start
 - **Zen Mode** - Distraction-free fullscreen editing (Cmd/Ctrl+Shift+Z)
 - **Cloud Integrations** - GitHub, Dropbox, Google Drive, OneDrive, Bitbucket
 - **Export Options** - Markdown, HTML, PDF
-- **Publish to Medium** - Direct publishing from the editor
 - **Drag & Drop Import** - Drop .md, .txt, or .markdown files
 - **Image Paste** - Paste images directly into the editor
 - **Local Storage** - Documents persist automatically
@@ -104,19 +103,6 @@ BITBUCKET_CLIENT_SECRET=your_consumer_secret
 BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
 ```
 
-### Medium
-
-1. Go to [Medium Settings](https://medium.com/me/settings)
-2. Scroll to **Integration tokens** section
-3. For full OAuth support, email Medium at yourfriends@medium.com to request API access
-4. Once approved, you'll receive client credentials
-
-```bash
-MEDIUM_CLIENT_ID=your_client_id
-MEDIUM_CLIENT_SECRET=your_client_secret
-MEDIUM_REDIRECT_URI=http://localhost:3000/api/medium/callback
-```
-
 ### GitHub (Pre-configured)
 
 GitHub integration uses existing credentials from the legacy app. If needed:
@@ -167,11 +153,6 @@ ONEDRIVE_REDIRECT_URI=http://localhost:3000/api/onedrive/callback
 BITBUCKET_CLIENT_ID=
 BITBUCKET_CLIENT_SECRET=
 BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
-
-# Medium
-MEDIUM_CLIENT_ID=
-MEDIUM_CLIENT_SECRET=
-MEDIUM_REDIRECT_URI=http://localhost:3000/api/medium/callback
 
 # GitHub (if not using legacy credentials)
 GITHUB_CLIENT_ID=

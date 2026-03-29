@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { X, Upload } from "lucide-react";
 import { Navbar } from "@/components/navbar/Navbar";
+import { LogoBar } from "@/components/ads/LogoBar";
 import { DocumentTitle } from "@/components/editor/DocumentTitle";
 import { MonacoEditor } from "@/components/editor/MonacoEditor";
 import { MarkdownPreview } from "@/components/preview/MarkdownPreview";
@@ -204,6 +205,7 @@ function EditorContent() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0">
         <Navbar />
+        <LogoBar />
         <DocumentTitle />
 
         {/* Editor + Preview */}

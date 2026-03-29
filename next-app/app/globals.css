@@ -194,3 +194,55 @@ body {
 .dark.preview-html hr {
   border-top-color: #444;
 }
+
+/* BuySellAds LogoBar */
+#logobar {
+  background: #2B2F36;
+}
+
+#logobar .native-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px;
+  text-decoration: none;
+  color: #A0AABF;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+#logobar .native-flex:hover {
+  color: #D3DAEA;
+}
+
+#logobar .native-sponsor {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6B7280;
+  flex-shrink: 0;
+}
+
+#logobar .native-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+#logobar .native-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#logobar .native-desc {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#logobar .native-desc strong {
+  color: #D3DAEA;
+}

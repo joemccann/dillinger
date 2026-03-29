@@ -95,22 +95,6 @@ Your production redirect URIs will be:
 
 ---
 
-## Medium
-
-- [ ] Go to [Medium Settings](https://medium.com/me/settings/security)
-- [ ] Update OAuth callback URL:
-  ```
-  https://your-production-domain.com/api/medium/callback
-  ```
-- [ ] Update Vercel environment variables:
-  ```
-  MEDIUM_CLIENT_ID=your_client_id
-  MEDIUM_CLIENT_SECRET=your_client_secret
-  NEXT_PUBLIC_APP_URL=https://your-production-domain.com
-  ```
-
----
-
 ## Vercel Environment Variables
 
 In Vercel dashboard, set all environment variables for **Production** environment:
@@ -136,10 +120,6 @@ DROPBOX_APP_SECRET=
 BITBUCKET_CLIENT_ID=
 BITBUCKET_CLIENT_SECRET=
 
-# Medium
-MEDIUM_CLIENT_ID=
-MEDIUM_CLIENT_SECRET=
-
 # App URL (CRITICAL - used for all OAuth redirects)
 NEXT_PUBLIC_APP_URL=https://your-production-domain.com
 
@@ -158,7 +138,6 @@ After updating all OAuth apps and deploying to production:
 - [ ] Test GitHub: Connect → List Repos → List Files → Save File
 - [ ] Test Dropbox: Connect → List Files → Save File → Import File
 - [ ] Test Bitbucket: Connect → List Repos → List Files → Save File
-- [ ] Test Medium: Connect → Publish Post
 - [ ] Test all export formats: HTML, Markdown, PDF
 - [ ] Test drag & drop file import
 - [ ] Test image upload
@@ -186,5 +165,4 @@ https://your-production-domain.com/api/onedrive/callback
 https://your-production-domain.com/api/github/callback
 https://your-production-domain.com/api/dropbox/callback
 https://your-production-domain.com/api/bitbucket/callback
-https://your-production-domain.com/api/medium/callback
 ```

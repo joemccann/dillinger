@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
-import { MediumPublishModal } from "@/components/modals/MediumPublishModal";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { importDocumentFile } from "@/lib/import";
 import {
@@ -16,7 +15,6 @@ import {
   FileCode,
   FileType,
   Maximize2,
-  Pencil,
   Upload,
   ImagePlus,
 } from "lucide-react";
@@ -42,7 +40,6 @@ export function Navbar() {
   const { upload } = useImageUpload();
 
   const [exportOpen, setExportOpen] = useState(false);
-  const [mediumModalOpen, setMediumModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -252,20 +249,6 @@ export function Navbar() {
                 <FileType size={16} />
                 PDF
               </button>
-              <div className="border-t border-border-settings my-1" role="separator" />
-              <button
-                role="menuitem"
-                onClick={() => {
-                  setExportOpen(false);
-                  setMediumModalOpen(true);
-                }}
-                className="w-full px-4 py-2 text-left text-text-invert hover:bg-bg-highlight
-                           flex items-center gap-2 text-sm
-                           focus-visible:outline-none focus-visible:bg-bg-highlight"
-              >
-                <Pencil size={16} />
-                Publish to Medium
-              </button>
             </div>
           )}
         </div>
@@ -302,11 +285,6 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Medium publish modal */}
-      <MediumPublishModal
-        isOpen={mediumModalOpen}
-        onClose={() => setMediumModalOpen(false)}
-      />
       <input
         ref={importInputRef}
         type="file"
