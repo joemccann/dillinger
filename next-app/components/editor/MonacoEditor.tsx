@@ -24,9 +24,46 @@ export function MonacoEditor() {
   // Debounced persist for auto-save
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleMount: OnMount = (editor) => {
+  const handleMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
     setEditorInstance(editor);
+
+    monaco.editor.defineTheme("dillinger-light", {
+      base: "vs",
+      inherit: true,
+      rules: [
+        { token: "keyword.md", foreground: "373D49", fontStyle: "bold" },
+        { token: "string.link.md", foreground: "373D49" },
+        { token: "variable.md", foreground: "373D49" },
+        { token: "markup.heading", foreground: "373D49", fontStyle: "bold" },
+        { token: "comment.md", foreground: "236e24" },
+      ],
+      colors: {
+        "editor.background": "#FFFFFF",
+        "editor.foreground": "#000000",
+      },
+    });
+
+    monaco.editor.defineTheme("dillinger-dark", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        { token: "keyword.md", foreground: "D3DAEA", fontStyle: "bold" },
+        { token: "string.link.md", foreground: "A0AABF" },
+        { token: "variable.md", foreground: "D3DAEA" },
+        { token: "markup.heading", foreground: "D3DAEA", fontStyle: "bold" },
+        { token: "comment.md", foreground: "6A9955" },
+      ],
+      colors: {
+        "editor.background": "#1D212A",
+        "editor.foreground": "#D3DAEA",
+      },
+    });
+
+    editor.updateOptions({
+      theme: settings.enableNightMode ? "dillinger-dark" : "dillinger-light",
+    });
+
     editor.focus();
   };
 
@@ -164,7 +201,7 @@ export function MonacoEditor() {
         <Editor
           height="100%"
           language="markdown"
-          theme={settings.enableNightMode ? "vs-dark" : "vs"}
+          theme={settings.enableNightMode ? "dillinger-dark" : "dillinger-light"}
           value={currentDocument.body}
           onChange={handleChange}
           onMount={handleMount}
