@@ -204,6 +204,8 @@ body {
 /* BuySellAds LogoBar */
 #logobar {
   background: #2B2F36;
+  min-height: 36px;
+  flex-shrink: 0;
 }
 
 #logobar .native-flex {
