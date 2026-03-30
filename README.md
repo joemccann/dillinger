@@ -1,142 +1,110 @@
-# Dillinger - Next.js
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/885053fb-b002-4168-98f5-56e583829983" alt="Dillinger Banner" width="100%" />
+</p>
 
-A modern markdown editor built with Next.js 14, featuring cloud storage integrations, real-time preview, and a distraction-free writing experience.
+<h1 align="center">Dillinger</h1>
 
-## Getting Started
+<p align="center">
+  <strong>The last Markdown editor you'll ever need.</strong>
+</p>
 
-### Prerequisites
+<p align="center">
+  A modern, cloud-native Markdown editor built on Next.js — designed for speed, focus, and seamless sync.
+</p>
 
-- Node.js 18+
-- npm, yarn, pnpm, or bun
+<p align="center">
+  <a href="#quick-start"><strong>Get Started</strong></a> ·
+  <a href="#features"><strong>Features</strong></a> ·
+  <a href="#cloud-integrations"><strong>Integrations</strong></a> ·
+  <a href="#deployment"><strong>Deploy</strong></a>
+</p>
 
-### Installation
+---
+
+## ✨ Why Dillinger
+
+Most markdown editors are either:
+- bloated  
+- offline-only  
+- or lack serious developer ergonomics  
+
+**Dillinger fixes that.**
+
+It combines:
+- ⚡ VS Code-grade editing  
+- ☁️ Native cloud storage  
+- 🧘 Distraction-free UX  
+- 🔄 Real-time rendering  
+
+---
+
+## ⚡ Quick Start
 
 ```bash
 npm install
-```
-
-### Development
-
-```bash
 npm run dev
-```
+````
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open → [http://localhost:3000](http://localhost:3000)
 
-### Build
+---
 
-```bash
-npm run build
-npm start
-```
+## 🧱 Requirements
 
-## Features
+* Node.js 18+
+* npm / yarn / pnpm / bun
 
-- **Monaco Editor** - VS Code's editor with markdown syntax highlighting
-- **Live Preview** - Real-time markdown rendering with scroll sync
-- **Zen Mode** - Distraction-free fullscreen editing (Cmd/Ctrl+Shift+Z)
-- **Cloud Integrations** - GitHub, Dropbox, Google Drive, OneDrive, Bitbucket
-- **Export Options** - Markdown, HTML, PDF
-- **Drag & Drop Import** - Drop .md, .txt, or .markdown files
-- **Image Paste** - Paste images directly into the editor
-- **Local Storage** - Documents persist automatically
+---
 
-## Cloud Service Setup
+## 🚀 Features
 
-To enable cloud integrations, create a `.env.local` file in this directory with your OAuth credentials.
+### Editor Experience
 
-### Google Drive
+* Monaco Editor (VS Code core)
+* Syntax highlighting for Markdown
+* Image paste support
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
-3. Navigate to **APIs & Services → Credentials**
-4. Click **Create Credentials → OAuth client ID**
-5. Configure the OAuth consent screen if prompted:
-   - User Type: External
-   - Add your email as a test user
-6. Application type: **Web application**
-7. Add Authorized redirect URI: `http://localhost:3000/api/google-drive/callback`
-8. Copy the **Client ID** and **Client Secret**
-9. Go to **APIs & Services → Library** and enable the **Google Drive API**
+### Live Workflow
 
-```bash
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_REDIRECT_URI=http://localhost:3000/api/google-drive/callback
-```
+* Real-time preview
+* Scroll sync
+* Instant feedback loop
 
-### OneDrive (Microsoft)
+### Focus Mode
 
-1. Go to [Azure Portal](https://portal.azure.com/)
-2. Navigate to **Azure Active Directory → App registrations**
-3. Click **New registration**
-4. Name: "Dillinger"
-5. Supported account types: **Personal Microsoft accounts only** (or multi-tenant)
-6. Redirect URI: **Web** → `http://localhost:3000/api/onedrive/callback`
-7. Click **Register**
-8. Go to **API permissions → Add a permission**
-9. Select **Microsoft Graph → Delegated permissions**
-10. Add: `Files.ReadWrite`, `User.Read`
-11. Go to **Certificates & secrets → New client secret**
-12. Copy the secret **Value** immediately (shown only once)
+* Zen Mode (`Cmd/Ctrl + Shift + Z`)
+* Fullscreen, distraction-free writing
+
+### File Handling
+
+* Drag & drop `.md`, `.txt`, `.markdown`
+* Auto-save (local persistence)
+
+### Export
+
+* Markdown
+* HTML
+* PDF
+
+### Cloud Integrations
+
+* GitHub
+* Google Drive
+* Dropbox
+* OneDrive
+* Bitbucket
+
+---
+
+## 🔐 Environment Setup
+
+Create:
 
 ```bash
-ONEDRIVE_CLIENT_ID=your_application_client_id
-ONEDRIVE_CLIENT_SECRET=your_client_secret_value
-ONEDRIVE_REDIRECT_URI=http://localhost:3000/api/onedrive/callback
+.env.local
 ```
 
-### Bitbucket
-
-1. Go to [Bitbucket Settings](https://bitbucket.org/account/settings/)
-2. Navigate to **OAuth consumers** (under Access Management)
-3. Click **Add consumer**
-4. Name: "Dillinger"
-5. Callback URL: `http://localhost:3000/api/bitbucket/callback`
-6. Permissions: Check **Repositories: Read/Write**
-7. Click **Save**
-8. Copy the **Key** (client ID) and **Secret**
-
-```bash
-BITBUCKET_CLIENT_ID=your_consumer_key
-BITBUCKET_CLIENT_SECRET=your_consumer_secret
-BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
-```
-
-### GitHub (Pre-configured)
-
-GitHub integration uses existing credentials from the legacy app. If needed:
-
-1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
-2. Click **New OAuth App**
-3. Application name: "Dillinger"
-4. Homepage URL: `http://localhost:3000`
-5. Authorization callback URL: `http://localhost:3000/api/github/callback`
-
-```bash
-GITHUB_CLIENT_ID=your_client_id
-GITHUB_CLIENT_SECRET=your_client_secret
-GITHUB_REDIRECT_URI=http://localhost:3000/api/github/callback
-```
-
-### Dropbox (Pre-configured)
-
-Dropbox integration uses existing credentials. If needed:
-
-1. Go to [Dropbox App Console](https://www.dropbox.com/developers/apps)
-2. Click **Create app**
-3. Choose **Scoped access** and **Full Dropbox**
-4. Name your app
-5. Add redirect URI: `http://localhost:3000/api/dropbox/callback`
-6. Under Permissions, enable `files.metadata.read` and `files.content.write`
-
-```bash
-DROPBOX_CLIENT_ID=your_app_key
-DROPBOX_CLIENT_SECRET=your_app_secret
-DROPBOX_REDIRECT_URI=http://localhost:3000/api/dropbox/callback
-```
-
-### Complete `.env.local` Template
+### Template
 
 ```bash
 # Google Drive
@@ -154,29 +122,122 @@ BITBUCKET_CLIENT_ID=
 BITBUCKET_CLIENT_SECRET=
 BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
 
-# GitHub (if not using legacy credentials)
+# GitHub
 GITHUB_CLIENT_ID=
 GITHUB_CLIENT_SECRET=
 GITHUB_REDIRECT_URI=http://localhost:3000/api/github/callback
 
-# Dropbox (if not using legacy credentials)
+# Dropbox
 DROPBOX_CLIENT_ID=
 DROPBOX_CLIENT_SECRET=
 DROPBOX_REDIRECT_URI=http://localhost:3000/api/dropbox/callback
 ```
 
-## Production Deployment
+---
 
-For production, update all redirect URIs to your production domain (e.g., `https://yourdomain.com/api/google-drive/callback`).
+## ☁️ Cloud Integrations
 
-## Tech Stack
+Each provider requires OAuth configuration.
 
-- **Framework**: Next.js 14 (App Router)
-- **Editor**: Monaco Editor
-- **Styling**: Tailwind CSS
-- **State**: Zustand
-- **Icons**: Lucide React
+### Google Drive
 
-## License
+* Enable Drive API
+* Create OAuth credentials
+* Redirect:
+
+```
+/api/google-drive/callback
+```
+
+### OneDrive
+
+* Azure App Registration
+* Permissions:
+
+  * Files.ReadWrite
+  * User.Read
+
+### Bitbucket
+
+* OAuth consumer
+* Repo read/write access
+
+### GitHub
+
+* OAuth App
+* Callback:
+
+```
+/api/github/callback
+```
+
+### Dropbox
+
+* Scoped app
+* Enable:
+
+  * files.metadata.read
+  * files.content.write
+
+---
+
+## 🚢 Deployment
+
+Update all OAuth callbacks:
+
+```bash
+https://yourdomain.com/api/{provider}/callback
+```
+
+Then:
+
+```bash
+npm run build
+npm start
+```
+
+---
+
+## 🏗 Tech Stack
+
+| Layer     | Technology   |
+| --------- | ------------ |
+| Framework | Next.js 14   |
+| Editor    | Monaco       |
+| Styling   | Tailwind CSS |
+| State     | Zustand      |
+| Icons     | Lucide       |
+
+---
+
+## 📦 Scripts
+
+```bash
+npm run dev
+npm run build
+npm start
+```
+
+---
+
+## 🧭 Philosophy
+
+Dillinger is built around a simple idea:
+
+> Writing tools should disappear.
+
+No friction.
+No clutter.
+Just flow.
+
+---
+
+## 🤝 Contributing
+
+PRs welcome. Open an issue first for major changes.
+
+---
+
+## 📄 License
 
 MIT
