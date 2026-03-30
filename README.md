@@ -1,137 +1,182 @@
-# Dillinger
-## _The Last Markdown Editor, Ever_
+# Dillinger - Next.js
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/) [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) [![Zustand](https://img.shields.io/badge/Zustand-5-orange)](https://zustand-demo.pmnd.rs/) [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel)](https://dillinger.io) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible
-Markdown editor built with Next.js and React.
-
-- Type some Markdown on the left
-- See HTML in the right
-- Magic
-
-## Features
-
-- **Monaco Editor** with markdown syntax highlighting and Vim/Emacs keybindings
-- **Live Preview** with real-time markdown rendering and scroll sync
-- **Zen Mode** for distraction-free fullscreen editing
-- **Cloud Integrations** — import and save files from GitHub, Dropbox, Google Drive, OneDrive, and Bitbucket
-- **Export** documents as Markdown, HTML, and PDF
-- **Import** markdown, HTML, and text files via drag and drop or file picker
-- **Image Paste** — paste images directly into the editor
-- **Local Storage** — documents persist automatically in your browser
-- **Dark Mode** — night mode for comfortable editing
-
-## Tech
-
-Dillinger is built with:
-
-- [Next.js 14](https://nextjs.org/) — React framework with App Router
-- [React 18](https://react.dev/) — UI components
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/) — VS Code's editor
-- [markdown-it](https://github.com/markdown-it/markdown-it) — Markdown parser with plugins
-- [Zustand](https://zustand-demo.pmnd.rs/) — State management with localStorage persistence
-- [Tailwind CSS](https://tailwindcss.com/) — Styling
-- [TypeScript](https://www.typescriptlang.org/) — Type safety
-- [Lucide React](https://lucide.dev/) — Icons
-
-Deployed on [Vercel](https://vercel.com/).
+A modern markdown editor built with Next.js 14, featuring cloud storage integrations, real-time preview, and a distraction-free writing experience.
 
 ## Getting Started
 
-Dillinger requires [Node.js](https://nodejs.org/) v18+ to run.
+### Prerequisites
 
-```sh
-cd next-app
+- Node.js 18+
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+```bash
 npm install
+```
+
+### Development
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-For production:
+### Build
 
-```sh
+```bash
 npm run build
 npm start
 ```
 
-## Configuration
+## Features
 
-Create a `.env.local` file in the `next-app` directory to enable cloud integrations:
+- **Monaco Editor** - VS Code's editor with markdown syntax highlighting
+- **Live Preview** - Real-time markdown rendering with scroll sync
+- **Zen Mode** - Distraction-free fullscreen editing (Cmd/Ctrl+Shift+Z)
+- **Cloud Integrations** - GitHub, Dropbox, Google Drive, OneDrive, Bitbucket
+- **Export Options** - Markdown, HTML, PDF
+- **Drag & Drop Import** - Drop .md, .txt, or .markdown files
+- **Image Paste** - Paste images directly into the editor
+- **Local Storage** - Documents persist automatically
 
-```sh
-# App URL (used for all OAuth redirects)
-NEXT_PUBLIC_APP_URL=https://dillinger.io
+## Cloud Service Setup
 
-# GitHub
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
+To enable cloud integrations, create a `.env.local` file in this directory with your OAuth credentials.
 
-# Dropbox
-DROPBOX_APP_KEY=
-DROPBOX_APP_SECRET=
+### Google Drive
 
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Navigate to **APIs & Services → Credentials**
+4. Click **Create Credentials → OAuth client ID**
+5. Configure the OAuth consent screen if prompted:
+   - User Type: External
+   - Add your email as a test user
+6. Application type: **Web application**
+7. Add Authorized redirect URI: `http://localhost:3000/api/google-drive/callback`
+8. Copy the **Client ID** and **Client Secret**
+9. Go to **APIs & Services → Library** and enable the **Google Drive API**
+
+```bash
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/google-drive/callback
+```
+
+### OneDrive (Microsoft)
+
+1. Go to [Azure Portal](https://portal.azure.com/)
+2. Navigate to **Azure Active Directory → App registrations**
+3. Click **New registration**
+4. Name: "Dillinger"
+5. Supported account types: **Personal Microsoft accounts only** (or multi-tenant)
+6. Redirect URI: **Web** → `http://localhost:3000/api/onedrive/callback`
+7. Click **Register**
+8. Go to **API permissions → Add a permission**
+9. Select **Microsoft Graph → Delegated permissions**
+10. Add: `Files.ReadWrite`, `User.Read`
+11. Go to **Certificates & secrets → New client secret**
+12. Copy the secret **Value** immediately (shown only once)
+
+```bash
+ONEDRIVE_CLIENT_ID=your_application_client_id
+ONEDRIVE_CLIENT_SECRET=your_client_secret_value
+ONEDRIVE_REDIRECT_URI=http://localhost:3000/api/onedrive/callback
+```
+
+### Bitbucket
+
+1. Go to [Bitbucket Settings](https://bitbucket.org/account/settings/)
+2. Navigate to **OAuth consumers** (under Access Management)
+3. Click **Add consumer**
+4. Name: "Dillinger"
+5. Callback URL: `http://localhost:3000/api/bitbucket/callback`
+6. Permissions: Check **Repositories: Read/Write**
+7. Click **Save**
+8. Copy the **Key** (client ID) and **Secret**
+
+```bash
+BITBUCKET_CLIENT_ID=your_consumer_key
+BITBUCKET_CLIENT_SECRET=your_consumer_secret
+BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
+```
+
+### GitHub (Pre-configured)
+
+GitHub integration uses existing credentials from the legacy app. If needed:
+
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Click **New OAuth App**
+3. Application name: "Dillinger"
+4. Homepage URL: `http://localhost:3000`
+5. Authorization callback URL: `http://localhost:3000/api/github/callback`
+
+```bash
+GITHUB_CLIENT_ID=your_client_id
+GITHUB_CLIENT_SECRET=your_client_secret
+GITHUB_REDIRECT_URI=http://localhost:3000/api/github/callback
+```
+
+### Dropbox (Pre-configured)
+
+Dropbox integration uses existing credentials. If needed:
+
+1. Go to [Dropbox App Console](https://www.dropbox.com/developers/apps)
+2. Click **Create app**
+3. Choose **Scoped access** and **Full Dropbox**
+4. Name your app
+5. Add redirect URI: `http://localhost:3000/api/dropbox/callback`
+6. Under Permissions, enable `files.metadata.read` and `files.content.write`
+
+```bash
+DROPBOX_CLIENT_ID=your_app_key
+DROPBOX_CLIENT_SECRET=your_app_secret
+DROPBOX_REDIRECT_URI=http://localhost:3000/api/dropbox/callback
+```
+
+### Complete `.env.local` Template
+
+```bash
 # Google Drive
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=http://localhost:3000/api/google-drive/callback
 
 # OneDrive
 ONEDRIVE_CLIENT_ID=
 ONEDRIVE_CLIENT_SECRET=
+ONEDRIVE_REDIRECT_URI=http://localhost:3000/api/onedrive/callback
 
 # Bitbucket
 BITBUCKET_CLIENT_ID=
 BITBUCKET_CLIENT_SECRET=
+BITBUCKET_REDIRECT_URI=http://localhost:3000/api/bitbucket/callback
+
+# GitHub (if not using legacy credentials)
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_REDIRECT_URI=http://localhost:3000/api/github/callback
+
+# Dropbox (if not using legacy credentials)
+DROPBOX_CLIENT_ID=
+DROPBOX_CLIENT_SECRET=
+DROPBOX_REDIRECT_URI=http://localhost:3000/api/dropbox/callback
 ```
 
-## Cloud Integrations
+## Production Deployment
 
-| Service | Features |
-| ------- | -------- |
-| GitHub | Browse orgs/repos/branches, import and save files |
-| Dropbox | Browse folders, import and save files |
-| Google Drive | Browse folders, import and save files |
-| OneDrive | Browse folders, import and save files |
-| Bitbucket | Browse workspaces/repos/branches, import and save files |
+For production, update all redirect URIs to your production domain (e.g., `https://yourdomain.com/api/google-drive/callback`).
 
-Each integration uses OAuth 2.0 with tokens stored in HTTP-only cookies.
+## Tech Stack
 
-## Development
-
-```sh
-cd next-app
-npm run dev       # Start dev server
-npm run lint      # Run ESLint
-npm run typecheck # Run TypeScript checks
-npm run test:unit # Run Vitest unit tests
-npm run build     # Production build
-```
-
-## Project Structure
-
-```
-next-app/
-├── app/                    # Next.js App Router
-│   ├── api/               # API route handlers (OAuth, export, upload)
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Main editor page
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── editor/            # Monaco editor, document title
-│   ├── preview/           # Markdown preview pane
-│   ├── navbar/            # Top navigation bar
-│   ├── sidebar/           # Document list + cloud integrations
-│   ├── modals/            # OAuth and settings dialogs
-│   └── ui/                # Toast, skeleton loaders
-├── hooks/                 # Custom hooks (useGitHub, useDropbox, etc.)
-├── stores/                # Zustand store
-├── lib/                   # Utilities (markdown, export, import)
-└── tests/                 # Vitest + Playwright tests
-```
+- **Framework**: Next.js 14 (App Router)
+- **Editor**: Monaco Editor
+- **Styling**: Tailwind CSS
+- **State**: Zustand
+- **Icons**: Lucide React
 
 ## License
 
 MIT
-
-**Free Software, Hell Yeah!**

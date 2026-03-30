@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dillinger Refactor Finish Report</title>
+    <style>
+      :root {
+        --bg: #f5f1e8;
+        --card: #fffdf8;
+        --ink: #1f2a2e;
+        --muted: #5d6a6f;
+        --line: #d8cfbf;
+        --accent: #0f766e;
+        --accent-soft: #dff4ef;
+        --warn: #92400e;
+        --warn-soft: #fff3d6;
+        --danger: #9f1239;
+        --danger-soft: #ffe3ea;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 32%),
+          linear-gradient(180deg, #f8f5ee 0%, var(--bg) 100%);
+      }
+
+      main {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 40px 20px 72px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.1;
+      }
+
+      h1 {
+        font-size: 2.9rem;
+        letter-spacing: -0.04em;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+        margin-bottom: 14px;
+      }
+
+      h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      p,
+      li {
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      code {
+        font-family: "SFMono-Regular", Menlo, monospace;
+        font-size: 0.92em;
+        background: rgba(15, 118, 110, 0.08);
+        padding: 0.12rem 0.32rem;
+        border-radius: 6px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(15, 118, 110, 0.15), rgba(31, 42, 46, 0.04));
+        border: 1px solid rgba(15, 118, 110, 0.18);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 16px 40px rgba(31, 42, 46, 0.08);
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(15, 118, 110, 0.1);
+        color: var(--accent);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.76rem;
+      }
+
+      .lede {
+        max-width: 860px;
+        margin-top: 16px;
+        font-size: 1.14rem;
+      }
+
+      .meta {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .grid.three {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 10px 28px rgba(31, 42, 46, 0.05);
+      }
+
+      .band {
+        margin-top: 24px;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .status.danger {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .status.warn {
+        background: var(--warn-soft);
+        color: var(--warn);
+      }
+
+      .status.ok {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .steps {
+        counter-reset: item;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .steps li {
+        counter-increment: item;
+        margin-bottom: 20px;
+        padding: 18px 18px 18px 66px;
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--card);
+      }
+
+      .steps li::before {
+        content: counter(item);
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        color: white;
+        background: var(--accent);
+      }
+
+      .steps p {
+        margin: 8px 0 0;
+      }
+
+      .steps strong {
+        display: block;
+        font-size: 1.02rem;
+      }
+
+      .callout {
+        border-left: 6px solid var(--warn);
+        background: var(--warn-soft);
+        padding: 16px 18px;
+        border-radius: 14px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.96rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .small {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .paths {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      @media (max-width: 640px) {
+        main {
+          padding: 24px 14px 48px;
+        }
+
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .steps li {
+          padding-left: 18px;
+        }
+
+        .steps li::before {
+          position: static;
+          margin-bottom: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Refactor Finish Report</div>
+        <h1>Dillinger migration is still in design mode, not implementation mode.</h1>
+        <p class="lede">
+          The exact work left is not “finish a partial Next.js port.” It is
+          “turn the approved migration design into a real build plan, then
+          implement the replacement app in a sequence that closes parity gaps
+          before cutover.” The current branch contains one tracked migration
+          artifact and no tracked Next.js scaffold.
+        </p>
+        <div class="meta">
+          Prepared on March 10, 2026 for the current <code>master</code> worktree.
+        </div>
+      </section>
+
+      <section class="grid three band">
+        <article class="card">
+          <span class="status danger">Observed State</span>
+          <p>
+            Compared to <code>origin/master</code>, the only tracked refactor work
+            is <code>docs/plans/2026-01-19-nextjs-migration-design.md</code>.
+            There is no tracked <code>app/</code>, <code>components/</code>,
+            <code>hooks/</code>, <code>stores/</code>, or <code>lib/</code> tree.
+          </p>
+        </article>
+        <article class="card">
+          <span class="status warn">Immediate Blocker</span>
+          <p>
+            The design claims “100% functional parity” while explicitly deferring
+            features that the legacy app still ships today: Bitbucket, Google
+            Drive, OneDrive, Medium, Zen mode, scroll sync, and Dropbox image upload.
+          </p>
+        </article>
+        <article class="card">
+          <span class="status ok">What Exists</span>
+          <p>
+            The legacy app is fully mapped enough to start execution: Express
+            entrypoints, Angular modules, localStorage contract, export routes,
+            markdown pipeline, and the cloud plugin surfaces are all identifiable.
+          </p>
+        </article>
+      </section>
+
+      <section class="grid two band">
+        <article class="card">
+          <h2>Evidence</h2>
+          <ul class="paths">
+            <li><code>docs/plans/2026-01-19-nextjs-migration-design.md</code> is the approved target architecture.</li>
+            <li><code>app.js</code> still boots the current Express + EJS + Angular app.</li>
+            <li><code>views/index.ejs</code> still composes the legacy UI shell.</li>
+            <li><code>public/js/app.js</code> still bootstraps the active Angular modules.</li>
+            <li><code>public/js/services/documents.service.js</code> still owns the canonical document/localStorage behavior.</li>
+            <li><code>plugins/core/server.js</code> still owns <code>/factory/*</code> export and HTML-to-Markdown routes.</li>
+            <li><code>plugins/github/server.js</code> and <code>plugins/dropbox/server.js</code> are in scope for the approved migration.</li>
+            <li><code>plugins/bitbucket/server.js</code>, <code>plugins/googledrive/server.js</code>, <code>plugins/onedrive/server.js</code>, and <code>plugins/medium/server.js</code> prove the legacy app has more live integrations than the approved design intends to ship in phase one.</li>
+            <li>The untracked <code>CLAUDE.md</code> files are memory/index artifacts, not refactor implementation.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>Bottom Line</h2>
+          <div class="callout">
+            Do not start by deleting Angular code or by scaffolding random Next.js files.
+            Finish this refactor by first locking the scope mismatch, then porting the
+            legacy system in dependency order: persistence and markdown core first,
+            shell/editor second, export and cloud routes third, cutover last.
+          </div>
+        </article>
+      </section>
+
+      <section class="card band">
+        <h2>Exact Steps To Finish The Refactor</h2>
+        <ol class="steps">
+          <li>
+            <strong>Resolve the parity contradiction before writing migration code.</strong>
+            Update the approved design into an execution spec that marks every currently
+            shipped capability as one of: <code>ship in v1</code>, <code>explicitly defer</code>,
+            or <code>remove</code>. The minimum list that must be decided is: core editor,
+            preview, localStorage compatibility, export routes, HTML-to-Markdown, GitHub,
+            Dropbox, Bitbucket, Google Drive, OneDrive, Medium, Zen mode, scroll sync,
+            and Dropbox image upload.
+            <p>
+              Exit criterion: there is a single parity matrix with no “implied later”
+              ambiguity.
+            </p>
+          </li>
+          <li>
+            <strong>Choose the real repository topology and freeze it.</strong>
+            The design doc shows a sibling-style <code>dillinger-next/</code> layout, but the
+            current repo has no such scaffold. Decide whether the Next.js app lives
+            in this repo root, under a subdirectory, or in a separate repo/worktree.
+            Do not continue until the directory layout, package manager, Node version,
+            and deployment target are fixed.
+            <p>
+              Exit criterion: one committed scaffold decision with a booting Next.js app.
+            </p>
+          </li>
+          <li>
+            <strong>Write the migration backlog from the legacy inventory, not from memory.</strong>
+            Convert the current Angular/Express surfaces into implementation tickets.
+            The canonical source files are: <code>views/index.ejs</code>,
+            <code>public/js/app.js</code>, <code>public/js/base/base.controller.js</code>,
+            <code>public/js/services/documents.service.js</code>,
+            <code>public/js/user/user.controller.js</code>,
+            <code>plugins/core/server.js</code>, and each plugin server/service pair.
+            <p>
+              Exit criterion: every legacy surface is mapped to a target component,
+              hook, store slice, or API route.
+            </p>
+          </li>
+          <li>
+            <strong>Port the persistence contract before the UI shell.</strong>
+            Implement the new store and hydration layer first, because everything else
+            depends on it. Preserve the legacy localStorage keys
+            <code>files</code>, <code>currentDocument</code>, and <code>profileV3</code>.
+            Preserve the default document semantics from
+            <code>public/js/factorys/sheet.factory.js</code>, including the seeded
+            untitled document and README-derived starter content.
+            <p>
+              Exit criterion: create/select/delete/save flows work in the new app with
+              legacy storage data loaded in place.
+            </p>
+          </li>
+          <li>
+            <strong>Extract and lock markdown parity next.</strong>
+            Rebuild the markdown pipeline from <code>plugins/core/markdown-it.js</code>,
+            including the plugin set, KaTeX, syntax highlighting, table classes, and
+            line-number attributes used by preview/scroll behavior. Generate fixture
+            snapshots from the legacy renderer before swapping in the new one.
+            <p>
+              Exit criterion: the new renderer matches the legacy HTML contract for
+              representative markdown fixtures.
+            </p>
+          </li>
+          <li>
+            <strong>Build the editor shell only after store and markdown are stable.</strong>
+            Port the shell composed today by <code>views/index.ejs</code>,
+            <code>views/navbar.ejs</code>, <code>views/sidebar.ejs</code>,
+            <code>views/title.ejs</code>, <code>views/editor.ejs</code>, and
+            <code>views/preview.ejs</code> into the target Next.js component tree.
+            Replace Ace with Monaco, but preserve the current UX contract: editor/preview split,
+            document switching, autosave, settings, counts, raw HTML preview mode, and keyboard modes.
+            <p>
+              Exit criterion: the React shell can replace the Angular shell for a local user
+              without touching export or cloud features yet.
+            </p>
+          </li>
+          <li>
+            <strong>Port the export and conversion endpoints before cloud integrations.</strong>
+            Recreate <code>/factory/fetch_markdown</code>, <code>/factory/fetch_html</code>,
+            <code>/factory/fetch_pdf</code>, and <code>/factory/html_to_md</code> as Next.js
+            route handlers or an equivalent server layer. Decide whether to preserve the
+            legacy route shapes for compatibility or migrate the client fully to
+            <code>/api/export/*</code> and <code>/api/convert/html-to-md</code>.
+            <p>
+              Exit criterion: markdown, HTML, styled HTML, PDF, and HTML-to-Markdown all work
+              end to end from the new UI.
+            </p>
+          </li>
+          <li>
+            <strong>Port GitHub and Dropbox as the first cloud integrations.</strong>
+            This matches the approved design and captures the most important external workflows.
+            Port both the API routes and the client state/modal flows now living in
+            <code>plugins/github/*</code>, <code>public/js/plugins/github/*</code>,
+            <code>plugins/dropbox/*</code>, and <code>public/js/plugins/dropbox/*</code>.
+            Include GitHub org/repo/branch/tree selection, file fetch, SHA tracking,
+            and save. Include Dropbox auth, search, fetch, save, and decide whether
+            Dropbox image upload is v1 or explicitly deferred.
+            <p>
+              Exit criterion: a user can authenticate, open remote markdown, edit it,
+              and save it back in both systems.
+            </p>
+          </li>
+          <li>
+            <strong>Close or formally defer the remaining legacy integrations.</strong>
+            Bitbucket, Google Drive, OneDrive, Medium, Zen mode, scroll sync, and
+            Dropbox image upload are live legacy behavior today. If they are not shipping
+            in the first Next.js release, document that as a product decision, not as
+            a silent omission. If they are shipping, port them now before calling the
+            refactor complete.
+            <p>
+              Exit criterion: there are no undocumented feature regressions left.
+            </p>
+          </li>
+          <li>
+            <strong>Build a parity verification suite before cutover.</strong>
+            The repo currently has meaningful tests only around Dropbox. Add a migration
+            test suite that covers store hydration, markdown fixtures, export routes,
+            settings behavior, and at least mocked GitHub/Dropbox happy paths. For
+            browser behavior, add end-to-end checks for document lifecycle, preview refresh,
+            and export flows.
+            <p>
+              Exit criterion: you can prove parity with automated checks instead of
+              hand-testing from memory.
+            </p>
+          </li>
+          <li>
+            <strong>Run side-by-side cutover and remove the legacy app last.</strong>
+            Keep the Express/Angular implementation as the reference system until the
+            new app passes the parity matrix. Only then wire production traffic to the
+            new app, migrate any required environment variables, and archive or remove
+            the legacy code paths.
+            <p>
+              Exit criterion: the new app is the default runtime and the legacy app is
+              no longer serving user traffic.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="grid two band">
+        <article class="card">
+          <h2>Execution Graph</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Depends On</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Scope freeze</td>
+                <td>None</td>
+                <td>Prevents building the wrong v1.</td>
+              </tr>
+              <tr>
+                <td>Repo topology + scaffold</td>
+                <td>Scope freeze</td>
+                <td>Everything else needs a fixed target layout.</td>
+              </tr>
+              <tr>
+                <td>Legacy inventory backlog</td>
+                <td>Scope freeze</td>
+                <td>Defines the real port surface area.</td>
+              </tr>
+              <tr>
+                <td>Store + persistence</td>
+                <td>Scaffold, backlog</td>
+                <td>Editor and integrations depend on document state.</td>
+              </tr>
+              <tr>
+                <td>Markdown parity</td>
+                <td>Scaffold, backlog</td>
+                <td>Preview and export depend on stable rendering.</td>
+              </tr>
+              <tr>
+                <td>Editor shell</td>
+                <td>Store, markdown</td>
+                <td>UI depends on both data and render output.</td>
+              </tr>
+              <tr>
+                <td>Export routes</td>
+                <td>Markdown, editor shell</td>
+                <td>Needs both renderer and client integration points.</td>
+              </tr>
+              <tr>
+                <td>GitHub + Dropbox</td>
+                <td>Store, editor shell</td>
+                <td>Remote document workflows depend on document state.</td>
+              </tr>
+              <tr>
+                <td>Remaining integrations or explicit deferrals</td>
+                <td>Scope freeze, editor shell</td>
+                <td>Prevents hidden regressions at launch.</td>
+              </tr>
+              <tr>
+                <td>Parity test suite</td>
+                <td>All shipped surfaces</td>
+                <td>Needed before cutover.</td>
+              </tr>
+              <tr>
+                <td>Cutover</td>
+                <td>Parity test suite</td>
+                <td>Legacy can only be removed after proof.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+        <article class="card">
+          <h2>Legacy To Target Map</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Legacy surface</th>
+                <th>Target home</th>
+                <th>Finish action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>views/*.ejs</code></td>
+                <td><code>app/page.tsx</code> + UI components</td>
+                <td>Rebuild the shell without losing layout behavior.</td>
+              </tr>
+              <tr>
+                <td><code>public/js/services/documents.service.js</code></td>
+                <td><code>stores/store.ts</code> + document hooks</td>
+                <td>Port storage, current document, import, autosave, SHA handling.</td>
+              </tr>
+              <tr>
+                <td><code>plugins/core/markdown-it.js</code></td>
+                <td><code>lib/markdown.ts</code></td>
+                <td>Preserve render output and line metadata.</td>
+              </tr>
+              <tr>
+                <td><code>plugins/core/server.js</code></td>
+                <td><code>app/api/export/*</code> and <code>app/api/convert/*</code></td>
+                <td>Recreate export and HTML conversion contracts.</td>
+              </tr>
+              <tr>
+                <td><code>plugins/github/*</code></td>
+                <td><code>app/api/github/*</code> + GitHub modal/hook</td>
+                <td>Port auth, tree/file fetch, and save flows.</td>
+              </tr>
+              <tr>
+                <td><code>plugins/dropbox/*</code></td>
+                <td><code>app/api/dropbox/*</code> + Dropbox modal/hook</td>
+                <td>Port auth, search, fetch, save, and decide image upload scope.</td>
+              </tr>
+              <tr>
+                <td><code>public/js/user/user.controller.js</code></td>
+                <td><code>hooks/useUserSettings.ts</code> + UI settings</td>
+                <td>Port scroll sync, counts, keybindings, night mode, about, profile reset.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section class="card band">
+        <h2>Recommended First Commit Sequence</h2>
+        <p class="small">
+          If you want the shortest path to forward motion without rework, the first commits
+          should land in this order:
+        </p>
+        <ol>
+          <li>Update the migration doc with a parity matrix and explicit defer list.</li>
+          <li>Scaffold the Next.js app and commit the runtime/tooling baseline.</li>
+          <li>Port the store, hydration, and markdown renderer with fixture tests.</li>
+          <li>Port the editor shell and document lifecycle.</li>
+          <li>Port export routes, then GitHub and Dropbox.</li>
+          <li>Either port or formally de-scope the remaining legacy integrations.</li>
+          <li>Add parity tests and cut over only after they pass.</li>
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>

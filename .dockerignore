@@ -1,8 +1,0 @@
-.gitignore
-.npmignore
-LICENSE
-VERSION
-Makefile
-docker-compose.yml
-node_modules
-.git

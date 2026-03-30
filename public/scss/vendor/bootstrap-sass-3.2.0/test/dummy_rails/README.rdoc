@@ -1,3 +1,0 @@
-== README
-
-This is a dummy app for testing REP
