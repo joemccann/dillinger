@@ -232,11 +232,9 @@ body {
 }
 
 #logobar .native-img {
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
-  overflow: hidden;
-  flex-shrink: 0;
+  width: initial;
+  height: 36px;
+  padding-inline: 0.5em;
 }
 
 #logobar .native-img img {
