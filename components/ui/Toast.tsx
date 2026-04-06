@@ -22,6 +22,19 @@ const ToastContext = createContext<ToastContextType | null>(null);
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [exiting, setExiting] = useState<Set<string>>(new Set());
+
+  const dismiss = useCallback((id: string) => {
+    setExiting((prev) => new Set(prev).add(id));
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+      setExiting((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }, 150);
+  }, []);
 
   const notify = useCallback((message: string, duration = 3000) => {
     const id = Date.now().toString();
@@ -29,14 +42,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
     if (duration > 0) {
       setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id));
+        dismiss(id);
       }, duration);
     }
-  }, []);
-
-  const dismiss = (id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
+  }, [dismiss]);
 
   return (
     <ToastContext.Provider value={{ notify }}>
@@ -50,8 +59,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="bg-bg-navbar text-text-invert px-4 py-3 rounded shadow-lg
-                       flex items-center gap-3 animate-in"
+            className={`bg-bg-navbar text-text-invert px-4 py-3 rounded shadow-lg
+                       flex items-center gap-3 transition-opacity duration-150
+                       ${exiting.has(toast.id) ? "opacity-0" : "animate-in"}`}
           >
             <span className="text-sm">{toast.message}</span>
             <button

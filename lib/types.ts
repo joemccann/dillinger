@@ -34,48 +34,122 @@ export const DEFAULT_SETTINGS: UserSettings = {
   enableGitHubComment: true,
 };
 
-export const DEFAULT_DOCUMENT_BODY = `# Dillinger
-## _The Last Markdown Editor, Ever_
+export const DEFAULT_DOCUMENT_BODY = `# Welcome to Dillinger
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/) [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) [![Zustand](https://img.shields.io/badge/Zustand-5-orange)](https://zustand-demo.pmnd.rs/) [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel)](https://dillinger.io) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+A clean, distraction-free markdown editor. Type on the left, see the rendered output on the right.
 
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible
-Markdown editor built with Next.js and React.
+---
 
-- Type some Markdown on the left
-- See HTML in the right
-- Magic
+## Text Formatting
 
-## Features
+Markdown makes it easy to format text. You can write in **bold**, *italic*, or ~~strikethrough~~. Combine them for ***bold italic*** text. Use \`inline code\` for technical terms.
 
-- **Monaco Editor** with markdown syntax highlighting and Vim/Emacs keybindings
-- **Live Preview** with real-time markdown rendering and scroll sync
-- **Zen Mode** for distraction-free fullscreen editing
-- **Cloud Integrations** — import and save files from GitHub, Dropbox, Google Drive, OneDrive, and Bitbucket
-- **Export** documents as Markdown, HTML, and PDF
-- **Import** markdown, HTML, and text files via drag and drop or file picker
-- **Image Paste** — paste images directly into the editor
-- **Local Storage** — documents persist automatically in your browser
-- **Dark Mode** — night mode for comfortable editing
+## Lists
 
-## Tech
+Unordered lists use dashes, asterisks, or plus signs:
 
-Dillinger is built with:
+- Import files from GitHub, Dropbox, or Google Drive
+- Export to Markdown, HTML, or PDF
+- Drag and drop files directly into the editor
 
-- [Next.js 14](https://nextjs.org/) — React framework with App Router
-- [React 18](https://react.dev/) — UI components
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/) — VS Code's editor
-- [markdown-it](https://github.com/markdown-it/markdown-it) — Markdown parser with plugins
-- [Zustand](https://zustand-demo.pmnd.rs/) — State management with localStorage persistence
-- [Tailwind CSS](https://tailwindcss.com/) — Styling
-- [TypeScript](https://www.typescriptlang.org/) — Type safety
-- [Lucide React](https://lucide.dev/) — Icons
+Ordered lists are numbered automatically:
 
-Deployed on [Vercel](https://vercel.com/).
+1. Write your markdown
+2. Preview the rendered output
+3. Export or save to the cloud
 
-## License
+Nested lists work too:
 
-MIT
+- Cloud integrations
+  - GitHub repositories
+  - Dropbox folders
+  - Google Drive files
+  - OneDrive and Bitbucket
+- Local features
+  - Auto-save to browser storage
+  - Image paste from clipboard
 
-**Free Software, Hell Yeah!**
+## Task Lists
+
+- [x] Set up the editor
+- [x] Write some markdown
+- [ ] Connect a cloud service
+- [ ] Export the finished document
+
+## Links and Images
+
+Link to any page with [inline links](https://dillinger.io) or use [reference-style links][dillinger].
+
+Images use a similar syntax:
+
+![Placeholder](https://via.placeholder.com/600x200/2B2F36/35D7BB?text=Your+Image+Here)
+
+[dillinger]: https://dillinger.io
+
+## Blockquotes
+
+> The art of writing is the art of discovering what you believe.
+>
+> — Gustave Flaubert
+
+Blockquotes can contain other markdown elements:
+
+> **Tip:** Use \`Cmd+Shift+Z\` to enter zen mode for distraction-free writing.
+
+## Code
+
+Fenced code blocks support syntax highlighting:
+
+\`\`\`javascript
+function greet(name) {
+  return \`Hello, \${name}.\`;
+}
+
+console.log(greet("world"));
+\`\`\`
+
+\`\`\`python
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+\`\`\`
+
+## Tables
+
+| Shortcut | Action |
+|----------|--------|
+| \`⌘ ⇧ Z\` | Toggle zen mode |
+| \`Escape\` | Exit zen mode |
+| \`?\` | Keyboard shortcuts |
+
+Tables support alignment:
+
+| Feature | Status | Notes |
+|:--------|:------:|------:|
+| Markdown editing | Active | Monaco-powered |
+| Live preview | Active | Scroll-synced |
+| Cloud sync | Available | 5 providers |
+| PDF export | Available | Server-rendered |
+
+## Footnotes
+
+Dillinger supports extended markdown syntax including footnotes[^1] and definition lists.
+
+[^1]: Footnotes appear at the bottom of the rendered preview.
+
+## Math
+
+Inline math: $E = mc^2$
+
+Block equations:
+
+$$
+\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}
+$$
+
+---
+
+*Your documents save automatically. Start writing.*
 `;

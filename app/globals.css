@@ -28,8 +28,8 @@ body {
   margin-bottom: 0.5em;
 }
 
-.preview-html h1 { font-size: 2em; }
-.preview-html h2 { font-size: 1.5em; }
+.preview-html h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid #E8E8E8; }
+.preview-html h2 { font-size: 1.5em; margin-top: 2em; padding-bottom: 0.2em; border-bottom: 1px solid #E8E8E8; }
 .preview-html h3 { font-size: 1.25em; }
 .preview-html h4 { font-size: 1em; }
 
@@ -68,9 +68,10 @@ body {
 }
 
 .preview-html blockquote {
-  border-left: 3px solid #A0AABF;
+  border-left: 4px solid #A0AABF;
   padding-left: 1em;
   margin-left: 0;
+  margin-bottom: 1em;
   font-style: italic;
   color: #666;
 }
@@ -158,6 +159,14 @@ body {
 .dark.preview-html h5,
 .dark.preview-html h6 {
   color: #e8e8e8;
+}
+
+.dark.preview-html h1 {
+  border-bottom-color: #444;
+}
+
+.dark.preview-html h2 {
+  border-bottom-color: #444;
 }
 
 .dark.preview-html a {
@@ -251,4 +260,16 @@ body {
 
 #logobar .native-desc strong {
   color: #D3DAEA;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

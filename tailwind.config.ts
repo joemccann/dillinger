@@ -50,9 +50,20 @@ const config: Config = {
           "0%": { transform: "translateX(100%)", opacity: "0" },
           "100%": { transform: "translateX(0)", opacity: "1" },
         },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
       animation: {
         "in": "slide-in-from-right 0.2s ease-out",
+        "fade-in": "fade-in 0.15s ease-out",
+      },
+      transitionTimingFunction: {
+        "out-quart": "cubic-bezier(0.25, 1, 0.5, 1)",
+      },
+      transitionDuration: {
+        "250": "250ms",
       },
     },
   },

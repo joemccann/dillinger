@@ -24,7 +24,6 @@ import {
   HardDrive,
   CloudCog,
   GitBranch,
-  ChevronDown,
   ChevronRight,
   Plug,
   CloudDownload,
@@ -108,18 +107,23 @@ export function Sidebar() {
     dispatch({ type: "closeDeleteModal" });
   }, [currentDocument, deleteDocument, notify]);
 
-  if (!sidebarOpen) return null;
-
   const closeModal = () => dispatch({ type: "closeModal" });
 
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/50 z-sidebar sm:hidden"
+        className={`fixed inset-0 bg-black/50 z-sidebar sm:hidden transition-opacity duration-250
+                    ${sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
         onClick={toggleSidebar}
         aria-hidden="true"
       />
-      <aside className="fixed sm:relative w-sidebar bg-bg-sidebar h-dvh flex flex-col z-sidebar">
+      <aside
+        className={`fixed sm:relative w-sidebar shrink-0 bg-bg-sidebar h-dvh flex flex-col z-sidebar
+                    transition-all duration-250
+                    ${sidebarOpen ? "translate-x-0" : "-translate-x-full sm:translate-x-0 sm:-ml-[270px]"}`}
+        style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
+      >
         <div className="pt-4" />
 
         {/* Navigation */}
@@ -168,7 +172,7 @@ export function Sidebar() {
           <button
             onClick={createDocument}
             className="w-full bg-plum text-bg-sidebar py-2 px-4 rounded font-medium
-                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2
+                       hover:opacity-90 active:scale-[0.97] transition-all flex items-center justify-center gap-2
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Plus size={18} />
@@ -177,7 +181,7 @@ export function Sidebar() {
           <button
             onClick={handleSave}
             className="w-full bg-bg-button-save text-text-invert py-2 px-4 rounded font-medium
-                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2
+                       hover:opacity-90 active:scale-[0.97] transition-all flex items-center justify-center gap-2
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Save size={18} />
@@ -189,7 +193,7 @@ export function Sidebar() {
             className={`w-full bg-red-600 text-text-invert py-2 px-4 rounded font-medium
                        flex items-center justify-center gap-2
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar
-                       ${documents.length <= 1 ? "opacity-60 cursor-not-allowed" : "hover:opacity-90 transition-opacity"}`}
+                       ${documents.length <= 1 ? "opacity-60 cursor-not-allowed" : "hover:opacity-90 active:scale-[0.97] transition-all"}`}
           >
             <Trash2 size={18} />
             Delete Document
@@ -261,13 +265,26 @@ function CollapsibleSection({
           {icon}
           {label}
         </span>
-        {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+        <ChevronRight
+          size={14}
+          className={`transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
+        />
       </button>
-      {isOpen && (
-        <div id={panelId} className="ml-2 space-y-1 mt-1">
-          {children}
+      <div
+        id={panelId}
+        className="grid transition-[grid-template-rows] duration-200"
+        style={{
+          gridTemplateRows: isOpen ? "1fr" : "0fr",
+          transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)",
+        }}
+      >
+        <div className="overflow-hidden">
+          <div className="ml-2 space-y-1 mt-1">
+            {children}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

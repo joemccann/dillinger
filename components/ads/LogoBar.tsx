@@ -47,7 +47,7 @@ export function LogoBar() {
         strategy="lazyOnload"
         onLoad={initAd}
       />
-      <div id="logobar" />
+      <div id="logobar" className="empty:hidden" />
     </>
   );
 }

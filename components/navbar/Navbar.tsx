@@ -167,7 +167,7 @@ export function Navbar() {
         <button
           onClick={toggleSidebar}
           aria-label="Toggle sidebar"
-          className="text-text-invert hover:text-plum transition-colors
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97]
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar rounded"
         >
           <Menu size={24} />
@@ -183,7 +183,7 @@ export function Navbar() {
           onClick={() => importInputRef.current?.click()}
           aria-label="Import file"
           title="Import file"
-          className="text-text-invert hover:text-plum transition-colors px-3 py-2
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
@@ -195,7 +195,7 @@ export function Navbar() {
           onClick={() => imageInputRef.current?.click()}
           aria-label="Insert image"
           title="Insert image"
-          className="text-text-invert hover:text-plum transition-colors px-3 py-2
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
@@ -210,7 +210,7 @@ export function Navbar() {
             aria-expanded={exportOpen}
             aria-haspopup="menu"
             aria-label="Export document"
-            className="text-text-invert hover:text-plum transition-colors px-3 py-2
+            className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                        flex items-center gap-1 text-sm rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
           >
@@ -273,7 +273,7 @@ export function Navbar() {
           aria-label={previewVisible ? "Hide preview" : "Show preview"}
           title={previewVisible ? "Hide preview" : "Show preview"}
           aria-pressed={previewVisible}
-          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           {previewVisible ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -284,7 +284,7 @@ export function Navbar() {
           onClick={() => setZenMode(true)}
           aria-label="Enter zen mode"
           title="Zen mode (⌘⇧Z)"
-          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <Maximize2 size={20} />
@@ -295,7 +295,7 @@ export function Navbar() {
           onClick={toggleSettings}
           aria-label="Open settings"
           title="Settings"
-          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <Settings size={20} />
@@ -305,7 +305,7 @@ export function Navbar() {
           onClick={toggleShortcuts}
           title="Keyboard shortcuts (?)"
           aria-label="Keyboard shortcuts"
-          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+          className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <HelpCircle size={20} />

@@ -8,6 +8,7 @@ import { DEFAULT_DOCUMENT_TITLE } from "@/lib/document";
 export function DocumentTitle() {
   const currentDocument = useStore((state) => state.currentDocument);
   const updateDocumentTitle = useStore((state) => state.updateDocumentTitle);
+  const isDirty = useStore((state) => state.isDirty);
 
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState("");
@@ -44,7 +45,7 @@ export function DocumentTitle() {
   if (!currentDocument) return null;
 
   return (
-    <div className="h-12 bg-border-light flex items-center px-4 border-b border-border-light">
+    <div className="h-14 bg-bg-primary flex items-center px-4 border-b border-border-light">
       {isEditing ? (
         <div className="flex items-center gap-2 flex-1">
           <label htmlFor="document-title" className="sr-only">Document title</label>
@@ -71,12 +72,19 @@ export function DocumentTitle() {
         </div>
       ) : (
         <div className="flex items-center gap-2 flex-1">
-          <h2 className="text-text-primary font-medium truncate">
+          <h2 className="text-text-primary font-semibold text-base truncate">
             {currentDocument.title || DEFAULT_DOCUMENT_TITLE}
           </h2>
+          <span
+            aria-live="polite"
+            className={`text-xs text-text-muted ml-2 transition-opacity duration-200 ${isDirty ? "" : "opacity-50"}`}
+          >
+            {isDirty ? "Unsaved" : "Saved"}
+          </span>
           <button
             onClick={() => setIsEditing(true)}
             aria-label="Edit title"
+            title="Rename document"
             className="text-text-muted hover:text-plum transition-colors rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >

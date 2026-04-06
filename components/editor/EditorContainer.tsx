@@ -177,7 +177,7 @@ function EditorContent() {
   if (zenMode) {
     return (
       <div
-        className="h-dvh bg-bg-primary flex items-center justify-center relative"
+        className="h-dvh bg-bg-primary flex items-center justify-center relative animate-fade-in"
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -204,7 +204,7 @@ function EditorContent() {
 
   return (
     <div
-      className="h-dvh flex overflow-hidden relative"
+      className="h-dvh flex overflow-hidden relative animate-fade-in"
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}

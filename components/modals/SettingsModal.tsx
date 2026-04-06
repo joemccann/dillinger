@@ -29,24 +29,27 @@ export function SettingsModal() {
     };
   }, [settingsOpen, toggleSettings]);
 
-  if (!settingsOpen) return null;
-
   return (
     <div
-      className="fixed inset-0 z-settings"
+      className={`fixed inset-0 z-settings transition-opacity duration-300
+                  ${settingsOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="settings-title"
     >
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50"
         onClick={toggleSettings}
         aria-hidden="true"
       />
 
-      {/* Modal */}
-      <div className="absolute right-0 top-0 h-full w-80 bg-bg-navbar shadow-xl">
+      <div
+        className={`absolute right-0 top-0 h-full w-80 bg-bg-navbar shadow-xl
+                    transition-transform duration-300
+                    ${settingsOpen ? "translate-x-0" : "translate-x-full"}`}
+        style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
+      >
         <div className="flex items-center justify-between p-4 border-b border-border-settings">
           <h2 id="settings-title" className="text-text-invert font-semibold text-balance">Settings</h2>
           <button

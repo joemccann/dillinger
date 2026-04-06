@@ -50,7 +50,7 @@ export function EditorSkeleton() {
       {/* Main content skeleton */}
       <main className="flex-1 flex flex-col min-w-0">
         {/* Navbar skeleton */}
-        <div className="h-12 bg-bg-navbar flex items-center px-4 gap-4">
+        <div className="h-14 bg-bg-navbar flex items-center px-4 gap-4">
           <Skeleton className="h-6 w-6" />
           <Skeleton className="h-6 w-6" />
           <div className="flex-1" />
@@ -60,7 +60,7 @@ export function EditorSkeleton() {
         </div>
 
         {/* Document title skeleton */}
-        <div className="h-12 bg-border-light flex items-center px-4">
+        <div className="h-14 bg-bg-primary flex items-center px-4 border-b border-border-light">
           <Skeleton className="h-6 w-48" />
         </div>
 
