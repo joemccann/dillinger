@@ -24,8 +24,14 @@ export default function ContentLayout({
           <Link href="/ai" className="hover:text-plum transition-colors">
             AI
           </Link>
+          <Link href="/integrations" className="hover:text-plum transition-colors">
+            Integrations
+          </Link>
           <Link href="/guide" className="hover:text-plum transition-colors">
             Guide
+          </Link>
+          <Link href="/compare" className="hover:text-plum transition-colors hidden sm:block">
+            Compare
           </Link>
           <Link
             href="/"
@@ -44,6 +50,9 @@ export default function ContentLayout({
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-text-invert transition-colors">
               Privacy
+            </Link>
+            <Link href="/changelog" className="hover:text-text-invert transition-colors">
+              Changelog
             </Link>
             <a
               href="https://github.com/joemccann/dillinger"
