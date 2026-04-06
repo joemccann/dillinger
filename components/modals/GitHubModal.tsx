@@ -31,9 +31,11 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [step, setStep] = useState<Step>("orgs");
-  const [commitMessage, setCommitMessage] = useState("");
-  const [newFileName, setNewFileName] = useState("");
+  const [formState, setFormState] = useState({
+    step: "orgs" as Step,
+    commitMessage: "",
+    newFileName: "",
+  });
 
   // Handle Escape key
   useEffect(() => {
@@ -56,9 +58,11 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   useEffect(() => {
     if (isOpen && github.isConnected) {
       github.fetchOrgs();
-      setStep("orgs");
-      setCommitMessage("");
-      setNewFileName(currentDocument?.title || "document");
+      setFormState({
+        step: "orgs",
+        commitMessage: "",
+        newFileName: currentDocument?.title || "document",
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, github.isConnected]);
@@ -67,17 +71,17 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
 
   const handleOrgSelect = (org: string) => {
     github.fetchRepos(org);
-    setStep("repos");
+    setFormState((prev) => ({ ...prev, step: "repos" }));
   };
 
   const handleRepoSelect = (repo: string) => {
     github.fetchBranches(repo);
-    setStep("branches");
+    setFormState((prev) => ({ ...prev, step: "branches" }));
   };
 
   const handleBranchSelect = (branch: string) => {
     github.fetchFiles(branch);
-    setStep("files");
+    setFormState((prev) => ({ ...prev, step: "files" }));
   };
 
   const handleFileSelect = async (path: string) => {
@@ -97,12 +101,12 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   const handleSave = async () => {
     if (!currentDocument) return;
 
-    const path = github.current.path || `${newFileName}.md`;
+    const path = github.current.path || `${formState.newFileName}.md`;
     github.setCurrent({ path });
 
     const success = await github.saveFile(
       currentDocument.body,
-      commitMessage || `Update ${path}`
+      formState.commitMessage || `Update ${path}`
     );
 
     if (success) {
@@ -111,9 +115,8 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
   };
 
   const goBack = () => {
-    if (step === "repos") setStep("orgs");
-    else if (step === "branches") setStep("repos");
-    else if (step === "files") setStep("branches");
+    const backMap: Record<Step, Step> = { repos: "orgs", branches: "repos", files: "branches", orgs: "orgs" };
+    setFormState((prev) => ({ ...prev, step: backMap[prev.step] }));
   };
 
   // Not connected state
@@ -171,7 +174,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border-settings">
           <div className="flex items-center gap-2">
-            {step !== "orgs" && (
+            {formState.step !== "orgs" && (
               <button
                 onClick={goBack}
                 aria-label="Go back"
@@ -220,7 +223,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
 
         {/* Content */}
         <div className="flex-1 overflow-auto p-4">
-          {step === "orgs" && (
+          {formState.step === "orgs" && (
             <div className="space-y-1">
               {github.orgs.map((org) => (
                 <button
@@ -236,7 +239,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
             </div>
           )}
 
-          {step === "repos" && (
+          {formState.step === "repos" && (
             <div className="space-y-1">
               {github.repos.map((repo) => (
                 <button
@@ -260,7 +263,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
             </div>
           )}
 
-          {step === "branches" && (
+          {formState.step === "branches" && (
             <div className="space-y-1">
               {github.branches.map((branch) => (
                 <button
@@ -276,7 +279,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
             </div>
           )}
 
-          {step === "files" && (
+          {formState.step === "files" && (
             <div className="space-y-1">
               {mode === "save" && (
                 <div className="mb-4 p-3 bg-bg-highlight rounded">
@@ -286,8 +289,8 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
                   <input
                     id="github-filename"
                     type="text"
-                    value={newFileName}
-                    onChange={(e) => setNewFileName(e.target.value)}
+                    value={formState.newFileName}
+                    onChange={(e) => setFormState((prev) => ({ ...prev, newFileName: e.target.value }))}
                     placeholder="document.md"
                     className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                                border border-border-settings
@@ -299,8 +302,8 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
                   <input
                     id="github-commit-message"
                     type="text"
-                    value={commitMessage}
-                    onChange={(e) => setCommitMessage(e.target.value)}
+                    value={formState.commitMessage}
+                    onChange={(e) => setFormState((prev) => ({ ...prev, commitMessage: e.target.value }))}
                     placeholder="Update document"
                     className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                                border border-border-settings
@@ -337,7 +340,7 @@ export function GitHubModal({ isOpen, onClose, mode }: GitHubModalProps) {
         </div>
 
         {/* Footer */}
-        {mode === "save" && step === "files" && (
+        {mode === "save" && formState.step === "files" && (
           <div className="p-4 border-t border-border-settings">
             <button
               onClick={handleSave}

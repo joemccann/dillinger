@@ -29,9 +29,11 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
   const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  const [newFileName, setNewFileName] = useState("");
-  const [commitMessage, setCommitMessage] = useState("");
-  const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
+  const [formState, setFormState] = useState({
+    newFileName: "",
+    commitMessage: "",
+    selectedFilePath: null as string | null,
+  });
 
   // Handle Escape key
   useEffect(() => {
@@ -54,9 +56,11 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
   useEffect(() => {
     if (isOpen && bitbucket.isConnected) {
       bitbucket.fetchWorkspaces();
-      setNewFileName(currentDocument?.title || "document");
-      setCommitMessage("");
-      setSelectedFilePath(null);
+      setFormState({
+        newFileName: currentDocument?.title || "document",
+        commitMessage: "",
+        selectedFilePath: null,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, bitbucket.isConnected]);
@@ -75,21 +79,24 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
       }
     } else {
       // Save mode - select file to overwrite
-      setSelectedFilePath(item.path);
-      setNewFileName(item.name.replace(/\.md$/, ""));
+      setFormState((prev) => ({
+        ...prev,
+        selectedFilePath: item.path,
+        newFileName: item.name.replace(/\.md$/, ""),
+      }));
     }
   };
 
   const handleSave = async () => {
     if (!currentDocument) return;
 
-    const fileName = newFileName.endsWith(".md") ? newFileName : `${newFileName}.md`;
-    const filePath = selectedFilePath || (bitbucket.currentPath ? `${bitbucket.currentPath}/${fileName}` : fileName);
+    const fileName = formState.newFileName.endsWith(".md") ? formState.newFileName : `${formState.newFileName}.md`;
+    const filePath = formState.selectedFilePath || (bitbucket.currentPath ? `${bitbucket.currentPath}/${fileName}` : fileName);
 
     const success = await bitbucket.saveFile(
       filePath,
       currentDocument.body,
-      commitMessage || `Update ${fileName}`
+      formState.commitMessage || `Update ${fileName}`
     );
 
     if (success) {
@@ -266,8 +273,8 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
                 <input
                   id="bitbucket-filename"
                   type="text"
-                  value={newFileName}
-                  onChange={(e) => setNewFileName(e.target.value)}
+                  value={formState.newFileName}
+                  onChange={(e) => setFormState((prev) => ({ ...prev, newFileName: e.target.value }))}
                   placeholder="document.md"
                   className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                              border border-border-settings
@@ -281,8 +288,8 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
                 <input
                   id="commit-message"
                   type="text"
-                  value={commitMessage}
-                  onChange={(e) => setCommitMessage(e.target.value)}
+                  value={formState.commitMessage}
+                  onChange={(e) => setFormState((prev) => ({ ...prev, commitMessage: e.target.value }))}
                   placeholder="Update document"
                   className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                              border border-border-settings
@@ -308,7 +315,7 @@ export function BitbucketModal({ isOpen, onClose, mode }: BitbucketModalProps) {
                       className={`w-full text-left px-3 py-2 rounded text-text-invert
                                  hover:bg-bg-highlight flex items-center gap-2
                                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum
-                                 ${selectedFilePath === item.path ? "bg-bg-highlight" : ""}`}
+                                 ${formState.selectedFilePath === item.path ? "bg-bg-highlight" : ""}`}
                     >
                       {item.isFolder ? (
                         <Folder size={16} className="text-text-muted" aria-hidden="true" />

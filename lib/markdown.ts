@@ -68,7 +68,7 @@ function applyLegacyRendererRules(instance: MarkdownIt) {
   };
 }
 
-export const md = new MarkdownIt({
+const md = new MarkdownIt({
   html: true,
   linkify: true,
   typographer: true,

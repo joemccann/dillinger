@@ -36,7 +36,7 @@ export function replaceExtension(filename: string, extension: string): string {
   return `${base}${normalizedExtension}`;
 }
 
-export function countWords(content: string): number {
+function countWords(content: string): number {
   const trimmed = content.trim();
   if (!trimmed) {
     return 0;
@@ -45,7 +45,7 @@ export function countWords(content: string): number {
   return trimmed.split(/\s+/).length;
 }
 
-export function countCharacters(content: string): number {
+function countCharacters(content: string): number {
   return content.length;
 }
 

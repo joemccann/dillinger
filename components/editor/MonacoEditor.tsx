@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useEffect, useMemo, useState } from "react";
+import { useRef, useCallback, useEffect, useMemo } from "react";
 import Editor, { OnMount, OnChange } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import { useStore } from "@/stores/store";
@@ -19,7 +19,13 @@ export function MonacoEditor() {
   const setEditorTopLine = useStore((state) => state.setEditorTopLine);
   const setEditorInstance = useStore((state) => state.setEditorInstance);
   const { uploadFromClipboard } = useImageUpload();
-  const [keybindingLabel, setKeybindingLabel] = useState("Default");
+
+  const keybindingLabel =
+    settings.keybindings === "vim"
+      ? "Vim"
+      : settings.keybindings === "emacs"
+        ? "Emacs"
+        : "Default";
 
   // Debounced persist for auto-save
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -82,7 +88,6 @@ export function MonacoEditor() {
     keybindingRef.current?.dispose();
     keybindingRef.current = null;
     statusNode.textContent = "";
-    setKeybindingLabel(settings.keybindings === "default" ? "Default" : settings.keybindings);
 
     let cancelled = false;
 
@@ -91,12 +96,10 @@ export function MonacoEditor() {
         const { initVimMode } = await import("monaco-vim");
         if (cancelled) return;
         keybindingRef.current = initVimMode(editor, statusNode);
-        setKeybindingLabel("Vim");
         return;
       }
 
       if (settings.keybindings === "emacs") {
-        setKeybindingLabel("Emacs");
         statusNode.textContent = "Unavailable in build";
       }
     };

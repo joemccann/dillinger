@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useStore } from "@/stores/store";
 import { Edit2, Check } from "lucide-react";
 import { DEFAULT_DOCUMENT_TITLE } from "@/lib/document";
@@ -8,7 +8,6 @@ import { DEFAULT_DOCUMENT_TITLE } from "@/lib/document";
 export function DocumentTitle() {
   const currentDocument = useStore((state) => state.currentDocument);
   const updateDocumentTitle = useStore((state) => state.updateDocumentTitle);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState("");
@@ -17,13 +16,12 @@ export function DocumentTitle() {
     setTitle(currentDocument?.title || "");
   }, [currentDocument?.title]);
 
-  // Focus input when entering edit mode
-  useEffect(() => {
-    if (isEditing) {
-      inputRef.current?.focus();
-      inputRef.current?.select();
+  const inputRef = useCallback((node: HTMLInputElement | null) => {
+    if (node) {
+      node.focus();
+      node.select();
     }
-  }, [isEditing]);
+  }, []);
 
   const handleSave = () => {
     if (title.trim()) {

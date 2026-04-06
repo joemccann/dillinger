@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo, useCallback } from "react";
+import { useReducer, memo, useCallback } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { useGitHub } from "@/hooks/useGitHub";
@@ -28,6 +28,49 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+type ModalMode = "import" | "save";
+type ModalTarget = "github" | "dropbox" | "googleDrive" | "oneDrive" | "bitbucket";
+
+interface SidebarUIState {
+  servicesOpen: boolean;
+  importOpen: boolean;
+  saveOpen: boolean;
+  documentsOpen: boolean;
+  activeModal: { target: ModalTarget; mode: ModalMode } | null;
+  deleteModalOpen: boolean;
+}
+
+type SidebarAction =
+  | { type: "toggle"; section: "servicesOpen" | "importOpen" | "saveOpen" | "documentsOpen" }
+  | { type: "openModal"; target: ModalTarget; mode: ModalMode }
+  | { type: "closeModal" }
+  | { type: "openDeleteModal" }
+  | { type: "closeDeleteModal" };
+
+const initialUIState: SidebarUIState = {
+  servicesOpen: true,
+  importOpen: false,
+  saveOpen: false,
+  documentsOpen: true,
+  activeModal: null,
+  deleteModalOpen: false,
+};
+
+function uiReducer(state: SidebarUIState, action: SidebarAction): SidebarUIState {
+  switch (action.type) {
+    case "toggle":
+      return { ...state, [action.section]: !state[action.section] };
+    case "openModal":
+      return { ...state, activeModal: { target: action.target, mode: action.mode } };
+    case "closeModal":
+      return { ...state, activeModal: null };
+    case "openDeleteModal":
+      return { ...state, deleteModalOpen: true };
+    case "closeDeleteModal":
+      return { ...state, deleteModalOpen: false };
+  }
+}
+
 export function Sidebar() {
   const sidebarOpen = useStore((state) => state.sidebarOpen);
   const documents = useStore((state) => state.documents);
@@ -43,32 +86,7 @@ export function Sidebar() {
   const oneDrive = useOneDrive();
   const bitbucket = useBitbucket();
 
-  const [servicesOpen, setServicesOpen] = useState(true);
-  const [importOpen, setImportOpen] = useState(false);
-  const [saveOpen, setSaveOpen] = useState(false);
-  const [documentsOpen, setDocumentsOpen] = useState(true);
-
-  const [githubModal, setGithubModal] = useState<{ open: boolean; mode: "import" | "save" }>({
-    open: false,
-    mode: "import",
-  });
-  const [dropboxModal, setDropboxModal] = useState<{ open: boolean; mode: "import" | "save" }>({
-    open: false,
-    mode: "import",
-  });
-  const [googleDriveModal, setGoogleDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
-    open: false,
-    mode: "import",
-  });
-  const [oneDriveModal, setOneDriveModal] = useState<{ open: boolean; mode: "import" | "save" }>({
-    open: false,
-    mode: "import",
-  });
-  const [bitbucketModal, setBitbucketModal] = useState<{ open: boolean; mode: "import" | "save" }>({
-    open: false,
-    mode: "import",
-  });
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [ui, dispatch] = useReducer(uiReducer, initialUIState);
 
   const handleSave = useCallback(() => {
     persist();
@@ -81,17 +99,19 @@ export function Sidebar() {
       notify("Cannot delete the last document");
       return;
     }
-    setDeleteModalOpen(true);
+    dispatch({ type: "openDeleteModal" });
   }, [currentDocument, documents.length, notify]);
 
   const handleDeleteConfirm = useCallback(() => {
     if (!currentDocument) return;
     deleteDocument(currentDocument.id);
     notify("Document deleted");
-    setDeleteModalOpen(false);
+    dispatch({ type: "closeDeleteModal" });
   }, [currentDocument, deleteDocument, notify]);
 
   if (!sidebarOpen) return null;
+
+  const closeModal = () => dispatch({ type: "closeModal" });
 
   return (
     <>
@@ -103,193 +123,73 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-auto px-4">
-          {/* Services Section */}
-          <div className="mb-2">
-            <button
-              onClick={() => setServicesOpen(!servicesOpen)}
-              aria-expanded={servicesOpen}
-              aria-controls="services-panel"
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-            >
-              <span>Services</span>
-              {servicesOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </button>
-            {servicesOpen && (
-              <div id="services-panel" className="ml-2 space-y-1">
-                <ServiceButton
-                  icon={<Github size={16} />}
-                  label="GitHub"
-                  connected={github.isConnected}
-                  onConnect={github.connect}
-                  onDisconnect={github.disconnect}
-                />
-                <ServiceButton
-                  icon={<Cloud size={16} />}
-                  label="Dropbox"
-                  connected={dropbox.isConnected}
-                  onConnect={dropbox.connect}
-                  onDisconnect={dropbox.disconnect}
-                />
-                <ServiceButton
-                  icon={<HardDrive size={16} />}
-                  label="Google Drive"
-                  connected={googleDrive.isConnected}
-                  onConnect={googleDrive.connect}
-                  onDisconnect={googleDrive.disconnect}
-                />
-                <ServiceButton
-                  icon={<CloudCog size={16} />}
-                  label="OneDrive"
-                  connected={oneDrive.isConnected}
-                  onConnect={oneDrive.connect}
-                  onDisconnect={oneDrive.disconnect}
-                />
-                <ServiceButton
-                  icon={<GitBranch size={16} />}
-                  label="Bitbucket"
-                  connected={bitbucket.isConnected}
-                  onConnect={bitbucket.connect}
-                  onDisconnect={bitbucket.disconnect}
-                />
-              </div>
-            )}
-          </div>
+          <CollapsibleSection
+            label="Services"
+            panelId="services-panel"
+            isOpen={ui.servicesOpen}
+            onToggle={() => dispatch({ type: "toggle", section: "servicesOpen" })}
+          >
+            <ServiceButton
+              icon={<Github size={16} />}
+              label="GitHub"
+              connected={github.isConnected}
+              onConnect={github.connect}
+              onDisconnect={github.disconnect}
+            />
+            <ServiceButton
+              icon={<Cloud size={16} />}
+              label="Dropbox"
+              connected={dropbox.isConnected}
+              onConnect={dropbox.connect}
+              onDisconnect={dropbox.disconnect}
+            />
+            <ServiceButton
+              icon={<HardDrive size={16} />}
+              label="Google Drive"
+              connected={googleDrive.isConnected}
+              onConnect={googleDrive.connect}
+              onDisconnect={googleDrive.disconnect}
+            />
+            <ServiceButton
+              icon={<CloudCog size={16} />}
+              label="OneDrive"
+              connected={oneDrive.isConnected}
+              onConnect={oneDrive.connect}
+              onDisconnect={oneDrive.disconnect}
+            />
+            <ServiceButton
+              icon={<GitBranch size={16} />}
+              label="Bitbucket"
+              connected={bitbucket.isConnected}
+              onConnect={bitbucket.connect}
+              onDisconnect={bitbucket.disconnect}
+            />
+          </CollapsibleSection>
 
-          {/* Import From Section */}
-          <div className="mb-2">
-            <button
-              onClick={() => setImportOpen(!importOpen)}
-              aria-expanded={importOpen}
-              aria-controls="import-panel"
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-            >
-              <span>Import from</span>
-              {importOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </button>
-            {importOpen && (
-              <div id="import-panel" className="ml-2 space-y-1">
-                <button
-                  onClick={() => setGithubModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <Github size={16} />
-                  <span>GitHub</span>
-                </button>
-                <button
-                  onClick={() => setDropboxModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <Cloud size={16} />
-                  <span>Dropbox</span>
-                </button>
-                <button
-                  onClick={() => setGoogleDriveModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <HardDrive size={16} />
-                  <span>Google Drive</span>
-                </button>
-                <button
-                  onClick={() => setOneDriveModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <CloudCog size={16} />
-                  <span>OneDrive</span>
-                </button>
-                <button
-                  onClick={() => setBitbucketModal({ open: true, mode: "import" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <GitBranch size={16} />
-                  <span>Bitbucket</span>
-                </button>
-              </div>
-            )}
-          </div>
+          <CloudServiceMenu
+            label="Import from"
+            panelId="import-panel"
+            isOpen={ui.importOpen}
+            onToggle={() => dispatch({ type: "toggle", section: "importOpen" })}
+            onSelect={(target) => dispatch({ type: "openModal", target, mode: "import" })}
+          />
 
-          {/* Save To Section */}
-          <div className="mb-2">
-            <button
-              onClick={() => setSaveOpen(!saveOpen)}
-              aria-expanded={saveOpen}
-              aria-controls="save-panel"
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-            >
-              <span>Save to</span>
-              {saveOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </button>
-            {saveOpen && (
-              <div id="save-panel" className="ml-2 space-y-1">
-                <button
-                  onClick={() => setGithubModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <Github size={16} />
-                  <span>GitHub</span>
-                </button>
-                <button
-                  onClick={() => setDropboxModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <Cloud size={16} />
-                  <span>Dropbox</span>
-                </button>
-                <button
-                  onClick={() => setGoogleDriveModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <HardDrive size={16} />
-                  <span>Google Drive</span>
-                </button>
-                <button
-                  onClick={() => setOneDriveModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <CloudCog size={16} />
-                  <span>OneDrive</span>
-                </button>
-                <button
-                  onClick={() => setBitbucketModal({ open: true, mode: "save" })}
-                  className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-                >
-                  <GitBranch size={16} />
-                  <span>Bitbucket</span>
-                </button>
-              </div>
-            )}
-          </div>
+          <CloudServiceMenu
+            label="Save to"
+            panelId="save-panel"
+            isOpen={ui.saveOpen}
+            onToggle={() => dispatch({ type: "toggle", section: "saveOpen" })}
+            onSelect={(target) => dispatch({ type: "openModal", target, mode: "save" })}
+          />
 
-          {/* Documents Section */}
-          <div className="mb-2">
-            <button
-              onClick={() => setDocumentsOpen(!documentsOpen)}
-              aria-expanded={documentsOpen}
-              aria-controls="documents-panel"
-              className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-            >
-              <span>Documents</span>
-              {documentsOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </button>
-            {documentsOpen && (
-              <div id="documents-panel" className="ml-2">
-                <DocumentList />
-              </div>
-            )}
-          </div>
+          <CollapsibleSection
+            label="Documents"
+            panelId="documents-panel"
+            isOpen={ui.documentsOpen}
+            onToggle={() => dispatch({ type: "toggle", section: "documentsOpen" })}
+          >
+            <DocumentList />
+          </CollapsibleSection>
         </nav>
 
         {/* Actions */}
@@ -328,33 +228,33 @@ export function Sidebar() {
 
       {/* Modals */}
       <GitHubModal
-        isOpen={githubModal.open}
-        onClose={() => setGithubModal({ ...githubModal, open: false })}
-        mode={githubModal.mode}
+        isOpen={ui.activeModal?.target === "github"}
+        onClose={closeModal}
+        mode={ui.activeModal?.mode ?? "import"}
       />
       <DropboxModal
-        isOpen={dropboxModal.open}
-        onClose={() => setDropboxModal({ ...dropboxModal, open: false })}
-        mode={dropboxModal.mode}
+        isOpen={ui.activeModal?.target === "dropbox"}
+        onClose={closeModal}
+        mode={ui.activeModal?.mode ?? "import"}
       />
       <GoogleDriveModal
-        isOpen={googleDriveModal.open}
-        onClose={() => setGoogleDriveModal({ ...googleDriveModal, open: false })}
-        mode={googleDriveModal.mode}
+        isOpen={ui.activeModal?.target === "googleDrive"}
+        onClose={closeModal}
+        mode={ui.activeModal?.mode ?? "import"}
       />
       <OneDriveModal
-        isOpen={oneDriveModal.open}
-        onClose={() => setOneDriveModal({ ...oneDriveModal, open: false })}
-        mode={oneDriveModal.mode}
+        isOpen={ui.activeModal?.target === "oneDrive"}
+        onClose={closeModal}
+        mode={ui.activeModal?.mode ?? "import"}
       />
       <BitbucketModal
-        isOpen={bitbucketModal.open}
-        onClose={() => setBitbucketModal({ ...bitbucketModal, open: false })}
-        mode={bitbucketModal.mode}
+        isOpen={ui.activeModal?.target === "bitbucket"}
+        onClose={closeModal}
+        mode={ui.activeModal?.mode ?? "import"}
       />
       <DeleteConfirmModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
+        isOpen={ui.deleteModalOpen}
+        onClose={() => dispatch({ type: "closeDeleteModal" })}
         onConfirm={handleDeleteConfirm}
         documentTitle={currentDocument?.title || ""}
       />
@@ -362,7 +262,79 @@ export function Sidebar() {
   );
 }
 
-// Memoized to prevent unnecessary re-renders when parent state changes
+// Reusable collapsible section
+function CollapsibleSection({
+  label,
+  panelId,
+  isOpen,
+  onToggle,
+  children,
+}: {
+  label: string;
+  panelId: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mb-2">
+      <button
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+      >
+        <span>{label}</span>
+        {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+      </button>
+      {isOpen && (
+        <div id={panelId} className="ml-2 space-y-1">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const CLOUD_SERVICES: { target: ModalTarget; icon: React.ReactNode; label: string }[] = [
+  { target: "github", icon: <Github size={16} />, label: "GitHub" },
+  { target: "dropbox", icon: <Cloud size={16} />, label: "Dropbox" },
+  { target: "googleDrive", icon: <HardDrive size={16} />, label: "Google Drive" },
+  { target: "oneDrive", icon: <CloudCog size={16} />, label: "OneDrive" },
+  { target: "bitbucket", icon: <GitBranch size={16} />, label: "Bitbucket" },
+];
+
+function CloudServiceMenu({
+  label,
+  panelId,
+  isOpen,
+  onToggle,
+  onSelect,
+}: {
+  label: string;
+  panelId: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onSelect: (target: ModalTarget) => void;
+}) {
+  return (
+    <CollapsibleSection label={label} panelId={panelId} isOpen={isOpen} onToggle={onToggle}>
+      {CLOUD_SERVICES.map((service) => (
+        <button
+          key={service.target}
+          onClick={() => onSelect(service.target)}
+          className="w-full flex items-center gap-2 py-2 px-2 text-dropdown-link hover:text-text-invert text-sm rounded hover:bg-bg-highlight
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
+        >
+          {service.icon}
+          <span>{service.label}</span>
+        </button>
+      ))}
+    </CollapsibleSection>
+  );
+}
+
 const ServiceButton = memo(function ServiceButton({
   icon,
   label,
