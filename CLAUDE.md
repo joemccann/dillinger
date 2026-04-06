@@ -298,13 +298,83 @@ showToast('Document saved!', 'success')
 - Escape: Exit zen mode
 - Monaco keybindings: Vim/Emacs modes supported via settings
 
-## Testing (TODO)
+## Testing
 
-Testing infrastructure is not yet configured. When adding:
+### Stack
 
-- **Unit tests**: Vitest + React Testing Library
-- **E2E tests**: Playwright
-- **Test location**: `__tests__/` directories or `.test.ts` suffix
+| Tool | Purpose |
+|------|---------|
+| Vitest | Unit + integration tests |
+| React Testing Library | Component rendering + interaction |
+| Playwright | E2E browser automation |
+| @vitest/coverage-v8 | Code coverage |
+
+### Running Tests
+
+```bash
+npm run test:unit          # Run unit/integration tests
+npm run test:watch         # Watch mode
+npm run test:e2e           # Build + run E2E (Playwright)
+npm run test:e2e:headed    # E2E in visible browser
+npm run test               # Unit + E2E
+npm run verify             # Lint + typecheck + unit + E2E
+npx vitest run --coverage  # Unit tests with coverage report
+```
+
+### Test Structure
+
+```
+tests/
+├── lib/                  # Pure utility unit tests
+│   ├── cache.test.ts
+│   ├── document.test.ts
+│   ├── export.test.ts
+│   ├── import.test.ts
+│   ├── markdown.test.ts
+│   └── utils.test.ts
+├── store/
+│   └── store.test.ts     # Zustand store actions + persistence
+├── hooks/
+│   ├── useGitHub.test.ts # Integration tests with mocked fetch
+│   └── useImageUpload.test.ts
+├── components/           # React Testing Library component tests
+│   ├── navbar.test.tsx
+│   ├── settings-modal.test.tsx
+│   ├── github-modal.test.tsx
+│   ├── delete-confirm-modal.test.tsx
+│   ├── document-title.test.tsx
+│   ├── document-list.test.tsx
+│   ├── toast.test.tsx
+│   └── skeleton.test.tsx
+├── routes/               # API route handler tests (@vitest-environment node)
+│   ├── github.route.test.ts
+│   ├── export-html.route.test.ts
+│   ├── export-markdown.route.test.ts
+│   ├── export-pdf.route.test.ts
+│   ├── import-html-to-markdown.route.test.ts
+│   └── upload-image.route.test.ts
+└── e2e/                  # Playwright browser tests
+    ├── smoke.spec.ts
+    ├── editor.spec.ts
+    ├── settings-sidebar.spec.ts
+    ├── import-export.spec.ts
+    └── logobar.spec.ts
+```
+
+### Coverage
+
+Current coverage: **98% statements, 91% branches, 99.5% functions, 98% lines** (294 unit + 39 E2E tests).
+
+### Writing Tests
+
+- **File naming**: `*.test.ts` / `*.test.tsx` for Vitest, `*.spec.ts` for Playwright
+- **Imports**: Use explicit imports (`import { describe, it, expect } from 'vitest'`), not globals
+- **Store setup**: Reset store in `beforeEach` with `useStore.setState(initialState)`
+- **Mocking**: Use `vi.mock()` for modules, `vi.spyOn(globalThis, 'fetch')` for API calls
+- **Component rendering**: Wrap in providers if the component uses `useToast()`
+- **API route tests**: Add `// @vitest-environment node` at the top, import handlers directly
+- **E2E state seeding**: Use `page.addInitScript()` to populate localStorage before navigation
+- **Async markdown**: The `renderMarkdown()` function is async — tests must await it
 
 ## Deployment
 
@@ -338,6 +408,10 @@ Testing infrastructure is not yet configured. When adding:
 | `app/layout.tsx` | Root layout with providers |
 | `components/editor/EditorContainer.tsx` | Main app shell |
 | `.impeccable.md` | Design system & context |
+| `vitest.config.ts` | Vitest test runner config |
+| `vitest.setup.ts` | Test environment setup (mocks) |
+| `playwright.config.ts` | E2E test config |
+| `lib/cache.ts` | In-memory LRU cache for API routes |
 
 ## Design Context
 

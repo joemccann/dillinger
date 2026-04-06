@@ -213,10 +213,31 @@ npm start
 ## 📦 Scripts
 
 ```bash
-npm run dev
-npm run build
-npm start
+npm run dev              # Start dev server
+npm run build            # Production build
+npm start                # Start production server
+npm run lint             # ESLint
+npm run test             # Unit + E2E tests
+npm run test:unit        # Vitest unit/integration tests
+npm run test:watch       # Vitest watch mode
+npm run test:e2e         # Playwright E2E tests
+npm run test:e2e:headed  # E2E in visible browser
+npm run verify           # Lint + typecheck + all tests
 ```
+
+---
+
+## 🧪 Testing
+
+294 unit/integration tests (Vitest) + 39 E2E tests (Playwright) with 98% code coverage.
+
+```bash
+npm run test:unit                # Run all unit tests
+npx vitest run --coverage        # With coverage report
+npm run test:e2e:headed          # E2E in visible browser
+```
+
+Tests live in `tests/` organized by type: `lib/`, `store/`, `hooks/`, `components/`, `routes/`, and `e2e/`.
 
 ---
 
