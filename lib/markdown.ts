@@ -1,16 +1,4 @@
-import MarkdownIt from "markdown-it";
-import markdownItAbbr from "markdown-it-abbr";
-import markdownItCheckbox from "markdown-it-checkbox";
-import markdownItDeflist from "markdown-it-deflist";
-import markdownItFootnote from "markdown-it-footnote";
-import markdownItIns from "markdown-it-ins";
-import markdownItMark from "markdown-it-mark";
-import markdownItSub from "markdown-it-sub";
-import markdownItSup from "markdown-it-sup";
-import markdownItTexmath from "markdown-it-texmath";
-import markdownItToc from "markdown-it-toc";
-import hljs from "highlight.js";
-import katex from "katex";
+import type MarkdownIt from "markdown-it";
 
 const lineNumberRendererRuleNames = [
   "paragraph_open",
@@ -68,39 +56,79 @@ function applyLegacyRendererRules(instance: MarkdownIt) {
   };
 }
 
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true,
-  highlight: (str: string, lang: string): string => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(str, { language: lang, ignoreIllegals: true }).value;
-      } catch {
-        // Fall through to default escaping.
+let md: MarkdownIt | null = null;
+
+async function getMarkdownRenderer(): Promise<MarkdownIt> {
+  if (md) return md;
+
+  const [
+    { default: MarkdownIt },
+    { default: markdownItAbbr },
+    { default: markdownItCheckbox },
+    { default: markdownItDeflist },
+    { default: markdownItFootnote },
+    { default: markdownItIns },
+    { default: markdownItMark },
+    { default: markdownItSub },
+    { default: markdownItSup },
+    { default: markdownItTexmath },
+    { default: markdownItToc },
+    { default: hljs },
+    { default: katex },
+  ] = await Promise.all([
+    import("markdown-it"),
+    import("markdown-it-abbr"),
+    import("markdown-it-checkbox"),
+    import("markdown-it-deflist"),
+    import("markdown-it-footnote"),
+    import("markdown-it-ins"),
+    import("markdown-it-mark"),
+    import("markdown-it-sub"),
+    import("markdown-it-sup"),
+    import("markdown-it-texmath"),
+    import("markdown-it-toc"),
+    import("highlight.js"),
+    import("katex"),
+  ]);
+
+  md = new MarkdownIt({
+    html: true,
+    linkify: true,
+    typographer: true,
+    breaks: true,
+    highlight: (str: string, lang: string): string => {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(str, { language: lang, ignoreIllegals: true })
+            .value;
+        } catch {
+          // Fall through to default escaping.
+        }
       }
-    }
 
-    return "";
-  },
-})
-  .use(markdownItToc)
-  .use(markdownItAbbr)
-  .use(markdownItCheckbox)
-  .use(markdownItDeflist)
-  .use(markdownItFootnote)
-  .use(markdownItIns)
-  .use(markdownItMark)
-  .use(markdownItSub)
-  .use(markdownItSup)
-  .use(markdownItTexmath, {
-    engine: katex,
-    delimiters: "dollars",
-  });
+      return "";
+    },
+  })
+    .use(markdownItToc)
+    .use(markdownItAbbr)
+    .use(markdownItCheckbox)
+    .use(markdownItDeflist)
+    .use(markdownItFootnote)
+    .use(markdownItIns)
+    .use(markdownItMark)
+    .use(markdownItSub)
+    .use(markdownItSup)
+    .use(markdownItTexmath, {
+      engine: katex,
+      delimiters: "dollars",
+    });
 
-applyLegacyRendererRules(md);
+  applyLegacyRendererRules(md);
 
-export function renderMarkdown(content: string): string {
-  return md.render(content);
+  return md;
+}
+
+export async function renderMarkdown(content: string): Promise<string> {
+  const renderer = await getMarkdownRenderer();
+  return renderer.render(content);
 }

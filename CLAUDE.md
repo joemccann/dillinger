@@ -337,3 +337,25 @@ Testing infrastructure is not yet configured. When adding:
 | `.env.local.example` | Required environment variables |
 | `app/layout.tsx` | Root layout with providers |
 | `components/editor/EditorContainer.tsx` | Main app shell |
+| `.impeccable.md` | Design system & context |
+
+## Design Context
+
+### Users
+Developers, technical writers, and content creators who need a distraction-free, cloud-connected markdown editor. They value speed, keyboard-driven workflows, and tools that stay out of the way.
+
+### Brand Personality
+**Focused. Capable. Understated.** The interface should feel like a precision instrument — confident and quiet, never flashy.
+
+### Emotional Goal
+**Calm focus.** The UI recedes; the content leads.
+
+### Design Principles
+1. **Content is king.** Every UI element exists to serve the writing experience.
+2. **Quiet confidence.** Plum accent (#35D7BB) is the single bright voice in a neutral palette.
+3. **Polished, not decorated.** Quality is in spacing, alignment, transitions, typography — never ornament.
+4. **Progressive disclosure.** Show what's needed, hide what isn't.
+5. **Accessible by default.** WCAG AA minimum. Focus rings, contrast, keyboard nav, reduced-motion.
+
+### Theme Modes
+Full support for light, dark, and system-preference modes. The plum accent (#35D7BB) remains constant across all themes. See `.impeccable.md` for full design system reference.

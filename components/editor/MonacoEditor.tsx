@@ -12,7 +12,13 @@ export function MonacoEditor() {
   const keybindingRef = useRef<{ dispose: () => void } | null>(null);
   const keybindingStatusRef = useRef<HTMLDivElement>(null);
   const currentDocument = useStore((state) => state.currentDocument);
-  const settings = useStore((state) => state.settings);
+  const enableNightMode = useStore((state) => state.settings.enableNightMode);
+  const enableAutoSave = useStore((state) => state.settings.enableAutoSave);
+  const tabSize = useStore((state) => state.settings.tabSize);
+  const keybindings = useStore((state) => state.settings.keybindings);
+  const enableScrollSync = useStore((state) => state.settings.enableScrollSync);
+  const enableWordsCount = useStore((state) => state.settings.enableWordsCount);
+  const enableCharactersCount = useStore((state) => state.settings.enableCharactersCount);
   const updateDocumentBody = useStore((state) => state.updateDocumentBody);
   const persist = useStore((state) => state.persist);
   const setEditorScrollPercent = useStore((state) => state.setEditorScrollPercent);
@@ -21,9 +27,9 @@ export function MonacoEditor() {
   const { uploadFromClipboard } = useImageUpload();
 
   const keybindingLabel =
-    settings.keybindings === "vim"
+    keybindings === "vim"
       ? "Vim"
-      : settings.keybindings === "emacs"
+      : keybindings === "emacs"
         ? "Emacs"
         : "Default";
 
@@ -67,7 +73,7 @@ export function MonacoEditor() {
     });
 
     editor.updateOptions({
-      theme: settings.enableNightMode ? "dillinger-dark" : "dillinger-light",
+      theme: enableNightMode ? "dillinger-dark" : "dillinger-light",
     });
 
     editor.focus();
@@ -92,14 +98,14 @@ export function MonacoEditor() {
     let cancelled = false;
 
     const initializeKeybinding = async () => {
-      if (settings.keybindings === "vim") {
+      if (keybindings === "vim") {
         const { initVimMode } = await import("monaco-vim");
         if (cancelled) return;
         keybindingRef.current = initVimMode(editor, statusNode);
         return;
       }
 
-      if (settings.keybindings === "emacs") {
+      if (keybindings === "emacs") {
         statusNode.textContent = "Unavailable in build";
       }
     };
@@ -114,7 +120,7 @@ export function MonacoEditor() {
         statusNode.textContent = "";
       }
     };
-  }, [settings.keybindings]);
+  }, [keybindings]);
 
   // Set up scroll sync listener (recreates when settings change)
   useEffect(() => {
@@ -122,7 +128,7 @@ export function MonacoEditor() {
     if (!editor) return;
 
     const disposable = editor.onDidScrollChange(() => {
-      if (settings.enableScrollSync) {
+      if (enableScrollSync) {
         const scrollTop = editor.getScrollTop();
         const scrollHeight = editor.getScrollHeight() - editor.getLayoutInfo().height;
         const percent = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
@@ -132,7 +138,7 @@ export function MonacoEditor() {
     });
 
     return () => disposable.dispose();
-  }, [settings.enableScrollSync, setEditorScrollPercent, setEditorTopLine]);
+  }, [enableScrollSync, setEditorScrollPercent, setEditorTopLine]);
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -173,7 +179,7 @@ export function MonacoEditor() {
       updateDocumentBody(value);
 
       // Debounced auto-save
-      if (settings.enableAutoSave) {
+      if (enableAutoSave) {
         if (debounceRef.current) {
           clearTimeout(debounceRef.current);
         }
@@ -182,7 +188,31 @@ export function MonacoEditor() {
         }, 2000);
       }
     },
-    [updateDocumentBody, persist, settings.enableAutoSave]
+    [updateDocumentBody, persist, enableAutoSave]
+  );
+
+  const editorOptions = useMemo(
+    () => ({
+      fontSize: 14,
+      fontFamily: '"Ubuntu Mono", Monaco, monospace',
+      lineHeight: 24,
+      wordWrap: "on" as const,
+      minimap: { enabled: false },
+      lineNumbers: "off" as const,
+      folding: false,
+      tabSize: tabSize,
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      padding: { top: 16, bottom: 16 },
+      renderLineHighlight: "none" as const,
+      overviewRulerLanes: 0,
+      hideCursorInOverviewRuler: true,
+      scrollbar: {
+        vertical: "auto" as const,
+        horizontal: "auto" as const,
+      },
+    }),
+    [tabSize]
   );
 
   const stats = useMemo(
@@ -204,38 +234,22 @@ export function MonacoEditor() {
         <Editor
           height="100%"
           language="markdown"
-          theme={settings.enableNightMode ? "dillinger-dark" : "dillinger-light"}
+          theme={enableNightMode ? "dillinger-dark" : "dillinger-light"}
           value={currentDocument.body}
           onChange={handleChange}
           onMount={handleMount}
-          options={{
-            fontSize: 14,
-            fontFamily: '"Ubuntu Mono", Monaco, monospace',
-            lineHeight: 24,
-            wordWrap: "on",
-            minimap: { enabled: false },
-            lineNumbers: "off",
-            folding: false,
-            tabSize: settings.tabSize,
-            scrollBeyondLastLine: false,
-            automaticLayout: true,
-            padding: { top: 16, bottom: 16 },
-            renderLineHighlight: "none",
-            overviewRulerLanes: 0,
-            hideCursorInOverviewRuler: true,
-            scrollbar: {
-              vertical: "auto",
-              horizontal: "auto",
-            },
-          }}
+          options={editorOptions}
         />
       </div>
-      <div className="flex min-h-10 items-center justify-between border-t border-border-light bg-bg-primary px-4 py-2 text-xs text-text-muted">
-        <div className="flex items-center gap-4">
-          {settings.enableWordsCount && (
+      <div className="flex min-h-10 items-center justify-between border-t border-border-light/60 bg-bg-primary px-4 py-2 text-xs text-text-muted">
+        <div className="flex items-center gap-3">
+          {enableWordsCount && (
             <span data-testid="word-count">{stats.wordCount} words</span>
           )}
-          {settings.enableCharactersCount && (
+          {enableWordsCount && enableCharactersCount && (
+            <span aria-hidden="true">·</span>
+          )}
+          {enableCharactersCount && (
             <span data-testid="character-count">{stats.characterCount} characters</span>
           )}
         </div>

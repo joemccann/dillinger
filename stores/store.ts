@@ -15,8 +15,10 @@ interface AppState {
   // UI State
   sidebarOpen: boolean;
   settingsOpen: boolean;
+  shortcutsOpen: boolean;
   previewVisible: boolean;
   zenMode: boolean;
+  isDirty: boolean;
   editorScrollPercent: number;
   editorTopLine: number;
 
@@ -36,6 +38,7 @@ interface AppState {
   // UI Actions
   toggleSidebar: () => void;
   toggleSettings: () => void;
+  toggleShortcuts: () => void;
   togglePreview: () => void;
   setZenMode: (enabled: boolean) => void;
   setEditorScrollPercent: (percent: number) => void;
@@ -61,8 +64,10 @@ export const useStore = create<AppState>((set, get) => ({
   settings: DEFAULT_SETTINGS,
   sidebarOpen: false,
   settingsOpen: false,
+  shortcutsOpen: false,
   previewVisible: true,
   zenMode: false,
+  isDirty: false,
   editorScrollPercent: 0,
   editorTopLine: 1,
 
@@ -120,8 +125,7 @@ export const useStore = create<AppState>((set, get) => ({
       d.id === currentDocument.id ? updated : d
     );
 
-    set({ currentDocument: updated, documents: updatedDocs });
-    // Note: persist is called by debounced auto-save, not here
+    set({ currentDocument: updated, documents: updatedDocs, isDirty: true });
   },
 
   updateDocumentTitle: (title: string) => {
@@ -179,6 +183,7 @@ export const useStore = create<AppState>((set, get) => ({
   // UI Actions
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   toggleSettings: () => set((state) => ({ settingsOpen: !state.settingsOpen })),
+  toggleShortcuts: () => set((state) => ({ shortcutsOpen: !state.shortcutsOpen })),
   togglePreview: () => set((state) => ({ previewVisible: !state.previewVisible })),
   setZenMode: (enabled) => set({ zenMode: enabled }),
   setEditorScrollPercent: (percent) => set({ editorScrollPercent: percent }),
@@ -193,6 +198,7 @@ export const useStore = create<AppState>((set, get) => ({
       const currentJson = localStorage.getItem("currentDocument");
       const settingsJson = localStorage.getItem("profileV3");
 
+      const isFirstVisit = !filesJson;
       let documents: Document[] = filesJson ? JSON.parse(filesJson) : [];
       let currentDocument: Document | null = currentJson ? JSON.parse(currentJson) : null;
       const settings: UserSettings = settingsJson
@@ -211,7 +217,7 @@ export const useStore = create<AppState>((set, get) => ({
         currentDocument = documents[0];
       }
 
-      set({ documents, currentDocument, settings });
+      set({ documents, currentDocument, settings, isDirty: false, sidebarOpen: isFirstVisit });
     } catch (e) {
       console.error("Failed to hydrate state:", e);
     }
@@ -226,6 +232,7 @@ export const useStore = create<AppState>((set, get) => ({
       localStorage.setItem("files", JSON.stringify(documents));
       localStorage.setItem("currentDocument", JSON.stringify(currentDocument));
       localStorage.setItem("profileV3", JSON.stringify(settings));
+      set({ isDirty: false });
     } catch (e) {
       console.error("Failed to persist state:", e);
     }

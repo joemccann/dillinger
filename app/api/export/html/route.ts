@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const htmlContent = renderMarkdown(markdown);
+    const htmlContent = await renderMarkdown(markdown);
     const filename = getExportFilename(title, "html");
     const fullHtml = renderHtmlDocument({
       title,

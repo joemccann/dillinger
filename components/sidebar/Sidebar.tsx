@@ -26,6 +26,10 @@ import {
   GitBranch,
   ChevronDown,
   ChevronRight,
+  Plug,
+  CloudDownload,
+  CloudUpload,
+  FileText,
 } from "lucide-react";
 
 type ModalMode = "import" | "save";
@@ -48,7 +52,7 @@ type SidebarAction =
   | { type: "closeDeleteModal" };
 
 const initialUIState: SidebarUIState = {
-  servicesOpen: true,
+  servicesOpen: false,
   importOpen: false,
   saveOpen: false,
   documentsOpen: true,
@@ -78,13 +82,8 @@ export function Sidebar() {
   const createDocument = useStore((state) => state.createDocument);
   const deleteDocument = useStore((state) => state.deleteDocument);
   const persist = useStore((state) => state.persist);
+  const toggleSidebar = useStore((state) => state.toggleSidebar);
   const { notify } = useToast();
-
-  const github = useGitHub();
-  const dropbox = useDropbox();
-  const googleDrive = useGoogleDrive();
-  const oneDrive = useOneDrive();
-  const bitbucket = useBitbucket();
 
   const [ui, dispatch] = useReducer(uiReducer, initialUIState);
 
@@ -115,60 +114,30 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="w-sidebar bg-bg-sidebar h-dvh flex flex-col z-sidebar">
-        {/* Logo */}
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-plum text-balance">DILLINGER</h1>
-        </div>
+      <div
+        className="fixed inset-0 bg-black/50 z-sidebar sm:hidden"
+        onClick={toggleSidebar}
+        aria-hidden="true"
+      />
+      <aside className="fixed sm:relative w-sidebar bg-bg-sidebar h-dvh flex flex-col z-sidebar">
+        <div className="pt-4" />
 
         {/* Navigation */}
         <nav className="flex-1 overflow-auto px-4">
           <CollapsibleSection
             label="Services"
             panelId="services-panel"
+            icon={<Plug size={14} />}
             isOpen={ui.servicesOpen}
             onToggle={() => dispatch({ type: "toggle", section: "servicesOpen" })}
           >
-            <ServiceButton
-              icon={<Github size={16} />}
-              label="GitHub"
-              connected={github.isConnected}
-              onConnect={github.connect}
-              onDisconnect={github.disconnect}
-            />
-            <ServiceButton
-              icon={<Cloud size={16} />}
-              label="Dropbox"
-              connected={dropbox.isConnected}
-              onConnect={dropbox.connect}
-              onDisconnect={dropbox.disconnect}
-            />
-            <ServiceButton
-              icon={<HardDrive size={16} />}
-              label="Google Drive"
-              connected={googleDrive.isConnected}
-              onConnect={googleDrive.connect}
-              onDisconnect={googleDrive.disconnect}
-            />
-            <ServiceButton
-              icon={<CloudCog size={16} />}
-              label="OneDrive"
-              connected={oneDrive.isConnected}
-              onConnect={oneDrive.connect}
-              onDisconnect={oneDrive.disconnect}
-            />
-            <ServiceButton
-              icon={<GitBranch size={16} />}
-              label="Bitbucket"
-              connected={bitbucket.isConnected}
-              onConnect={bitbucket.connect}
-              onDisconnect={bitbucket.disconnect}
-            />
+            <CloudServicesList />
           </CollapsibleSection>
 
           <CloudServiceMenu
             label="Import from"
             panelId="import-panel"
+            icon={<CloudDownload size={14} />}
             isOpen={ui.importOpen}
             onToggle={() => dispatch({ type: "toggle", section: "importOpen" })}
             onSelect={(target) => dispatch({ type: "openModal", target, mode: "import" })}
@@ -177,6 +146,7 @@ export function Sidebar() {
           <CloudServiceMenu
             label="Save to"
             panelId="save-panel"
+            icon={<CloudUpload size={14} />}
             isOpen={ui.saveOpen}
             onToggle={() => dispatch({ type: "toggle", section: "saveOpen" })}
             onSelect={(target) => dispatch({ type: "openModal", target, mode: "save" })}
@@ -185,6 +155,7 @@ export function Sidebar() {
           <CollapsibleSection
             label="Documents"
             panelId="documents-panel"
+            icon={<FileText size={14} />}
             isOpen={ui.documentsOpen}
             onToggle={() => dispatch({ type: "toggle", section: "documentsOpen" })}
           >
@@ -193,7 +164,7 @@ export function Sidebar() {
         </nav>
 
         {/* Actions */}
-        <div className="p-4 space-y-2">
+        <div className="p-4 space-y-3 border-t border-border-settings">
           <button
             onClick={createDocument}
             className="w-full bg-plum text-bg-sidebar py-2 px-4 rounded font-medium
@@ -212,17 +183,17 @@ export function Sidebar() {
             <Save size={18} />
             Save Session
           </button>
-          {documents.length > 1 && (
-            <button
-              onClick={handleDeleteClick}
-              className="w-full bg-red-600 text-text-invert py-2 px-4 rounded font-medium
-                         hover:opacity-90 transition-opacity flex items-center justify-center gap-2
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
-            >
-              <Trash2 size={18} />
-              Delete Document
-            </button>
-          )}
+          <button
+            onClick={handleDeleteClick}
+            disabled={documents.length <= 1}
+            className={`w-full bg-red-600 text-text-invert py-2 px-4 rounded font-medium
+                       flex items-center justify-center gap-2
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar
+                       ${documents.length <= 1 ? "opacity-60 cursor-not-allowed" : "hover:opacity-90 transition-opacity"}`}
+          >
+            <Trash2 size={18} />
+            Delete Document
+          </button>
         </div>
       </aside>
 
@@ -262,34 +233,38 @@ export function Sidebar() {
   );
 }
 
-// Reusable collapsible section
 function CollapsibleSection({
   label,
   panelId,
   isOpen,
   onToggle,
+  icon,
   children,
 }: {
   label: string;
   panelId: string;
   isOpen: boolean;
   onToggle: () => void;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <div className="mb-2">
+    <div className="mb-3">
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="w-full flex items-center justify-between py-2 text-text-invert text-sm rounded
+        className="w-full flex items-center justify-between py-2 text-text-muted text-xs uppercase tracking-wider rounded
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
       >
-        <span>{label}</span>
-        {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+        <span className="flex items-center gap-2">
+          {icon}
+          {label}
+        </span>
+        {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
       </button>
       {isOpen && (
-        <div id={panelId} className="ml-2 space-y-1">
+        <div id={panelId} className="ml-2 space-y-1 mt-1">
           {children}
         </div>
       )}
@@ -311,15 +286,17 @@ function CloudServiceMenu({
   isOpen,
   onToggle,
   onSelect,
+  icon,
 }: {
   label: string;
   panelId: string;
   isOpen: boolean;
   onToggle: () => void;
   onSelect: (target: ModalTarget) => void;
+  icon?: React.ReactNode;
 }) {
   return (
-    <CollapsibleSection label={label} panelId={panelId} isOpen={isOpen} onToggle={onToggle}>
+    <CollapsibleSection label={label} panelId={panelId} isOpen={isOpen} onToggle={onToggle} icon={icon}>
       {CLOUD_SERVICES.map((service) => (
         <button
           key={service.target}
@@ -332,6 +309,54 @@ function CloudServiceMenu({
         </button>
       ))}
     </CollapsibleSection>
+  );
+}
+
+function CloudServicesList() {
+  const github = useGitHub();
+  const dropbox = useDropbox();
+  const googleDrive = useGoogleDrive();
+  const oneDrive = useOneDrive();
+  const bitbucket = useBitbucket();
+
+  return (
+    <>
+      <ServiceButton
+        icon={<Github size={16} />}
+        label="GitHub"
+        connected={github.isConnected}
+        onConnect={github.connect}
+        onDisconnect={github.disconnect}
+      />
+      <ServiceButton
+        icon={<Cloud size={16} />}
+        label="Dropbox"
+        connected={dropbox.isConnected}
+        onConnect={dropbox.connect}
+        onDisconnect={dropbox.disconnect}
+      />
+      <ServiceButton
+        icon={<HardDrive size={16} />}
+        label="Google Drive"
+        connected={googleDrive.isConnected}
+        onConnect={googleDrive.connect}
+        onDisconnect={googleDrive.disconnect}
+      />
+      <ServiceButton
+        icon={<CloudCog size={16} />}
+        label="OneDrive"
+        connected={oneDrive.isConnected}
+        onConnect={oneDrive.connect}
+        onDisconnect={oneDrive.disconnect}
+      />
+      <ServiceButton
+        icon={<GitBranch size={16} />}
+        label="Bitbucket"
+        connected={bitbucket.isConnected}
+        onConnect={bitbucket.connect}
+        onDisconnect={bitbucket.disconnect}
+      />
+    </>
   );
 }
 

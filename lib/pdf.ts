@@ -78,9 +78,10 @@ export async function renderPdfBuffer({
   markdown: string;
   title?: string;
 }) {
+  const renderedMarkdown = await renderMarkdown(markdown);
   const html = renderHtmlDocument({
     title,
-    html: renderMarkdown(markdown),
+    html: renderedMarkdown,
     styled: true,
   });
 

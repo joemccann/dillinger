@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getCached, setCache, tokenPrefix } from "@/lib/cache";
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -21,6 +22,12 @@ export async function GET(request: NextRequest) {
       { error: "Owner, repo, and branch are required" },
       { status: 400 }
     );
+  }
+
+  const cacheKey = `gh:files:${tokenPrefix(token)}:${owner}:${repo}:${branch}`;
+  const cached = getCached<unknown[]>(cacheKey);
+  if (cached) {
+    return NextResponse.json(cached);
   }
 
   try {
@@ -48,14 +55,17 @@ export async function GET(request: NextRequest) {
         (item.path.endsWith(".md") || item.path.endsWith(".markdown"))
     );
 
-    return NextResponse.json(
+    const result =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       markdownFiles.map((file: Record<string, string>) => ({
         path: file.path,
         sha: file.sha,
         url: file.url,
-      }))
-    );
+      }));
+
+    setCache(cacheKey, result);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("GitHub files error:", error);
     return NextResponse.json({ error: "Failed to fetch files" }, { status: 500 });

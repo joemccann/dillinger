@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import dynamic from "next/dynamic";
 import { X, Upload } from "lucide-react";
 import { Navbar } from "@/components/navbar/Navbar";
@@ -9,6 +9,7 @@ import { DocumentTitle } from "@/components/editor/DocumentTitle";
 import { MonacoEditor } from "@/components/editor/MonacoEditor";
 import { MarkdownPreview } from "@/components/preview/MarkdownPreview";
 import { SettingsModal } from "@/components/modals/SettingsModal";
+import { KeyboardShortcuts } from "@/components/ui/KeyboardShortcuts";
 import { useToast } from "@/components/ui/Toast";
 import { useStore } from "@/stores/store";
 import { EditorSkeleton } from "@/components/ui/Skeleton";
@@ -21,6 +22,35 @@ const Sidebar = dynamic(
   { ssr: false }
 );
 
+const DropZoneOverlay = memo(function DropZoneOverlay({
+  isDragging,
+}: {
+  isDragging: boolean;
+}) {
+  if (!isDragging) return null;
+
+  return (
+    <div
+      className="absolute inset-0 z-modal bg-bg-primary/90 flex items-center justify-center pointer-events-none"
+      aria-hidden="true"
+    >
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="size-20 rounded-full bg-plum/20 flex items-center justify-center">
+          <Upload size={40} className="text-plum" />
+        </div>
+        <div>
+          <p className="text-xl font-semibold text-text-invert">
+            Drop your file here
+          </p>
+          <p className="text-text-muted mt-1">
+            Supports markdown, HTML, and image files
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 function EditorContent() {
   const previewVisible = useStore((state) => state.previewVisible);
   const currentDocument = useStore((state) => state.currentDocument);
@@ -28,6 +58,9 @@ function EditorContent() {
   const insertMarkdownAtCursor = useStore((state) => state.insertMarkdownAtCursor);
   const zenMode = useStore((state) => state.zenMode);
   const setZenMode = useStore((state) => state.setZenMode);
+  const isDirty = useStore((state) => state.isDirty);
+  const shortcutsOpen = useStore((state) => state.shortcutsOpen);
+  const toggleShortcuts = useStore((state) => state.toggleShortcuts);
   const { notify } = useToast();
   const { upload } = useImageUpload();
 
@@ -109,11 +142,31 @@ function EditorContent() {
       if (e.key === "Escape" && zenMode) {
         setZenMode(false);
       }
+      // ? to open keyboard shortcuts
+      if (
+        e.key === "?" &&
+        !(e.target instanceof HTMLInputElement) &&
+        !(e.target instanceof HTMLTextAreaElement) &&
+        !document.querySelector(".monaco-editor")?.contains(e.target as Node)
+      ) {
+        toggleShortcuts();
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [zenMode, setZenMode]);
+  }, [zenMode, setZenMode, toggleShortcuts]);
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
 
   // Show structural skeleton while hydrating
   if (!currentDocument) {
@@ -130,27 +183,7 @@ function EditorContent() {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        {/* Drop zone overlay for zen mode */}
-        {isDragging && (
-          <div
-            className="absolute inset-0 z-modal bg-bg-primary/90 flex items-center justify-center pointer-events-none"
-            aria-hidden="true"
-          >
-            <div className="flex flex-col items-center gap-4 text-center">
-              <div className="size-20 rounded-full bg-plum/20 flex items-center justify-center">
-                <Upload size={40} className="text-plum" />
-              </div>
-              <div>
-                <p className="text-xl font-semibold text-text-invert">
-                  Drop your file here
-                </p>
-                <p className="text-text-muted mt-1">
-                  Supports markdown, HTML, and image files
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        <DropZoneOverlay isDragging={isDragging} />
 
         <div className="w-full max-w-3xl h-full py-12 px-4 relative">
           <button
@@ -177,27 +210,7 @@ function EditorContent() {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      {/* Drop zone overlay */}
-      {isDragging && (
-        <div
-          className="absolute inset-0 z-modal bg-bg-primary/90 flex items-center justify-center pointer-events-none"
-          aria-hidden="true"
-        >
-          <div className="flex flex-col items-center gap-4 text-center">
-            <div className="size-20 rounded-full bg-plum/20 flex items-center justify-center">
-              <Upload size={40} className="text-plum" />
-            </div>
-            <div>
-              <p className="text-xl font-semibold text-text-invert">
-                Drop your file here
-              </p>
-              <p className="text-text-muted mt-1">
-                Supports markdown, HTML, and image files
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      <DropZoneOverlay isDragging={isDragging} />
 
       {/* Sidebar */}
       <Sidebar />
@@ -212,7 +225,7 @@ function EditorContent() {
           {/* Editor Panel */}
           <div
             className={`${
-              previewVisible ? "w-1/2" : "w-full"
+              previewVisible ? "w-full sm:w-1/2 shadow-none sm:shadow-[1px_0_0_0_#E8E8E8]" : "w-full"
             } border-r border-border-light`}
           >
             <MonacoEditor />
@@ -220,7 +233,7 @@ function EditorContent() {
 
           {/* Preview Panel */}
           {previewVisible && (
-            <div className="w-1/2">
+            <div className="hidden sm:block w-1/2 bg-[#FAFBFC]">
               <MarkdownPreview />
             </div>
           )}
@@ -228,8 +241,8 @@ function EditorContent() {
         <LogoBar />
       </main>
 
-      {/* Settings Modal */}
       <SettingsModal />
+      <KeyboardShortcuts isOpen={shortcutsOpen} onClose={toggleShortcuts} />
     </div>
   );
 }

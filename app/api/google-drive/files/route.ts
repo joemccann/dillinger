@@ -69,37 +69,29 @@ export async function POST(request: NextRequest) {
   try {
     const { fileId } = await request.json();
 
-    // Get file metadata first
-    const metaResponse = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}?fields=name`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const authHeaders = { Authorization: `Bearer ${accessToken}` };
+
+    const [metaResponse, contentResponse] = await Promise.all([
+      fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=name`, {
+        headers: authHeaders,
+      }),
+      fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+        headers: authHeaders,
+      }),
+    ]);
 
     if (!metaResponse.ok) {
       return NextResponse.json({ error: "Failed to get file metadata" }, { status: 500 });
     }
 
-    const metadata = await metaResponse.json();
-
-    // Download file content
-    const contentResponse = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
     if (!contentResponse.ok) {
       return NextResponse.json({ error: "Failed to download file" }, { status: 500 });
     }
 
-    const content = await contentResponse.text();
+    const [metadata, content] = await Promise.all([
+      metaResponse.json(),
+      contentResponse.text(),
+    ]);
 
     return NextResponse.json({
       name: metadata.name,

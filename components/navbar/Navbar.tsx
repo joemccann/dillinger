@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { useImageUpload } from "@/hooks/useImageUpload";
@@ -17,6 +17,7 @@ import {
   Maximize2,
   Upload,
   ImagePlus,
+  HelpCircle,
 } from "lucide-react";
 
 type ExportFormat = "markdown" | "html" | "pdf";
@@ -36,6 +37,7 @@ export function Navbar() {
   const createImportedDocument = useStore((state) => state.createImportedDocument);
   const insertMarkdownAtCursor = useStore((state) => state.insertMarkdownAtCursor);
   const setZenMode = useStore((state) => state.setZenMode);
+  const toggleShortcuts = useStore((state) => state.toggleShortcuts);
   const { notify } = useToast();
   const { upload } = useImageUpload();
 
@@ -66,14 +68,20 @@ export function Navbar() {
     };
   }, [exportOpen]);
 
-  const handleExport = async (
+  const handleExport = useCallback(async (
     format: ExportFormat,
     options?: { styled?: boolean }
   ) => {
     if (!currentDocument) return;
     setExportOpen(false);
 
+    const formatLabel = format === "html" && options?.styled
+      ? "styled HTML"
+      : format.toUpperCase();
+
     try {
+      notify(`Preparing ${formatLabel}...`);
+
       const response = await fetch(`/api/export/${format}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,12 +110,16 @@ export function Navbar() {
           ? "Exported as styled HTML"
           : `Exported as ${format.toUpperCase()}`
       );
-    } catch {
-      notify("Export failed");
+    } catch (error) {
+      if (error instanceof TypeError) {
+        notify(`${formatLabel} export failed — check your connection`);
+      } else {
+        notify(`${formatLabel} export failed — please try again`);
+      }
     }
-  };
+  }, [currentDocument, notify]);
 
-  const handleImportSelection = async (
+  const handleImportSelection = useCallback(async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
@@ -128,9 +140,9 @@ export function Navbar() {
           : "Failed to import file"
       );
     }
-  };
+  }, [createImportedDocument, notify]);
 
-  const handleImageSelection = async (
+  const handleImageSelection = useCallback(async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
@@ -146,7 +158,7 @@ export function Navbar() {
     }
 
     insertMarkdownAtCursor(`\n${result.markdown}\n`);
-  };
+  }, [upload, insertMarkdownAtCursor]);
 
   return (
     <nav className="h-14 bg-bg-navbar flex items-center justify-between px-4 z-navbar">
@@ -160,7 +172,7 @@ export function Navbar() {
         >
           <Menu size={24} />
         </button>
-        <span className="text-plum font-bold text-lg hidden sm:block">
+        <span className="text-plum font-bold text-xl tracking-wide hidden sm:block">
           DILLINGER
         </span>
       </div>
@@ -170,6 +182,7 @@ export function Navbar() {
         <button
           onClick={() => importInputRef.current?.click()}
           aria-label="Import file"
+          title="Import file"
           className="text-text-invert hover:text-plum transition-colors px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
@@ -181,6 +194,7 @@ export function Navbar() {
         <button
           onClick={() => imageInputRef.current?.click()}
           aria-label="Insert image"
+          title="Insert image"
           className="text-text-invert hover:text-plum transition-colors px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
@@ -207,7 +221,7 @@ export function Navbar() {
             <div
               role="menu"
               aria-label="Export formats"
-              className="absolute right-0 top-full mt-1 bg-bg-navbar rounded shadow-lg py-1 min-w-[150px]"
+              className="absolute right-0 top-full mt-1 bg-bg-navbar rounded shadow-lg py-1 min-w-[150px] animate-fade-in"
             >
               <button
                 role="menuitem"
@@ -257,6 +271,7 @@ export function Navbar() {
         <button
           onClick={togglePreview}
           aria-label={previewVisible ? "Hide preview" : "Show preview"}
+          title={previewVisible ? "Hide preview" : "Show preview"}
           aria-pressed={previewVisible}
           className="text-text-invert hover:text-plum transition-colors p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
@@ -268,6 +283,7 @@ export function Navbar() {
         <button
           onClick={() => setZenMode(true)}
           aria-label="Enter zen mode"
+          title="Zen mode (⌘⇧Z)"
           className="text-text-invert hover:text-plum transition-colors p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
@@ -278,10 +294,21 @@ export function Navbar() {
         <button
           onClick={toggleSettings}
           aria-label="Open settings"
+          title="Settings"
           className="text-text-invert hover:text-plum transition-colors p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <Settings size={20} />
+        </button>
+
+        <button
+          onClick={toggleShortcuts}
+          title="Keyboard shortcuts (?)"
+          aria-label="Keyboard shortcuts"
+          className="text-text-invert hover:text-plum transition-colors p-2 rounded
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
+        >
+          <HelpCircle size={20} />
         </button>
       </div>
 

@@ -24,7 +24,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run start:test",
+    command: `npx next dev -H 127.0.0.1 -p ${port}`, // Use dev mode; production build has pre-existing prerender errors
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

@@ -12,25 +12,20 @@ export async function GET() {
   }
 
   try {
-    // Fetch user first
-    const userResponse = await fetch("https://api.github.com/user", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github.v3+json",
+    };
 
-    const user = await userResponse.json();
+    const [userResponse, orgsResponse] = await Promise.all([
+      fetch("https://api.github.com/user", { headers }),
+      fetch("https://api.github.com/user/orgs", { headers }),
+    ]);
 
-    // Fetch organizations
-    const orgsResponse = await fetch("https://api.github.com/user/orgs", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
-
-    const orgs = await orgsResponse.json();
+    const [user, orgs] = await Promise.all([
+      userResponse.json(),
+      orgsResponse.json(),
+    ]);
 
     // Prepend user as first "org" option
     const allOrgs = [{ login: user.login, type: "user" }, ...orgs];

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getCached, setCache, tokenPrefix } from "@/lib/cache";
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -18,6 +19,12 @@ export async function GET(request: NextRequest) {
 
   if (!owner) {
     return NextResponse.json({ error: "Owner is required" }, { status: 400 });
+  }
+
+  const cacheKey = `gh:repos:${tokenPrefix(token)}:${owner}:${page}:${perPage}`;
+  const cached = getCached<{ items: unknown[] }>(cacheKey);
+  if (cached) {
+    return NextResponse.json(cached);
   }
 
   try {
@@ -50,7 +57,7 @@ export async function GET(request: NextRequest) {
 
     const repos = await response.json();
 
-    return NextResponse.json({
+    const result = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       items: repos.map((repo: Record<string, any>) => ({
         name: repo.name,
@@ -58,7 +65,11 @@ export async function GET(request: NextRequest) {
         private: repo.private,
         default_branch: repo.default_branch,
       })),
-    });
+    };
+
+    setCache(cacheKey, result);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("GitHub repos error:", error);
     return NextResponse.json({ error: "Failed to fetch repositories" }, { status: 500 });

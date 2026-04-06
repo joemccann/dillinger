@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { getCached, setCache, tokenPrefix } from "@/lib/cache";
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -17,6 +18,12 @@ export async function GET(request: NextRequest) {
 
   if (!owner || !repo) {
     return NextResponse.json({ error: "Owner and repo are required" }, { status: 400 });
+  }
+
+  const cacheKey = `gh:branches:${tokenPrefix(token)}:${owner}:${repo}`;
+  const cached = getCached<unknown[]>(cacheKey);
+  if (cached) {
+    return NextResponse.json(cached);
   }
 
   try {
@@ -36,13 +43,16 @@ export async function GET(request: NextRequest) {
 
     const branches = await response.json();
 
-    return NextResponse.json(
+    const result =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       branches.map((branch: Record<string, any>) => ({
         name: branch.name,
         sha: branch.commit.sha,
-      }))
-    );
+      }));
+
+    setCache(cacheKey, result);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("GitHub branches error:", error);
     return NextResponse.json({ error: "Failed to fetch branches" }, { status: 500 });
