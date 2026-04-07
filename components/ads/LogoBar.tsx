@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Script from "next/script";
 
 declare global {
@@ -36,16 +35,12 @@ function initAd() {
 }
 
 export function LogoBar() {
-  useEffect(() => {
-    initAd();
-  }, []);
-
   return (
     <>
       <Script
         src="//m.servedby-buysellads.com/monetization.js"
         strategy="lazyOnload"
-        onLoad={initAd}
+        onReady={initAd}
       />
       <div id="logobar" className="empty:hidden" />
     </>
