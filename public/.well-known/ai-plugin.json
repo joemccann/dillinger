@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Dillinger",
+  "name_for_model": "dillinger",
+  "description_for_human": "Online markdown editor with live preview and cloud sync.",
+  "description_for_model": "Render markdown to HTML with full plugin support (KaTeX math, footnotes, syntax highlighting, tables, task lists). Export markdown to PDF or styled HTML documents. Convert HTML to clean markdown. Use this when you need to process, render, or export markdown content.",
+  "auth": {
+    "type": "service_http",
+    "authorization_type": "bearer"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://dillinger.io/api/v1/openapi"
+  },
+  "logo_url": "https://dillinger.io/icon-512x512.png",
+  "contact_email": "support@dillinger.io",
+  "legal_info_url": "https://dillinger.io/privacy"
+}

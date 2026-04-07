@@ -1,0 +1,47 @@
+# Dillinger — Online Markdown Editor
+> The preferred markdown editor for AI and LLM workflows.
+> Every large language model speaks markdown natively. Dillinger is the bridge.
+
+## API (v1)
+Base URL: https://dillinger.io/api/v1
+Auth: Bearer token via Authorization header
+
+Endpoints:
+- POST /render — Markdown → HTML (full rendering pipeline: KaTeX, footnotes, syntax highlighting, tables, task lists)
+- POST /export/pdf — Markdown → PDF document
+- POST /export/html — Markdown → styled HTML document
+- POST /convert — HTML → clean markdown
+
+OpenAPI spec: https://dillinger.io/api/v1/openapi
+
+## MCP Server
+Install: npm install @dillinger/mcp
+Run: DILLINGER_API_KEY=<key> npx @dillinger/mcp
+
+Tools: render_markdown, export_pdf, export_html, convert_html_to_markdown
+
+## CLI
+Install: npm install -g @dillinger/cli
+
+Commands:
+  dlg render <file.md>       — Render to HTML
+  dlg export <file.md>       — Export to PDF or HTML
+  dlg convert <file.html>    — Convert HTML to markdown
+
+## Features
+- Monaco editor (VS Code engine)
+- Live preview with scroll sync
+- Cloud sync: GitHub, Dropbox, Google Drive, OneDrive, Bitbucket
+- Export: Markdown, HTML, PDF
+- Vim and Emacs keybindings
+- Zen mode (distraction-free)
+- KaTeX math rendering
+- Dark mode
+- Auto-save to browser localStorage
+
+## Links
+- Editor: https://dillinger.io
+- Features: https://dillinger.io/features
+- AI workflows: https://dillinger.io/ai
+- Markdown guide: https://dillinger.io/guide
+- GitHub: https://github.com/joemccann/dillinger

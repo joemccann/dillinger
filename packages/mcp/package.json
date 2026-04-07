@@ -1,0 +1,22 @@
+{
+  "name": "@dillinger/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Dillinger - use the markdown editor as an LLM tool",
+  "bin": {
+    "dillinger-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": ["mcp", "markdown", "dillinger", "llm", "ai"],
+  "license": "MIT"
+}
