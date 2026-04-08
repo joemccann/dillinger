@@ -28,7 +28,7 @@
     "@vercel/postgres": "^0.10.0",
     "breakdance": "^3.0.1",
     "clsx": "^2.1.1",
-    "dompurify": "^3.3.1",
+    "dompurify": "^3.3.3",
     "dropbox": "^10.34.0",
     "highlight.js": "^11.11.1",
     "katex": "^0.16.38",
