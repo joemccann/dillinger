@@ -10,6 +10,21 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: "0.3.0",
+    date: "April 2026",
+    title: "User accounts and API key management",
+    changes: [
+      "Added user accounts with GitHub and Google OAuth sign-in",
+      "Per-user API key generation and management dashboard",
+      "API key rate limiting (100 requests/hour per key)",
+      "Backward-compatible dual-mode API authentication",
+      "Settings page at /settings/api for key management",
+      "Auth.js v5 integration with JWT sessions",
+      "Vercel Postgres for user and API key storage",
+      "Vercel KV (Redis) for rate limiting",
+    ],
+  },
+  {
     version: "0.1.5",
     date: "April 2026",
     title: "SEO and content pages",
