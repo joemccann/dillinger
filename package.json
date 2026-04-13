@@ -46,7 +46,7 @@
     "markdown-it-toc": "^1.1.0",
     "monaco-emacs": "^0.3.0",
     "monaco-vim": "^0.4.4",
-    "next": "14.2.35",
+    "next": "16.2.3",
     "next-auth": "^5.0.0-beta.30",
     "pg": "^8.20.0",
     "prisma": "^7.7.0",
