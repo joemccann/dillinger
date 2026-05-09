@@ -10,11 +10,11 @@ const sourceSans = Source_Sans_3({
 
 export const metadata: Metadata = {
   title: {
-    default: "Dillinger - Online Markdown Editor",
+    default: "Online Markdown Editor with Live Preview — Dillinger",
     template: "%s | Dillinger",
   },
   description:
-    "Free online markdown editor with live preview, GitHub sync, and AI-ready formatting. The preferred editor for developers, writers, and LLM workflows. No signup required.",
+    "Free online markdown editor with live preview. Cloud sync to GitHub, Dropbox, and Google Drive. No signup required.",
   metadataBase: new URL("https://dillinger.io"),
   openGraph: {
     title: "Dillinger - Online Markdown Editor",

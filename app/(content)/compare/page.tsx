@@ -19,6 +19,21 @@ const COMPETITORS = [
     slug: "hackmd",
     tagline: "HackMD focuses on real-time collaboration. Dillinger focuses on individual productivity with zero friction.",
   },
+  {
+    name: "Markdown Live Preview",
+    slug: "markdownlivepreview",
+    tagline: "Markdown Live Preview is a minimal scratchpad. Dillinger adds cloud sync, multiple documents, and the Monaco editor for real workflows.",
+  },
+  {
+    name: "Typora",
+    slug: "typora",
+    tagline: "Typora is a paid desktop WYSIWYG editor. Dillinger is a free web-based editor with built-in cloud sync — no install required.",
+  },
+  {
+    name: "MarkLiveEdit",
+    slug: "marklivedit",
+    tagline: "MarkLiveEdit is a newer lightweight tool. Dillinger has a decade of production trust, broader cloud sync, and Monaco-powered editing.",
+  },
 ];
 
 export default function ComparePage() {
