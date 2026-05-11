@@ -1,4 +1,30 @@
 User-agent: *
 Allow: /
 
+# Block junk URL patterns scraped from user-pasted markdown content.
+# These paths have never been valid routes on dillinger.io.
+Disallow: /redirect/
+Disallow: /products/
+Disallow: /pages/
+Disallow: /factory/
+Disallow: /development/
+Disallow: /support/
+Disallow: /legal/
+Disallow: /blog/
+Disallow: /privacy/subprocessors
+Disallow: /index.md
+Disallow: /README.sample.md
+Disallow: /internal-link-to-product
+Disallow: /internal-link-to-product-category
+Disallow: /link-to-onfinality-docs
+
+# Block tracking-parameter spam variants of the homepage.
+Disallow: /*?xcod=
+Disallow: /*?ref=
+Disallow: /*&ref=
+Disallow: /*?c=
+Disallow: /*?utm_
+Disallow: /*&utm_
+Disallow: /*?toc-variant-
+
 Sitemap: https://dillinger.io/sitemap.xml
