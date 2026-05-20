@@ -82,7 +82,7 @@ Link to any page with [inline links](https://dillinger.io) or use [reference-sty
 
 Images use a similar syntax:
 
-![Placeholder](https://via.placeholder.com/600x200/2B2F36/35D7BB?text=Your+Image+Here)
+![Placeholder](https://placehold.co/600x200/2B2F36/35D7BB?text=Your+Image+Here)
 
 [dillinger]: https://dillinger.io
 
