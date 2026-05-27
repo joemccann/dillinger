@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateApiKey } from "@/lib/api-auth";
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
   try {
@@ -42,14 +42,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      id: `wh_${Date.now()}`,
-      url,
-      events,
-      status: "pending",
-      message:
-        "Webhook registered. Note: webhook delivery requires a storage backend (coming soon).",
-    });
+    return NextResponse.json(
+      {
+        id: `wh_${Date.now()}`,
+        url,
+        events,
+        status: "pending",
+        message:
+          "Webhook registered. Note: webhook delivery requires a storage backend (coming soon).",
+      },
+      { headers: rlHeaders }
+    );
   } catch {
     return NextResponse.json(
       { error: "Failed to register webhook" },
@@ -59,12 +62,15 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
-  return NextResponse.json({
-    webhooks: [],
-    message:
-      "Webhook storage not yet configured. Registered webhooks are not persisted.",
-  });
+  return NextResponse.json(
+    {
+      webhooks: [],
+      message:
+        "Webhook storage not yet configured. Registered webhooks are not persisted.",
+    },
+    { headers: rlHeaders }
+  );
 }
