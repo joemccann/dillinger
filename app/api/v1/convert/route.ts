@@ -18,7 +18,7 @@ turndown.addRule("strikethrough", {
 });
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
   try {
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const markdown = turndown.turndown(html).trim();
 
-    return NextResponse.json({ markdown });
+    return NextResponse.json({ markdown }, { headers: rlHeaders });
   } catch {
     return NextResponse.json(
       { error: "Failed to convert HTML to markdown" },
