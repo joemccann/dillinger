@@ -5,7 +5,7 @@ import { validateApiKey } from "@/lib/api-auth";
 import { renderMarkdown } from "@/lib/markdown";
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
   try {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const html = await renderMarkdown(markdown);
 
-    return NextResponse.json({ html });
+    return NextResponse.json({ html }, { headers: rlHeaders });
   } catch {
     return NextResponse.json(
       { error: "Failed to render markdown" },

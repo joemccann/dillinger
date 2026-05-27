@@ -1,6 +1,6 @@
 {
   "name": "dillinger",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,9 +17,15 @@
     "verify": "npm run lint && npm run typecheck && npm run test:unit && npm run test:e2e"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@monaco-editor/react": "^4.7.0",
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
     "@sparticuz/chromium": "^143.0.4",
     "@types/dompurify": "^3.0.5",
+    "@types/pg": "^8.20.0",
+    "@vercel/kv": "^3.0.0",
+    "@vercel/postgres": "^0.10.0",
     "breakdance": "^3.0.1",
     "clsx": "^2.1.1",
     "dompurify": "^3.3.1",
@@ -41,6 +47,9 @@
     "monaco-emacs": "^0.3.0",
     "monaco-vim": "^0.4.4",
     "next": "14.2.35",
+    "next-auth": "^5.0.0-beta.30",
+    "pg": "^8.20.0",
+    "prisma": "^7.7.0",
     "puppeteer-core": "^24.39.0",
     "react": "^18",
     "react-dom": "^18",
