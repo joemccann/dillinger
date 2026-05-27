@@ -27,7 +27,7 @@
     "highlight.js": "^11.11.1",
     "katex": "^0.16.38",
     "lucide-react": "^0.562.0",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "markdown-it-abbr": "^2.0.0",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-deflist": "^3.0.0",
