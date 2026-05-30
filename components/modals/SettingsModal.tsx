@@ -36,6 +36,7 @@ export function SettingsModal() {
       style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
       role="dialog"
       aria-modal="true"
+      aria-hidden={!settingsOpen}
       aria-labelledby="settings-title"
     >
       <div
