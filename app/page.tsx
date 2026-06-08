@@ -4,20 +4,20 @@ import nextDynamic from "next/dynamic";
 import { EditorSkeleton } from "@/components/ui/Skeleton";
 
 export const metadata: Metadata = {
-  title: "Online Markdown Editor with Live Preview — Dillinger",
+  title: "Markdown Editor — Online, Free, with Live Preview | Dillinger",
   description:
-    "Free online markdown editor with live preview. Cloud sync to GitHub, Dropbox, and Google Drive. No signup required.",
+    "Free online Markdown editor with live preview. Write, format, and export Markdown to HTML or PDF — sync to GitHub, Dropbox & Google Drive. No signup.",
   alternates: { canonical: "https://dillinger.io" },
   openGraph: {
-    title: "Online Markdown Editor with Live Preview — Dillinger",
+    title: "Markdown Editor — Online, Free, with Live Preview | Dillinger",
     description:
-      "Free online markdown editor with live preview. Cloud sync to GitHub, Dropbox, and Google Drive. No signup required.",
+      "Free online Markdown editor with live preview. Write, format, and export Markdown to HTML or PDF — sync to GitHub, Dropbox & Google Drive. No signup.",
     url: "https://dillinger.io",
   },
   twitter: {
-    title: "Online Markdown Editor with Live Preview — Dillinger",
+    title: "Markdown Editor — Online, Free, with Live Preview | Dillinger",
     description:
-      "Free online markdown editor with live preview. Cloud sync to GitHub, Dropbox, and Google Drive. No signup required.",
+      "Free online Markdown editor with live preview. Write, format, and export Markdown to HTML or PDF — sync to GitHub, Dropbox & Google Drive. No signup.",
   },
 };
 

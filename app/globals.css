@@ -213,7 +213,7 @@ body {
 /* BuySellAds LogoBar */
 #logobar {
   background: #2B2F36;
-  min-height: 36px;
+  min-height: 48px;
   flex-shrink: 0;
 }
 

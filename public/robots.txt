@@ -12,19 +12,9 @@ Disallow: /support/
 Disallow: /legal/
 Disallow: /blog/
 Disallow: /privacy/subprocessors
-Disallow: /index.md
 Disallow: /README.sample.md
 Disallow: /internal-link-to-product
 Disallow: /internal-link-to-product-category
 Disallow: /link-to-onfinality-docs
-
-# Block tracking-parameter spam variants of the homepage.
-Disallow: /*?xcod=
-Disallow: /*?ref=
-Disallow: /*&ref=
-Disallow: /*?c=
-Disallow: /*?utm_
-Disallow: /*&utm_
-Disallow: /*?toc-variant-
 
 Sitemap: https://dillinger.io/sitemap.xml
