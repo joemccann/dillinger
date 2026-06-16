@@ -6,7 +6,7 @@ import { getExportFilename, renderHtmlDocument } from "@/lib/export";
 import { renderMarkdown } from "@/lib/markdown";
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
   try {
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "Content-Disposition": `attachment; filename="${filename}"`,
+        ...rlHeaders,
       },
     });
   } catch {
