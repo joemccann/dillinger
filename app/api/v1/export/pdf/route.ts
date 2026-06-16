@@ -7,7 +7,7 @@ import { getExportFilename } from "@/lib/export";
 import { renderPdfBuffer } from "@/lib/pdf";
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
+  const { error: authError, headers: rlHeaders } = await validateApiKey(request);
   if (authError) return authError;
 
   try {
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filename}"`,
+        ...rlHeaders,
       },
     });
   } catch {

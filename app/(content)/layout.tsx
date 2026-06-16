@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { UserMenu } from "@/components/auth/UserMenu";
 
 export const metadata: Metadata = {};
 
-export default function ContentLayout({
+export default async function ContentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
     <div className="min-h-dvh flex flex-col bg-bg-primary text-text-primary">
       <header className="h-14 bg-bg-navbar flex items-center px-6">
@@ -39,6 +43,13 @@ export default function ContentLayout({
           >
             Open Editor
           </Link>
+          {session?.user ? (
+            <UserMenu name={session.user.name || ""} image={session.user.image} />
+          ) : (
+            <Link href="/login" className="text-text-muted hover:text-plum transition-colors">
+              Sign in
+            </Link>
+          )}
         </nav>
       </header>
 
