@@ -42,7 +42,7 @@ export function LogoBar() {
         strategy="lazyOnload"
         onReady={initAd}
       />
-      <div id="logobar" className="min-h-9" />
+      <div id="logobar" className="min-h-12" />
     </>
   );
 }
