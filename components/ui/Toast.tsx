@@ -37,7 +37,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const notify = useCallback((message: string, duration = 3000) => {
-    const id = Date.now().toString();
+    const id = crypto.randomUUID();
     setToasts((prev) => [...prev, { id, message }]);
 
     if (duration > 0) {
