@@ -11,10 +11,11 @@ import { MarkdownPreview } from "@/components/preview/MarkdownPreview";
 import { SettingsModal } from "@/components/modals/SettingsModal";
 import { KeyboardShortcuts } from "@/components/ui/KeyboardShortcuts";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { useStore } from "@/stores/store";
 import { EditorSkeleton } from "@/components/ui/Skeleton";
 import { useImageUpload } from "@/hooks/useImageUpload";
-import { importDocumentFile } from "@/lib/import";
+import { importDocumentFile, ImportError } from "@/lib/import";
 
 // Dynamic import Sidebar to prevent SSR issues with GitHub/Dropbox hooks
 const Sidebar = dynamic(
@@ -24,8 +25,12 @@ const Sidebar = dynamic(
 
 const DropZoneOverlay = memo(function DropZoneOverlay({
   isDragging,
+  dropTitle,
+  dropSubtitle,
 }: {
   isDragging: boolean;
+  dropTitle: string;
+  dropSubtitle: string;
 }) {
   if (!isDragging) return null;
 
@@ -40,10 +45,10 @@ const DropZoneOverlay = memo(function DropZoneOverlay({
         </div>
         <div>
           <p className="text-xl font-semibold text-text-invert">
-            Drop your file here
+            {dropTitle}
           </p>
           <p className="text-text-muted mt-1">
-            Supports markdown, HTML, and image files
+            {dropSubtitle}
           </p>
         </div>
       </div>
@@ -62,6 +67,7 @@ function EditorContent() {
   const shortcutsOpen = useStore((state) => state.shortcutsOpen);
   const toggleShortcuts = useStore((state) => state.toggleShortcuts);
   const { notify } = useToast();
+  const { t } = useI18n();
   const { upload } = useImageUpload();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -92,16 +98,22 @@ function EditorContent() {
       try {
         const imported = await importDocumentFile(file);
         createImportedDocument(file.name, imported.body);
-        notify(`Imported "${file.name}"`);
+        notify(t("toast.imported", { name: file.name }));
       } catch (error) {
         notify(
-          error instanceof Error
-            ? error.message
-            : "Failed to import file"
+          error instanceof ImportError
+            ? t(
+                error.code === "unsupported_type"
+                  ? "import.unsupportedType"
+                  : "import.convertFailed"
+              )
+            : error instanceof Error
+              ? error.message
+              : t("toast.importFailed")
         );
       }
     },
-    [createImportedDocument, insertMarkdownAtCursor, notify, upload]
+    [createImportedDocument, insertMarkdownAtCursor, notify, t, upload]
   );
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
@@ -183,14 +195,18 @@ function EditorContent() {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        <DropZoneOverlay isDragging={isDragging} />
+        <DropZoneOverlay
+          isDragging={isDragging}
+          dropTitle={t("editor.dropFileTitle")}
+          dropSubtitle={t("editor.dropFileSubtitle")}
+        />
 
         <div className="w-full max-w-3xl h-full py-12 px-4 relative">
           <button
             onClick={() => setZenMode(false)}
             className="absolute top-4 right-4 text-text-muted hover:text-text-invert transition-colors rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
-            aria-label="Exit zen mode"
+            aria-label={t("editor.exitZenMode")}
           >
             <X size={24} />
           </button>
@@ -210,7 +226,11 @@ function EditorContent() {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <DropZoneOverlay isDragging={isDragging} />
+      <DropZoneOverlay
+        isDragging={isDragging}
+        dropTitle={t("editor.dropFileTitle")}
+        dropSubtitle={t("editor.dropFileSubtitle")}
+      />
 
       {/* Sidebar */}
       <Sidebar />

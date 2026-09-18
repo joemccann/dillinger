@@ -8,6 +8,43 @@ body {
   color: #373D49;
 }
 
+/* Farsi (rtl) font — activated when the fa locale is active */
+[lang="fa"] body,
+html[lang="fa"] body {
+  font-family: "Vazirmatn", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html[lang="fa"] .font-sans {
+  font-family: "Vazirmatn", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* RTL adjustments for the preview pane */
+html[lang="fa"] .preview-html,
+html[lang="fa"] .preview-html p,
+html[lang="fa"] .preview-html li,
+html[lang="fa"] .preview-html blockquote {
+  font-family: "Vazirmatn", Georgia, serif;
+}
+
+html[lang="fa"] .preview-html blockquote {
+  border-left: none;
+  padding-left: 0;
+  border-right: 4px solid #A0AABF;
+  padding-right: 1em;
+  margin-right: 0;
+}
+
+html[lang="fa"] .preview-html ul,
+html[lang="fa"] .preview-html ol {
+  padding-left: 0;
+  padding-right: 2em;
+}
+
+html[lang="fa"] .preview-html th,
+html[lang="fa"] .preview-html td {
+  text-align: right;
+}
+
 /* Preview Styles */
 .preview-html {
   font-family: Georgia, Cambria, serif;

@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { X } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface Toast {
   id: string;
@@ -23,6 +24,7 @@ const ToastContext = createContext<ToastContextType | null>(null);
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [exiting, setExiting] = useState<Set<string>>(new Set());
+  const { t } = useI18n();
 
   const dismiss = useCallback((id: string) => {
     setExiting((prev) => new Set(prev).add(id));
@@ -54,7 +56,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         className="fixed bottom-4 right-4 z-toast flex flex-col gap-2 pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)]"
         role="status"
         aria-live="polite"
-        aria-label="Notifications"
+        aria-label={t("toast.notifications")}
       >
         {toasts.map((toast) => (
           <div
@@ -66,7 +68,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <span className="text-sm">{toast.message}</span>
             <button
               onClick={() => dismiss(toast.id)}
-              aria-label="Dismiss notification"
+              aria-label={t("toast.dismissNotification")}
               className="hover:opacity-70 transition-opacity rounded
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >

@@ -15,6 +15,7 @@ import { GoogleDriveModal } from "@/components/modals/GoogleDriveModal";
 import { OneDriveModal } from "@/components/modals/OneDriveModal";
 import { BitbucketModal } from "@/components/modals/BitbucketModal";
 import { DeleteConfirmModal } from "@/components/modals/DeleteConfirmModal";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   Plus,
   Save,
@@ -75,6 +76,7 @@ function uiReducer(state: SidebarUIState, action: SidebarAction): SidebarUIState
 }
 
 export function Sidebar() {
+  const { t } = useI18n();
   const sidebarOpen = useStore((state) => state.sidebarOpen);
   const documents = useStore((state) => state.documents);
   const currentDocument = useStore((state) => state.currentDocument);
@@ -88,24 +90,24 @@ export function Sidebar() {
 
   const handleSave = useCallback(() => {
     persist();
-    notify("Documents saved");
-  }, [persist, notify]);
+    notify(t("toast.documentsSaved"));
+  }, [persist, notify, t]);
 
   const handleDeleteClick = useCallback(() => {
     if (!currentDocument) return;
     if (documents.length <= 1) {
-      notify("Cannot delete the last document");
+      notify(t("delete.cannotDeleteLast"));
       return;
     }
     dispatch({ type: "openDeleteModal" });
-  }, [currentDocument, documents.length, notify]);
+  }, [currentDocument, documents.length, notify, t]);
 
   const handleDeleteConfirm = useCallback(() => {
     if (!currentDocument) return;
     deleteDocument(currentDocument.id);
-    notify("Document deleted");
+    notify(t("toast.documentDeleted"));
     dispatch({ type: "closeDeleteModal" });
-  }, [currentDocument, deleteDocument, notify]);
+  }, [currentDocument, deleteDocument, notify, t]);
 
   const closeModal = () => dispatch({ type: "closeModal" });
 
@@ -129,7 +131,7 @@ export function Sidebar() {
         {/* Navigation */}
         <nav className="flex-1 overflow-auto px-4">
           <CollapsibleSection
-            label="Services"
+            label={t("sidebar.services")}
             panelId="services-panel"
             icon={<Plug size={14} />}
             isOpen={ui.servicesOpen}
@@ -139,7 +141,7 @@ export function Sidebar() {
           </CollapsibleSection>
 
           <CloudServiceMenu
-            label="Import from"
+            label={t("sidebar.importFrom")}
             panelId="import-panel"
             icon={<CloudDownload size={14} />}
             isOpen={ui.importOpen}
@@ -148,7 +150,7 @@ export function Sidebar() {
           />
 
           <CloudServiceMenu
-            label="Save to"
+            label={t("sidebar.saveTo")}
             panelId="save-panel"
             icon={<CloudUpload size={14} />}
             isOpen={ui.saveOpen}
@@ -157,7 +159,7 @@ export function Sidebar() {
           />
 
           <CollapsibleSection
-            label="Documents"
+            label={t("sidebar.documents")}
             panelId="documents-panel"
             icon={<FileText size={14} />}
             isOpen={ui.documentsOpen}
@@ -176,7 +178,7 @@ export function Sidebar() {
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Plus size={18} />
-            New Document
+            {t("sidebar.newDocument")}
           </button>
           <button
             onClick={handleSave}
@@ -185,7 +187,7 @@ export function Sidebar() {
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-sidebar"
           >
             <Save size={18} />
-            Save Session
+            {t("sidebar.saveSession")}
           </button>
           <button
             onClick={handleDeleteClick}
@@ -196,7 +198,7 @@ export function Sidebar() {
                        ${documents.length <= 1 ? "opacity-60 cursor-not-allowed" : "hover:opacity-90 active:scale-[0.97] transition-all"}`}
           >
             <Trash2 size={18} />
-            Delete Document
+            {t("delete.deleteDocument")}
           </button>
         </div>
       </aside>
@@ -390,6 +392,7 @@ const ServiceButton = memo(function ServiceButton({
   onConnect: () => void;
   onDisconnect: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <div className="flex items-center justify-between py-2 px-2 text-sm">
       <div className="flex items-center gap-2 text-dropdown-link">
@@ -399,20 +402,20 @@ const ServiceButton = memo(function ServiceButton({
       {connected ? (
         <button
           onClick={onDisconnect}
-          aria-label={`Unlink ${label}`}
+          aria-label={t("sidebar.unlink", { service: label })}
           className="text-xs text-red-400 hover:text-red-300 rounded px-1
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
         >
-          Unlink
+          {t("sidebar.unlinkLabel")}
         </button>
       ) : (
         <button
           onClick={onConnect}
-          aria-label={`Link ${label}`}
+          aria-label={t("sidebar.link", { service: label })}
           className="text-xs text-plum hover:opacity-80 rounded px-1
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
         >
-          Link
+          {t("sidebar.linkLabel")}
         </button>
       )}
     </div>

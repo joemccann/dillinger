@@ -2,42 +2,44 @@
 
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface KeyboardShortcutsProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const SHORTCUT_GROUPS = [
-  {
-    title: "Editor",
-    shortcuts: [
-      { keys: ["⌘", "Z"], action: "Undo" },
-      { keys: ["⌘", "⇧", "Z"], action: "Redo" },
-      { keys: ["⌘", "X"], action: "Cut line" },
-      { keys: ["⌘", "D"], action: "Duplicate line" },
-      { keys: ["⌘", "/"], action: "Toggle comment" },
-      { keys: ["⌘", "F"], action: "Find" },
-      { keys: ["⌘", "H"], action: "Find and replace" },
-    ],
-  },
-  {
-    title: "View",
-    shortcuts: [
-      { keys: ["⌘", "⇧", "Z"], action: "Toggle zen mode" },
-      { keys: ["Escape"], action: "Exit zen mode" },
-    ],
-  },
-  {
-    title: "Help",
-    shortcuts: [
-      { keys: ["?"], action: "Keyboard shortcuts" },
-    ],
-  },
-];
-
 export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const { t } = useI18n();
+
+  const SHORTCUT_GROUPS = [
+    {
+      title: t("shortcuts.editor"),
+      shortcuts: [
+        { keys: ["⌘", "Z"], action: t("shortcuts.undo") },
+        { keys: ["⌘", "⇧", "Z"], action: t("shortcuts.redo") },
+        { keys: ["⌘", "X"], action: t("shortcuts.cutLine") },
+        { keys: ["⌘", "D"], action: t("shortcuts.duplicateLine") },
+        { keys: ["⌘", "/"], action: t("shortcuts.toggleComment") },
+        { keys: ["⌘", "F"], action: t("shortcuts.find") },
+        { keys: ["⌘", "H"], action: t("shortcuts.findReplace") },
+      ],
+    },
+    {
+      title: t("shortcuts.view"),
+      shortcuts: [
+        { keys: ["⌘", "⇧", "Z"], action: t("shortcuts.toggleZen") },
+        { keys: ["Escape"], action: t("shortcuts.exitZen") },
+      ],
+    },
+    {
+      title: t("shortcuts.help"),
+      shortcuts: [
+        { keys: ["?"], action: t("shortcuts.keyboardShortcuts") },
+      ],
+    },
+  ];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -69,12 +71,12 @@ export function KeyboardShortcuts({ isOpen, onClose }: KeyboardShortcutsProps) {
       <div className="relative bg-bg-navbar rounded-lg shadow-xl p-6 w-96 animate-fade-in">
         <div className="flex items-center justify-between mb-4">
           <h2 id="shortcuts-title" className="text-text-invert font-semibold">
-            Keyboard Shortcuts
+            {t("shortcuts.title")}
           </h2>
           <button
             ref={closeRef}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("modal.close")}
             className="text-text-invert hover:text-plum transition-colors rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >

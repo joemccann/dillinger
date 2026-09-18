@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useOneDrive } from "@/hooks/useOneDrive";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   X,
   CloudCog,
@@ -24,6 +25,7 @@ interface OneDriveModalProps {
 export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
   const oneDrive = useOneDrive();
   const { notify } = useToast();
+  const { t } = useI18n();
   const currentDocument = useStore((state) => state.currentDocument);
   const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -67,7 +69,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
       const file = await oneDrive.fetchFileContent(item.id);
       if (file) {
         createImportedDocument(file.name, file.content);
-        notify("File imported from OneDrive");
+        notify(t("toast.fileImported", { service: "OneDrive" }));
         onClose();
       }
     } else {
@@ -107,7 +109,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("modal.close")}
             className="absolute top-4 right-4 text-text-invert hover:text-plum rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
@@ -117,10 +119,10 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
           <div className="text-center">
             <CloudCog size={48} className="mx-auto text-text-invert mb-4" aria-hidden="true" />
             <h2 id="onedrive-connect-title" className="text-xl font-semibold text-text-invert mb-2 text-balance">
-              Connect to OneDrive
+              {t("cloud.connectTitle.oneDrive")}
             </h2>
             <p className="text-text-muted mb-6">
-              Connect your OneDrive account to import and save markdown files.
+              {t("cloud.connectDescription.oneDrive")}
             </p>
             <button
               onClick={oneDrive.connect}
@@ -128,7 +130,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
                          hover:opacity-90 transition-opacity
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
-              Connect OneDrive
+              {t("cloud.connectButton.oneDrive")}
             </button>
           </div>
         </div>
@@ -151,7 +153,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
             {oneDrive.pathHistory.length > 0 && (
               <button
                 onClick={oneDrive.navigateBack}
-                aria-label="Go back"
+                aria-label={t("modal.goBack")}
                 className="text-text-invert hover:text-plum rounded
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
               >
@@ -160,13 +162,13 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
             )}
             <CloudCog size={24} className="text-text-invert" aria-hidden="true" />
             <h2 id="onedrive-modal-title" className="text-lg font-semibold text-text-invert text-balance">
-              {mode === "import" ? "Import from OneDrive" : "Save to OneDrive"}
+              {mode === "import" ? t("cloud.importFrom.oneDrive") : t("cloud.saveTo.oneDrive")}
             </h2>
           </div>
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("modal.close")}
             className="text-text-invert hover:text-plum rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
@@ -179,14 +181,14 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
           {mode === "save" && (
             <div className="mb-4 p-3 bg-bg-highlight rounded">
               <label htmlFor="onedrive-filename" className="block text-sm text-text-muted mb-1">
-                File name
+                {t("modal.fileName")}
               </label>
               <input
                 id="onedrive-filename"
                 type="text"
                 value={newFileName}
                 onChange={(e) => setNewFileName(e.target.value)}
-                placeholder="document.md"
+                placeholder={t("modal.placeholderDocument")}
                 className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                            border border-border-settings
                            focus:border-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
@@ -196,7 +198,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
 
           {oneDrive.files.length === 0 ? (
             <p className="text-text-muted text-center py-4">
-              No files found
+              {t("modal.noFiles")}
             </p>
           ) : (
             <div className="space-y-1">
@@ -231,7 +233,7 @@ export function OneDriveModal({ isOpen, onClose, mode }: OneDriveModalProps) {
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
               <Save size={18} />
-              Save to OneDrive
+              {t("cloud.saveTo.oneDrive")}
             </button>
           </div>
         )}

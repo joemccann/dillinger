@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface DriveFile {
   id: string;
@@ -23,6 +24,7 @@ interface GoogleDriveState {
 
 export function useGoogleDrive() {
   const { notify } = useToast();
+  const { t } = useI18n();
   const [state, setState] = useState<GoogleDriveState>({
     isConnected: false,
     files: [],
@@ -60,12 +62,12 @@ export function useGoogleDrive() {
         currentFolderId: "root",
         pathHistory: [],
       });
-      notify("Google Drive disconnected");
+      notify(t("toast.disconnected", { service: "Google Drive" }));
     } catch (error) {
       console.error("Failed to disconnect Google Drive:", error);
-      notify("Failed to disconnect Google Drive");
+      notify(t("toast.disconnectFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFiles = useCallback(async (folderId?: string) => {
     const targetFolderId = folderId || stateRef.current.currentFolderId;
@@ -81,9 +83,9 @@ export function useGoogleDrive() {
       }));
     } catch (error) {
       console.error("Failed to fetch Google Drive files:", error);
-      notify("Failed to fetch files");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFileContent = useCallback(async (fileId: string): Promise<FileContent | null> => {
     try {
@@ -98,10 +100,10 @@ export function useGoogleDrive() {
       return await response.json();
     } catch (error) {
       console.error("Failed to fetch file content:", error);
-      notify("Failed to fetch file content");
+      notify(t("toast.fetchFailed"));
       return null;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const saveFile = useCallback(async (
     name: string,
@@ -123,14 +125,14 @@ export function useGoogleDrive() {
 
       if (!response.ok) throw new Error("Failed to save file");
 
-      notify("File saved to Google Drive");
+      notify(t("toast.fileSaved", { service: "Google Drive" }));
       return true;
     } catch (error) {
       console.error("Failed to save to Google Drive:", error);
-      notify("Failed to save file");
+      notify(t("toast.saveFailed", { error: t("toast.unknownError") }));
       return false;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const navigateToFolder = useCallback((folderId: string) => {
     setState((prev) => ({

@@ -11,6 +11,16 @@ interface ImportedDocument {
   title: string;
 }
 
+/** Tagged error so call sites can translate without parsing fragile messages. */
+export class ImportError extends Error {
+  code: "unsupported_type" | "convert_failed";
+  constructor(code: "unsupported_type" | "convert_failed", message: string) {
+    super(message);
+    this.code = code;
+    this.name = "ImportError";
+  }
+}
+
 async function convertHtmlToMarkdown(html: string): Promise<string> {
   const response = await fetch("/api/import/html-to-markdown", {
     method: "POST",
@@ -21,7 +31,10 @@ async function convertHtmlToMarkdown(html: string): Promise<string> {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || "Failed to convert HTML");
+    throw new ImportError(
+      "convert_failed",
+      data.error || "Failed to convert HTML"
+    );
   }
 
   return data.markdown;
@@ -43,5 +56,8 @@ export async function importDocumentFile(file: File): Promise<ImportedDocument> 
     };
   }
 
-  throw new Error("Please choose a .md, .txt, .markdown, .html, or .htm file");
+  throw new ImportError(
+    "unsupported_type",
+    "Please choose a .md, .txt, .markdown, .html, or .htm file"
+  );
 }

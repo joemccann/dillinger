@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "@/stores/store";
 import { X } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 export function SettingsModal() {
   const settingsOpen = useStore((state) => state.settingsOpen);
@@ -10,6 +11,7 @@ export function SettingsModal() {
   const toggleSettings = useStore((state) => state.toggleSettings);
   const updateSettings = useStore((state) => state.updateSettings);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const { t } = useI18n();
 
   // Handle Escape key
   useEffect(() => {
@@ -51,11 +53,11 @@ export function SettingsModal() {
         style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
       >
         <div className="flex items-center justify-between p-4 border-b border-border-settings">
-          <h2 id="settings-title" className="text-text-invert font-semibold text-balance">Settings</h2>
+          <h2 id="settings-title" className="text-text-invert font-semibold text-balance">{t("settings.title")}</h2>
           <button
             ref={closeButtonRef}
             onClick={toggleSettings}
-            aria-label="Close settings"
+            aria-label={t("settings.close")}
             className="text-text-invert hover:text-plum transition-colors rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
@@ -67,7 +69,7 @@ export function SettingsModal() {
           {/* Auto Save */}
           <SettingToggle
             id="auto-save"
-            label="Auto Save"
+            label={t("settings.autoSave")}
             checked={settings.enableAutoSave}
             onChange={(v) => updateSettings({ enableAutoSave: v })}
           />
@@ -75,7 +77,7 @@ export function SettingsModal() {
           {/* Word Count */}
           <SettingToggle
             id="word-count"
-            label="Word Count"
+            label={t("settings.wordCount")}
             checked={settings.enableWordsCount}
             onChange={(v) => updateSettings({ enableWordsCount: v })}
           />
@@ -83,7 +85,7 @@ export function SettingsModal() {
           {/* Character Count */}
           <SettingToggle
             id="char-count"
-            label="Character Count"
+            label={t("settings.characterCount")}
             checked={settings.enableCharactersCount}
             onChange={(v) => updateSettings({ enableCharactersCount: v })}
           />
@@ -91,7 +93,7 @@ export function SettingsModal() {
           {/* Night Mode */}
           <SettingToggle
             id="night-mode"
-            label="Night Mode"
+            label={t("settings.nightMode")}
             checked={settings.enableNightMode}
             onChange={(v) => updateSettings({ enableNightMode: v })}
           />
@@ -99,14 +101,14 @@ export function SettingsModal() {
           {/* Scroll Sync */}
           <SettingToggle
             id="scroll-sync"
-            label="Scroll Sync"
+            label={t("settings.scrollSync")}
             checked={settings.enableScrollSync}
             onChange={(v) => updateSettings({ enableScrollSync: v })}
           />
 
           {/* Tab Size */}
           <div className="flex items-center justify-between">
-            <label htmlFor="tab-size" className="text-text-invert text-sm">Tab Size</label>
+            <label htmlFor="tab-size" className="text-text-invert text-sm">{t("settings.tabSize")}</label>
             <select
               id="tab-size"
               value={settings.tabSize}
@@ -122,7 +124,7 @@ export function SettingsModal() {
 
           {/* Keybindings */}
           <div className="flex items-center justify-between">
-            <label htmlFor="keybindings" className="text-text-invert text-sm">Keybindings</label>
+            <label htmlFor="keybindings" className="text-text-invert text-sm">{t("settings.keybindings")}</label>
             <select
               id="keybindings"
               value={settings.keybindings}
@@ -134,9 +136,9 @@ export function SettingsModal() {
               className="bg-bg-highlight text-text-invert px-2 py-1 rounded text-sm
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
             >
-              <option value="default">Default</option>
-              <option value="vim">Vim</option>
-              <option value="emacs">Emacs</option>
+              <option value="default">{t("settings.default")}</option>
+              <option value="vim">{t("settings.vim")}</option>
+              <option value="emacs">{t("settings.emacs")}</option>
             </select>
           </div>
         </div>

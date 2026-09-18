@@ -18,6 +18,13 @@ vi.mock("@/hooks/useImageUpload", () => ({
 const mockImportDocumentFile = vi.fn();
 vi.mock("@/lib/import", () => ({
   importDocumentFile: (...args: unknown[]) => mockImportDocumentFile(...args),
+  ImportError: class extends Error {
+    code: string;
+    constructor(code: string, message: string) {
+      super(message);
+      this.code = code;
+    }
+  },
 }));
 
 const initialState = useStore.getState();

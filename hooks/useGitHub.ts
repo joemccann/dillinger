@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface GitHubUser {
   login: string;
@@ -74,6 +75,7 @@ export function useGitHub() {
   stateRef.current = state;
 
   const { notify } = useToast();
+  const { t } = useI18n();
 
   const checkStatus = useCallback(async () => {
     try {
@@ -113,15 +115,15 @@ export function useGitHub() {
         files: [],
         current: initialCurrent,
       }));
-      notify("Disconnected from GitHub");
+      notify(t("toast.disconnected", { service: "GitHub" }));
     } catch (error) {
-      notify("Failed to disconnect");
+      notify(t("toast.disconnectFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchOrgs = useCallback(async () => {
     try {
-      notify("Fetching organizations...", 2000);
+      notify(t("toast.fetchingOrganizations"), 2000);
       const response = await fetch("/api/github/orgs");
       const data = await response.json();
 
@@ -129,14 +131,14 @@ export function useGitHub() {
         setState((s) => ({ ...s, orgs: data }));
       }
     } catch (error) {
-      notify("Failed to fetch organizations");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchRepos = useCallback(
     async (owner: string) => {
       try {
-        notify("Fetching repositories...", 2000);
+        notify(t("toast.fetchingRepositories"), 2000);
         const response = await fetch(`/api/github/repos?owner=${owner}`);
         const data = await response.json();
 
@@ -150,10 +152,10 @@ export function useGitHub() {
           }));
         }
       } catch (error) {
-        notify("Failed to fetch repositories");
+        notify(t("toast.fetchFailed"));
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const fetchBranches = useCallback(
@@ -161,7 +163,7 @@ export function useGitHub() {
       // Use ref to avoid stale closure
       const { owner } = stateRef.current.current;
       try {
-        notify("Fetching branches...", 2000);
+        notify(t("toast.fetchingBranches"), 2000);
         const response = await fetch(
           `/api/github/branches?owner=${owner}&repo=${repo}`
         );
@@ -176,10 +178,10 @@ export function useGitHub() {
           }));
         }
       } catch {
-        notify("Failed to fetch branches");
+        notify(t("toast.fetchFailed"));
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const fetchFiles = useCallback(
@@ -187,7 +189,7 @@ export function useGitHub() {
       // Use ref to avoid stale closure
       const { owner, repo } = stateRef.current.current;
       try {
-        notify("Fetching files...", 2000);
+        notify(t("toast.fetchingFiles"), 2000);
         const response = await fetch(
           `/api/github/files?owner=${owner}&repo=${repo}&branch=${branch}`
         );
@@ -201,10 +203,10 @@ export function useGitHub() {
           }));
         }
       } catch {
-        notify("Failed to fetch files");
+        notify(t("toast.fetchFailed"));
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const fetchFileContent = useCallback(
@@ -212,7 +214,7 @@ export function useGitHub() {
       // Use ref to avoid stale closure
       const { owner, repo } = stateRef.current.current;
       try {
-        notify("Fetching file...", 2000);
+        notify(t("toast.fetchingFile"), 2000);
         const response = await fetch("/api/github/files", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -229,11 +231,11 @@ export function useGitHub() {
         }
         return null;
       } catch {
-        notify("Failed to fetch file");
+        notify(t("toast.fetchFailed"));
         return null;
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const saveFile = useCallback(
@@ -242,12 +244,12 @@ export function useGitHub() {
       const { owner, repo, branch, path, sha } = stateRef.current.current;
 
       if (!owner || !repo || !branch || !path) {
-        notify("No file selected for saving");
+        notify(t("toast.noFileSelected"));
         return false;
       }
 
       try {
-        notify("Saving to GitHub...", 3000);
+        notify(t("toast.saving", { service: "GitHub" }), 3000);
         const response = await fetch("/api/github/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -269,18 +271,18 @@ export function useGitHub() {
             ...s,
             current: { ...s.current, sha: data.content.sha },
           }));
-          notify("Successfully saved to GitHub!");
+          notify(t("toast.saveSuccess", { service: "GitHub" }));
           return true;
         } else {
           throw new Error(data.error);
         }
       } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        notify(`Failed to save: ${errorMessage}`);
+        const errorMessage = error instanceof Error ? error.message : t("toast.unknownError");
+        notify(t("toast.saveFailed", { error: errorMessage }));
         return false;
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const setCurrent = useCallback(

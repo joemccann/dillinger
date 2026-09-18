@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface Workspace {
   slug: string;
@@ -44,6 +45,7 @@ interface BitbucketState {
 
 export function useBitbucket() {
   const { notify } = useToast();
+  const { t } = useI18n();
   const [state, setState] = useState<BitbucketState>({
     isConnected: false,
     workspaces: [],
@@ -93,12 +95,12 @@ export function useBitbucket() {
         currentPath: "",
         pathHistory: [],
       });
-      notify("Bitbucket disconnected");
+      notify(t("toast.disconnected", { service: "Bitbucket" }));
     } catch (error) {
       console.error("Failed to disconnect Bitbucket:", error);
-      notify("Failed to disconnect Bitbucket");
+      notify(t("toast.disconnectFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchWorkspaces = useCallback(async () => {
     try {
@@ -109,9 +111,9 @@ export function useBitbucket() {
       setState((prev) => ({ ...prev, workspaces: data.workspaces }));
     } catch (error) {
       console.error("Failed to fetch workspaces:", error);
-      notify("Failed to fetch workspaces");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const selectWorkspace = useCallback(async (workspace: string) => {
     try {
@@ -132,9 +134,9 @@ export function useBitbucket() {
       }));
     } catch (error) {
       console.error("Failed to fetch repos:", error);
-      notify("Failed to fetch repos");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const selectRepo = useCallback(async (repo: string) => {
     const { selectedWorkspace } = stateRef.current;
@@ -158,9 +160,9 @@ export function useBitbucket() {
       }));
     } catch (error) {
       console.error("Failed to fetch branches:", error);
-      notify("Failed to fetch branches");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const selectBranch = useCallback(async (branch: string) => {
     const { selectedWorkspace, selectedRepo } = stateRef.current;
@@ -182,9 +184,9 @@ export function useBitbucket() {
       }));
     } catch (error) {
       console.error("Failed to fetch files:", error);
-      notify("Failed to fetch files");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const navigateToFolder = useCallback(async (path: string) => {
     const { selectedWorkspace, selectedRepo, selectedBranch, currentPath } = stateRef.current;
@@ -205,9 +207,9 @@ export function useBitbucket() {
       }));
     } catch (error) {
       console.error("Failed to navigate folder:", error);
-      notify("Failed to navigate folder");
+      notify(t("toast.failedToNavigateFolder"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const navigateBack = useCallback(async () => {
     const { selectedWorkspace, selectedRepo, selectedBranch, pathHistory } = stateRef.current;
@@ -231,9 +233,9 @@ export function useBitbucket() {
       }));
     } catch (error) {
       console.error("Failed to navigate back:", error);
-      notify("Failed to navigate back");
+      notify(t("toast.failedToNavigateBack"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFileContent = useCallback(async (path: string): Promise<FileContent | null> => {
     const { selectedWorkspace, selectedRepo, selectedBranch } = stateRef.current;
@@ -256,10 +258,10 @@ export function useBitbucket() {
       return await response.json();
     } catch (error) {
       console.error("Failed to fetch file content:", error);
-      notify("Failed to fetch file content");
+      notify(t("toast.fetchFailed"));
       return null;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const saveFile = useCallback(async (
     path: string,
@@ -285,14 +287,14 @@ export function useBitbucket() {
 
       if (!response.ok) throw new Error("Failed to save file");
 
-      notify("File saved to Bitbucket");
+      notify(t("toast.fileSaved", { service: "Bitbucket" }));
       return true;
     } catch (error) {
       console.error("Failed to save to Bitbucket:", error);
-      notify("Failed to save file");
+      notify(t("toast.saveFailed", { error: t("toast.unknownError") }));
       return false;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   return {
     isConnected: state.isConnected,

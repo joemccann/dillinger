@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface DriveFile {
   id: string;
@@ -23,6 +24,7 @@ interface OneDriveState {
 
 export function useOneDrive() {
   const { notify } = useToast();
+  const { t } = useI18n();
   const [state, setState] = useState<OneDriveState>({
     isConnected: false,
     files: [],
@@ -60,12 +62,12 @@ export function useOneDrive() {
         currentFolderId: "root",
         pathHistory: [],
       });
-      notify("OneDrive disconnected");
+      notify(t("toast.disconnected", { service: "OneDrive" }));
     } catch (error) {
       console.error("Failed to disconnect OneDrive:", error);
-      notify("Failed to disconnect OneDrive");
+      notify(t("toast.disconnectFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFiles = useCallback(async (folderId?: string) => {
     const targetFolderId = folderId || stateRef.current.currentFolderId;
@@ -81,9 +83,9 @@ export function useOneDrive() {
       }));
     } catch (error) {
       console.error("Failed to fetch OneDrive files:", error);
-      notify("Failed to fetch files");
+      notify(t("toast.fetchFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFileContent = useCallback(async (fileId: string): Promise<FileContent | null> => {
     try {
@@ -98,10 +100,10 @@ export function useOneDrive() {
       return await response.json();
     } catch (error) {
       console.error("Failed to fetch file content:", error);
-      notify("Failed to fetch file content");
+      notify(t("toast.fetchFailed"));
       return null;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const saveFile = useCallback(async (
     name: string,
@@ -123,14 +125,14 @@ export function useOneDrive() {
 
       if (!response.ok) throw new Error("Failed to save file");
 
-      notify("File saved to OneDrive");
+      notify(t("toast.fileSaved", { service: "OneDrive" }));
       return true;
     } catch (error) {
       console.error("Failed to save to OneDrive:", error);
-      notify("Failed to save file");
+      notify(t("toast.saveFailed", { error: t("toast.unknownError") }));
       return false;
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const navigateToFolder = useCallback((folderId: string) => {
     setState((prev) => ({

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface UploadResult {
   url: string;
@@ -13,6 +14,7 @@ interface UploadResult {
 
 export function useImageUpload() {
   const { notify } = useToast();
+  const { t } = useI18n();
   const [isUploading, setIsUploading] = useState(false);
 
   const upload = useCallback(
@@ -29,22 +31,22 @@ export function useImageUpload() {
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || "Upload failed");
+          const error = await response.json().catch(() => null);
+          throw new Error(error?.error || "Upload failed");
         }
 
         const result = await response.json();
-        notify(`Uploaded "${file.name}"`);
+        notify(t("toast.uploaded", { name: file.name }));
         return result;
       } catch (error) {
-        const message = error instanceof Error ? error.message : "Failed to upload image";
+        const message = error instanceof Error ? error.message : t("toast.uploadFailed");
         notify(message);
         return null;
       } finally {
         setIsUploading(false);
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const uploadFromClipboard = useCallback(

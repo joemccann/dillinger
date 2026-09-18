@@ -6,6 +6,7 @@ import type * as Monaco from "monaco-editor";
 import { useStore } from "@/stores/store";
 import { countDocumentStats } from "@/lib/document";
 import { useImageUpload } from "@/hooks/useImageUpload";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 export function MonacoEditor() {
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -25,13 +26,14 @@ export function MonacoEditor() {
   const setEditorTopLine = useStore((state) => state.setEditorTopLine);
   const setEditorInstance = useStore((state) => state.setEditorInstance);
   const { uploadFromClipboard } = useImageUpload();
+  const { t, formatNumber } = useI18n();
 
   const keybindingLabel =
     keybindings === "vim"
-      ? "Vim"
+      ? t("settings.vim")
       : keybindings === "emacs"
-        ? "Emacs"
-        : "Default";
+        ? t("settings.emacs")
+        : t("settings.default");
 
   // Debounced persist for auto-save
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -106,7 +108,7 @@ export function MonacoEditor() {
       }
 
       if (keybindings === "emacs") {
-        statusNode.textContent = "Unavailable in build";
+        statusNode.textContent = t("editor.emacsUnavailable");
       }
     };
 
@@ -120,7 +122,7 @@ export function MonacoEditor() {
         statusNode.textContent = "";
       }
     };
-  }, [keybindings]);
+  }, [keybindings, t]);
 
   // Set up scroll sync listener (recreates when settings change)
   useEffect(() => {
@@ -223,14 +225,14 @@ export function MonacoEditor() {
   if (!currentDocument) {
     return (
       <div className="flex items-center justify-center h-full bg-bg-primary text-text-muted">
-        No document selected
+        {t("editor.noDocument")}
       </div>
     );
   }
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="min-h-0 flex-1" data-testid="editor-pane">
+      <div dir="auto" className="min-h-0 flex-1" data-testid="editor-pane">
         <Editor
           height="100%"
           language="markdown"
@@ -244,13 +246,13 @@ export function MonacoEditor() {
       <div className="flex min-h-10 items-center justify-between border-t border-border-light/60 bg-bg-primary px-4 py-2 text-xs text-text-muted">
         <div className="flex items-center gap-3">
           {enableWordsCount && (
-            <span data-testid="word-count">{stats.wordCount} words</span>
+            <span data-testid="word-count">{t("editor.words", { count: formatNumber(stats.wordCount) })}</span>
           )}
           {enableWordsCount && enableCharactersCount && (
             <span aria-hidden="true">·</span>
           )}
           {enableCharactersCount && (
-            <span data-testid="character-count">{stats.characterCount} characters</span>
+            <span data-testid="character-count">{t("editor.characters", { count: formatNumber(stats.characterCount) })}</span>
           )}
         </div>
         <div className="flex items-center gap-3">

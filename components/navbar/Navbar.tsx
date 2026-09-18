@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
 import { useImageUpload } from "@/hooks/useImageUpload";
-import { importDocumentFile } from "@/lib/import";
+import { importDocumentFile, ImportError } from "@/lib/import";
 import {
   Menu,
   Eye,
@@ -18,7 +18,9 @@ import {
   Upload,
   ImagePlus,
   HelpCircle,
+  Languages,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 type ExportFormat = "markdown" | "html" | "pdf";
 
@@ -29,6 +31,7 @@ function getDownloadFilename(response: Response, fallback: string): string {
 }
 
 export function Navbar() {
+  const { t } = useI18n();
   const toggleSidebar = useStore((state) => state.toggleSidebar);
   const toggleSettings = useStore((state) => state.toggleSettings);
   const togglePreview = useStore((state) => state.togglePreview);
@@ -80,7 +83,7 @@ export function Navbar() {
       : format.toUpperCase();
 
     try {
-      notify(`Preparing ${formatLabel}...`);
+      notify(t("toast.exportPreparing", { format: formatLabel }));
 
       const response = await fetch(`/api/export/${format}`, {
         method: "POST",
@@ -107,17 +110,17 @@ export function Navbar() {
 
       notify(
         format === "html" && options?.styled === true
-          ? "Exported as styled HTML"
-          : `Exported as ${format.toUpperCase()}`
+          ? t("toast.exportedStyledHtml")
+          : t("toast.exportedFormat", { format: format.toUpperCase() })
       );
     } catch (error) {
       if (error instanceof TypeError) {
-        notify(`${formatLabel} export failed — check your connection`);
+        notify(t("toast.exportFailedConnection", { format: formatLabel }));
       } else {
-        notify(`${formatLabel} export failed — please try again`);
+        notify(t("toast.exportFailed", { format: formatLabel }));
       }
     }
-  }, [currentDocument, notify]);
+  }, [currentDocument, notify, t]);
 
   const handleImportSelection = useCallback(async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -132,15 +135,21 @@ export function Navbar() {
     try {
       const imported = await importDocumentFile(file);
       createImportedDocument(file.name, imported.body);
-      notify(`Imported "${file.name}"`);
+      notify(t("toast.imported", { name: file.name }));
     } catch (error) {
       notify(
-        error instanceof Error
-          ? error.message
-          : "Failed to import file"
+        error instanceof ImportError
+          ? t(
+              error.code === "unsupported_type"
+                ? "import.unsupportedType"
+                : "import.convertFailed"
+            )
+          : error instanceof Error
+            ? error.message
+            : t("toast.importFailed")
       );
     }
-  }, [createImportedDocument, notify]);
+  }, [createImportedDocument, notify, t]);
 
   const handleImageSelection = useCallback(async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -166,7 +175,7 @@ export function Navbar() {
       <div className="flex items-center gap-4">
         <button
           onClick={toggleSidebar}
-          aria-label="Toggle sidebar"
+          aria-label={t("navbar.toggleSidebar")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97]
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar rounded"
         >
@@ -181,26 +190,26 @@ export function Navbar() {
       <div className="flex items-center gap-2">
         <button
           onClick={() => importInputRef.current?.click()}
-          aria-label="Import file"
-          title="Import file"
+          aria-label={t("navbar.importFile")}
+          title={t("navbar.importFile")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <Upload size={18} />
-          <span className="hidden sm:inline">Import</span>
+          <span className="hidden sm:inline">{t("navbar.import")}</span>
         </button>
 
         <button
           onClick={() => imageInputRef.current?.click()}
-          aria-label="Insert image"
-          title="Insert image"
+          aria-label={t("navbar.insertImage")}
+          title={t("navbar.insertImage")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                      flex items-center gap-1 text-sm rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <ImagePlus size={18} />
-          <span className="hidden sm:inline">Image</span>
+          <span className="hidden sm:inline">{t("navbar.image")}</span>
         </button>
 
         {/* Export dropdown */}
@@ -209,19 +218,19 @@ export function Navbar() {
             onClick={() => setExportOpen(!exportOpen)}
             aria-expanded={exportOpen}
             aria-haspopup="menu"
-            aria-label="Export document"
+            aria-label={t("navbar.exportDocument")}
             className="text-text-invert hover:text-plum transition-all active:scale-[0.97] px-3 py-2
                        flex items-center gap-1 text-sm rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
           >
             <Download size={18} />
-            <span className="hidden sm:inline">Export as</span>
+            <span className="hidden sm:inline">{t("navbar.exportAs")}</span>
           </button>
           {exportOpen && (
             <div
               role="menu"
-              aria-label="Export formats"
-              className="absolute right-0 top-full mt-1 bg-bg-navbar rounded shadow-lg py-1 min-w-[150px] animate-fade-in"
+              aria-label={t("navbar.exportFormats")}
+              className={"absolute right-0 top-full mt-1 bg-bg-navbar rounded shadow-lg py-1 min-w-[150px] animate-fade-in rtl:left-0 rtl:right-auto"}
             >
               <button
                 role="menuitem"
@@ -270,8 +279,8 @@ export function Navbar() {
         {/* Preview toggle */}
         <button
           onClick={togglePreview}
-          aria-label={previewVisible ? "Hide preview" : "Show preview"}
-          title={previewVisible ? "Hide preview" : "Show preview"}
+          aria-label={previewVisible ? t("navbar.hidePreview") : t("navbar.showPreview")}
+          title={previewVisible ? t("navbar.hidePreview") : t("navbar.showPreview")}
           aria-pressed={previewVisible}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
@@ -282,8 +291,8 @@ export function Navbar() {
         {/* Zen mode */}
         <button
           onClick={() => setZenMode(true)}
-          aria-label="Enter zen mode"
-          title="Zen mode (⌘⇧Z)"
+          aria-label={t("navbar.enterZenMode")}
+          title={t("navbar.zenModeShortcut")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
@@ -293,18 +302,21 @@ export function Navbar() {
         {/* Settings */}
         <button
           onClick={toggleSettings}
-          aria-label="Open settings"
-          title="Settings"
+          aria-label={t("navbar.openSettings")}
+          title={t("settings.title")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
           <Settings size={20} />
         </button>
 
+        {/* Language switcher */}
+        <LanguageSwitcher />
+
         <button
           onClick={toggleShortcuts}
-          title="Keyboard shortcuts (?)"
-          aria-label="Keyboard shortcuts"
+          title={t("shortcuts.keyboardShortcuts")}
+          aria-label={t("shortcuts.keyboardShortcuts")}
           className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
         >
@@ -329,5 +341,89 @@ export function Navbar() {
         onChange={handleImageSelection}
       />
     </nav>
+  );
+}
+
+/**
+ * A compact language toggle (EN / FA) shown in the navbar.
+ * Cycles through available locales on click; keeps document focus.
+ */
+function LanguageSwitcher() {
+  const { locale, setLocale, t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close on Escape or click outside
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
+  const switchTo = (next: "en" | "fa") => {
+    setLocale(next);
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={t("settings.language")}
+        title={t("settings.language")}
+        className="text-text-invert hover:text-plum transition-all active:scale-[0.97] p-2 rounded
+                   flex items-center gap-1 text-sm
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
+      >
+        <Languages size={18} />
+        <span className="hidden sm:inline uppercase text-xs font-semibold tracking-wide">
+          {locale}
+        </span>
+      </button>
+      {open && (
+        <div
+          role="menu"
+          aria-label={t("settings.language")}
+          className="absolute right-0 top-full mt-1 bg-bg-navbar rounded shadow-lg py-1 min-w-[120px] animate-fade-in rtl:left-0 rtl:right-auto"
+        >
+          <button
+            role="menuitem"
+            onClick={() => switchTo("en")}
+            className={`w-full px-4 py-2 text-left text-sm flex items-center gap-2 hover:bg-bg-highlight
+                       focus-visible:outline-none focus-visible:bg-bg-highlight ${
+                         locale === "en" ? "text-plum" : "text-text-invert"
+                       }`}
+          >
+            <span>{t("settings.english")}</span>
+            {locale === "en" && <span className="mr-auto text-plum">✓</span>}
+          </button>
+          <button
+            role="menuitem"
+            onClick={() => switchTo("fa")}
+            className={`w-full px-4 py-2 text-left text-sm flex items-center gap-2 hover:bg-bg-highlight
+                       focus-visible:outline-none focus-visible:bg-bg-highlight ${
+                         locale === "fa" ? "text-plum" : "text-text-invert"
+                       }`}
+          >
+            <span>{t("settings.farsi")}</span>
+            {locale === "fa" && <span className="mr-auto text-plum">✓</span>}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

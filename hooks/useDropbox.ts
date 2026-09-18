@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface DropboxUser {
   name: string;
@@ -38,6 +39,7 @@ export function useDropbox() {
   stateRef.current = state;
 
   const { notify } = useToast();
+  const { t } = useI18n();
 
   const checkStatus = useCallback(async () => {
     try {
@@ -74,16 +76,16 @@ export function useDropbox() {
         currentPath: "",
         pathHistory: [],
       }));
-      notify("Disconnected from Dropbox");
+      notify(t("toast.disconnected", { service: "Dropbox" }));
     } catch {
-      notify("Failed to disconnect");
+      notify(t("toast.disconnectFailed"));
     }
-  }, [notify]);
+  }, [notify, t]);
 
   const fetchFiles = useCallback(
     async (path: string = "") => {
       try {
-        notify("Fetching files...", 2000);
+        notify(t("toast.fetchingFiles"), 2000);
         const response = await fetch(`/api/dropbox/files?path=${encodeURIComponent(path)}`);
         const data = await response.json();
 
@@ -95,10 +97,10 @@ export function useDropbox() {
           }));
         }
       } catch {
-        notify("Failed to fetch files");
+        notify(t("toast.fetchFailed"));
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const navigateToFolder = useCallback(
@@ -132,7 +134,7 @@ export function useDropbox() {
   const fetchFileContent = useCallback(
     async (path: string): Promise<{ content: string; name: string } | null> => {
       try {
-        notify("Fetching file...", 2000);
+        notify(t("toast.fetchingFile"), 2000);
         const response = await fetch("/api/dropbox/files", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,17 +147,17 @@ export function useDropbox() {
         }
         return null;
       } catch {
-        notify("Failed to fetch file");
+        notify(t("toast.fetchFailed"));
         return null;
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const saveFile = useCallback(
     async (path: string, content: string): Promise<boolean> => {
       try {
-        notify("Saving to Dropbox...", 3000);
+        notify(t("toast.saving", { service: "Dropbox" }), 3000);
         const response = await fetch("/api/dropbox/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -163,19 +165,19 @@ export function useDropbox() {
         });
 
         if (response.ok) {
-          notify("Successfully saved to Dropbox!");
+          notify(t("toast.saveSuccess", { service: "Dropbox" }));
           return true;
         } else {
           const data = await response.json();
           throw new Error(data.error);
         }
       } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        notify(`Failed to save: ${errorMessage}`);
+        const errorMessage = error instanceof Error ? error.message : t("toast.unknownError");
+        notify(t("toast.saveFailed", { error: errorMessage }));
         return false;
       }
     },
-    [notify]
+    [notify, t]
   );
 
   const reset = useCallback(() => {

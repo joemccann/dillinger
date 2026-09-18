@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { AlertTriangle } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export function DeleteConfirmModal({
   documentTitle,
 }: DeleteConfirmModalProps) {
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const { t } = useI18n();
 
   // Handle Escape key and focus trap
   useEffect(() => {
@@ -65,14 +67,14 @@ export function DeleteConfirmModal({
             id="delete-modal-title"
             className="text-lg font-semibold text-text-invert mb-2 text-balance"
           >
-            Delete Document
+            {t("delete.title")}
           </h2>
 
           <p
             id="delete-modal-description"
             className="text-text-muted text-sm mb-6"
           >
-            Are you sure you want to delete &quot;{documentTitle}&quot;? This action cannot be undone.
+            {t("delete.description", { title: documentTitle })}
           </p>
 
           <div className="flex gap-3 w-full">
@@ -83,7 +85,7 @@ export function DeleteConfirmModal({
                          hover:opacity-90 transition-opacity
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
-              Cancel
+              {t("modal.cancel")}
             </button>
             <button
               onClick={onConfirm}
@@ -91,7 +93,7 @@ export function DeleteConfirmModal({
                          hover:bg-red-700 transition-colors
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
-              Delete
+              {t("delete.confirm")}
             </button>
           </div>
         </div>

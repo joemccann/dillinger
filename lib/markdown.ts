@@ -33,7 +33,7 @@ function applyLegacyRendererRules(instance: MarkdownIt) {
       if (original) {
         return original(tokens, idx, options, env, self);
       }
-
+      token.attrPush(["dir","auto"]);
       return self.renderToken(tokens, idx, options);
     };
   });
@@ -49,7 +49,7 @@ function applyLegacyRendererRules(instance: MarkdownIt) {
     if (label?.type === "inline" && token.map?.length && label.map?.length) {
       const anchor = `${makeSafe(label.content)}_${label.map[0]}`;
 
-      return `<${level} class="code-line has-line-data" data-line-start="${token.map[0]}" data-line-end="${token.map[1]}"><a id="${anchor}"></a>`;
+      return `<${level} dir="auto" has-line-data class="code-line has-line-data" data-line-start="${token.map[0]}" data-line-end="${token.map[1]}"><a id="${anchor}"></a>`;
     }
 
     return `<${level}>`;

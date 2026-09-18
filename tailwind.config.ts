@@ -29,6 +29,7 @@ const config: Config = {
         sans: ['"Source Sans Pro"', '"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
         serif: ["Georgia", "Cambria", "serif"],
         mono: ['"Ubuntu Mono"', "Monaco", "monospace"],
+        vazirmatn: ['"Vazirmatn"', '"Source Sans Pro"', "sans-serif"],
       },
       spacing: {
         sidebar: "270px",

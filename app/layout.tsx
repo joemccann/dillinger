@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
+import { Source_Sans_3, Vazirmatn } from "next/font/google";
 import { Providers } from "@/components/providers/Providers";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-source-sans",
+});
+
+// Farsi (RTL) font — used when the fa locale is active.
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazirmatn",
 });
 
 export const metadata: Metadata = {
@@ -64,8 +70,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${sourceSans.variable} font-sans`}>
+    <html dir="auto">
+      <body dir="auto" className={`${sourceSans.variable} ${vazirmatn.variable} font-sans`}>
         <Providers>
           {children}
         </Providers>

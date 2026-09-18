@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useDropbox } from "@/hooks/useDropbox";
 import { useStore } from "@/stores/store";
 import { useToast } from "@/components/ui/Toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   X,
   Cloud,
@@ -24,6 +25,7 @@ interface DropboxModalProps {
 export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
   const dropbox = useDropbox();
   const { notify } = useToast();
+  const { t } = useI18n();
   const currentDocument = useStore((state) => state.currentDocument);
   const createImportedDocument = useStore((state) => state.createImportedDocument);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -65,7 +67,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
       const file = await dropbox.fetchFileContent(item.path);
       if (file) {
         createImportedDocument(file.name, file.content);
-        notify("File imported from Dropbox");
+        notify(t("toast.fileImported", { service: "Dropbox" }));
         onClose();
       }
     }
@@ -97,7 +99,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("modal.close")}
             className="absolute top-4 right-4 text-text-invert hover:text-plum rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
@@ -107,10 +109,10 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
           <div className="text-center">
             <Cloud size={48} className="mx-auto text-text-invert mb-4" aria-hidden="true" />
             <h2 id="dropbox-connect-title" className="text-xl font-semibold text-text-invert mb-2 text-balance">
-              Connect to Dropbox
+              {t("cloud.connectTitle.dropbox")}
             </h2>
             <p className="text-text-muted mb-6">
-              Connect your Dropbox account to import and save markdown files.
+              {t("cloud.connectDescription.dropbox")}
             </p>
             <button
               onClick={dropbox.connect}
@@ -118,7 +120,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
                          hover:opacity-90 transition-opacity
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
-              Connect Dropbox
+              {t("cloud.connectButton.dropbox")}
             </button>
           </div>
         </div>
@@ -141,7 +143,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
             {dropbox.pathHistory.length > 0 && (
               <button
                 onClick={dropbox.navigateBack}
-                aria-label="Go back"
+                aria-label={t("modal.goBack")}
                 className="text-text-invert hover:text-plum rounded
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
               >
@@ -150,13 +152,13 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
             )}
             <Cloud size={24} className="text-text-invert" aria-hidden="true" />
             <h2 id="dropbox-modal-title" className="text-lg font-semibold text-text-invert text-balance">
-              {mode === "import" ? "Import from Dropbox" : "Save to Dropbox"}
+              {mode === "import" ? t("cloud.importFrom.dropbox") : t("cloud.saveTo.dropbox")}
             </h2>
           </div>
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("modal.close")}
             className="text-text-invert hover:text-plum rounded
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
           >
@@ -174,14 +176,14 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
           {mode === "save" && (
             <div className="mb-4 p-3 bg-bg-highlight rounded">
               <label htmlFor="dropbox-filename" className="block text-sm text-text-muted mb-1">
-                File name
+                {t("modal.fileName")}
               </label>
               <input
                 id="dropbox-filename"
                 type="text"
                 value={newFileName}
                 onChange={(e) => setNewFileName(e.target.value)}
-                placeholder="document.md"
+                placeholder={t("modal.placeholderDocument")}
                 className="w-full bg-bg-navbar text-text-invert px-3 py-2 rounded
                            border border-border-settings
                            focus:border-plum focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum"
@@ -191,7 +193,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
 
           {dropbox.files.length === 0 ? (
             <p className="text-text-muted text-center py-4">
-              No files found
+              {t("modal.noFiles")}
             </p>
           ) : (
             <div className="space-y-1">
@@ -225,7 +227,7 @@ export function DropboxModal({ isOpen, onClose, mode }: DropboxModalProps) {
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-bg-navbar"
             >
               <Save size={18} />
-              Save to Dropbox
+              {t("cloud.saveTo.dropbox")}
             </button>
           </div>
         )}
