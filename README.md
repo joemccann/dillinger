@@ -24,17 +24,17 @@
 ## ✨ Why Dillinger
 
 Most markdown editors are either:
-- bloated  
-- offline-only  
-- or lack serious developer ergonomics  
+- bloated
+- offline-only
+- or lack serious developer ergonomics
 
 **Dillinger fixes that.**
 
 It combines:
-- ⚡ VS Code-grade editing  
-- ☁️ Native cloud storage  
-- 🧘 Distraction-free UX  
-- 🔄 Real-time rendering  
+- ⚡ VS Code-grade editing
+- ☁️ Native cloud storage
+- 🧘 Distraction-free UX
+- 🔄 Real-time rendering
 
 ---
 
@@ -62,6 +62,7 @@ Open → [http://localhost:3000](http://localhost:3000)
 
 * Monaco Editor (VS Code core)
 * Syntax highlighting for Markdown
+* Support RTL (auto-detection) in editor preview and export
 * Image paste support
 
 ### Live Workflow
